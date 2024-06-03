@@ -1,8 +1,8 @@
-## api.fikiri.co
+## api.cinolu.org
 
 ## Description
 
-An api built with nestjs to power the fikiri.co website
+An api built with nestjs to power the cinolu.org website
 
 ## Installation
 
@@ -21,17 +21,4 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
 ```
