@@ -24,6 +24,37 @@ export class UsersService {
     private readonly emailService: EmailService
   ) {}
 
+  async seed(): Promise<void> {
+    const users = [
+      {
+        name: 'Ackeem Mbuebua',
+        role: RoleEnum.Admin
+      },
+      {
+        name: 'Jerry Lunda',
+        role: RoleEnum.Admin
+      },
+      {
+        name: 'Wilfried Musanzi',
+        role: RoleEnum.Admin
+      },
+      {
+        name: 'Moses Ziongo',
+        role: RoleEnum.User
+      }
+    ];
+    for (const user of users) {
+      const exists: boolean = await this.userRepository.exists({ where: { name: user.name } });
+      if (!exists) {
+        await this.userRepository.save({
+          name: user.name,
+          password: '123456',
+          roles: [{ name: user.role }]
+        });
+      }
+    }
+  }
+
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const exists: boolean = await this.userRepository.exists({
@@ -61,14 +92,6 @@ export class UsersService {
   async findUsers(): Promise<{ data: User[] }> {
     const data: User[] = await this.userRepository.find({
       order: { created_at: 'DESC' }
-    });
-    return { data };
-  }
-
-  async findCurators(): Promise<{ data: User[] }> {
-    const data: User[] = await this.userRepository.find({
-      where: { roles: { name: RoleEnum.Curator } },
-      relations: ['roles', 'organisation', 'pole']
     });
     return { data };
   }
