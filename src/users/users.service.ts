@@ -28,19 +28,23 @@ export class UsersService {
     const users = [
       {
         name: 'Ackeem Mbuebua',
-        role: RoleEnum.Admin
+        role: RoleEnum.Admin,
+        email: 'ackeemmbuebua@gmail.com'
       },
       {
         name: 'Jerry Lunda',
-        role: RoleEnum.Admin
+        role: RoleEnum.Admin,
+        email: 'jerrylundakasongo@gmail.com'
       },
       {
         name: 'Wilfried Musanzi',
-        role: RoleEnum.Admin
+        role: RoleEnum.Admin,
+        email: 'musanziwilfried@gmail.com'
       },
       {
         name: 'Moses Ziongo',
-        role: RoleEnum.User
+        role: RoleEnum.User,
+        email: 'mosesziongo@gmail.com'
       }
     ];
     for (const user of users) {
@@ -49,7 +53,8 @@ export class UsersService {
         await this.userRepository.save({
           name: user.name,
           password: '123456',
-          roles: [{ name: user.role }]
+          email: user.email,
+          roles: [{ id: 1 }]
         });
       }
     }
