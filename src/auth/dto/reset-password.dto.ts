@@ -13,5 +13,5 @@ export class ResetPasswordDto {
   password: string;
 
   @Match('password', { message: 'Les mots de passe ne correspondent pas' })
-  passwordConfirm: string;
+  password_confirm: string;
 }
