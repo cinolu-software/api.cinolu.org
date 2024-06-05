@@ -28,22 +28,22 @@ export class UsersService {
     const users = [
       {
         name: 'Ackeem Mbuebua',
-        role: RoleEnum.Admin,
+        role: 1,
         email: 'ackeemmbuebua@gmail.com'
       },
       {
         name: 'Jerry Lunda',
-        role: RoleEnum.Admin,
+        role: 1,
         email: 'jerrylundakasongo@gmail.com'
       },
       {
         name: 'Wilfried Musanzi',
-        role: RoleEnum.Admin,
+        role: 1,
         email: 'musanziwilfried@gmail.com'
       },
       {
         name: 'Moses Ziongo',
-        role: RoleEnum.User,
+        role: 2,
         email: 'mosesziongo@gmail.com'
       }
     ];
@@ -54,7 +54,7 @@ export class UsersService {
           name: user.name,
           password: '123456',
           email: user.email,
-          roles: [{ id: 1 }]
+          roles: [{ id: user.role }]
         });
       }
     }
@@ -104,7 +104,7 @@ export class UsersService {
   async findAdmins(): Promise<{ data: User[] }> {
     const data: User[] = await this.userRepository.find({
       where: { roles: { name: RoleEnum.Admin } },
-      relations: ['roles', 'organisation', 'pole']
+      relations: ['roles']
     });
     return { data };
   }
@@ -113,7 +113,7 @@ export class UsersService {
     try {
       const data: User = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles', 'pole', 'organisation']
+        relations: ['roles']
       });
       return { data };
     } catch {
