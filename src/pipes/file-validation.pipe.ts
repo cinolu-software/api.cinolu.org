@@ -7,7 +7,7 @@ export function validateFile(): PipeTransform {
 
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
-  private readonly allowedExtensions = ['.png', '.jpeg', '.jpg'];
+  private readonly allowedExtensions = ['.png', '.jpeg', '.jpg', '.pdf'];
 
   transform(value: Express.Multer.File): Express.Multer.File {
     const extension = extname(value.originalname);
