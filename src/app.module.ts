@@ -12,6 +12,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SearchModule } from './search/search.module';
 
+import { StatusModule } from './status/status.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProjectsModule } from './projects/projects.module';
+import { ProgramsModule } from './programs/programs.module';
+import { AttachmentsModule } from './attachments/attachments.module';
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -26,7 +32,12 @@ import { SearchModule } from './search/search.module';
     RolesModule,
     EmailModule,
     DatabaseModule,
-    SearchModule
+    SearchModule,
+    StatusModule,
+    CategoriesModule,
+    ProjectsModule,
+    ProgramsModule,
+    AttachmentsModule
   ],
   providers: [
     {
