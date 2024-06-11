@@ -12,16 +12,6 @@ export class RolesService {
     private readonly roleRepository: Repository<Role>
   ) {}
 
-  async seed(): Promise<void> {
-    const roles = [{ name: 'admin' }, { name: 'user' }];
-    for (const role of roles) {
-      const exists: boolean = await this.roleRepository.exists({ where: { name: role.name } });
-      if (!exists) {
-        await this.roleRepository.save(role);
-      }
-    }
-  }
-
   async create(dto: CreateRoleDto): Promise<{ data: Role }> {
     try {
       const data: Role = await this.roleRepository.save(dto);

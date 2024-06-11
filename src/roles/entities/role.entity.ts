@@ -9,7 +9,7 @@ export class Role {
   @Column({ unique: true })
   name: string;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn({ type: 'datetime' })

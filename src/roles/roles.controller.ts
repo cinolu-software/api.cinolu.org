@@ -5,17 +5,10 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/auth/enums/role.enum';
 import { Role } from './entities/role.entity';
-import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
-
-  @Public()
-  @Get('seed')
-  seed(): Promise<void> {
-    return this.rolesService.seed();
-  }
 
   @Post('')
   @Roles([RoleEnum.Admin])

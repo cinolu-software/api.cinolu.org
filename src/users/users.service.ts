@@ -24,42 +24,6 @@ export class UsersService {
     private readonly emailService: EmailService
   ) {}
 
-  async seed(): Promise<void> {
-    const users = [
-      {
-        name: 'Ackeem Mbuebua',
-        role: 1,
-        email: 'ackeemmbuebua@gmail.com'
-      },
-      {
-        name: 'Jerry Lunda',
-        role: 1,
-        email: 'jerrylundakasongo@gmail.com'
-      },
-      {
-        name: 'Wilfried Musanzi',
-        role: 1,
-        email: 'musanziwilfried@gmail.com'
-      },
-      {
-        name: 'Moses Ziongo',
-        role: 2,
-        email: 'mosesziongo@gmail.com'
-      }
-    ];
-    for (const user of users) {
-      const exists: boolean = await this.userRepository.exists({ where: { name: user.name } });
-      if (!exists) {
-        await this.userRepository.save({
-          name: user.name,
-          password: '123456',
-          email: user.email,
-          roles: [{ id: user.role }]
-        });
-      }
-    }
-  }
-
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const exists: boolean = await this.userRepository.exists({

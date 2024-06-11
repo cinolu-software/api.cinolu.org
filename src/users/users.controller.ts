@@ -9,7 +9,6 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/auth/enums/role.enum';
 import { User } from './entities/user.entity';
 import { validateFile } from 'src/pipes/file-validation.pipe';
-import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -24,12 +23,6 @@ export class UsersController {
   @Get('')
   findUsers(): Promise<{ data: User[] }> {
     return this.userService.findUsers();
-  }
-
-  @Public()
-  @Get('seed')
-  findCurators(): Promise<void> {
-    return this.userService.seed();
   }
 
   findAdmins(): Promise<{ data: User[] }> {
