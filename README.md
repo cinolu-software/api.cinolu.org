@@ -2,7 +2,7 @@
 
 ## Description
 
-An api built with nestjs to power the cinolu.org website
+An api built with Nestjs to power the cinolu.org website
 
 ## Installation
 
