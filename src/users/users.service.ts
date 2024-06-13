@@ -51,11 +51,15 @@ export class UsersService {
     });
     if (exists) new ConflictException();
     delete dto.password_confirm;
-    const data: User = await this.userRepository.save({
-      ...dto,
-      roles: [{ name: RoleEnum.User }]
-    });
-    return { data };
+    try {
+      const data: User = await this.userRepository.save({
+        ...dto,
+        roles: [{ name: RoleEnum.User }]
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Cette adresse email est déjà utilisée');
+    }
   }
 
   async findUsers(): Promise<{ data: User[] }> {
