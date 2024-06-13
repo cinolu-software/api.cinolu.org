@@ -2,7 +2,7 @@ import { Role } from 'src/roles/entities/role.entity';
 import { User } from 'src/users/entities/user.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Seed1718030348979 implements MigrationInterface {
+export class Seed1718282540459 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.manager.save(
       queryRunner.manager.getRepository(Role).create([
