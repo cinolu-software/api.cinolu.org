@@ -13,7 +13,7 @@ export const dataSource = new DataSource({
   database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  migrations: ['dist/src/shared/database/migrations/**'],
+  migrations: ['dist/src/modules/migrations/**'],
   entities: ['dist/**/*.entity.js']
 });
 

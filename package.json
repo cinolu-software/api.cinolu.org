@@ -19,10 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
-    "migration:create": "pnpm build && pnpm typeorm migration:create ./src/shared/database/migrations/$npm_config_name",
-    "migration:generate": "pnpm build && pnpm typeorm migration:generate ./src/shared/database/migrations/$npm_config_name -d ./src/shared/database/typeorm.config.ts",
-    "migration:up": "pnpm build && pnpm typeorm migration:run -d ./src/shared/database/typeorm.config.ts",
-    "migration:down": "pnpm build && pnpm typeorm migration:revert -d ./src/shared/database/typeorm.config.ts",
+    "migration:create": "pnpm build && pnpm typeorm migration:create ./src/modules/database/migrations/$npm_config_name",
+    "migration:generate": "pnpm build && pnpm typeorm migration:generate ./src/modules/database/migrations/$npm_config_name -d ./src/modules/database/typeorm.config.ts",
+    "migration:up": "pnpm build && pnpm typeorm migration:run -d ./src/modules/database/typeorm.config.ts",
+    "migration:down": "pnpm build && pnpm typeorm migration:revert -d ./src/modules/database/typeorm.config.ts",
     "prepare": "husky"
   },
   "dependencies": {
