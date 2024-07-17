@@ -1,4 +1,5 @@
 import { Attachment } from 'src/modules/attachments/entities/attachment.entity';
+import { Requirement } from 'src/modules/requirements/entities/requirement.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
   Column,
@@ -9,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
-import { Requirement } from './requirement.entity';
 
 @Entity()
 export class Program {
@@ -34,7 +34,7 @@ export class Program {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.projects)
+  @ManyToOne(() => User, (user) => user.programs)
   user: User;
 
   @OneToMany(() => Attachment, (attachment) => attachment.program)

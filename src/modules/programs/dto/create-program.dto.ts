@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { CreateRequirementDto } from './create-requirement.dto';
+import { CreateRequirementDto } from 'src/modules/requirements/dto/create-requirement.dto';
 
 export class CreateProgramDto {
   @IsNotEmpty({ message: 'Le nom du programme est obligatoire' })
@@ -13,6 +13,9 @@ export class CreateProgramDto {
 
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
   end_at: Date;
+
+  @IsNotEmpty({ message: 'Le type est obligatoir' })
+  type: number;
 
   @IsNotEmpty({ message: 'Les conditions du programme sont obligatoires' })
   requirements: CreateRequirementDto[];

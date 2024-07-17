@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 
 import { Role } from '../../roles/entities/role.entity';
-import { Project } from 'src/modules/projects/entities/project.entity';
 import { Program } from 'src/modules/programs/entities/program.entity';
 
 @Entity()
@@ -60,9 +59,6 @@ export class User {
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
-
-  @OneToMany(() => Project, (project) => project.user)
-  projects: Project[];
 
   @OneToMany(() => Program, (program) => program.user)
   programs: Program[];

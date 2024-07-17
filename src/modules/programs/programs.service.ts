@@ -5,22 +5,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
 import { AttachmentsService } from 'src/modules/attachments/attachments.service';
-import { Requirement } from './entities/requirement.entity';
+import { RequirementsService } from '../requirements/requirements.service';
 
 @Injectable()
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
     private programRepository: Repository<Program>,
-    @InjectRepository(Requirement)
-    private requirementRepository: Repository<Requirement>,
+    private requirementService: RequirementsService,
     private attachmentsService: AttachmentsService
   ) {}
 
   async create(dto: CreateProgramDto): Promise<{ data: Program }> {
     try {
       await this.throwIfExist(dto.name);
-      await this.requirementRepository.save(dto.requirements);
+      await this.requirementService.createMany(dto.requirements);
       const data: Program = await this.programRepository.save(dto);
       return { data };
     } catch {
@@ -56,8 +55,6 @@ export class ProgramsService {
 
   async update(id: number, updateProgramDto: UpdateProgramDto): Promise<{ data: Program }> {
     await this.findOne(id);
-    await this.requirementRepository.delete({ program: { id } });
-    await this.requirementRepository.save(updateProgramDto.requirements);
     try {
       const data = await this.programRepository.save({
         id,

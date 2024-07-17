@@ -1,5 +1,5 @@
+import { Program } from 'src/modules/programs/entities/program.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Program } from './program.entity';
 
 @Entity()
 export class Requirement {

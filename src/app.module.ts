@@ -11,11 +11,10 @@ import { DatabaseModule } from './modules/database/database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SearchModule } from './modules/search/search.module';
-import { StatusModule } from './modules/status/status.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { ProjectsModule } from './modules/projects/projects.module';
 import { ProgramsModule } from './modules/programs/programs.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
+import { RequirementsModule } from './modules/requirements/requirements.module';
+import { TypesModule } from './modules/types/types.module';
 
 @Module({
   imports: [
@@ -32,11 +31,10 @@ import { AttachmentsModule } from './modules/attachments/attachments.module';
     EmailModule,
     DatabaseModule,
     SearchModule,
-    StatusModule,
-    CategoriesModule,
-    ProjectsModule,
     ProgramsModule,
-    AttachmentsModule
+    AttachmentsModule,
+    RequirementsModule,
+    TypesModule
   ],
   providers: [
     {
