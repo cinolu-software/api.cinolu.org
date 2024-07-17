@@ -1,0 +1,100 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateProgramDto } from './dto/create-program.dto';
+import { UpdateProgramDto } from './dto/update-program.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Program } from './entities/program.entity';
+import { Repository } from 'typeorm';
+import { AttachmentsService } from 'src/modules/attachments/attachments.service';
+import { Requirement } from './entities/requirement.entity';
+
+@Injectable()
+export class ProgramsService {
+  constructor(
+    @InjectRepository(Program)
+    private programRepository: Repository<Program>,
+    @InjectRepository(Requirement)
+    private requirementRepository: Repository<Requirement>,
+    private attachmentsService: AttachmentsService
+  ) {}
+
+  async create(dto: CreateProgramDto): Promise<{ data: Program }> {
+    try {
+      await this.throwIfExist(dto.name);
+      await this.requirementRepository.save(dto.requirements);
+      const data: Program = await this.programRepository.save(dto);
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la création du programme');
+    }
+  }
+
+  async throwIfExist(name: string): Promise<void> {
+    const program = await this.programRepository.findOne({
+      where: { name }
+    });
+    if (program) throw new BadRequestException('Le programme existe déjà');
+  }
+
+  async findAll(): Promise<{ data: Program[] }> {
+    const data: Program[] = await this.programRepository.find({
+      relations: ['attachments']
+    });
+    return { data };
+  }
+
+  async findOne(id: number): Promise<{ data: Program }> {
+    try {
+      const data: Program = await this.programRepository.findOneOrFail({
+        where: { id },
+        relations: ['attachments', 'requirements']
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la récupération du programme');
+    }
+  }
+
+  async update(id: number, updateProgramDto: UpdateProgramDto): Promise<{ data: Program }> {
+    await this.findOne(id);
+    await this.requirementRepository.delete({ program: { id } });
+    await this.requirementRepository.save(updateProgramDto.requirements);
+    try {
+      const data = await this.programRepository.save({
+        id,
+        ...updateProgramDto,
+        requirements: updateProgramDto.requirements
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la modification du programme');
+    }
+  }
+
+  async addAttachment(id: number, file: Express.Multer.File): Promise<{ data: Program }> {
+    await this.findOne(id);
+    try {
+      const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
+      const data = await this.programRepository.save({ id, attachments: [attachment] });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
+    }
+  }
+
+  async removeAttachment(id: number): Promise<void> {
+    try {
+      await this.attachmentsService.remove(id);
+    } catch {
+      throw new BadRequestException('Erreur lors de la suppression de la pièce jointe');
+    }
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.findOne(id);
+    try {
+      await this.programRepository.delete(id);
+    } catch {
+      throw new BadRequestException('Erreur lors de la suppression du programme');
+    }
+  }
+}
