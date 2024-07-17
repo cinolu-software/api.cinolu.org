@@ -24,8 +24,8 @@ export class TypesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTypeDto: UpdateTypeDto): Promise<{ data: Type }> {
-    return this.typesService.update(+id, updateTypeDto);
+  update(@Param('id') id: string, @Body() dto: UpdateTypeDto): Promise<{ data: Type }> {
+    return this.typesService.update(+id, dto);
   }
 
   @Delete(':id')

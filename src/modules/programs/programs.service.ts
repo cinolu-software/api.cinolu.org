@@ -20,7 +20,10 @@ export class ProgramsService {
     try {
       await this.throwIfExist(dto.name);
       await this.requirementService.createMany(dto.requirements);
-      const data: Program = await this.programRepository.save(dto);
+      const data: Program = await this.programRepository.save({
+        ...dto,
+        types: dto.types.map((type) => ({ id: type }))
+      });
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la création du programme');
@@ -36,7 +39,7 @@ export class ProgramsService {
 
   async findAll(): Promise<{ data: Program[] }> {
     const data: Program[] = await this.programRepository.find({
-      relations: ['attachments']
+      relations: ['attachments', 'types']
     });
     return { data };
   }
@@ -45,7 +48,7 @@ export class ProgramsService {
     try {
       const data: Program = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['attachments', 'requirements']
+        relations: ['attachments', 'requirements', 'types']
       });
       return { data };
     } catch {
@@ -59,6 +62,7 @@ export class ProgramsService {
       const data = await this.programRepository.save({
         id,
         ...updateProgramDto,
+        types: updateProgramDto.types.map((type) => ({ id: type })),
         requirements: updateProgramDto.requirements
       });
       return { data };

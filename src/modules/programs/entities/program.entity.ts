@@ -1,10 +1,13 @@
 import { Attachment } from 'src/modules/attachments/entities/attachment.entity';
 import { Requirement } from 'src/modules/requirements/entities/requirement.entity';
+import { Type } from 'src/modules/types/entities/type.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -42,4 +45,8 @@ export class Program {
 
   @OneToMany(() => Requirement, (requirement) => requirement.program)
   requirements: Requirement[];
+
+  @ManyToMany(() => Type, (type) => type.programs)
+  @JoinTable({ name: 'program_types' })
+  types: Type[];
 }

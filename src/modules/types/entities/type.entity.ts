@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Program } from 'src/modules/programs/entities/program.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Type {
@@ -10,4 +11,7 @@ export class Type {
 
   @Column({ type: 'text' })
   description: string;
+
+  @ManyToMany(() => Program, (program) => program.types)
+  programs: Program[];
 }
