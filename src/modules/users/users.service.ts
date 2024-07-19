@@ -1,6 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { promisify } from 'util';
 import { SignupDto } from '../auth/dto/register.dto';
 import CreateUserDto from './dto/create-user.dto';
 import { CreateWithGoogleDto } from './dto/create-with-google.dto';
@@ -11,17 +10,12 @@ import { Repository } from 'typeorm';
 import { RoleEnum } from '../auth/enums/role.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { EmailService } from '../email/email.service';
-import { randomPassword } from '../../shared/helpers/random-password';
-
-const unlinkAsync = promisify(fs.unlink);
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly emailService: EmailService
+    private readonly userRepository: Repository<User>
   ) {}
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
@@ -30,15 +24,12 @@ export class UsersService {
         where: { email: dto.email }
       });
       if (exists) new ConflictException("L'utilisateur existe déjà");
-      const password: string = randomPassword();
+      const password: string = 'team1234';
       const user: User = await this.userRepository.save({
         ...dto,
         password,
-        organisation: { id: dto.organisation },
-        pole: { id: dto.pole },
         roles: dto.roles.map((id) => ({ id }))
       });
-      await this.emailService.sendRegistrationEmail(user, password);
       return { data: user };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
@@ -142,7 +133,7 @@ export class UsersService {
   async uploadImage(id: number, image: Express.Multer.File): Promise<{ data: User }> {
     const { data: user } = await this.findOne(id);
     try {
-      if (user.profile) await unlinkAsync(`./uploads/profiles/${user.profile}`);
+      if (user.profile) await fs.unlink(`./uploads/profiles/${user.profile}`);
       const updatedUser = Object.assign(user, { profile: image.filename });
       delete updatedUser.password;
       const data = await this.userRepository.save(updatedUser);
@@ -156,7 +147,7 @@ export class UsersService {
     try {
       const { data: user } = await this.findOne(id);
       delete user.password;
-      await unlinkAsync(`./uploads/${user.profile}`);
+      await fs.unlink(`./uploads/${user.profile}`);
       const data = await this.userRepository.save({
         ...user,
         profile: null
