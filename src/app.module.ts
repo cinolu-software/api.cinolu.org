@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
-import { RolesModule } from './modules/roles/roles.module';
+import { AuthModule } from './app/modules/auth/auth.module';
+import { RolesModule } from './app/modules/roles/roles.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './modules/auth/guards/auth.guard';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
-import { EmailModule } from './modules/email/email.module';
-import { DatabaseModule } from './modules/database/database.module';
+import { AuthGuard } from './app/modules/auth/guards/auth.guard';
+import { RolesGuard } from './app/modules/auth/guards/roles.guard';
+import { EmailModule } from './app/modules/email/email.module';
+import { DatabaseModule } from './app/modules/database/database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { SearchModule } from './modules/search/search.module';
-import { ProgramsModule } from './modules/programs/programs.module';
-import { AttachmentsModule } from './modules/attachments/attachments.module';
-import { RequirementsModule } from './modules/requirements/requirements.module';
-import { TypesModule } from './modules/types/types.module';
+import { SearchModule } from './app/modules/search/search.module';
+import { ProgramsModule } from './app/modules/programs/programs.module';
+import { AttachmentsModule } from './app/modules/attachments/attachments.module';
+import { RequirementsModule } from './app/modules/requirements/requirements.module';
+import { TypesModule } from './app/modules/types/types.module';
+import { UsersModule } from './app/modules/users/users.module';
 
 @Module({
   imports: [
@@ -39,11 +39,11 @@ import { TypesModule } from './modules/types/types.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: AuthGuard
+      useClass: RolesGuard
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard
+      useClass: AuthGuard
     }
   ]
 })
