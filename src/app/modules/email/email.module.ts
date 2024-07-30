@@ -11,8 +11,8 @@ import { join } from 'path';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         transport: {
-          host: config.get('MAIL_HOST'),
           secure: true,
+          host: config.get('MAIL_HOST'),
           port: Number(config.get('MAIL_PORT')),
           auth: {
             user: config.get('MAIL_USERNAME'),
@@ -20,7 +20,7 @@ import { join } from 'path';
           }
         },
         defaults: {
-          from: `Suport fikiri <${config.get('MAIL_USERNAME')}>`
+          from: `Support CINOLU <${config.get('MAIL_USERNAME')}>`
         },
         template: {
           dir: join(__dirname, '..', '..', '..', '..', 'app', 'shared', 'templates'),

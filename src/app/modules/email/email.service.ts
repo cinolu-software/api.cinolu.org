@@ -15,7 +15,8 @@ export class EmailService {
     };
     try {
       await this.mailerSerive.sendMail(mail);
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
     }
   }
