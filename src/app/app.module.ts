@@ -19,7 +19,7 @@ import { AuthGuard } from './modules/auth/guards/auth.guard';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../'),
+      rootPath: join(__dirname, '..', '..', '..'),
       renderPath: '/uploads'
     }),
     ConfigModule.forRoot({
