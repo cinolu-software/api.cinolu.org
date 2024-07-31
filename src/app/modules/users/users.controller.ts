@@ -8,7 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'src/app/modules/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/app/modules/auth/enums/role.enum';
 import { User } from './entities/user.entity';
-import { validateFile } from 'src/app/shared/pipes/file-validation.pipe';
+import { validateFile } from 'src/app/shared/utils/pipes/file-validation.pipe';
 
 @Controller('users')
 export class UsersController {

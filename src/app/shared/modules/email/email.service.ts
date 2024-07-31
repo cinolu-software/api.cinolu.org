@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { User } from '../users/entities/user.entity';
+import { User } from 'src/app/modules/users/entities/user.entity';
 
 @Injectable()
 export class EmailService {
@@ -10,7 +10,7 @@ export class EmailService {
     const mail: ISendMailOptions = {
       to: user.email,
       subject: 'Réinitialisation du mot de passe',
-      template: './reset-password',
+      template: 'reset-password',
       context: { user, token }
     };
     try {
@@ -24,8 +24,8 @@ export class EmailService {
   async sendRegistrationEmail(user: User, password: string): Promise<void> {
     const mail: ISendMailOptions = {
       to: user.email,
-      subject: 'Bienvenue sur fikiri',
-      template: './registration',
+      subject: 'Bienvenue sur cinolu.org',
+      template: 'registration',
       context: { user, password }
     };
     try {

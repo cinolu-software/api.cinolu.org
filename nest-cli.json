@@ -3,7 +3,9 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["app/shared/templates/**/*"],
+    "deleteOutDir": true,
+    "manualRestart": true,
+    "assets": ["templates/**/*"],
     "watchAssets": true
   }
 }

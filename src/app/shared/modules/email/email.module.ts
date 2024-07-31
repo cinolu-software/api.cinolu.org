@@ -3,7 +3,6 @@ import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,7 +22,7 @@ import { join } from 'path';
           from: `Support CINOLU <${config.get('MAIL_USERNAME')}>`
         },
         template: {
-          dir: join(__dirname, '..', '..', '..', '..', 'app', 'shared', 'templates'),
+          dir: 'dist/templates',
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true

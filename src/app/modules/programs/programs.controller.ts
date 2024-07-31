@@ -6,7 +6,7 @@ import { Program } from './entities/program.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { validateFile } from 'src/app/shared/pipes/file-validation.pipe';
+import { validateFile } from 'src/app/shared/utils/pipes/file-validation.pipe';
 
 @Controller('programs')
 export class ProgramsController {

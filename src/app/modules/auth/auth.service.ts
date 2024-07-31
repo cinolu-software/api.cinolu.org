@@ -4,19 +4,17 @@ import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
 import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
 import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/register.dto';
-import { ConfigService } from '@nestjs/config';
 import UpdateProfileDto from './dto/update-profile.dto';
-import { EmailService } from 'src/app/modules/email/email.service';
 import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { randomPassword } from 'src/app/shared/helpers/random-password';
 import { Request, Response } from 'express';
+import { EmailService } from 'src/app/shared/modules/email/email.service';
+import { randomPassword } from 'src/app/shared/utils/helpers/random-password';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly emailService: EmailService
   ) {}
@@ -30,7 +28,7 @@ export class AuthService {
   }
 
   async loginGoogle(@Res() res: Response): Promise<void> {
-    return res.redirect(this.configService.get('FRONTEND_URI'));
+    return res.redirect(process.env.FRONTEND_URI);
   }
 
   async login(@Req() req: Request): Promise<{ data: Express.User }> {
