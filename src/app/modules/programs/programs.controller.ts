@@ -7,6 +7,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { validateFile } from 'src/app/shared/utils/pipes/file-validation.pipe';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('programs')
 export class ProgramsController {
@@ -17,6 +18,7 @@ export class ProgramsController {
     return this.programsService.create(createProgramDto);
   }
 
+  @Public()
   @Get('')
   findAll(): Promise<{ data: Program[] }> {
     return this.programsService.findAll();
