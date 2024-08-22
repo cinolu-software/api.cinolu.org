@@ -8,7 +8,7 @@ import { GoogleGuard } from './guards/google.guard';
 import { SignupDto } from './dto/register.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
+import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from '../users/entities/user.entity';
 
@@ -62,9 +62,9 @@ export class AuthController {
   }
 
   @Public()
-  @Post('reset-password-request')
-  resetPasswordRequest(@Body() dto: ResetPasswordRequestDto): Promise<{ data: User }> {
-    return this.authService.resetPasswordRequest(dto);
+  @Post('forgot-password')
+  resetPasswordRequest(@Body() dto: forgotPasswordDto): Promise<{ data: User }> {
+    return this.authService.forgotPassword(dto);
   }
 
   @Public()

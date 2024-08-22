@@ -9,7 +9,7 @@ const port: number = Number(process.env.PORT) as number;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: true,
+    origin: ['http://localhost:4200', 'http://localhost:5000', 'https://cinolu.org', 'http://admin.cinolu.org'],
     allowedHeaders: ['Content-Type'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true

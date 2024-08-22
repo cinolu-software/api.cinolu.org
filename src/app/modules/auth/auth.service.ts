@@ -1,6 +1,6 @@
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { ResetPasswordRequestDto } from './dto/reset-password-request.dto';
+import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
 import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/register.dto';
@@ -68,7 +68,7 @@ export class AuthService {
     }
   }
 
-  async resetPasswordRequest(dto: ResetPasswordRequestDto): Promise<{ data: User }> {
+  async forgotPassword(dto: forgotPasswordDto): Promise<{ data: User }> {
     const { email } = dto;
     const { data } = await this.usersService.findByEmail(email);
     if (!data) throw new BadRequestException('Aucun utilisateur trouvé avec cet email');
