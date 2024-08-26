@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/user.decorator';
 import { GoogleGuard } from './guards/google.guard';
@@ -52,7 +52,7 @@ export class AuthController {
   @Public()
   @UseGuards(GoogleGuard)
   @Get('google/redirect')
-  googleAuthRedirect(@Res() res: any): Promise<void> {
+  googleAuthRedirect(@Res() res: Response): Promise<void> {
     return this.authService.loginGoogle(res);
   }
 

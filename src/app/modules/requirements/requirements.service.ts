@@ -16,7 +16,7 @@ export class RequirementsService {
     try {
       const data: Requirement = await this.requirementsRepository.save(dto);
       return { data };
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Erreur lors de la création de la condition');
     }
   }

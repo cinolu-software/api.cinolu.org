@@ -5,6 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { CreateWithGoogleDto } from '../../users/dto/create-with-google.dto';
 import { UsersService } from '../../users/users.service';
 
+export interface IProfile {
+  emails: { value: string }[];
+  name: { givenName: string; familyName: string };
+  photos: { value: string }[];
+}
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
@@ -19,7 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(_accessToken: string, _refreshToken: string, profile: any, done: VerifyCallback) {
+  async validate(_accessToken: string, _refreshToken: string, profile: IProfile, done: VerifyCallback) {
     const { emails, name, photos } = profile;
     const userDto: CreateWithGoogleDto = {
       email: emails[0].value,

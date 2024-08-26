@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 
 export function Match(property: string, validationOptions?: ValidationOptions) {
-  return (object: any, propertyName: string) => {
+  return (object: object, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName,
@@ -22,7 +22,7 @@ export function Match(property: string, validationOptions?: ValidationOptions) {
 export class MatchConstraint implements ValidatorConstraintInterface {
   validate(value: string, args: ValidationArguments) {
     const [relatedPropertyName] = args.constraints;
-    const relatedValue: string = (args.object as any)[relatedPropertyName];
+    const relatedValue: string = args.object[relatedPropertyName];
     return value === relatedValue;
   }
 }

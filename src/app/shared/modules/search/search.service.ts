@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EnqueuedTask, MeiliSearch, SearchParams, SearchResponse } from 'meilisearch';
+import { EnqueuedTask, MeiliSearch, SearchParams } from 'meilisearch';
 
 @Injectable()
 export class SearchService {
@@ -20,11 +20,7 @@ export class SearchService {
     return await this.client.index(index).updateFilterableAttributes(attributes);
   }
 
-  async search(
-    index: string,
-    query: string,
-    searchParams: SearchParams
-  ): Promise<{ data: SearchResponse<Record<string, any>, SearchParams> }> {
+  async search(index: string, query: string, searchParams: SearchParams) {
     const data = await this.client.index(index).search(query, searchParams);
     return { data };
   }
