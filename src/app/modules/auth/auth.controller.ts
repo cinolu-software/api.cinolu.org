@@ -21,6 +21,7 @@ export class AuthController {
     return this.authService.logout(request);
   }
 
+  @Public()
   @Get('profile')
   profile(@CurrentUser() user: User): Promise<{ data: User }> {
     return this.authService.profile(user);
