@@ -23,7 +23,7 @@ export class AuthController {
 
   @Public()
   @Get('profile')
-  profile(@CurrentUser() user: User): Promise<{ data: User }> {
+  profile(@CurrentUser() user: User): Promise<{ data: User } | null> {
     return this.authService.profile(user);
   }
 

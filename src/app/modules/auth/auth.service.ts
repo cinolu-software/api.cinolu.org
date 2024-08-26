@@ -40,7 +40,8 @@ export class AuthService {
     request.session.destroy(() => {});
   }
 
-  async profile(@CurrentUser() user: User): Promise<{ data: User }> {
+  async profile(@CurrentUser() user: User | null): Promise<{ data: User } | null> {
+    if (!user) return null;
     const { data } = await this.usersService.findOne(user.id);
     return { data };
   }
