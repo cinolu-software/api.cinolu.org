@@ -22,6 +22,11 @@ export class AuthController {
   }
 
   @Public()
+  @Get('is-auth')
+  checkAuth(@Req() req: Request): Promise<{ data: Express.User }> {
+    return this.authService.checkAuth(req);
+  }
+
   @Get('profile')
   profile(@CurrentUser() user: User): Promise<{ data: User } | null> {
     return this.authService.profile(user);

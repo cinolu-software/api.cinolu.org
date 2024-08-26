@@ -27,6 +27,11 @@ export class AuthService {
     return { data: user };
   }
 
+  async checkAuth(@Req() req: Request): Promise<{ data: Express.User }> {
+    const { user } = req;
+    return { data: user };
+  }
+
   async loginGoogle(@Res() res: Response): Promise<void> {
     return res.redirect(process.env.FRONTEND_URI);
   }
@@ -40,8 +45,7 @@ export class AuthService {
     request.session.destroy(() => {});
   }
 
-  async profile(@CurrentUser() user: User | null): Promise<{ data: User } | null> {
-    if (!user) return null;
+  async profile(@CurrentUser() user: User): Promise<{ data: User }> {
     const { data } = await this.usersService.findOne(user.id);
     return { data };
   }
