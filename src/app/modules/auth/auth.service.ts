@@ -27,9 +27,9 @@ export class AuthService {
     return { data: user };
   }
 
-  async checkAuth(@Req() req: Request): Promise<{ data: Express.User }> {
-    const { user } = req;
-    return { data: user };
+  async checkAuth(@Req() req: Request): Promise<{ data: boolean }> {
+    const isAuth = req.user ? true : false;
+    return { data: isAuth };
   }
 
   async loginGoogle(@Res() res: Response): Promise<void> {

@@ -23,7 +23,7 @@ export class AuthController {
 
   @Public()
   @Get('is-auth')
-  checkAuth(@Req() req: Request): Promise<{ data: Express.User }> {
+  checkAuth(@Req() req: Request): Promise<{ data: boolean }> {
     return this.authService.checkAuth(req);
   }
 
