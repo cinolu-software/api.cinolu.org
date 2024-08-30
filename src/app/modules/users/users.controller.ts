@@ -9,6 +9,7 @@ import { Roles } from 'src/app/modules/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/app/modules/auth/enums/role.enum';
 import { User } from './entities/user.entity';
 import { validateFile } from 'src/app/shared/utils/pipes/file-validation.pipe';
+import { CurrentUser } from '../auth/decorators/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -40,7 +41,7 @@ export class UsersController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Post('image/:id')
+  @Post('image-profile')
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
@@ -52,10 +53,10 @@ export class UsersController {
     })
   )
   uploadImage(
-    @Param('id') id: string,
+    @CurrentUser() user: User,
     @UploadedFile(validateFile()) file: Express.Multer.File
   ): Promise<{ data: User }> {
-    return this.userService.uploadImage(+id, file);
+    return this.userService.uploadImage(user, file);
   }
 
   @Delete('image/:id')
