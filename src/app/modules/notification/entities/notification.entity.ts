@@ -23,7 +23,7 @@ export class Notification {
   message: string;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'sender_id' })
+  @JoinColumn({ name: 'senderId' })
   sender: User;
 
   @CreateDateColumn()

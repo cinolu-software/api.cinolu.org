@@ -21,13 +21,7 @@ export class User {
   email: string;
 
   @Column()
-  first_name: string;
-
-  @Column()
   name: string;
-
-  @Column()
-  last_name: string;
 
   @Column({ nullable: true })
   password: string;

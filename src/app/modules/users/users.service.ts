@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { SignupDto } from '../auth/dto/register.dto';
+import { SignupDto } from '../auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
 import { CreateWithGoogleDto } from './dto/create-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -76,12 +76,13 @@ export class UsersService {
     }
   }
 
-  async findByEmail(email: string): Promise<{ data: User | null }> {
-    const data: User | null = await this.userRepository.findOne({
-      where: { email },
-      relations: ['roles']
-    });
-    return { data };
+  async findBy(key: string, value: string): Promise<{ data: User }> {
+    try {
+      const data: User = await this.userRepository.findOneOrFail({ where: { [key]: value } });
+      return { data };
+    } catch {
+      throw new NotFoundException('Aucun utilisateur trouvé');
+    }
   }
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {

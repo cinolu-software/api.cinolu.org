@@ -3,14 +3,13 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategies/local.strategy';
-import { Session } from './session';
-import { GoogleStrategy } from './strategies/google.strategy';
 import { EmailModule } from 'src/app/shared/modules/email/email.module';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [PassportModule.register({ session: true }), UsersModule, EmailModule],
+  imports: [PassportModule, UsersModule, EmailModule],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, Session, GoogleStrategy]
+  providers: [AuthService, LocalStrategy, JwtStrategy]
 })
 export class AuthModule {}

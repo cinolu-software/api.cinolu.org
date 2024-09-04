@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -14,8 +14,9 @@ import { TypesModule } from './modules/types/types.module';
 import { UsersModule } from './modules/users/users.module';
 import { DatabaseModule } from './shared/modules/database/database.module';
 import { EmailModule } from './shared/modules/email/email.module';
-import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { NotificationModule } from './modules/notification/notification.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -25,6 +26,14 @@ import { NotificationModule } from './modules/notification/notification.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' }
+      })
     }),
     AuthModule,
     UsersModule,
@@ -39,14 +48,8 @@ import { NotificationModule } from './modules/notification/notification.module';
     NotificationModule
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard
-    }
+    { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard }
   ]
 })
 export class AppModule {}
