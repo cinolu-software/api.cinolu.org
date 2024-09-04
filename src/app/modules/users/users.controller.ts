@@ -8,7 +8,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'src/app/modules/auth/decorators/roles.decorator';
 import { RoleEnum } from 'src/app/modules/auth/enums/role.enum';
 import { User } from './entities/user.entity';
-import { validateFile } from 'src/app/shared/utils/pipes/file-validation.pipe';
 import { CurrentUser } from '../auth/decorators/user.decorator';
 
 @Controller('users')
@@ -52,10 +51,7 @@ export class UsersController {
       })
     })
   )
-  uploadImage(
-    @CurrentUser() user: User,
-    @UploadedFile(validateFile()) file: Express.Multer.File
-  ): Promise<{ data: User }> {
+  uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<{ data: User }> {
     return this.userService.uploadImage(user, file);
   }
 
