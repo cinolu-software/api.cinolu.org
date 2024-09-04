@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Notification } from './notifications.entity';
+import { Notification } from './notification.entity';
 import { User } from '../../users/entities/user.entity';
 import { Role } from '../../roles/entities/role.entity';
 

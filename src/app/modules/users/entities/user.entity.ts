@@ -11,7 +11,7 @@ import {
 import { Role } from '../../roles/entities/role.entity';
 import { Program } from 'src/app/modules/programs/entities/program.entity';
 import { NotificationRecipients } from '../../notification/entities/notificationRecipients.entity';
-import { Notification } from '../../notification/entities/notifications.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 
 @Entity()
 export class User {

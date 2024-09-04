@@ -9,7 +9,6 @@ import {
   OneToMany
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { NotificationRecipients } from './notificationRecipients.entity';
 import { Attachment } from '../../attachments/entities/attachment.entity';
 
 @Entity()
@@ -33,8 +32,8 @@ export class Notification {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => NotificationRecipients, (recipient) => recipient.notification)
-  recipients: NotificationRecipients[];
+  @OneToMany(() => User, (user) => user.notifications)
+  recipients: User[];
 
   @OneToMany(() => Attachment, (attachment) => attachment.notification)
   attachments: Attachment[];

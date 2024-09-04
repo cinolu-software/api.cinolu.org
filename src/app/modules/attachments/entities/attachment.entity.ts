@@ -1,6 +1,6 @@
 import { Program } from 'src/app/modules/programs/entities/program.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Notification } from '../../notification/entities/notifications.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 
 @Entity()
 export class Attachment {
