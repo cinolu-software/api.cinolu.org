@@ -3,11 +3,11 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CreateWithGoogleDto } from '../dto/sign-up-with-google.dto';
-import { UsersService } from '../../../modules/users/users.service';
+import { UsersService } from '../../users/users.service';
 import { GoogleProfile } from '../types/google-profile.interface';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly userService: UsersService,
     readonly configService: ConfigService

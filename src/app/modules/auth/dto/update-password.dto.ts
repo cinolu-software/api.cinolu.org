@@ -5,9 +5,7 @@ export class UpdatePasswordDto {
   @IsOptional()
   old_password: string;
 
-  @MinLength(6, {
-    message: 'Le mot de passe doit contenir au moins 6 caractères'
-  })
+  @MinLength(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' })
   password: string;
 
   @IsNotEmpty({ message: 'La confirmation du mot de passe est recquise' })

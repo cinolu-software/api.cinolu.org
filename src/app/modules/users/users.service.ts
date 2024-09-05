@@ -1,11 +1,11 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { SignupDto } from '../../core/auth/dto/sign-up.dto';
+import { SignupDto } from '../auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
-import { CreateWithGoogleDto } from '../../core/auth/dto/sign-up-with-google.dto';
+import { CreateWithGoogleDto } from '../auth/dto/sign-up-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import UpdateProfileDto from '../../core/auth/dto/update-profile.dto';
-import { CurrentUser } from 'src/app/core/auth/decorators/user.decorator';
+import UpdateProfileDto from '../auth/dto/update-profile.dto';
+import { CurrentUser } from 'src/app/modules/auth/decorators/user.decorator';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -32,6 +32,19 @@ export class UsersService {
       return { data: user };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
+    }
+  }
+
+  async verifyUserEmail(email: string): Promise<{ data: User }> {
+    try {
+      const { data: user } = await this.findBy('email', email);
+      const data = await this.userRepository.save({
+        ...user,
+        verified_at: new Date()
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la vérification de l'email");
     }
   }
 
@@ -86,7 +99,7 @@ export class UsersService {
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
-      const user: User = await this.userRepository.findOne({
+      const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });
       if (user && !user.profile) {
@@ -94,7 +107,7 @@ export class UsersService {
         await this.userRepository.save(user);
       }
       if (user) return { data: user };
-      const newUser: User = await this.userRepository.save({
+      const newUser = await this.userRepository.save({
         ...dto,
         roles: [{ name: 'user' }]
       });
@@ -143,34 +156,10 @@ export class UsersService {
     }
   }
 
-  async deleteProfileImage(id: number): Promise<{ data: User }> {
-    try {
-      const { data: user } = await this.findOne(id);
-      delete user.password;
-      await fs.unlink(`./uploads/${user.profile}`);
-      const data = await this.userRepository.save({
-        ...user,
-        profile: null
-      });
-      return { data };
-    } catch {
-      throw new BadRequestException("Erreur lors de la suppression de l'image");
-    }
-  }
-
-  async findByResetToken(token: string): Promise<{ data: User }> {
-    try {
-      const data: User = await this.userRepository.findOneByOrFail({ token });
-      return { data };
-    } catch {
-      throw new NotFoundException('le code fourni est invalide');
-    }
-  }
-
   async updatePassword(id: number, password: string): Promise<{ data: User }> {
     try {
       const { data } = await this.findOne(id);
-      await this.userRepository.update(id, { password, token: null });
+      await this.userRepository.update(id, { password });
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');

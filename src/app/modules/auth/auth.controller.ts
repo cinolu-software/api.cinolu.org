@@ -7,13 +7,13 @@ import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { User } from '../../modules/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
   @Post('sign-in')
@@ -57,8 +57,20 @@ export class AuthController {
 
   @Public()
   @Post('forgot-password')
-  resetPasswordRequest(@Body() dto: forgotPasswordDto): Promise<{ data: User }> {
+  forgotPassword(@Body() dto: forgotPasswordDto): Promise<{ data: User }> {
     return this.authService.forgotPassword(dto);
+  }
+
+  @Public()
+  @Post('resend-token')
+  resendToken(@Body() dto: { email: string }): Promise<void> {
+    return this.authService.resendToken(dto.email);
+  }
+
+  @Public()
+  @Post('verify-email')
+  verifyUserEmail(@Body() dto: { email: string }): Promise<{ data: User }> {
+    return this.authService.verifyUserEmail(dto.email);
   }
 
   @Public()

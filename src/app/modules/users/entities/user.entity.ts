@@ -33,9 +33,6 @@ export class User {
   address: string;
 
   @Column({ nullable: true })
-  token: string;
-
-  @Column({ nullable: true })
   google_image: string;
 
   @Column({ nullable: true })

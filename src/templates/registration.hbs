@@ -1,40 +1,28 @@
-<html lang='fr'>
+<html lang='en'>
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Bienvenue sur cinolu.org!</title>
+    <title>Password Reset</title>
     <style>
-      body { font-family: Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 0; } .container { max-width:
-      600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,
-      0, 0, 0.1); } .message { margin-top: 20px; text-align: right; } .btn { display: inline-block; padding: 10px 20px;
-      background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px; transition: background-color
-      0.3s ease; } .btn:hover { background-color: #0056b3; }
+      body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; } .container { max-width:
+      600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0,
+      0, 0, 0.1); } h1 { color: #333; } p { color: #666; } .btn { display: inline-block; background-color: #167d11;
+      color: #fff; margin-bottom: 5px; text-decoration: none; padding: 10px 20px; border-radius: 3px; } .btn:hover { background-color:
+      #0056b3; }
     </style>
   </head>
   <body>
     <div class='container'>
-      <div class='message'>
-        <p>Cher(e) {{user.name}},</p>
-        <p>
-          Nous sommes ravis de vous accueillir sur la plateforme Fikiri.co! nous sommes heureux de vous compter parmi
-          nous.
-        </p>
-        <p>
-          Voici votre mot de passe par défaut:
-          {{password}}. Nous vous recommandons de le modifier une fois connecté(e) pour des raisons de sécurité.
-        </p>
-        <p>Pour commencer, veuillez vous connecter à l'adresse suivante:</p>
-        <p>
-          <a class='btn' href='https://admin.cinolu.org'>Connexion à Fikiri.co</a>
-        </p>
-        <p>
-          Si vous avez des questions ou rencontrez des problèmes lors de la connexion, n'hésitez pas à nous contacter à
-          <a href='mailto:support@fikiri.co'>support@fikiri.co</a>. Notre équipe est là pour vous aider à tirer le
-          meilleur parti de notre plateforme.</p>
-        <p>Encore une fois, bienvenue à bord!</p>
-        <p>Cordialement,</p>
-        <p>L'équipe CINOLU</p>
-      </div>
+      <h2>Bonjour {{ user.name }},</h2>
+      <p>
+     Merci de vous être inscrit sur la plateforme CINOLU ! Pour finaliser votre inscription et activer votre compte, veuillez vérifier votre adresse email en cliquant sur le lien ci-dessous :
+      </p>
+      <a href='https://localhost:42000/auth/sign-up/{{token}}' class='btn'>Vérifier mon adresse email</a>
+      <p>
+        Ce lien est valable pendant 30 minutes. Si le lien expire, vous devrez recommencer le processus de vérification.
+      </p>
+      <p>Si vous n'avez pas initié cette inscription, vous pouvez ignorer cet email.</p>
+      <p>Merci,<br /> L'équipe CINOLU.</p>
     </div>
   </body>
 </html>

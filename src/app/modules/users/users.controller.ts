@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { CurrentUser } from '../../core/auth/decorators/user.decorator';
+import { CurrentUser } from '../auth/decorators/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -49,11 +49,6 @@ export class UsersController {
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<{ data: User }> {
     return this.userService.uploadImage(user, file);
-  }
-
-  @Delete('image/:id')
-  removeImage(@Param('id') id: string): Promise<{ data: User }> {
-    return this.userService.deleteProfileImage(+id);
   }
 
   @Delete(':id')
