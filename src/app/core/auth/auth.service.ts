@@ -1,16 +1,16 @@
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
-import { BadRequestException, Injectable, Res } from '@nestjs/common';
+import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
 import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
-import { Response } from 'express';
-import { EmailService } from 'src/app/shared/modules/email/email.service';
-import { randomPassword } from 'src/app/shared/utils/helpers/random-password';
+import { UsersService } from '../../modules/users/users.service';
+import { Request, Response } from 'express';
+import { EmailService } from 'src/app/core/modules/email/email.service';
+import { randomPassword } from 'src/app/core/utils/helpers/random-password';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -22,6 +22,17 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
+
+  private async verifyPassword(password: string, encrypted: string): Promise<boolean> {
+    const isMatch = await bcrypt.compare(password, encrypted);
+    if (!isMatch) throw new BadRequestException();
+    return isMatch;
+  }
+
+  private async generateToken(user: User): Promise<string> {
+    const payload = { sub: user.id, name: user.name };
+    return await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
+  }
 
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
@@ -36,22 +47,16 @@ export class AuthService {
 
   async signIn(@CurrentUser() user: User): Promise<{ access_token: string }> {
     try {
-      const payload = { sub: user.id, name: user.name };
-      const access_token = await this.jwtService.signAsync(payload, { secret: this.configService.get('JWT_SECRET') });
+      const access_token = await this.generateToken(user);
       return { access_token };
     } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
     }
   }
 
-  private async verifyPassword(password: string, encrypted: string): Promise<boolean> {
-    const isMatch = await bcrypt.compare(password, encrypted);
-    if (!isMatch) throw new BadRequestException();
-    return isMatch;
-  }
-
-  async signInWithGoogle(@Res() res: Response): Promise<void> {
-    return res.redirect(process.env.FRONTEND_URI);
+  async signInWithGoogle(@Req() req: Request, @Res() res: Response): Promise<void> {
+    const access_token = await this.generateToken(req.user as User);
+    res.redirect(`${this.configService.get('FRONTEND_URL')}/auth/google?access_token=${access_token}`);
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
@@ -63,8 +68,8 @@ export class AuthService {
     return await this.usersService.updateProfile(currentUser, dto);
   }
 
-  async register(registerDto: SignupDto): Promise<{ data: User }> {
-    const { data } = await this.usersService.register(registerDto);
+  async signUp(dto: SignupDto): Promise<{ data: User }> {
+    const { data } = await this.usersService.signUp(dto);
     return { data };
   }
 

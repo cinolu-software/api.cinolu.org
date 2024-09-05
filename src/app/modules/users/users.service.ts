@@ -1,13 +1,12 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { SignupDto } from '../auth/dto/sign-up.dto';
+import { SignupDto } from '../../core/auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
-import { CreateWithGoogleDto } from './dto/create-with-google.dto';
+import { CreateWithGoogleDto } from '../../core/auth/dto/sign-up-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import UpdateProfileDto from '../auth/dto/update-profile.dto';
-import { CurrentUser } from 'src/app/modules/auth/decorators/user.decorator';
+import UpdateProfileDto from '../../core/auth/dto/update-profile.dto';
+import { CurrentUser } from 'src/app/core/auth/decorators/user.decorator';
 import { Repository } from 'typeorm';
-import { RoleEnum } from '../auth/enums/role.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 
@@ -36,12 +35,12 @@ export class UsersService {
     }
   }
 
-  async register(dto: SignupDto): Promise<{ data: User }> {
+  async signUp(dto: SignupDto): Promise<{ data: User }> {
     try {
       delete dto.password_confirm;
       const data: User = await this.userRepository.save({
         ...dto,
-        roles: [{ name: RoleEnum.User }]
+        roles: [{ name: 'user' }]
       });
       return { data };
     } catch {
@@ -58,7 +57,7 @@ export class UsersService {
 
   async findAdmins(): Promise<{ data: User[] }> {
     const data: User[] = await this.userRepository.find({
-      where: { roles: { name: RoleEnum.Admin } },
+      where: { roles: { name: 'admin' } },
       relations: ['roles']
     });
     return { data };
@@ -87,17 +86,17 @@ export class UsersService {
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
-      const existingUser: User = await this.userRepository.findOne({
+      const user: User = await this.userRepository.findOne({
         where: { email: dto.email }
       });
-      if (existingUser && !existingUser.profile) {
-        existingUser.google_image = dto.google_image;
-        await this.userRepository.save(existingUser);
+      if (user && !user.profile) {
+        user.google_image = dto.google_image;
+        await this.userRepository.save(user);
       }
-      if (existingUser) return { data: existingUser };
+      if (user) return { data: user };
       const newUser: User = await this.userRepository.save({
         ...dto,
-        roles: [{ name: RoleEnum.User }]
+        roles: [{ name: 'user' }]
       });
       return { data: newUser };
     } catch {
@@ -119,10 +118,10 @@ export class UsersService {
     }
   }
 
-  async updateProfile(@CurrentUser() user: User, dto: UpdateProfileDto): Promise<{ data: User }> {
-    const { data: existingUser } = await this.findOne(user.id);
+  async updateProfile(@CurrentUser() currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
+    const { data: user } = await this.findOne(currentUser.id);
     try {
-      const updatedUser = Object.assign(existingUser, dto);
+      const updatedUser = Object.assign(user, dto);
       delete updatedUser.password;
       const data: User = await this.userRepository.save(updatedUser);
       return { data };

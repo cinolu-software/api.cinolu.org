@@ -4,7 +4,7 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UserSubscriber } from './subscribers/user.subscriber';
-import { EmailModule } from 'src/app/shared/modules/email/email.module';
+import { EmailModule } from 'src/app/core/modules/email/email.module';
 
 @Module({
   imports: [EmailModule, TypeOrmModule.forFeature([User]), EmailModule],

@@ -3,20 +3,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { SearchModule } from './shared/modules/search/search.module';
+import { SearchModule } from './core/modules/search/search.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { AuthModule } from './core/auth/auth.module';
 import { ProgramsModule } from './modules/programs/programs.module';
 import { RequirementsModule } from './modules/requirements/requirements.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { TypesModule } from './modules/types/types.module';
 import { UsersModule } from './modules/users/users.module';
-import { DatabaseModule } from './shared/modules/database/database.module';
-import { EmailModule } from './shared/modules/email/email.module';
+import { DatabaseModule } from './core/modules/database/database.module';
+import { EmailModule } from './core/modules/email/email.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from './core/auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -47,9 +46,6 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
     TypesModule,
     NotificationModule
   ],
-  providers: [
-    { provide: APP_GUARD, useClass: RolesGuard },
-    { provide: APP_GUARD, useClass: JwtAuthGuard }
-  ]
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }]
 })
 export class AppModule {}
