@@ -31,6 +31,7 @@ export class AuthService {
       const { data: user } = await this.usersService.findBy('email', email);
       const { password, ...result } = user;
       await this.verifyPassword(pass, password);
+      await this.usersService.isVerified(email);
       return { data: result as User };
     } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
@@ -62,13 +63,13 @@ export class AuthService {
     }
   }
 
-  private async verifyPassword(password: string, encrypted: string): Promise<boolean> {
+  async verifyPassword(password: string, encrypted: string): Promise<boolean> {
     const isMatch = await bcrypt.compare(password, encrypted);
     if (!isMatch) throw new BadRequestException();
     return isMatch;
   }
 
-  private async generateToken(user: User, expiresIn: string): Promise<string> {
+  async generateToken(user: User, expiresIn: string): Promise<string> {
     const payload = { sub: user.id, name: user.name };
     return await this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
   }
