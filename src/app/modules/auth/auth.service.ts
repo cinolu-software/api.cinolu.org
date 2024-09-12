@@ -86,7 +86,7 @@ export class AuthService {
 
   async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response): Promise<void> {
     const access_token = await this.generateToken(user, '1d');
-    return res.redirect(this._frontEndUrl + '/sign-in?token' + access_token);
+    return res.redirect(this._frontEndUrl + 'sign-in?token' + access_token);
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
