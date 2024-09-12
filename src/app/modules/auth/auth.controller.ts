@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/user.decorator';
@@ -8,7 +8,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from '../users/entities/user.entity';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
@@ -30,8 +30,8 @@ export class AuthController {
   @Public()
   @UseGuards(AuthGuard('google'))
   @Get('google/redirect')
-  googleAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<void> {
-    return this.authService.signInWithGoogle(req, res);
+  googleAuthRedirect(@CurrentUser() user: User, @Res() res: Response): Promise<void> {
+    return this.authService.signInWithGoogle(user, res);
   }
 
   @Public()

@@ -1,14 +1,14 @@
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
-import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
+import { BadRequestException, Injectable, Res } from '@nestjs/common';
 import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -24,7 +24,7 @@ export class AuthService {
     private configService: ConfigService
   ) {
     this._jwtSecret = this.configService.get('JWT_SECRET');
-    this._frontEndUrl = this.configService.get('FRONTEND_URL');
+    this._frontEndUrl = this.configService.get('FRONTEND_URI');
   }
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
@@ -84,10 +84,9 @@ export class AuthService {
     }
   }
 
-  async signInWithGoogle(@Req() req: Request, @Res() res: Response): Promise<void> {
-    const user = req.user as User;
+  async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response): Promise<void> {
     const access_token = await this.generateToken(user, '1d');
-    return res.redirect(this._frontEndUrl + '/auth/google?access_token' + access_token);
+    return res.redirect(this._frontEndUrl + '/sign-in?token' + access_token);
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
