@@ -75,13 +75,13 @@ export class AuthController {
 
   @Public()
   @Post('verify-email')
-  verifyUserEmail(@Body() dto: { email: string }): Promise<{ data: User }> {
-    return this.authService.verifyUserEmail(dto.email);
+  verifyUserEmail(@Body() dto: { token: string }): Promise<{ access_token: string }> {
+    return this.authService.verifyUserEmail(dto.token);
   }
 
   @Public()
   @Post('reset-password')
-  resetPassword(@Body() dto: ResetPasswordDto): Promise<{ data: User }> {
+  resetPassword(@Body() dto: ResetPasswordDto): Promise<{ access_token: string }> {
     return this.authService.resetPassword(dto);
   }
 }

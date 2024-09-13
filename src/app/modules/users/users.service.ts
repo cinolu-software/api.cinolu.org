@@ -58,16 +58,6 @@ export class UsersService {
     }
   }
 
-  async isVerified(email: string): Promise<void> {
-    try {
-      const { data: user } = await this.findBy('email', email);
-      const isVerified = user.verified_at !== null;
-      if (!isVerified) new BadRequestException();
-    } catch {
-      throw new BadRequestException("Erreur lors de la vérification de l'email");
-    }
-  }
-
   async signUp(dto: SignupDto): Promise<{ data: User }> {
     try {
       delete dto.password_confirm;
@@ -129,6 +119,7 @@ export class UsersService {
       if (user) return { data: user };
       const newUser = await this.userRepository.save({
         ...dto,
+        verified_at: new Date(),
         roles: [{ name: 'user' }]
       });
       return { data: newUser };

@@ -28,10 +28,9 @@ export class AuthService {
   }
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
-      const { data: user } = await this.usersService.findBy('email', email);
+      const { data: user } = await this.usersService.getVerifiedUser(email);
       const { password, ...result } = user;
       await this.verifyPassword(pass, password);
-      await this.usersService.isVerified(email);
       return { data: result as User };
     } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
@@ -50,14 +49,17 @@ export class AuthService {
   async signUp(dto: SignupDto): Promise<{ data: User }> {
     const { data } = await this.usersService.signUp(dto);
     const token = await this.generateToken(data, '30min');
-    this.eventEmitter.emit('user.sign-up', { user: data, token });
+    const url = this.configService.get('FRONTEND_URI') + 'sign-in?token=' + token;
+    this.eventEmitter.emit('user.sign-up', { user: data, token: url });
     return { data };
   }
 
-  async verifyUserEmail(email: string): Promise<{ data: User }> {
+  async verifyUserEmail(token: string): Promise<{ access_token: string }> {
     try {
-      const { data } = await this.usersService.verifyUserEmail(email);
-      return { data };
+      const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
+      const { data } = await this.usersService.verifyUserEmail(payload.email);
+      const access_token = await this.generateToken(data, '1d');
+      return { access_token };
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
     }
@@ -74,11 +76,12 @@ export class AuthService {
     return await this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
   }
 
-  async verifyToken(token: string): Promise<{ data: User }> {
+  async verifyToken(token: string): Promise<{ access_token: string }> {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
       const { data } = await this.usersService.findOne(payload.sub);
-      return { data };
+      const access_token = await this.generateToken(data, '1d');
+      return { access_token };
     } catch {
       throw new BadRequestException('Token invalide');
     }
@@ -112,7 +115,8 @@ export class AuthService {
     try {
       const { data: user } = await this.usersService.findBy('email', dto.email);
       const token = await this.generateToken(user, '15min');
-      this.eventEmitter.emit('user.reset-password', { user, token });
+      const url = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
+      this.eventEmitter.emit('user.reset-password', { user, token: url });
       return { data: user };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
@@ -130,12 +134,14 @@ export class AuthService {
     }
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{ data: User }> {
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{ access_token: string }> {
     const { token, password } = resetPasswordDto;
     try {
-      const { data } = await this.verifyToken(token);
-      await this.usersService.updatePassword(data.id, password);
-      return { data };
+      await this.verifyToken(token);
+      const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
+      const { data } = await this.usersService.updatePassword(payload.id, password);
+      const access_token = await this.generateToken(data, '1d');
+      return { access_token };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
     }
