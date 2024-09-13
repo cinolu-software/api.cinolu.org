@@ -48,6 +48,16 @@ export class UsersService {
     }
   }
 
+  async getVerifiedUser(email: string): Promise<{ data: User }> {
+    try {
+      const { data: user } = await this.findBy('email', email);
+      if (user.verified_at === null) new BadRequestException();
+      return { data: user };
+    } catch {
+      throw new BadRequestException("L'email n'a pas été vérifié");
+    }
+  }
+
   async isVerified(email: string): Promise<void> {
     try {
       const { data: user } = await this.findBy('email', email);

@@ -90,7 +90,7 @@ export class AuthService {
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
-    const { data } = await this.usersService.findOne(user.id);
+    const { data } = await this.usersService.getVerifiedUser(user.email);
     return { data };
   }
 
