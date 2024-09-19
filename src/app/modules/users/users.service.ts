@@ -100,7 +100,7 @@ export class UsersService {
 
   async findBy(key: string, value: string): Promise<{ data: User }> {
     try {
-      const data: User = await this.userRepository.findOneOrFail({ where: { [key]: value } });
+      const data: User = await this.userRepository.findOneOrFail({ where: { [key]: value }, relations: ['roles'] });
       return { data };
     } catch {
       throw new NotFoundException('Aucun utilisateur trouvé');
