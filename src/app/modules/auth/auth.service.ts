@@ -111,13 +111,12 @@ export class AuthService {
     }
   }
 
-  async forgotPassword(dto: forgotPasswordDto): Promise<{ data: User }> {
+  async forgotPassword(dto: forgotPasswordDto): Promise<void> {
     try {
       const { data: user } = await this.usersService.findBy('email', dto.email);
       const token = await this.generateToken(user, '15min');
       const url = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
       this.eventEmitter.emit('user.reset-password', { user, token: url });
-      return { data: user };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
     }
