@@ -118,7 +118,7 @@ export class AuthService {
       const url = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
       this.eventEmitter.emit('user.reset-password', { user, token: url });
     } catch {
-      throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
+      throw new BadRequestException('Aucun utilisateur trouvé avec cet email');
     }
   }
 
@@ -142,7 +142,7 @@ export class AuthService {
       const access_token = await this.generateToken(data, '1d');
       return { access_token };
     } catch {
-      throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
+      throw new BadRequestException('Le lien de réinitialisation du mot de passe est invalide');
     }
   }
 }
