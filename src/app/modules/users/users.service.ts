@@ -170,7 +170,8 @@ export class UsersService {
   async updatePassword(id: number, password: string): Promise<{ data: User }> {
     try {
       const { data } = await this.findOne(id);
-      await this.userRepository.update(id, { password });
+      data.password = password;
+      await this.userRepository.save(data);
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
