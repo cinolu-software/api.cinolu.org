@@ -6,6 +6,8 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UsersService } from '../users/users.service';
 import { AttachmentsService } from '../attachments/attachments.service';
 import { Notification } from './entities/notification.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class NotificationService {
@@ -13,11 +15,17 @@ export class NotificationService {
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
     private userService: UsersService,
-    private attachmentsService: AttachmentsService
+    private attachmentsService: AttachmentsService,
+    private eventEmitter: EventEmitter2,
+    private configService: ConfigService
   ) {}
 
   async create(dto: CreateNotificationDto): Promise<{ data: Notification }> {
     await this.userService.findOne(dto.sender);
+    const { data: recipients } = await this.userService.getUsersByIds(dto.recipients);
+    recipients.forEach((recipient) => {
+      this.eventEmitter.emit('user.notify', { user: recipient, link: this.configService.get('ACCOUNT_URI') });
+    });
     const data = await this.notificationRepository.save({
       ...dto,
       sender: { id: dto.sender },

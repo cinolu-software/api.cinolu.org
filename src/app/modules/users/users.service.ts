@@ -6,7 +6,7 @@ import { CreateWithGoogleDto } from '../auth/dto/sign-up-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UpdateProfileDto from '../auth/dto/update-profile.dto';
 import { CurrentUser } from 'src/app/modules/auth/decorators/user.decorator';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 
@@ -33,6 +33,13 @@ export class UsersService {
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
     }
+  }
+
+  async getUsersByIds(ids: number[]): Promise<{ data: User[] }> {
+    const data: User[] = await this.userRepository.findBy({
+      id: In(ids)
+    });
+    return { data };
   }
 
   async verifyUserEmail(email: string): Promise<{ data: User }> {
