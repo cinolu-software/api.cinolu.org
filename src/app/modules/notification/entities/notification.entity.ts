@@ -22,15 +22,18 @@ export class Notification {
   @Column({ type: 'text' })
   message: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'senderId' })
-  sender: User;
+  @Column({ type: 'boolean', default: false })
+  is_read: boolean;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'senderId' })
+  sender: User;
 
   @OneToMany(() => User, (user) => user.notifications)
   recipients: User[];

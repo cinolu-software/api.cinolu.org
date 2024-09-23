@@ -1,79 +1,100 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
-import { Notification } from './entities/notification.entity';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UsersService } from '../users/users.service';
+import { AttachmentsService } from '../attachments/attachments.service';
+import { Notification } from './entities/notification.entity';
 
 @Injectable()
 export class NotificationService {
   constructor(
     @InjectRepository(Notification)
-    private readonly notificationRepository: Repository<Notification>,
-    private readonly userService: UsersService
+    private notificationRepository: Repository<Notification>,
+    private userService: UsersService,
+    private attachmentsService: AttachmentsService
   ) {}
 
-  async create(createNotificationDto: CreateNotificationDto): Promise<{ data: Notification }> {
-    const { title, message, recipientIds, senderId } = createNotificationDto;
-    await this.userService.findOne(senderId);
-    const data: Notification = await this.notificationRepository.save({
-      title,
-      message,
-      sender: { id: senderId },
-      recipients: recipientIds.map((id) => ({ id }))
+  async create(dto: CreateNotificationDto): Promise<{ data: Notification }> {
+    await this.userService.findOne(dto.sender);
+    const data = await this.notificationRepository.save({
+      ...dto,
+      sender: { id: dto.sender },
+      recipients: dto.recipients.map((id) => ({ id }))
     });
     return { data };
   }
 
-  //   await this.notificationRepository.save(notification);
-
-  //   for (const recipientId of recipientIds) {
-  //     const recipientUser = await this.userRepository.findOne({ where: { id: recipientId } });
-  //     const recipientRole = await this.roleRepository.findOne({ where: { id: recipientId } });
-
-  //     if (recipientUser) {
-  //       const recipient = this.notificationRecipientsRepository.create({
-  //         notification,
-  //         user: recipientUser
-  //       });
-  //       await this.notificationRecipientsRepository.save(recipient);
-  //     } else if (recipientRole) {
-  //       const recipient = this.notificationRecipientsRepository.create({
-  //         notification,
-  //         role: recipientRole
-  //       });
-  //       await this.notificationRecipientsRepository.save(recipient);
-  //     }
-  //   }
-
-  //   return notification;
-  // }
-
-  async findAll(): Promise<Notification[]> {
-    return this.notificationRepository.find({ relations: ['sender', 'recipients', 'attachments'] });
+  async addAttachments(id: number, files: Express.Multer.File[]): Promise<{ data: Notification }> {
+    await this.findOne(id);
+    try {
+      const attachments = await Promise.all(
+        files.map(async (file) => {
+          const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
+          return attachment;
+        })
+      );
+      const data = await this.notificationRepository.save({ id, attachments });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
+    }
   }
 
-  async findOne(id: number): Promise<Notification> {
-    const notification = await this.notificationRepository.findOne({
-      where: { id },
+  async findUserNotifications(userId: number): Promise<{ data: Notification[] }> {
+    const data = await this.notificationRepository.find({
+      where: { recipients: { id: userId } },
       relations: ['sender', 'recipients', 'attachments']
     });
-    if (!notification) {
-      throw new NotFoundException('Notification not found');
-    }
-    return notification;
+    return { data };
   }
 
-  async update(id: number, updateNotificationDto: UpdateNotificationDto): Promise<Notification> {
-    const notification = await this.findOne(id);
+  async filterUserNotifications(userId: number, isRead: boolean): Promise<{ data: Notification[] }> {
+    const data = await this.notificationRepository.find({
+      where: { recipients: { id: userId }, is_read: isRead },
+      relations: ['sender', 'recipients', 'attachments']
+    });
+    return { data };
+  }
 
-    const updatedNotification = this.notificationRepository.merge(notification, updateNotificationDto);
-    return this.notificationRepository.save(updatedNotification);
+  async markAsRead(id: number): Promise<{ data: Notification }> {
+    const { data: notification } = await this.findOne(id);
+    const updatedNotification = this.notificationRepository.merge(notification, { is_read: true });
+    const data = await this.notificationRepository.save(updatedNotification);
+    return { data };
+  }
+
+  async findAll(): Promise<{ data: Notification[] }> {
+    const data = await this.notificationRepository.find({ relations: ['sender', 'recipients', 'attachments'] });
+    return { data };
+  }
+
+  async findOne(id: number): Promise<{ data: Notification }> {
+    try {
+      const data = await this.notificationRepository.findOneOrFail({
+        where: { id },
+        relations: ['sender', 'recipients', 'attachments']
+      });
+      return { data };
+    } catch {
+      throw new NotFoundException('Notification not found');
+    }
+  }
+
+  async update(id: number, dto: UpdateNotificationDto): Promise<{ data: Notification }> {
+    const { data: notification } = await this.findOne(id);
+    const updatedNotification = this.notificationRepository.merge(notification, dto);
+    const data = await this.notificationRepository.save(updatedNotification);
+    return { data };
   }
 
   async remove(id: number): Promise<void> {
-    const notification = await this.findOne(id);
-    await this.notificationRepository.remove(notification);
+    try {
+      const { data: notification } = await this.findOne(id);
+      await this.notificationRepository.remove(notification);
+    } catch {
+      throw new BadRequestException('Erreur lors de la suppression de la notification');
+    }
   }
 }
