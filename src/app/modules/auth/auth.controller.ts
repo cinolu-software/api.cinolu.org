@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/user.decorator';
@@ -8,8 +8,9 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from '../users/entities/user.entity';
-import { Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,21 +18,21 @@ export class AuthController {
 
   @Public()
   @Post('sign-in')
-  @UseGuards(AuthGuard('local'))
-  singIn(@CurrentUser() user: User): Promise<{ access_token: string }> {
-    return this.authService.signIn(user);
+  @UseGuards(LocalAuthGuard)
+  singIn(@Req() req: Request) {
+    return this.authService.signIn(req);
   }
 
   @Public()
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   @Get('sign-in')
   signInWithGoogle(): void {}
 
   @Public()
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleAuthGuard)
   @Get('google/redirect')
-  googleAuthRedirect(@CurrentUser() user: User, @Res() res: Response): Promise<void> {
-    return this.authService.signInWithGoogle(user, res);
+  googleAuthRedirect(@Res() res: Response): Promise<void> {
+    return this.authService.signInWithGoogle(res);
   }
 
   @Public()
@@ -40,8 +41,13 @@ export class AuthController {
     return this.authService.signUp(data);
   }
 
+  @Post('sign-out')
+  signOut(@Req() req: Request) {
+    return this.authService.signOut(req);
+  }
+
   @Get('profile')
-  profile(@CurrentUser() user: User): Promise<{ data: User } | null> {
+  profile(@CurrentUser() user: User): Promise<{ data: User }> {
     return this.authService.profile(user);
   }
 
@@ -75,13 +81,13 @@ export class AuthController {
 
   @Public()
   @Post('verify-email')
-  verifyUserEmail(@Body() dto: { token: string }): Promise<{ access_token: string }> {
-    return this.authService.verifyUserEmail(dto.token);
+  verifyUserEmail(@Body() dto: { token: string }): Promise<{ data: User }> {
+    return this.authService.verifyEmail(dto.token);
   }
 
   @Public()
   @Post('reset-password')
-  resetPassword(@Body() dto: ResetPasswordDto): Promise<{ access_token: string }> {
+  resetPassword(@Body() dto: ResetPasswordDto): Promise<{ data: User }> {
     return this.authService.resetPassword(dto);
   }
 }

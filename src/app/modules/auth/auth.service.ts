@@ -1,22 +1,22 @@
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
-import { BadRequestException, Injectable, Res } from '@nestjs/common';
+import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
 import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { User } from '../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
-  _jwtSecret: string;
-  _frontEndUrl: string;
+  private _jwtSecret: string;
+  private _frontEndUrl: string;
   constructor(
     private usersService: UsersService,
     private eventEmitter: EventEmitter2,
@@ -26,6 +26,7 @@ export class AuthService {
     this._jwtSecret = this.configService.get('JWT_SECRET');
     this._frontEndUrl = this.configService.get('FRONTEND_URI');
   }
+
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
       const { data: user } = await this.usersService.getVerifiedUser(email);
@@ -37,31 +38,48 @@ export class AuthService {
     }
   }
 
-  async signIn(@CurrentUser() user: User): Promise<{ access_token: string }> {
-    try {
-      const access_token = await this.generateToken(user, '1d');
-      return { access_token };
-    } catch {
-      throw new BadRequestException('Les identifiants saisis sont invalides');
-    }
+  async signInWithGoogle(@Res() res: Response): Promise<void> {
+    return res.redirect(this._frontEndUrl);
   }
 
-  async signUp(dto: SignupDto): Promise<{ data: User }> {
-    const { data } = await this.usersService.signUp(dto);
-    const token = await this.generateToken(data, '30min');
-    const url = this.configService.get('FRONTEND_URI') + 'sign-in?token=' + token;
-    this.eventEmitter.emit('user.sign-up', { user: data, token: url });
+  async signIn(@Req() req: Request): Promise<{ data: Express.User }> {
+    const data: Express.User = req.user;
     return { data };
   }
 
-  async verifyUserEmail(token: string): Promise<{ access_token: string }> {
+  async signOut(@Req() request: Request): Promise<void> {
+    request.session.destroy(() => {});
+  }
+
+  async signUp(dto: SignupDto): Promise<{ data: User }> {
+    try {
+      const { data } = await this.usersService.signUp(dto);
+      const token = await this.generateToken(data, '30min');
+      const url = this._frontEndUrl + 'sign-in?token=' + token;
+      this.eventEmitter.emit('user.sign-up', { user: data, token: url });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de l'inscription");
+    }
+  }
+
+  async verifyEmail(token: string): Promise<{ data: User }> {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
-      const { data } = await this.usersService.verifyUserEmail(payload.email);
-      const access_token = await this.generateToken(data, '1d');
-      return { access_token };
+      const { data } = await this.usersService.verifyEmail(payload.email);
+      return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
+    }
+  }
+
+  async verifyToken(token: string): Promise<{ data: User }> {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
+      const { data } = await this.usersService.findOne(payload.sub);
+      return { data };
+    } catch {
+      throw new BadRequestException('Token invalide');
     }
   }
 
@@ -74,22 +92,6 @@ export class AuthService {
   async generateToken(user: User, expiresIn: string): Promise<string> {
     const payload = { sub: user.id, name: user.name };
     return await this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
-  }
-
-  async verifyToken(token: string): Promise<{ access_token: string }> {
-    try {
-      const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
-      const { data } = await this.usersService.findOne(payload.sub);
-      const access_token = await this.generateToken(data, '1d');
-      return { access_token };
-    } catch {
-      throw new BadRequestException('Token invalide');
-    }
-  }
-
-  async signInWithGoogle(@CurrentUser() user: User, @Res() res: Response): Promise<void> {
-    const access_token = await this.generateToken(user, '1d');
-    return res.redirect(this._frontEndUrl + 'sign-in?token=' + access_token);
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
@@ -122,25 +124,24 @@ export class AuthService {
     }
   }
 
-  async resendToken(email: string, why: 'verify-email' | 'reset-password'): Promise<void> {
+  async resendToken(email: string, reason: 'verify-email' | 'reset-password'): Promise<void> {
     try {
       const { data: user } = await this.usersService.findBy('email', email);
       const token = await this.generateToken(user, '15min');
-      if (why === 'reset-password') this.eventEmitter.emit('user.reset-password', { user, token });
-      if (why === 'verify-email') this.eventEmitter.emit('user.sign-up', { user, token });
+      if (reason === 'reset-password') this.eventEmitter.emit('user.reset-password', { user, token });
+      if (reason === 'verify-email') this.eventEmitter.emit('user.sign-up', { user, token });
     } catch {
       throw new BadRequestException("Erreur lors de l'envoie du token");
     }
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{ access_token: string }> {
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{ data: User }> {
     const { token, password } = resetPasswordDto;
     try {
       await this.verifyToken(token);
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
       const { data } = await this.usersService.updatePassword(payload.id, password);
-      const access_token = await this.generateToken(data, '1d');
-      return { access_token };
+      return { data };
     } catch {
       throw new BadRequestException('Le lien de réinitialisation du mot de passe est invalide');
     }

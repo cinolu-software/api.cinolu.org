@@ -42,7 +42,7 @@ export class UsersService {
     return { data };
   }
 
-  async verifyUserEmail(email: string): Promise<{ data: User }> {
+  async verifyEmail(email: string): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findBy('email', email);
       const data = await this.userRepository.save({

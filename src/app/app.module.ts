@@ -15,8 +15,8 @@ import { DatabaseModule } from './modules/database/database.module';
 import { EmailModule } from './modules/email/email.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AuthGuard } from './modules/auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -48,6 +48,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     TypesModule,
     NotificationModule
   ],
-  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }]
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })
 export class AppModule {}
