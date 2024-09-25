@@ -9,12 +9,14 @@ import { CurrentUser } from 'src/app/modules/auth/decorators/user.decorator';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
@@ -24,12 +26,12 @@ export class UsersService {
       });
 
       if (exists) new ConflictException("L'utilisateur existe déjà");
-      const password: string = 'team1234';
       const user: User = await this.userRepository.save({
         ...dto,
-        password,
+        password: '12345678',
         roles: dto.roles.map((id) => ({ id }))
       });
+      this.eventEmitter.emit('user.sign-up', user);
       return { data: user };
     } catch(e) {
       console.log(e)

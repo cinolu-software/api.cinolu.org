@@ -70,13 +70,7 @@ export class AuthController {
   @Public()
   @Post('verify-email/resend-token')
   resendSignupToken(@Body() dto: { email: string }): Promise<void> {
-    return this.authService.resendToken(dto.email, 'verify-email');
-  }
-
-  @Public()
-  @Post('reset-password/resend-token')
-  resendResetPasswordToken(@Body() dto: { email: string }): Promise<void> {
-    return this.authService.resendToken(dto.email, 'reset-password');
+    return this.authService.resendToken(dto.email);
   }
 
   @Public()
