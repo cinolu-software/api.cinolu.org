@@ -124,12 +124,11 @@ export class AuthService {
     }
   }
 
-  async resendToken(email: string, reason: 'verify-email' | 'reset-password'): Promise<void> {
+  async resendToken(email: string): Promise<void> {
     try {
       const { data: user } = await this.usersService.findBy('email', email);
       const token = await this.generateToken(user, '15min');
-      if (reason === 'reset-password') this.eventEmitter.emit('user.reset-password', { user, token });
-      if (reason === 'verify-email') this.eventEmitter.emit('user.sign-up', { user, token });
+      this.eventEmitter.emit('user.sign-up', { user, token });
     } catch {
       throw new BadRequestException("Erreur lors de l'envoie du token");
     }
