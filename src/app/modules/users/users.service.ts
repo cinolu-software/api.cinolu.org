@@ -22,6 +22,7 @@ export class UsersService {
       const exists: boolean = await this.userRepository.exists({
         where: { email: dto.email }
       });
+
       if (exists) new ConflictException("L'utilisateur existe déjà");
       const password: string = 'team1234';
       const user: User = await this.userRepository.save({
@@ -30,7 +31,8 @@ export class UsersService {
         roles: dto.roles.map((id) => ({ id }))
       });
       return { data: user };
-    } catch {
+    } catch(e) {
+      console.log(e)
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
     }
   }
