@@ -1,7 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 export class Seed1727254368749 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const password = await bcrypt.hash('admin', 10);
     queryRunner.connection
       .createQueryBuilder()
       .insert()
@@ -11,7 +13,7 @@ export class Seed1727254368749 implements MigrationInterface {
       .values({
         email: 'admin@admin.com',
         name: 'Admin',
-        password: '$2y$10$MaQ/F3H/EMIyPQ.cKmW2DOkg9jy1xQJBl8dbcFJgthbdxZ4.I8bpS',
+        password,
         phone_number: '+243979265726',
         address: 'Lubumbashi, RDC',
         verified_at: new Date(),
