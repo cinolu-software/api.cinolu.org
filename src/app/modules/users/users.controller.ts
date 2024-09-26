@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../auth/decorators/user.decorator';
@@ -21,11 +20,6 @@ export class UsersController {
   @Get('seed')
   seed(): Promise<{ data: User }> {
     return this.useerSeeder.seed();
-  }
-
-  @Post('')
-  create(@Body() createUserDto: CreateUserDto): Promise<{ data: User }> {
-    return this.userService.create(createUserDto);
   }
 
   @Get('')

@@ -9,14 +9,12 @@ import { CurrentUser } from 'src/app/modules/auth/decorators/user.decorator';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-    private eventEmitter: EventEmitter2
+    private userRepository: Repository<User>
   ) {}
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
@@ -31,7 +29,6 @@ export class UsersService {
         password: '12345678',
         roles: dto.roles.map((id) => ({ id }))
       });
-      this.eventEmitter.emit('user.sign-up', user);
       return { data: user };
     } catch(e) {
       console.log(e)
