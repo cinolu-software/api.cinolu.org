@@ -7,10 +7,21 @@ import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../auth/decorators/user.decorator';
+import { UsersSeeder } from './users.seeder';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private useerSeeder: UsersSeeder
+  ) {}
+
+  @Public()
+  @Get('seed')
+  seed(): Promise<{ data: User }> {
+    return this.useerSeeder.seed();
+  }
 
   @Post('')
   create(@Body() createUserDto: CreateUserDto): Promise<{ data: User }> {
