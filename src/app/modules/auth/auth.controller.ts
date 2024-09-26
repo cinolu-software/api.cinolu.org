@@ -11,6 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+import CreateUserDto from '../users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -37,8 +38,14 @@ export class AuthController {
 
   @Public()
   @Post('sign-up')
-  signUp(@Body() data: SignupDto): Promise<{ data: User }> {
-    return this.authService.signUp(data);
+  signUp(@Body() dto: SignupDto): Promise<{ data: User }> {
+    return this.authService.signUp(dto);
+  }
+
+  @Public()
+  @Post('add-user')
+  addUser(@Body() dto: CreateUserDto): Promise<{ data: User }> {
+    return this.authService.addUser(dto);
   }
 
   @Post('sign-out')

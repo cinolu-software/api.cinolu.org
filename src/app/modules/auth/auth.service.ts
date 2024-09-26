@@ -12,6 +12,7 @@ import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import CreateUserDto from '../users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -60,6 +61,18 @@ export class AuthService {
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de l'inscription");
+    }
+  }
+
+  async addUser(dto: CreateUserDto): Promise<{ data: User }> {
+    try {
+      const { data } = await this.usersService.create(dto);
+      const token = await this.generateToken(data, '30min');
+      const url = this._frontEndUrl + 'sign-in?token=' + token;
+      this.eventEmitter.emit('user.sign-up', { user: data, token: url });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la création de l'utilisateur");
     }
   }
 
