@@ -30,10 +30,10 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
-      const { data: user } = await this.usersService.getVerifiedUser(email);
-      const { password, ...result } = user;
+      const { data } = await this.usersService.getVerifiedUser(email);
+      const { password } = data;
       await this.verifyPassword(pass, password);
-      return { data: result as User };
+      return { data };
     } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
     }
