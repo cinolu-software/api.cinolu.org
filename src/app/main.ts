@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app/app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { AppModule } from './app.module';
 
 const port: number = Number(process.env.PORT) as number;
 

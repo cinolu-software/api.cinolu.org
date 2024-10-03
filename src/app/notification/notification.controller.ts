@@ -23,7 +23,7 @@ export class NotificationController {
 
   @Post('')
   @UseInterceptors(
-    FilesInterceptor('attachment', 4, {
+    FilesInterceptor('attachments', 4, {
       storage: diskStorage({
         destination: './uploads/attachments'
       })
@@ -36,7 +36,7 @@ export class NotificationController {
     return this.notificationService.create(dto, files);
   }
 
-  @Get()
+  @Get('')
   async findAll(): Promise<{ data: Notification[] }> {
     return await this.notificationService.findAll();
   }
