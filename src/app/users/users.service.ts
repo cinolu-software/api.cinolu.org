@@ -37,7 +37,7 @@ export class UsersService {
   }
 
   async getUsersByIds(ids: number[]): Promise<{ data: User[] }> {
-    const data: User[] = await this.userRepository.findBy({
+    const data = await this.userRepository.findBy({
       id: In(ids)
     });
     return { data };
