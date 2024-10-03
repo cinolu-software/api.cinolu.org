@@ -1,17 +1,26 @@
-<html lang='en'></html>
+<html lang='en'>
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Notification</title>
+    <style>
+      body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; } .container { max-width:
+      600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0,
+      0, 0, 0.1); } h1 { color: #333; } p { color: #666; } .btn { display: inline-block; background-color: #167d11;
+      color: #fff; margin-bottom: 5px; text-decoration: none; padding: 10px 20px; border-radius: 3px; } .btn:hover {
+      background-color: #0056b3; }
+    </style>
   </head>
   <body>
     <div class='container'>
-      <h2>Bonjour {{ user.name }},</h2>
+      <h2>Bonjour {{user.name}},</h2>
+      <h5>{{user.title}}</h5>
       <p>
-        Vous avez recu une notification de la plateforme CINOLU ! Pour consulter votre notification, veuillez cliquer sur
-        le lien ci-dessous :
+        {{data.message}}
       </p>
-      <a href='{{link}}'>Mon cmpte</a>
+      <p>
+        Connectez-vous en cliquant sur le lien ci-dessous :
+      </p>
+      <a href='{{token}}' class='btn'>Mon compte</a>
       <p>Merci,<br /> L'équipe CINOLU.</p>
     </div>
   </body>

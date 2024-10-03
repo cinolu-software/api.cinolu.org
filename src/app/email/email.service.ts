@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from 'src/app/users/entities/user.entity';
 import { OnEvent } from '@nestjs/event-emitter';
+import { Notification } from '../notification/entities/notification.entity';
 
 @Injectable()
 export class EmailService {
@@ -15,6 +16,20 @@ export class EmailService {
         subject: 'Réinitialisation du mot de passe',
         template: 'reset-password',
         context: { user, token }
+      });
+    } catch {
+      throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
+    }
+  }
+
+  @OnEvent('user.notify')
+  async notifyUser({ user, data }: { user: User; data: Notification }) {
+    try {
+      await this.mailerSerive.sendMail({
+        to: user.email,
+        subject: data.title,
+        template: 'notification',
+        context: { user, data }
       });
     } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
