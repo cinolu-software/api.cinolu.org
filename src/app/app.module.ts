@@ -17,7 +17,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AttachmentsModule } from './attachments/attachments.module';
-import { PartnersModule } from './partners/partners.module';
 
 @Module({
   imports: [
@@ -47,8 +46,7 @@ import { PartnersModule } from './partners/partners.module';
     AttachmentsModule,
     RequirementsModule,
     TypesModule,
-    NotificationModule,
-    PartnersModule
+    NotificationModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })
