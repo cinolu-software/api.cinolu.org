@@ -21,8 +21,11 @@ export class NotificationService {
   ) {}
 
   async create(dto: CreateNotificationDto): Promise<{ data: Notification }> {
+
     await this.userService.findOne(dto.sender);
     const { data: recipients } = await this.userService.getUsersByIds(dto.recipients);
+
+ 
     recipients.forEach((recipient) => {
       this.eventEmitter.emit('user.notify', { user: recipient, link: this.configService.get('ACCOUNT_URI') });
     });
@@ -31,6 +34,9 @@ export class NotificationService {
       sender: { id: dto.sender },
       recipients: dto.recipients.map((id) => ({ id }))
     });
+
+    console.log(data);
+
     return { data };
   }
 
