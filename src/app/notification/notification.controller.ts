@@ -15,28 +15,37 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 import { Notification } from './entities/notification.entity';
 
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Post('')
+  @Post()
+  async create(@Body() createNotificationDto: CreateNotificationDto) {
+    return await this.notificationService.create(createNotificationDto);
+  }
+
+  @Post('attachment/:id')
   @UseInterceptors(
-    FilesInterceptor('attachments', 4, {
+    FilesInterceptor('attachment', 4, {
       storage: diskStorage({
-        destination: './uploads/attachments'
+        destination: './uploads/attachments',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
       })
     })
   )
   addAttachments(
-    @Body() dto: CreateNotificationDto,
+    @Param('id') id: string,
     @UploadedFiles() files: Express.Multer.File[]
   ): Promise<{ data: Notification }> {
-    return this.notificationService.create(dto, files);
+    return this.notificationService.addAttachments(+id, files);
   }
 
-  @Get('')
+  @Get()
   async findAll(): Promise<{ data: Notification[] }> {
     return await this.notificationService.findAll();
   }
