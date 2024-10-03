@@ -18,7 +18,7 @@ export class NotificationService {
     private eventEmitter: EventEmitter2
   ) {}
 
-  async create(dto: CreateNotificationDto): Promise<{ data: Notification }> {
+  async create(dto: CreateNotificationDto, files: Express.Multer.File[]): Promise<{ data: Notification }> {
     await this.userService.findOne(dto.sender);
     const { data: recipients } = await this.userService.getUsersByIds(dto.recipients);
     const data: Notification = await this.notificationRepository.save({
@@ -26,6 +26,7 @@ export class NotificationService {
       sender: { id: dto.sender },
       recipients: dto.recipients.map((id) => ({ id }))
     });
+    await this.addAttachments(data.id, files);
     recipients.forEach((recipient) => {
       this.eventEmitter.emit('user.notify', { user: recipient, data });
     });
@@ -33,7 +34,6 @@ export class NotificationService {
   }
 
   async addAttachments(id: number, files: Express.Multer.File[]): Promise<{ data: Notification }> {
-    await this.findOne(id);
     try {
       const attachments = await Promise.all(
         files.map(async (file) => {
