@@ -38,13 +38,13 @@ export class EmailService {
   }
 
   @OnEvent('user.sign-up')
-  async signUpEmail({ user, token }: { user: User; token: string }): Promise<void> {
+  async signUpEmail({ user, link }: { user: User; link: string }): Promise<void> {
     try {
       await this.mailerSerive.sendMail({
         to: user.email,
         subject: 'Vérifiez votre adresse email pour compléter votre inscription',
         template: 'registration',
-        context: { user, token }
+        context: { user, link }
       });
     } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");

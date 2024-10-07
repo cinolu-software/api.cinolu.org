@@ -17,6 +17,11 @@ export class UsersService {
     private userRepository: Repository<User>
   ) {}
 
+  async findAll(): Promise<{ data: User[] }> {
+    const data = await this.userRepository.find();
+    return { data };
+  }
+
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const exists: boolean = await this.userRepository.exists({
@@ -43,11 +48,10 @@ export class UsersService {
 
   async verifyEmail(email: string): Promise<{ data: User }> {
     try {
-      const { data: user } = await this.findBy('email', email);
-      const data = await this.userRepository.save({
-        ...user,
-        verified_at: new Date()
-      });
+      const { data: user } = await this.findByEmail(email);
+      user.verified_at = new Date();
+      delete user.password;
+      const data = await this.userRepository.save(user);
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
@@ -55,13 +59,9 @@ export class UsersService {
   }
 
   async getVerifiedUser(email: string): Promise<{ data: User }> {
-    try {
-      const { data: user } = await this.findBy('email', email);
-      if (user.verified_at === null) new BadRequestException();
-      return { data: user };
-    } catch {
-      throw new BadRequestException("L'email n'a pas été vérifié");
-    }
+    const { data: user } = await this.findByEmail(email);
+    if (!user.verified_at) throw new BadRequestException();
+    return { data: user };
   }
 
   async signUp(dto: SignupDto): Promise<{ data: User }> {
@@ -69,27 +69,12 @@ export class UsersService {
       delete dto.password_confirm;
       const data: User = await this.userRepository.save({
         ...dto,
-        roles: [{ name: 'user' }]
+        roles: [{ id: 2 }]
       });
       return { data };
     } catch {
       throw new BadRequestException('Cette adresse email est déjà utilisée');
     }
-  }
-
-  async findUsers(): Promise<{ data: User[] }> {
-    const data: User[] = await this.userRepository.find({
-      order: { created_at: 'DESC' }
-    });
-    return { data };
-  }
-
-  async findAdmins(): Promise<{ data: User[] }> {
-    const data: User[] = await this.userRepository.find({
-      where: { roles: { name: 'admin' } },
-      relations: ['roles']
-    });
-    return { data };
   }
 
   async findOne(id: number): Promise<{ data: User }> {
@@ -104,9 +89,9 @@ export class UsersService {
     }
   }
 
-  async findBy(key: string, value: string): Promise<{ data: User }> {
+  async findByEmail(email: string): Promise<{ data: User }> {
     try {
-      const data: User = await this.userRepository.findOneOrFail({ where: { [key]: value }, relations: ['roles'] });
+      const data: User = await this.userRepository.findOneOrFail({ where: { email }, relations: ['roles'] });
       return { data };
     } catch {
       throw new NotFoundException('Aucun utilisateur trouvé');
@@ -126,7 +111,7 @@ export class UsersService {
       const newUser = await this.userRepository.save({
         ...dto,
         verified_at: new Date(),
-        roles: [{ name: 'user' }]
+        roles: [{ id: 2 }]
       });
       return { data: newUser };
     } catch {
@@ -176,8 +161,7 @@ export class UsersService {
   async updatePassword(id: number, password: string): Promise<{ data: User }> {
     try {
       const { data } = await this.findOne(id);
-      data.password = password;
-      await this.userRepository.save(data);
+      await this.userRepository.update(data.id, { password });
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');

@@ -31,8 +31,7 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
       const { data } = await this.usersService.getVerifiedUser(email);
-      const { password } = data;
-      await this.verifyPassword(pass, password);
+      await this.verifyPassword(pass, data.password);
       return { data };
     } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
@@ -54,11 +53,11 @@ export class AuthService {
 
   async signUp(dto: SignupDto): Promise<{ data: User }> {
     try {
-      const { data } = await this.usersService.signUp(dto);
-      const token = await this.generateToken(data, '30min');
-      const url = this._frontEndUrl + 'sign-in?token=' + token;
-      this.eventEmitter.emit('user.sign-up', { user: data, token: url });
-      return { data };
+      const { data: user } = await this.usersService.signUp(dto);
+      const token = await this.generateToken(user, '30min');
+      const link = this._frontEndUrl + 'sign-in?token=' + token;
+      this.eventEmitter.emit('user.sign-up', { user, link });
+      return { data: user };
     } catch {
       throw new BadRequestException("Erreur lors de l'inscription");
     }
@@ -79,7 +78,8 @@ export class AuthService {
   async verifyEmail(token: string): Promise<{ data: User }> {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
-      const { data } = await this.usersService.verifyEmail(payload.email);
+      const { data: user } = await this.usersService.findOne(payload.sub);
+      const { data } = await this.usersService.verifyEmail(user.email);
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
@@ -98,13 +98,13 @@ export class AuthService {
 
   async verifyPassword(password: string, encrypted: string): Promise<boolean> {
     const isMatch = await bcrypt.compare(password, encrypted);
-    if (!isMatch) throw new BadRequestException();
+    if (!isMatch) throw new BadRequestException('Les mot de passe ne correspondent pas');
     return isMatch;
   }
 
   async generateToken(user: User, expiresIn: string): Promise<string> {
     const payload = { sub: user.id, name: user.name };
-    return await this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
+    return this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
   }
 
   async profile(@CurrentUser() user: User): Promise<{ data: User }> {
@@ -128,7 +128,7 @@ export class AuthService {
 
   async forgotPassword(dto: forgotPasswordDto): Promise<void> {
     try {
-      const { data: user } = await this.usersService.findBy('email', dto.email);
+      const { data: user } = await this.usersService.findByEmail(dto.email);
       const token = await this.generateToken(user, '15min');
       const url = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
       this.eventEmitter.emit('user.reset-password', { user, token: url });
@@ -139,9 +139,10 @@ export class AuthService {
 
   async resendToken(email: string): Promise<void> {
     try {
-      const { data: user } = await this.usersService.findBy('email', email);
-      const token = await this.generateToken(user, '15min');
-      this.eventEmitter.emit('user.sign-up', { user, token });
+      const { data: user } = await this.usersService.findByEmail(email);
+      const token = await this.generateToken(user, '30min');
+      const link = this._frontEndUrl + 'sign-in?token=' + token;
+      this.eventEmitter.emit('user.sign-up', { user, link });
     } catch {
       throw new BadRequestException("Erreur lors de l'envoie du token");
     }
@@ -152,7 +153,7 @@ export class AuthService {
     try {
       await this.verifyToken(token);
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
-      const { data } = await this.usersService.updatePassword(payload.id, password);
+      const { data } = await this.usersService.updatePassword(payload.sub, password);
       return { data };
     } catch {
       throw new BadRequestException('Le lien de réinitialisation du mot de passe est invalide');

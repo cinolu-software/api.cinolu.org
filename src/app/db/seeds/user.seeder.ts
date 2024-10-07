@@ -11,15 +11,13 @@ export default class UserSeeder implements Seeder {
 
     await roleRepository.save([{ name: 'admin' }, { name: 'user' }, { name: 'staff' }, { name: 'coach' }]);
 
-    const password = await bcrypt.hash('12345678', 10);
-
     await userRepository.save({
       name: 'Admin admin',
       address: 'Lubumbashi, RDC',
       phone_number: '+243999999999',
       email: 'admin@admin.com',
       verified_at: new Date(),
-      password,
+      password: await bcrypt.hash('admin1234', 10),
       roles: [{ id: 1 }]
     });
   }

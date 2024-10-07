@@ -18,7 +18,7 @@
     "db:migrate": "pnpm build && pnpm typeorm migration:generate ./src/app/db/migrations/$npm_config_name -d ./src/app/db/orm.config.ts",
     "db:up": "pnpm typeorm migration:run -d ./src/app/db/orm.config.ts",
     "db:down": "pnpm build && pnpm typeorm migration:revert -d ./src/app/db/orm.config.ts",
-    "seed:run": "pnpm build && pnpm typeorm-extension seed:run -d ./src/app/db/orm.config.ts",
+    "db:seed": "pnpm build && pnpm typeorm-extension seed:run -d ./src/app/db/orm.config.ts",
     "prepare": "husky"
   },
   "dependencies": {

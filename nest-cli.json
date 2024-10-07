@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src/app",
+  "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
     "manualRestart": true,
-    "assets": ["templates/**/*"],
+    "assets": ["templates/**"],
     "watchAssets": true
   }
 }

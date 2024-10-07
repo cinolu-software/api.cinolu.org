@@ -9,7 +9,4 @@ export class CreateNotificationDto {
 
   @IsArray({ message: 'Les destinataires sont obligatoires' })
   recipients: number[];
-
-  @IsNotEmpty({ message: "L'expéditeur est obligatoire" })
-  sender: number;
 }

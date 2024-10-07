@@ -17,14 +17,16 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Notification } from './entities/notification.entity';
+import { CurrentUser } from '../auth/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Post()
-  async create(@Body() createNotificationDto: CreateNotificationDto) {
-    return await this.notificationService.create(createNotificationDto);
+  async create(@CurrentUser() user: User, @Body() createNotificationDto: CreateNotificationDto) {
+    return await this.notificationService.create(user, createNotificationDto);
   }
 
   @Post('attachment/:id')

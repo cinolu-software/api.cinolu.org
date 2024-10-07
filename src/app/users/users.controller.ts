@@ -13,11 +13,7 @@ export class UsersController {
 
   @Get('')
   findUsers(): Promise<{ data: User[] }> {
-    return this.userService.findUsers();
-  }
-
-  findAdmins(): Promise<{ data: User[] }> {
-    return this.userService.findAdmins();
+    return this.userService.findAll();
   }
 
   @Get(':id')
