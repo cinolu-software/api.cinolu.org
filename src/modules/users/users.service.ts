@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
 import { SignupDto } from '../auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
@@ -34,7 +34,8 @@ export class UsersService {
       const user: User = await this.userRepository.save({
         ...dto,
         password: '12345678',
-        roles: dto.roles.map((id) => ({ id }))
+        verified_at: new Date(),
+        roles: dto.roles?.map((id) => ({ id }))
       });
       return { data: user };
     } catch(e) {
