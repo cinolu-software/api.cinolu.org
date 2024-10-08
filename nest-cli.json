@@ -4,8 +4,6 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "manualRestart": true,
-    "assets": ["templates/**"],
-    "watchAssets": true
+    "manualRestart": true
   }
 }
