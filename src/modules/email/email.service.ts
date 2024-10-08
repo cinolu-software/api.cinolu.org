@@ -2,8 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from 'src/modules/users/entities/user.entity';
 import { OnEvent } from '@nestjs/event-emitter';
-import { Notification } from '../notification/entities/notification.entity';
-
+import { Notification } from '../notifications/entities/notification.entity';
 
 @Injectable()
 export class EmailService {
@@ -31,16 +30,15 @@ export class EmailService {
         subject: data.title,
         template: 'notification',
         context: { user, data },
-        // attachments: data.attachments.map((att) => ({
-        //   path: join(__dirname ,'..', '..','uploads', 'attachments' ),
-        //   filename: att.name,
-        //   contentDisposition: 'attachment'
-        // }))
+        attachments: data.attachments.map((att) => ({
+          path: process.cwd() + '/uploads/attachments/' + att.name,
+          filename: att.name,
+          contentDisposition: 'attachment'
+        }))
       });
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
-
     }
   }
 

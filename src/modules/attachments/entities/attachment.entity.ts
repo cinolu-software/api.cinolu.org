@@ -1,4 +1,4 @@
-import { Notification } from 'src/modules/notification/entities/notification.entity';
+import { Notification } from 'src/modules/notifications/entities/notification.entity';
 import { Program } from 'src/modules/programs/entities/program.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';

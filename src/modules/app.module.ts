@@ -12,7 +12,7 @@ import { TypesModule } from './types/types.module';
 import { UsersModule } from './users/users.module';
 import { DbModule } from './db/db.module';
 import { EmailModule } from './email/email.module';
-import { NotificationModule } from './notification/notification.module';
+import { NotificationModule } from './notifications/notifications.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthGuard } from './auth/guards/auth.guard';

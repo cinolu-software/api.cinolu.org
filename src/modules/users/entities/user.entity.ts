@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import { Program } from 'src/modules/programs/entities/program.entity';
-import { Notification } from '../../notification/entities/notification.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
 import { BaseEntity } from '../../../common/entities/base.entity';
 
 @Entity()
