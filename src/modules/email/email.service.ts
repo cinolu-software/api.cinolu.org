@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { User } from 'src/modules/users/entities/user.entity';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Notification } from '../notifications/entities/notification.entity';
@@ -25,19 +25,20 @@ export class EmailService {
   @OnEvent('user.notify')
   async notifyUser({ user, data }: { user: User; data: Notification }) {
     try {
-      await this.mailerSerive.sendMail({
+      const message: ISendMailOptions = {
         to: user.email,
         subject: data.title,
         template: 'notification',
-        context: { user, data },
-        attachments: data.attachments.map((att) => ({
+        context: { user, data }
+      };
+      if (data.attachments)
+        message.attachments = data.attachments.map((att) => ({
           path: process.cwd() + '/uploads/attachments/' + att.name,
           filename: att.name,
           contentDisposition: 'attachment'
-        }))
-      });
-    } catch (e) {
-      console.log(e);
+        }));
+      await this.mailerSerive.sendMail(message);
+    } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
     }
   }

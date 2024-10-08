@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsArray } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateNotificationDto {
   @IsNotEmpty({ message: 'Le titre est obligatoire' })
@@ -7,6 +7,6 @@ export class CreateNotificationDto {
   @IsNotEmpty({ message: 'Le message est obligatoire' })
   message: string;
 
-  @IsArray({ message: 'Les destinataires sont obligatoires' })
-  recipients: string[];
+  @IsNotEmpty({ message: 'Les destinataires sont obligatoires' })
+  recipients: string[] | string | boolean;
 }

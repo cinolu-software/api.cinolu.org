@@ -38,7 +38,18 @@ export class UsersService {
     }
   }
 
-  async getUsersByIds(ids: number[]): Promise<{ data: User[] }> {
+  async findByRole(id: string): Promise<{ data: User[] }> {
+    try {
+      const data = await this.userRepository.find({
+        where: { roles: { id } }
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la création de l'utilisateur");
+    }
+  }
+
+  async findByIds(ids: string[]): Promise<{ data: User[] }> {
     const data = await this.userRepository.findBy({
       id: In(ids)
     });

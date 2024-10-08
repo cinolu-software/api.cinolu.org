@@ -1,19 +1,4 @@
-import { IsOptional, IsString, IsArray } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateNotificationDto } from './create-notification.dto';
 
-export class UpdateNotificationDto {
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @IsOptional()
-  @IsString()
-  message?: string;
-
-  @IsOptional()
-  @IsArray()
-  recipientIds?: number[];
-
-  @IsOptional()
-  @IsArray()
-  attachmentIds?: number[];
-}
+export class UpdateNotificationDto extends PartialType(CreateNotificationDto) {}
