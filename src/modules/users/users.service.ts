@@ -26,11 +26,6 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
-      const exists: boolean = await this.userRepository.exists({
-        where: { email: dto.email }
-      });
-
-      if (exists) new ConflictException("L'utilisateur existe déjà");
       const user: User = await this.userRepository.save({
         ...dto,
         password: '12345678',
@@ -38,8 +33,7 @@ export class UsersService {
         roles: dto.roles?.map((id) => ({ id }))
       });
       return { data: user };
-    } catch(e) {
-      console.log(e)
+    } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
     }
   }

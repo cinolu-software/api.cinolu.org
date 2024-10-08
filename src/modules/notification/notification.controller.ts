@@ -59,7 +59,7 @@ export class NotificationController {
     return await this.notificationService.markAsRead(id);
   }
 
-  @Get('send/:id')
+  @Post('send/:id')
   async send(@Param('id') id: string): Promise<{ data: Notification }> {
     return this.notificationService.send(id);
   }
