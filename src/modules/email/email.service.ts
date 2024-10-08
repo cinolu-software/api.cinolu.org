@@ -30,7 +30,11 @@ export class EmailService {
         subject: data.title,
         template: 'notification',
         context: { user, data },
-        attachments: data.attachments.map((att) => ({ filename: att.name }))
+        attachments: data.attachments.map((att) => ({
+          path: process.cwd() + '/uploads/attachments/' + att.name,
+          filename: att.name,
+          contentDisposition: 'attachment'
+        }))
       });
     } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
