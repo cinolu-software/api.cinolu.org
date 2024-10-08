@@ -7,17 +7,18 @@
       body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; } .container { max-width:
       600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0,
       0, 0, 0.1); } h1 { color: #333; } p { color: #666; } .btn { display: inline-block; background-color: #167d11;
-      color: #fff; margin-bottom: 5px; text-decoration: none; padding: 10px 20px; border-radius: 3px; } .btn:hover { background-color:
-      #0056b3; }
+      color: #fff; margin-bottom: 5px; text-decoration: none; padding: 10px 20px; border-radius: 3px; } .btn:hover {
+      background-color: #0056b3; }
     </style>
   </head>
   <body>
     <div class='container'>
-      <h2>Bonjour {{ user.name }},</h2>
+      <h2>Bonjour {{user.name}},</h2>
       <p>
-     Merci de vous être inscrit sur la plateforme CINOLU ! Pour finaliser votre inscription et activer votre compte, veuillez vérifier votre adresse email en cliquant sur le lien ci-dessous :
+        Merci de vous être inscrit sur la plateforme CINOLU ! Pour finaliser votre inscription et activer votre compte,
+        veuillez vérifier votre adresse email en cliquant sur le lien ci-dessous :
       </p>
-      <a href='{{token}}' class='btn'>Vérifier mon adresse email</a>
+      <a href='{{link}}' target='_blank' class='btn'>Vérifier mon adresse email</a>
       <p>
         Ce lien est valable pendant 30 minutes. Si le lien expire, vous devrez recommencer le processus de vérification.
       </p>

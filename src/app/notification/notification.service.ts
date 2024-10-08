@@ -7,6 +7,8 @@ import { UsersService } from '../users/users.service';
 import { AttachmentsService } from '../attachments/attachments.service';
 import { Notification } from './entities/notification.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CurrentUser } from '../auth/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class NotificationService {
@@ -18,23 +20,19 @@ export class NotificationService {
     private eventEmitter: EventEmitter2
   ) {}
 
-  async create(dto: CreateNotificationDto, files: Express.Multer.File[]): Promise<{ data: Notification }> {
-    await this.userService.findOne(dto.sender);
-    const { data: recipients } = await this.userService.getUsersByIds(dto.recipients);
+  async create(@CurrentUser() user: User, dto: CreateNotificationDto): Promise<{ data: Notification }> {
     const data: Notification = await this.notificationRepository.save({
       ...dto,
-      sender: { id: dto.sender },
+      sender: { id: user.id },
       recipients: dto.recipients.map((id) => ({ id }))
-    });
-    await this.addAttachments(data.id, files);
-    recipients.forEach((recipient) => {
-      this.eventEmitter.emit('user.notify', { user: recipient, data });
     });
     return { data };
   }
 
   async addAttachments(id: number, files: Express.Multer.File[]): Promise<{ data: Notification }> {
     try {
+      const { data: notification } = await this.findOne(id);
+      const recipients = notification.recipients;
       const attachments = await Promise.all(
         files.map(async (file) => {
           const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
@@ -42,6 +40,9 @@ export class NotificationService {
         })
       );
       const data = await this.notificationRepository.save({ id, attachments });
+      recipients.forEach((recipient) => {
+        this.eventEmitter.emit('user.notify', { user: recipient, data });
+      });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
