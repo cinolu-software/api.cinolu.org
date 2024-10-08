@@ -30,20 +30,29 @@ export class NotificationService {
   async addAttachments(id: string, files: Express.Multer.File[]): Promise<{ data: Notification }> {
     try {
       const { data: notification } = await this.findOne(id);
-      const recipients = notification.recipients;
       const attachments = await Promise.all(
         files.map(async (file) => {
           const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
           return attachment;
         })
       );
-      const data = await this.notificationRepository.save({ id, attachments });
+      const data = await this.notificationRepository.save({ ...notification, attachments });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
+    }
+  }
+
+  async send(id: string): Promise<{ data: Notification }> {
+    try {
+      const { data } = await this.findOne(id);
+      const recipients = data.recipients;
       recipients.forEach((recipient) => {
         this.eventEmitter.emit('user.notify', { user: recipient, data });
       });
       return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
+      throw new BadRequestException("Erreur lors de l'ajout de l'envoie");
     }
   }
 

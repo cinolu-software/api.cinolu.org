@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Patch,
-  Delete,
-  NotFoundException,
-  UseInterceptors,
-  UploadedFiles
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -70,13 +59,14 @@ export class NotificationController {
     return await this.notificationService.markAsRead(id);
   }
 
+  @Get('send/:id')
+  async send(@Param('id') id: string): Promise<{ data: Notification }> {
+    return this.notificationService.send(id);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<{ data: Notification }> {
-    const notification = await this.notificationService.findOne(id);
-    if (!notification) {
-      throw new NotFoundException('Notification not found');
-    }
-    return notification;
+    return this.notificationService.findOne(id);
   }
 
   @Patch(':id')
