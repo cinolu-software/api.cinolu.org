@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
 import { SignupDto } from '../auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
@@ -26,10 +26,6 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
-      const exists: boolean = await this.userRepository.exists({
-        where: { email: dto.email }
-      });
-      if (exists) new ConflictException("L'utilisateur existe déjà");
       const user: User = await this.userRepository.save({
         ...dto,
         password: '12345678',
