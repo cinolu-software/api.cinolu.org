@@ -15,10 +15,10 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "typeorm-extension": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs",
-    "db:migrate": "pnpm build && pnpm typeorm migration:generate ./src/modules/db/migrations/$npm_config_name -d ./src/modules/db/orm.config.ts",
-    "db:up": "pnpm typeorm migration:run -d ./src/modules/db/orm.config.ts",
-    "db:down": "pnpm build && pnpm typeorm migration:revert -d ./src/modules/db/orm.config.ts",
-    "db:seed": "pnpm build && pnpm typeorm-extension seed:run -d ./src/modules/db/orm.config.ts",
+    "db:migrate": "pnpm build && pnpm typeorm migration:generate ./src/modules/core/db/migrations/$npm_config_name -d ./src/modules/core/db/orm.config.ts",
+    "db:up": "pnpm typeorm migration:run -d ./src/modules/core/db/orm.config.ts",
+    "db:down": "pnpm build && pnpm typeorm migration:revert -d ./src/modules/core/db/orm.config.ts",
+    "db:seed": "pnpm build && pnpm typeorm-extension seed:run -d ./src/modules//coredb/orm.config.ts",
     "prepare": "husky"
   },
   "dependencies": {
