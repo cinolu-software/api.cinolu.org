@@ -68,7 +68,7 @@ export class AuthService {
       const { data } = await this.usersService.create(dto);
       const token = await this.generateToken(data, '30min');
       const url = this._frontEndUrl + 'sign-in?token=' + token;
-      this.eventEmitter.emit('user.sign-up', { user: data, token: url });
+      this.eventEmitter.emit('user.created', { user: data, token: url });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");

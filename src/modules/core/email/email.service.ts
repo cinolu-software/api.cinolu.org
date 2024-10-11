@@ -56,4 +56,18 @@ export class EmailService {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
     }
   }
+
+  @OnEvent('user.created')
+  async createdEmail({ user }: { user: User }): Promise<void> {
+    try {
+      await this.mailerSerive.sendMail({
+        to: user.email,
+        subject: 'Bienvenue sur cinolu.org',
+        template: 'welcome',
+        context: { user }
+      });
+    } catch {
+      throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
+    }
+  }
 }

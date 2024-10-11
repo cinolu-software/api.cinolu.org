@@ -1,0 +1,70 @@
+<html lang='fr'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Email de Bienvenue</title>
+  </head>
+  <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>
+
+    <table
+      style='max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'
+    >
+      <tr>
+        <td style='text-align: center;'>
+          <h1 style='color: #333333;'>Bienvenue sur [Nom de l'application] !</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p style='color: #555555; font-size: 16px;'>
+            Bonjour
+            <strong>{{user.name}}</strong>,
+          </p>
+          <p style='color: #555555; font-size: 16px;'>
+            Nous avons le plaisir de vous informer que votre compte a été créé avec succès par notre administrateur sur
+            <strong>cinolu.org</strong>. Vous pouvez désormais accéder à votre compte et profiter de tous nos services.
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            <strong>Voici vos informations de connexion :</strong><br />
+            <strong>Adresse email :</strong>
+            {{user.email}}<br />
+            <strong>Mot de passe : </strong>
+            12345678
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Pour des raisons de sécurité, nous vous recommandons de changer votre mot de passe dès votre première
+            connexion.
+          </p>
+
+          <p style='text-align: center;'>
+            <a
+              href='[URL de connexion]'
+              style='display: inline-block; background-color: #007BFF; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;'
+            >Accéder à mon compte</a>
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Si vous avez des questions ou avez besoin d'aide, n'hésitez pas à nous contacter à
+            <a href='mailto:[Adresse email de support]' style='color: #007BFF;'>wilfriedm@cinolu.org</a>
+            ou au
+            <strong>+243979265726</strong>.
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Bienvenue parmi nous et à bientôt sur
+            <strong>cinolu.org</strong>
+            !
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style='text-align: center; padding-top: 20px;'>
+          <p style='color: #aaaaaa; font-size: 12px;'>&copy; 2024 cinolu.org. Tous droits réservés.</p>
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>
