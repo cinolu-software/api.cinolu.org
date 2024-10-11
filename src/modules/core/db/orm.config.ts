@@ -16,8 +16,9 @@ const options: DataSourceOptions & SeederOptions = {
   password: process.env.DB_PASSWORD,
   migrations: ['src/modules/core/db/migrations/**'],
   entities: ['dist/**/*.entity.js'],
-  seeds: ['dist/src/modules/core/db/seeds/*.js'],
-  factories: ['dist/modules/core/db/factories/*.js']
+  seeds: ['dist/src/modules/core/db/seeds/**{.ts,.js}'],
+  factories: ['dist/src/modules/core/db/factories/*{.ts,.js}']
 };
+
 export const dataSource = new DataSource(options);
 dataSource.initialize().catch((error) => console.log(error));

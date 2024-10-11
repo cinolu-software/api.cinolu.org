@@ -11,7 +11,7 @@ export class Partner extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   profile: string;
 
   @ManyToMany(() => Partnership, (partnership) => partnership.partners)
