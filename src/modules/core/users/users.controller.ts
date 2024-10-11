@@ -12,8 +12,13 @@ export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get('')
-  findUsers(): Promise<{ data: User[] }> {
+  findAll(): Promise<{ data: User[] }> {
     return this.userService.findAll();
+  }
+
+  @Get('with-role/:name')
+  findWithRole(@Param('name') name: string): Promise<{ data: User[] }> {
+    return this.userService.findWithRole(name);
   }
 
   @Get(':id')

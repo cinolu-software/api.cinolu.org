@@ -24,6 +24,13 @@ export class UsersService {
     return { data };
   }
 
+  async findWithRole(name: string): Promise<{ data: User[] }> {
+    const data = await this.userRepository.findBy({
+      roles: { name }
+    });
+    return { data };
+  }
+
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const user: User = await this.userRepository.save({
