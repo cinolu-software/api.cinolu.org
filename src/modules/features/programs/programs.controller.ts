@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+  Query
+} from '@nestjs/common';
 import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
@@ -19,8 +30,8 @@ export class ProgramsController {
 
   @Public()
   @Get('')
-  findAll(): Promise<{ data: Program[] }> {
-    return this.programsService.findAll();
+  findAll(@Query('page') page: string): Promise<{ data: Program[] }> {
+    return this.programsService.findAll(+page);
   }
 
   @Get(':id')
