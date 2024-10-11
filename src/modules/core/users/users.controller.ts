@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { Public } from '../../../common/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -16,6 +17,7 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Public()
   @Get('with-role/:name')
   findWithRole(@Param('name') name: string): Promise<{ data: User[] }> {
     return this.userService.findWithRole(name);
