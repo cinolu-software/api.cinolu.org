@@ -17,7 +17,7 @@
     "typeorm-extension": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs",
     "db:migrate": "pnpm build && pnpm typeorm migration:generate ./src/modules/core/db/migrations/$npm_config_name -d ./src/modules/core/db/orm.config.ts",
     "db:up": "pnpm typeorm migration:run -d ./src/modules/core/db/orm.config.ts",
-    "db:down": "pnpm build && pnpm typeorm migration:revert -d ./src/modules/core/db/orm.config.ts",
+    "db:down": "pnpm typeorm migration:revert -d ./src/modules/core/db/orm.config.ts",
     "db:seed": "pnpm build && pnpm typeorm-extension seed:run -d ./src/modules/core/db/orm.config.ts",
     "prepare": "husky"
   },
@@ -59,6 +59,7 @@
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.9.1",
+    "@faker-js/faker": "^9.0.3",
     "@mapbox/node-pre-gyp": "^1.0.11",
     "@nestjs/cli": "^10.4.4",
     "@nestjs/schematics": "^10.1.4",
