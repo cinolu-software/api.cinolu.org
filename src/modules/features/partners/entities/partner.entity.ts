@@ -8,7 +8,7 @@ export class Partner extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'text' })
   description: string;
 
   @Column({ nullable: true })

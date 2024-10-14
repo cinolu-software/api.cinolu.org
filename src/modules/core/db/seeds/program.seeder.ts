@@ -1,11 +1,11 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { faker } from '@faker-js/faker';
 import { Partnership } from '../../../features/partnerships/entities/partnership.entity';
 import { Program } from '../../../features/programs/entities/program.entity';
 import { Requirement } from '../../../features/requirements/entities/requirement.entity';
 import { Type } from '../../../features/types/entities/type.entity';
 import { Partner } from '../../../features/partners/entities/partner.entity';
+import { fakerFR as faker } from '@faker-js/faker';
 
 export default class ProgramSeeder implements Seeder {
   async run(dataSource: DataSource) {

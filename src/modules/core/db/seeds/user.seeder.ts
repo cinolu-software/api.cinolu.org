@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
 import { Role } from 'src/modules/core/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
-import { faker } from '@faker-js/faker';
+import { fakerFR as faker } from '@faker-js/faker';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -35,7 +35,6 @@ export default class UserSeeder implements Seeder {
      * @param password
      */
     const createUsers = async (count: number, roleName: string, password: string) => {
-      const role = await roleRepository.findOneBy({ name: roleName });
       await Promise.all(
         Array(count)
           .fill('')
@@ -48,21 +47,13 @@ export default class UserSeeder implements Seeder {
               verified_at: new Date(),
               google_image: faker.image.avatar(),
               password: await bcrypt.hash(password, 10),
-              roles: [role]
+              roles: [await roleRepository.findOneByOrFail({ name: roleName })]
             });
           })
       );
     };
 
-    /**
-     * Save staff users
-     */
     await createUsers(10, 'staff', 'staff1234');
-
-    /**
-     * Save coach users
-     */
-    await createUsers(20, 'coach', 'coach1234');
 
     await userRepository.save({
       name: faker.person.firstName(),
@@ -74,5 +65,7 @@ export default class UserSeeder implements Seeder {
       google_image: faker.image.avatar(),
       roles: [await roleRepository.findOneBy({ name: 'admin' })]
     });
+
+    await createUsers(20, 'coach', 'coach1234');
   }
 }
