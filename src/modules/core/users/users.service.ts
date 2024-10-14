@@ -27,6 +27,7 @@ export class UsersService {
   async findWithRole(name: string): Promise<{ data: User[] }> {
     const data = await this.userRepository.find({
       select: ['name', 'email', 'profile', 'google_image'],
+      relations: ['roles'],
       where: { roles: { name } }
     });
     return { data };
