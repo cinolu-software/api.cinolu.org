@@ -31,7 +31,7 @@ export class ProgramsController {
   @Public()
   @Get('')
   findAll(@Query('page') page: string): Promise<{ data: Program[] }> {
-    return this.programsService.findAll(+page);
+    return this.programsService.findAll(+page || 1);
   }
 
   @Get(':id')
