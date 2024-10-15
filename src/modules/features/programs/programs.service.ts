@@ -40,11 +40,12 @@ export class ProgramsService {
   }
 
   async findAll(page: number): Promise<{ data: Program[] }> {
-    const take: number = 20;
+    const take: number = 9;
     const skip = (page - 1) * take;
     const data: Program[] = await this.programRepository.find({
       skip,
       take,
+      order: { start_at: 'DESC' },
       relations: ['types']
     });
     return { data };
