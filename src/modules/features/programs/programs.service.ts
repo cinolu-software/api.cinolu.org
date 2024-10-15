@@ -45,7 +45,7 @@ export class ProgramsService {
     const data: Program[] = await this.programRepository.find({
       skip,
       take,
-      relations: ['attachments', 'types', 'partners', 'partners.partnerships']
+      relations: ['types']
     });
     return { data };
   }
