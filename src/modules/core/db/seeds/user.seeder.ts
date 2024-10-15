@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
 import { Role } from 'src/modules/core/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
-import { fakerFR as faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -13,6 +13,7 @@ export default class UserSeeder implements Seeder {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.query('TRUNCATE TABLE user;');
     await dataSource.query('TRUNCATE TABLE role;');
+    await dataSource.query('TRUNCATE TABLE user_roles;');
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
     /**
@@ -45,15 +46,12 @@ export default class UserSeeder implements Seeder {
               phone_number: faker.phone.number(),
               email: faker.internet.email(),
               verified_at: new Date(),
-              google_image: faker.image.avatar(),
               password: await bcrypt.hash(password, 10),
               roles: [await roleRepository.findOneByOrFail({ name: roleName })]
             });
           })
       );
     };
-
-    await createUsers(10, 'staff', 'staff1234');
 
     await userRepository.save({
       name: faker.person.firstName(),
@@ -65,7 +63,7 @@ export default class UserSeeder implements Seeder {
       google_image: faker.image.avatar(),
       roles: [await roleRepository.findOneBy({ name: 'admin' })]
     });
-
+    await createUsers(10, 'staff', 'staff1234');
     await createUsers(20, 'coach', 'coach1234');
   }
 }
