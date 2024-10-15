@@ -30,7 +30,7 @@ export class ProgramsController {
 
   @Public()
   @Get('')
-  findAll(@Query('page') page: string): Promise<{ data: Program[] }> {
+  findAll(@Query('page') page: string): Promise<{ data: { programs: Program[]; count: number } }> {
     return this.programsService.findAll(+page || 1);
   }
 
