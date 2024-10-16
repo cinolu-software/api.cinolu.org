@@ -18,6 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Public } from '../../../common/decorators/public.decorator';
+import { QueryParams } from './types/query-params.type';
 
 @Controller('programs')
 export class ProgramsController {
@@ -30,11 +31,8 @@ export class ProgramsController {
 
   @Public()
   @Get('')
-  findAll(
-    @Query('page') page: string,
-    @Query('type') type: string
-  ): Promise<{ data: { programs: Program[]; count: number } }> {
-    return this.programsService.findAll(+page || 1, type);
+  findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
+    return this.programsService.findAll(queryParams);
   }
 
   @Get(':id')

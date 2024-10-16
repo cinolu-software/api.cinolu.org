@@ -6,6 +6,7 @@ import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
 import { AttachmentsService } from 'src/modules/utilities/attachments/attachments.service';
 import { RequirementsService } from '../requirements/requirements.service';
+import { QueryParams } from './types/query-params.type';
 
 @Injectable()
 export class ProgramsService {
@@ -39,18 +40,15 @@ export class ProgramsService {
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
 
-  async findAll(page: number, type: string): Promise<{ data: { programs: Program[]; count: number } }> {
+  async findAll(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
+    const { page, type } = queryParams;
+    const query = this.programRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
+    if (type) query.andWhere('types.name = :type', { type });
     const take: number = 9;
-    const skip = (page - 1) * take;
+    const skip = ((page || 1) - 1) * take;
     const where = type ? { types: { name: type } } : {};
-    const programs: Program[] = await this.programRepository.find({
-      skip,
-      take,
-      where,
-      order: { start_at: 'DESC' },
-      relations: ['types']
-    });
-    const count = await this.programRepository.count();
+    const programs: Program[] = await query.skip(skip).take(take).getMany();
+    const count = await this.programRepository.count({ where });
     return { data: { programs, count } };
   }
 
