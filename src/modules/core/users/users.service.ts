@@ -24,11 +24,20 @@ export class UsersService {
     return { data };
   }
 
-  async findWithRole(name: string): Promise<{ data: User[] }> {
+  async findCoachs(): Promise<{ data: User[] }> {
     const data = await this.userRepository.find({
       select: ['name', 'email', 'profile', 'google_image'],
       relations: ['roles'],
-      where: { roles: { name } }
+      where: { roles: { name: 'coach' } }
+    });
+    return { data };
+  }
+
+  async findStaffMembers(): Promise<{ data: User[] }> {
+    const data = await this.userRepository.find({
+      select: ['name', 'email', 'profile', 'google_image'],
+      relations: ['roles'],
+      where: { roles: { name: 'staff' } }
     });
     return { data };
   }

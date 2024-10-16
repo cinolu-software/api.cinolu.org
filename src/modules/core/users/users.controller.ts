@@ -18,9 +18,15 @@ export class UsersController {
   }
 
   @Public()
-  @Get('with-role/:name')
-  findWithRole(@Param('name') name: string): Promise<{ data: User[] }> {
-    return this.userService.findWithRole(name);
+  @Get('coachs')
+  findCoachs(): Promise<{ data: User[] }> {
+    return this.userService.findCoachs();
+  }
+
+  @Public()
+  @Get('staff-members')
+  findStaffMembers(): Promise<{ data: User[] }> {
+    return this.userService.findStaffMembers();
   }
 
   @Get(':id')
