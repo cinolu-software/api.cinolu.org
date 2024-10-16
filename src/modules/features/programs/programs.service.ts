@@ -39,12 +39,14 @@ export class ProgramsService {
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
 
-  async findAll(page: number): Promise<{ data: { programs: Program[]; count: number } }> {
+  async findAll(page: number, type: string): Promise<{ data: { programs: Program[]; count: number } }> {
     const take: number = 9;
     const skip = (page - 1) * take;
+    const where = type ? { types: { name: type } } : {};
     const programs: Program[] = await this.programRepository.find({
       skip,
       take,
+      where,
       order: { start_at: 'DESC' },
       relations: ['types']
     });

@@ -3,6 +3,7 @@ import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { Type } from './entities/type.entity';
+import { Public } from '../../../common/decorators/public.decorator';
 
 @Controller('types')
 export class TypesController {
@@ -13,6 +14,7 @@ export class TypesController {
     return this.typesService.create(createTypeDto);
   }
 
+  @Public()
   @Get()
   findAll(): Promise<{ data: Type[] }> {
     return this.typesService.findAll();
