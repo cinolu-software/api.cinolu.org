@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../../../common/decorators/user.decorator';
 import { RolesService } from '../roles/roles.service';
+import AddDetailDto from './dto/add-detail.dto';
 
 @Injectable()
 export class UsersService {
@@ -108,11 +109,29 @@ export class UsersService {
     }
   }
 
+  async addDetail(@CurrentUser() currentUser: User, dto: AddDetailDto) {
+    try {
+      const { data: user } = await this.findOne(currentUser.id);
+      await this.userRepository.save({
+        ...user,
+        detail: {
+          bio: dto.bio,
+          socials: {
+            name: dto.social_name,
+            value: dto.social_value
+          }
+        }
+      });
+    } catch {
+      throw new BadRequestException('Une erreur est survenue sur le serveur');
+    }
+  }
+
   async findOne(id: string): Promise<{ data: User }> {
     try {
       const data: User = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles']
+        relations: ['roles', 'details']
       });
       return { data };
     } catch {

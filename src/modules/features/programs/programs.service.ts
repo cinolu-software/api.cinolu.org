@@ -39,9 +39,13 @@ export class ProgramsService {
     });
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
+
   async findAll(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     const { page, type, hideFinished } = queryParams;
-    const query = this.programRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
+    const query = this.programRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.partners', 'partners')
+      .leftJoinAndSelect('p.types', 'types');
     if (type) query.andWhere('types.name = :type', { type });
     if (hideFinished) query.andWhere('(p.end_at IS NULL OR p.end_at > :now)', { now: new Date() });
     const take: number = 9;
@@ -55,7 +59,7 @@ export class ProgramsService {
     try {
       const data: Program = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['attachments', 'requirements', 'types']
+        relations: ['attachments', 'requirements', 'types', 'partners']
       });
       return { data };
     } catch {

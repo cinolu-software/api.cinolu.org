@@ -17,6 +17,11 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Post('add-detail')
+  addDetail(): Promise<{ data: User[] }> {
+    return this.userService.findAll();
+  }
+
   @Public()
   @Get('coachs')
   findCoachs(): Promise<{ data: User[] }> {
