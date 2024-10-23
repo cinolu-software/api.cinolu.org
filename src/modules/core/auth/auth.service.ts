@@ -16,24 +16,23 @@ import CreateUserDto from '../users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
-  private _jwtSecret: string;
-  private _frontEndUrl: string;
+  private _jwtSecret = this.configService.get('JWT_SECRET');
+  private _frontEndUrl = this.configService.get('FRONTEND_URI');
+
   constructor(
     private usersService: UsersService,
     private eventEmitter: EventEmitter2,
     private jwtService: JwtService,
     private configService: ConfigService
-  ) {
-    this._jwtSecret = this.configService.get('JWT_SECRET');
-    this._frontEndUrl = this.configService.get('FRONTEND_URI');
-  }
+  ) {}
 
   async validateUser(email: string, pass: string): Promise<{ data: User }> {
     try {
       const { data } = await this.usersService.getVerifiedUser(email);
       await this.verifyPassword(pass, data.password);
       return { data };
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException('Les identifiants saisis sont invalides');
     }
   }

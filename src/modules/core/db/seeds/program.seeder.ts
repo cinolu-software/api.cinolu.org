@@ -90,7 +90,6 @@ export default class ProgramSeeder implements Seeder {
             partnerRepository.save({
               name: faker.company.name(),
               description: faker.commerce.productDescription(),
-              profile: faker.image.avatar(),
               partnerships: await createPartnership(10)
             })
           )
