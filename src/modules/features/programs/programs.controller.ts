@@ -40,6 +40,21 @@ export class ProgramsController {
     return this.programsService.findOne(id);
   }
 
+  @Post('image/:id')
+  @UseInterceptors(
+    FileInterceptor('thumb', {
+      storage: diskStorage({
+        destination: './uploads/programs',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Program }> {
+    return this.programsService.uploadImage(id, file);
+  }
+
   @Post('attachment/:id')
   @UseInterceptors(
     FileInterceptor('attachment', {

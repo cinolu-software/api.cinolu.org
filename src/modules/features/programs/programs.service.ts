@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { AttachmentsService } from 'src/modules/utilities/attachments/attachments.service';
 import { RequirementsService } from '../requirements/requirements.service';
 import { QueryParams } from './types/query-params.type';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class ProgramsService {
@@ -53,6 +54,17 @@ export class ProgramsService {
     const programs: Program[] = await query.skip(skip).take(take).orderBy('p.end_at', 'DESC').getMany();
     const count = await query.getCount();
     return { data: { programs, count } };
+  }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Program }> {
+    try {
+      const { data: program } = await this.findOne(id);
+      if (program.image) await fs.promises.unlink(`./uploads/programs/${program.image}`);
+      const data = await this.programRepository.save({ ...program, image: file.filename });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la mise à jour de l'image");
+    }
   }
 
   async findOne(id: string): Promise<{ data: Program }> {
