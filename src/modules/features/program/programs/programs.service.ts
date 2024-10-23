@@ -113,9 +113,9 @@ export class ProgramsService {
   }
 
   async remove(id: string): Promise<void> {
-    await this.findOne(id);
     try {
-      await this.programRepository.delete(id);
+      await this.findOne(id);
+      await this.programRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Erreur lors de la suppression du programme');
     }
