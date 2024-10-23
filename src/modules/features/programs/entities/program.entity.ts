@@ -11,14 +11,17 @@ export class Program extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @Column({ type: 'text' })
   description: string;
 
   @Column({ type: 'date' })
-  start_at: Date;
+  started_at: Date;
 
   @Column({ type: 'date' })
-  end_at: Date;
+  ended_at: Date;
 
   @ManyToMany(() => User, (user) => user.programs)
   users: User[];

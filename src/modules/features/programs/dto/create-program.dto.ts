@@ -9,10 +9,10 @@ export class CreateProgramDto {
   description: string;
 
   @IsNotEmpty({ message: 'La date de début du programme est obligatoire' })
-  start_at: Date;
+  started_at: Date;
 
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
-  end_at: Date;
+  ended_at: Date;
 
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];
