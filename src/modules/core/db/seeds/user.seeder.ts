@@ -56,11 +56,10 @@ export default class UserSeeder implements Seeder {
     await userRepository.save({
       name: faker.person.firstName(),
       address: faker.location.streetAddress(),
-      phone_number: '+243999999999',
+      phone_number: faker.phone.number({ style: 'human' }),
       email: 'admin@admin.com',
       verified_at: faker.date.recent(),
       password: await bcrypt.hash('admin1234', 10),
-      google_image: faker.image.avatar(),
       roles: [await roleRepository.findOneBy({ name: 'admin' })]
     });
     await createUsers(10, 'staff', 'staff1234');

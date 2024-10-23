@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../../../common/entities/base.entity';
 import { Social } from './social.entity';
 import { User } from './user.entity';
@@ -12,7 +12,8 @@ export class Detail extends BaseEntity {
   @OneToMany(() => Social, (social) => social.detail)
   socials: Social[];
 
-  @OneToOne(() => User, (user) => user.detail)
+  @OneToOne(() => User, (user) => user.details)
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ManyToMany(() => Expertise, (expertise) => expertise.details)

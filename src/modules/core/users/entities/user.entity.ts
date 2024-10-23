@@ -44,5 +44,5 @@ export class User extends BaseEntity {
   notifications: Notification[];
 
   @OneToOne(() => Detail, (detail) => detail.user)
-  detail: Detail;
+  details: Detail;
 }

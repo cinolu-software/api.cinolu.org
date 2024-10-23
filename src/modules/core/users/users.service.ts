@@ -133,7 +133,7 @@ export class UsersService {
     try {
       const data: User = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles', 'detail', 'detail.socials']
+        relations: ['roles', 'details', 'details.socials']
       });
       return { data };
     } catch {
@@ -200,11 +200,13 @@ export class UsersService {
   async uploadImage(@CurrentUser() currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currenUser.id);
+
       if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);
       delete user.password;
       const data = await this.userRepository.save({ ...user, profile: file.filename });
       return { data };
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }
