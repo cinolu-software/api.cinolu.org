@@ -1,8 +1,8 @@
 import { Attachment } from 'src/modules/utilities/attachments/entities/attachment.entity';
-import { Requirement } from 'src/modules/features/requirements/entities/requirement.entity';
+import { Requirement } from 'src/modules/features/program/requirements/entities/requirement.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { User } from '../../../core/users/entities/user.entity';
-import { BaseEntity } from '../../../../common/entities/base.entity';
+import { User } from '../../../../core/users/entities/user.entity';
+import { BaseEntity } from '../../../../../common/entities/base.entity';
 import { Partner } from '../../partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
 

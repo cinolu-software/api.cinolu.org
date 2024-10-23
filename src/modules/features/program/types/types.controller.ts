@@ -3,7 +3,7 @@ import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { Type } from './entities/type.entity';
-import { Public } from '../../../common/decorators/public.decorator';
+import { Public } from '../../../../common/decorators/public.decorator';
 
 @Controller('types')
 export class TypesController {

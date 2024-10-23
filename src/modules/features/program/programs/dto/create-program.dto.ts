@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty } from 'class-validator';
-import { CreateRequirementDto } from 'src/modules/features/requirements/dto/create-requirement.dto';
+import { CreateRequirementDto } from 'src/modules/features/program/requirements/dto/create-requirement.dto';
 
 export class CreateProgramDto {
   @IsNotEmpty({ message: 'Le nom du programme est obligatoire' })

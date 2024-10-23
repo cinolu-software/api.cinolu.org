@@ -5,21 +5,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SearchModule } from './utilities/search/search.module';
 import { AuthModule } from './core/auth/auth.module';
-import { ProgramsModule } from './features/programs/programs.module';
-import { RequirementsModule } from './features/requirements/requirements.module';
-import { RolesModule } from './core/roles/roles.module';
-import { UsersModule } from './core/users/users.module';
-import { DbModule } from './core/db/db.module';
-import { EmailModule } from './core/email/email.module';
-import { NotificationModule } from './utilities/notifications/notifications.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AuthGuard } from './core/auth/guards/auth.guard';
+import { UsersModule } from './core/users/users.module';
+import { DbModule } from './core/db/db.module';
+import { RolesModule } from './core/roles/roles.module';
+import { PartnersModule } from './features/program/partners/partners.module';
+import { PartnershipsModule } from './features/program/partnerships/partnership.module';
+import { ProgramsModule } from './features/program/programs/programs.module';
+import { RequirementsModule } from './features/program/requirements/requirements.module';
+import { TypesModule } from './features/program/types/types.module';
+import { ExpertisesModule } from './features/user/expertises/expertises.module';
 import { AttachmentsModule } from './utilities/attachments/attachments.module';
-import { PartnersModule } from './features/partners/partners.module';
-import { PartnershipsModule } from './features/partnerships/partnership.module';
-import { TypesModule } from './features/types/types.module';
-import { ExpertisesModule } from './features/expertises/expertises.module';
+import { EmailModule } from './utilities/email/email.module';
+import { NotificationModule } from './utilities/notifications/notifications.module';
+import { LocalAuthGuard } from './core/auth/guards/local-auth.guard';
 
 @Module({
   imports: [
@@ -54,6 +54,6 @@ import { ExpertisesModule } from './features/expertises/expertises.module';
     PartnershipsModule,
     ExpertisesModule
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
+  providers: [{ provide: APP_GUARD, useClass: LocalAuthGuard }]
 })
 export class AppModule {}

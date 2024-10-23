@@ -1,10 +1,10 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { Partnership } from '../../../features/partnerships/entities/partnership.entity';
-import { Program } from '../../../features/programs/entities/program.entity';
-import { Requirement } from '../../../features/requirements/entities/requirement.entity';
-import { Type } from '../../../features/types/entities/type.entity';
-import { Partner } from '../../../features/partners/entities/partner.entity';
+import { Partnership } from '../../../features/program/partnerships/entities/partnership.entity';
+import { Program } from '../../../features/program/programs/entities/program.entity';
+import { Requirement } from '../../../features/program/requirements/entities/requirement.entity';
+import { Type } from '../../../features/program/types/entities/type.entity';
+import { Partner } from '../../../features/program/partners/entities/partner.entity';
 import { fakerFR as faker } from '@faker-js/faker';
 
 export default class ProgramSeeder implements Seeder {
@@ -109,8 +109,8 @@ export default class ProgramSeeder implements Seeder {
             programRepository.save({
               name: faker.commerce.productName(),
               description: faker.commerce.productDescription(),
-              start_at: faker.date.past(),
-              end_at: faker.date.soon(),
+              started_at: faker.date.recent(),
+              ended_at: faker.helpers.arrayElement([faker.date.soon(), faker.date.past()]),
               types: await createType(faker.number.int({ min: 1, max: 2 })),
               requirements: await createRequirement(faker.number.int({ min: 1, max: 3 })),
               partners: await createPartner(faker.number.int({ min: 1, max: 5 }))

@@ -17,7 +17,7 @@ import { Program } from './entities/program.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Public } from '../../../common/decorators/public.decorator';
+import { Public } from '../../../../common/decorators/public.decorator';
 import { QueryParams } from './types/query-params.type';
 
 @Controller('programs')

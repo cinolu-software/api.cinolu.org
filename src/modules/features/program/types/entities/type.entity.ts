@@ -1,6 +1,6 @@
-import { Program } from 'src/modules/features/programs/entities/program.entity';
+import { Program } from 'src/modules/features/program/programs/entities/program.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../../../common/entities/base.entity';
+import { BaseEntity } from '../../../../../common/entities/base.entity';
 
 @Entity()
 export class Type extends BaseEntity {
