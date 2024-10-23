@@ -18,7 +18,7 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Post('add-detail')
+  @Post('add-details')
   addDetail(@CurrentUser() user: User, dto: AddDetailsDto): Promise<{ data: User }> {
     return this.userService.addDetails(user, dto);
   }
