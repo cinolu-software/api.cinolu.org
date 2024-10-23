@@ -185,24 +185,22 @@ export class UsersService {
   }
 
   async updateProfile(@CurrentUser() currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
-    const { data: user } = await this.findOne(currentUser.id);
     try {
-      const updatedUser = Object.assign(user, dto);
-      delete updatedUser.password;
-      const data: User = await this.userRepository.save(updatedUser);
+      const { data: user } = await this.findOne(currentUser.id);
+      delete user.password;
+      const data: User = await this.userRepository.save({ ...user, ...dto });
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la modification du profil');
     }
   }
 
-  async uploadImage(@CurrentUser() currenUser: User, image: Express.Multer.File): Promise<{ data: User }> {
-    const { data: user } = await this.findOne(currenUser.id);
+  async uploadImage(@CurrentUser() currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
     try {
+      const { data: user } = await this.findOne(currenUser.id);
       if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);
-      const updatedUser = Object.assign(user, { profile: image.filename });
-      delete updatedUser.password;
-      const data = await this.userRepository.save(updatedUser);
+      delete user.password;
+      const data = await this.userRepository.save({ ...user, profile: file.filename });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
