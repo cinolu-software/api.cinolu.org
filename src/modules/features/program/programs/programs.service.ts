@@ -66,7 +66,7 @@ export class ProgramsService {
 
   async findOne(id: string): Promise<{ data: Program }> {
     try {
-      const data: Program = await this.programRepository.findOneOrFail({
+      const data = await this.programRepository.findOneOrFail({
         where: { id },
         relations: ['attachments', 'requirements', 'types', 'partners']
       });
@@ -79,12 +79,11 @@ export class ProgramsService {
   async update(id: string, dto: UpdateProgramDto): Promise<{ data: Program }> {
     try {
       const { data: program } = await this.findOne(id);
-
       const data = await this.programRepository.save({
         id,
         ...dto,
-        types: dto.types.map((type) => ({ id: type })) || program.types,
-        requirements: dto.requirements || program.requirements,
+        types: dto.types?.map((type) => ({ id: type })) || program.types,
+        requirements: dto?.requirements || program.requirements,
         partners: dto.partners?.map((id) => ({ id })) || program.partners
       });
       return { data };
