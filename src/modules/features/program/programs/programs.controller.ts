@@ -80,6 +80,11 @@ export class ProgramsController {
     return this.programsService.removeAttachment(id);
   }
 
+  @Delete('restore/:id')
+  restore(@Param('id') id: string): Promise<void> {
+    return this.programsService.restore(id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.programsService.remove(id);

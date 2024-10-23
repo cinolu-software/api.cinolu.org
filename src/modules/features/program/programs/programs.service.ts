@@ -112,6 +112,10 @@ export class ProgramsService {
     }
   }
 
+  async restore(id: string): Promise<void> {
+    await this.programRepository.restore(id);
+  }
+
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
