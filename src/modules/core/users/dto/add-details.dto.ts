@@ -1,12 +1,12 @@
 import { IsOptional } from 'class-validator';
 
-export default class AddDetailDto {
+export default class AddDetailsDto {
   @IsOptional()
   bio: string;
 
   @IsOptional()
-  social_name: string;
+  socials: { name: string; link: string }[];
 
   @IsOptional()
-  social_value: string;
+  expertises: string[];
 }

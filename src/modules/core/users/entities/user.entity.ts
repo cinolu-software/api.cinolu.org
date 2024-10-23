@@ -1,8 +1,9 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
+import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Role } from 'src/modules/core/roles/entities/role.entity';
 import { Program } from 'src/modules/features/programs/entities/program.entity';
-import { Notification } from '../../../utilities/notifications/entities/notification.entity';
-import { BaseEntity } from '../../../../common/entities/base.entity';
+import { Notification } from 'src/modules/utilities/notifications/entities/notification.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { Detail } from './detail.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -41,4 +42,7 @@ export class User extends BaseEntity {
   @ManyToMany(() => Notification, (notification) => notification.recipients)
   @JoinTable({ name: 'user_notifications' })
   notifications: Notification[];
+
+  @OneToOne(() => Detail, (detail) => detail.user)
+  detail: Detail;
 }

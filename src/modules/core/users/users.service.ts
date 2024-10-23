@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../../../common/decorators/user.decorator';
 import { RolesService } from '../roles/roles.service';
-import AddDetailDto from './dto/add-detail.dto';
+import AddDetailsDto from './dto/add-details.dto';
 
 @Injectable()
 export class UsersService {
@@ -109,19 +109,21 @@ export class UsersService {
     }
   }
 
-  async addDetail(@CurrentUser() currentUser: User, dto: AddDetailDto) {
+  async addDetails(@CurrentUser() currentUser: User, dto: AddDetailsDto): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currentUser.id);
-      await this.userRepository.save({
+      const isCoach = user.roles.map((role) => role.name).includes('coach');
+      if (!isCoach) throw new BadRequestException();
+      delete user.password;
+      const data = await this.userRepository.save({
         ...user,
         detail: {
-          bio: dto.bio,
-          socials: {
-            name: dto.social_name,
-            value: dto.social_value
-          }
+          bio: dto?.bio,
+          socials: dto?.socials,
+          expertises: dto?.expertises.map((id) => ({ id }))
         }
       });
+      return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
@@ -131,7 +133,7 @@ export class UsersService {
     try {
       const data: User = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles', 'details']
+        relations: ['roles', 'detail', 'detail.socials']
       });
       return { data };
     } catch {

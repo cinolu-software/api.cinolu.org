@@ -19,6 +19,7 @@ import { AttachmentsModule } from './utilities/attachments/attachments.module';
 import { PartnersModule } from './features/partners/partners.module';
 import { PartnershipsModule } from './features/partnerships/partnership.module';
 import { TypesModule } from './features/types/types.module';
+import { ExpertisesModule } from './features/expertises/expertises.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { TypesModule } from './features/types/types.module';
     TypesModule,
     NotificationModule,
     PartnersModule,
-    PartnershipsModule
+    PartnershipsModule,
+    ExpertisesModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })

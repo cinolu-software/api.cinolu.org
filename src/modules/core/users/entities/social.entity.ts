@@ -8,7 +8,7 @@ export class Social extends BaseEntity {
   name: string;
 
   @Column()
-  value: string;
+  link: string;
 
   @ManyToOne(() => Detail, (detail) => detail.socials)
   detail: Detail;

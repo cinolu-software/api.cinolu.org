@@ -7,6 +7,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../../../common/decorators/user.decorator';
 import { Public } from '../../../common/decorators/public.decorator';
+import AddDetailsDto from './dto/add-details.dto';
 
 @Controller('users')
 export class UsersController {
@@ -18,8 +19,8 @@ export class UsersController {
   }
 
   @Post('add-detail')
-  addDetail(): Promise<{ data: User[] }> {
-    return this.userService.findAll();
+  addDetail(@CurrentUser() user: User, dto: AddDetailsDto): Promise<{ data: User }> {
+    return this.userService.addDetails(user, dto);
   }
 
   @Public()
