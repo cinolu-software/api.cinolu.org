@@ -19,7 +19,7 @@ import { ExpertisesModule } from './features/user/expertises/expertises.module';
 import { AttachmentsModule } from './utilities/attachments/attachments.module';
 import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
-import { LocalAuthGuard } from './core/auth/guards/local-auth.guard';
+import { AuthGuard } from './core/auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -54,6 +54,6 @@ import { LocalAuthGuard } from './core/auth/guards/local-auth.guard';
     PartnershipsModule,
     ExpertisesModule
   ],
-  providers: [{ provide: APP_GUARD, useClass: LocalAuthGuard }]
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })
 export class AppModule {}
