@@ -35,23 +35,23 @@ export default class UserSeeder implements Seeder {
      * @param roleName
      * @param password
      */
-    const createUsers = async (count: number, roleName: string, password: string) => {
-      await Promise.all(
-        Array(count)
-          .fill('')
-          .map(async () => {
-            await userRepository.save({
-              name: faker.person.fullName(),
-              address: faker.location.streetAddress(),
-              phone_number: faker.phone.number(),
-              email: faker.internet.email(),
-              verified_at: new Date(),
-              password: await bcrypt.hash(password, 10),
-              roles: [await roleRepository.findOneByOrFail({ name: roleName })]
-            });
-          })
-      );
-    };
+    // const createUsers = async (count: number, roleName: string, password: string) => {
+    //   await Promise.all(
+    //     Array(count)
+    //       .fill('')
+    //       .map(async () => {
+    //         await userRepository.save({
+    //           name: faker.person.fullName(),
+    //           address: faker.location.streetAddress(),
+    //           phone_number: faker.phone.number(),
+    //           email: faker.internet.email(),
+    //           verified_at: new Date(),
+    //           password: await bcrypt.hash(password, 10),
+    //           roles: [await roleRepository.findOneByOrFail({ name: roleName })]
+    //         });
+    //       })
+    //   );
+    // };
 
     await userRepository.save({
       name: faker.person.firstName(),
@@ -62,7 +62,7 @@ export default class UserSeeder implements Seeder {
       password: await bcrypt.hash('admin1234', 10),
       roles: [await roleRepository.findOneBy({ name: 'admin' })]
     });
-    await createUsers(10, 'staff', 'staff1234');
-    await createUsers(20, 'coach', 'coach1234');
+    // await createUsers(10, 'staff', 'staff1234');
+    // await createUsers(20, 'coach', 'coach1234');
   }
 }
