@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne 
 import { BaseEntity } from '../../../../common/entities/base.entity';
 import { Social } from './social.entity';
 import { User } from './user.entity';
-import { Expertise } from '../../../features/user/expertises/entities/expertise.entity';
+import { Expertise } from '../../../features/users/expertises/entities/expertise.entity';
 
 @Entity()
 export class Detail extends BaseEntity {

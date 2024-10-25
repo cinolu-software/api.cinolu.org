@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { Role } from 'src/modules/core/roles/entities/role.entity';
-import { Program } from 'src/modules/features/program/programs/entities/program.entity';
+import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Notification } from 'src/modules/utilities/notifications/entities/notification.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Detail } from './detail.entity';

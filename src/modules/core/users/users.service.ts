@@ -205,8 +205,7 @@ export class UsersService {
       delete user.password;
       const data = await this.userRepository.save({ ...user, profile: file.filename });
       return { data };
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }

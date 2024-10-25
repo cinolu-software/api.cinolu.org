@@ -3,19 +3,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { SearchModule } from './utilities/search/search.module';
 import { AuthModule } from './core/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UsersModule } from './core/users/users.module';
 import { DbModule } from './core/db/db.module';
 import { RolesModule } from './core/roles/roles.module';
-import { PartnersModule } from './features/program/partners/partners.module';
-import { PartnershipsModule } from './features/program/partnerships/partnership.module';
-import { ProgramsModule } from './features/program/programs/programs.module';
-import { RequirementsModule } from './features/program/requirements/requirements.module';
-import { TypesModule } from './features/program/types/types.module';
-import { ExpertisesModule } from './features/user/expertises/expertises.module';
+import { PartnersModule } from './features/programs/partners/partners.module';
+import { PartnershipsModule } from './features/programs/partnerships/partnership.module';
+import { ProgramsModule } from './features/programs/programs/programs.module';
+import { RequirementsModule } from './features/programs/requirements/requirements.module';
+import { TypesModule } from './features/programs/types/types.module';
+import { ExpertisesModule } from './features/users/expertises/expertises.module';
 import { AttachmentsModule } from './utilities/attachments/attachments.module';
 import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
@@ -44,7 +43,6 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
     RolesModule,
     EmailModule,
     DbModule,
-    SearchModule,
     ProgramsModule,
     AttachmentsModule,
     RequirementsModule,

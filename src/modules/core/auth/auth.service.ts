@@ -31,8 +31,7 @@ export class AuthService {
       const { data } = await this.usersService.getVerifiedUser(email);
       await this.verifyPassword(pass, data.password);
       return { data };
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException('Les identifiants saisis sont invalides');
     }
   }

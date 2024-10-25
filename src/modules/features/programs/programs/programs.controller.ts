@@ -35,6 +35,7 @@ export class ProgramsController {
     return this.programsService.findAll(queryParams);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.findOne(id);

@@ -45,7 +45,7 @@ export class ProgramsService {
     const { page, type, hideFinished } = queryParams;
     const query = this.programRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
     if (type) query.andWhere('types.name = :type', { type });
-    if (hideFinished) query.andWhere('(p.ended_at IS NULL OR p.ended_at > :now)', { now: new Date() });
+    if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });
     const take: number = 9;
     const skip = ((page || 1) - 1) * take;
     const programs: Program[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();

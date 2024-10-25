@@ -1,5 +1,5 @@
 import { Notification } from 'src/modules/utilities/notifications/entities/notification.entity';
-import { Program } from 'src/modules/features/program/programs/entities/program.entity';
+import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../../common/entities/base.entity';
 

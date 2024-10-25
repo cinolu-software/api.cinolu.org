@@ -20,4 +20,4 @@ const options: DataSourceOptions & SeederOptions = {
 };
 
 export const dataSource = new DataSource(options);
-dataSource.initialize().catch((error) => console.log(error));
+dataSource.initialize();
