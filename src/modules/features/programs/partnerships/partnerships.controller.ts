@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PartnershipsService } from './partnership.service';
+import { PartnershipsService } from './partnerships.service';
 import { CreatePartnershipDto } from './dto/create-partnership.dto';
 import { UpdatePartnershipDto } from './dto/update-partnership.dto';
 import { Partnership } from './entities/partnership.entity';

@@ -14,14 +14,14 @@ export class ProgramsService {
   constructor(
     @InjectRepository(Program)
     private programRepository: Repository<Program>,
-    private requirementService: RequirementsService,
+    private requirementsService: RequirementsService,
     private attachmentsService: AttachmentsService
   ) {}
 
   async create(dto: CreateProgramDto): Promise<{ data: Program }> {
     try {
       await this.throwIfExist(dto.name);
-      const { data: requirements } = await this.requirementService.createMany(dto.requirements);
+      const { data: requirements } = await this.requirementsService.createMany(dto.requirements);
       const data = await this.programRepository.save({
         ...dto,
         requirements,

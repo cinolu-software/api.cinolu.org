@@ -17,7 +17,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private rolesService: RolesService
+    private roleService: RolesService
   ) {}
 
   async findAll(): Promise<{ data: User[] }> {
@@ -97,7 +97,7 @@ export class UsersService {
 
   async signUp(dto: SignupDto): Promise<{ data: User }> {
     try {
-      const { data: userRole } = await this.rolesService.findByName('user');
+      const { data: userRole } = await this.roleService.findByName('user');
       delete dto.password_confirm;
       const data: User = await this.userRepository.save({
         ...dto,
@@ -120,7 +120,8 @@ export class UsersService {
         detail: {
           bio: dto?.bio,
           socials: dto?.socials,
-          expertises: dto?.expertises.map((id) => ({ id }))
+          expertises: dto?.expertises.map((id) => ({ id })),
+          positions: dto?.positions.map((id) => ({ id }))
         }
       });
       return { data };
@@ -152,7 +153,7 @@ export class UsersService {
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
-      const { data: userRole } = await this.rolesService.findByName('user');
+      const { data: userRole } = await this.roleService.findByName('user');
       const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });

@@ -9,12 +9,12 @@ import { Repository } from 'typeorm';
 export class RequirementsService {
   constructor(
     @InjectRepository(Requirement)
-    private readonly requirementsRepository: Repository<Requirement>
+    private readonly requirementRepository: Repository<Requirement>
   ) {}
 
   async create(dto: CreateRequirementDto): Promise<{ data: Requirement }> {
     try {
-      const data: Requirement = await this.requirementsRepository.save(dto);
+      const data: Requirement = await this.requirementRepository.save(dto);
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la création de la condition');
@@ -23,7 +23,7 @@ export class RequirementsService {
 
   async createMany(dto: CreateRequirementDto[]): Promise<{ data: Requirement[] }> {
     try {
-      const data: Requirement[] = await this.requirementsRepository.save(dto);
+      const data: Requirement[] = await this.requirementRepository.save(dto);
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la création des conditions');
@@ -31,13 +31,13 @@ export class RequirementsService {
   }
 
   async findAll(): Promise<{ data: Requirement[] }> {
-    const data = await this.requirementsRepository.find();
+    const data = await this.requirementRepository.find();
     return { data };
   }
 
   async findOne(id: string): Promise<{ data: Requirement }> {
     try {
-      const data = await this.requirementsRepository.findOneOrFail({
+      const data = await this.requirementRepository.findOneOrFail({
         where: { id }
       });
       return { data };
@@ -50,7 +50,7 @@ export class RequirementsService {
     try {
       const { data: requirement } = await this.findOne(id);
       const newRequirement: Requirement & UpdateRequirementDto = Object.assign(requirement, dto);
-      const data = await this.requirementsRepository.save(newRequirement);
+      const data = await this.requirementRepository.save(newRequirement);
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la mise à jour de la condition');
@@ -60,7 +60,7 @@ export class RequirementsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.requirementsRepository.delete(id);
+      await this.requirementRepository.delete(id);
     } catch {
       throw new BadRequestException('Erreur lors de la suppression de la condition');
     }

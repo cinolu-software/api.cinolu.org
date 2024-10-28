@@ -9,12 +9,12 @@ import { Repository } from 'typeorm';
 export class PartnershipsService {
   constructor(
     @InjectRepository(Partnership)
-    private partnershipsRepository: Repository<Partnership>
+    private partnershipRepository: Repository<Partnership>
   ) {}
 
   async create(dto: CreatePartnershipDto): Promise<{ data: Partnership }> {
     try {
-      const data = await this.partnershipsRepository.save(dto);
+      const data = await this.partnershipRepository.save(dto);
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -23,7 +23,7 @@ export class PartnershipsService {
 
   async findAll(): Promise<{ data: Partnership[] }> {
     try {
-      const data = await this.partnershipsRepository.find();
+      const data = await this.partnershipRepository.find();
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -32,7 +32,7 @@ export class PartnershipsService {
 
   async findOne(id: string): Promise<{ data: Partnership }> {
     try {
-      const data = await this.partnershipsRepository.findOneOrFail({ where: { id } });
+      const data = await this.partnershipRepository.findOneOrFail({ where: { id } });
       return { data };
     } catch {
       throw new NotFoundException("Le type de partenariat n'existe pas");
@@ -42,7 +42,7 @@ export class PartnershipsService {
   async update(id: string, dto: UpdatePartnershipDto) {
     try {
       const { data: Partnership } = await this.findOne(id);
-      const data = await this.partnershipsRepository.save({ ...Partnership, ...dto });
+      const data = await this.partnershipRepository.save({ ...Partnership, ...dto });
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -52,7 +52,7 @@ export class PartnershipsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.partnershipsRepository.delete(id);
+      await this.partnershipRepository.delete(id);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }

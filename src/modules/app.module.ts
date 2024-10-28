@@ -10,7 +10,7 @@ import { UsersModule } from './core/users/users.module';
 import { DbModule } from './core/db/db.module';
 import { RolesModule } from './core/roles/roles.module';
 import { PartnersModule } from './features/programs/partners/partners.module';
-import { PartnershipsModule } from './features/programs/partnerships/partnership.module';
+import { PartnershipsModule } from './features/programs/partnerships/partnerships.module';
 import { ProgramsModule } from './features/programs/programs/programs.module';
 import { RequirementsModule } from './features/programs/requirements/requirements.module';
 import { TypesModule } from './features/programs/types/types.module';
@@ -19,6 +19,7 @@ import { AttachmentsModule } from './utilities/attachments/attachments.module';
 import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
 import { AuthGuard } from './core/auth/guards/auth.guard';
+import { PositionsModule } from './features/users/positions/positions.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
     NotificationModule,
     PartnersModule,
     PartnershipsModule,
-    ExpertisesModule
+    ExpertisesModule,
+    PositionsModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })

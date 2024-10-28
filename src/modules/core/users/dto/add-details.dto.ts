@@ -9,4 +9,7 @@ export default class AddDetailsDto {
 
   @IsOptional()
   expertises: string[];
+
+  @IsOptional()
+  positions: string[];
 }

@@ -3,6 +3,7 @@ import { BaseEntity } from '../../../../common/entities/base.entity';
 import { Social } from './social.entity';
 import { User } from './user.entity';
 import { Expertise } from '../../../features/users/expertises/entities/expertise.entity';
+import { Position } from '../../../features/users/positions/entities/position.entity';
 
 @Entity()
 export class Detail extends BaseEntity {
@@ -19,4 +20,8 @@ export class Detail extends BaseEntity {
   @ManyToMany(() => Expertise, (expertise) => expertise.details)
   @JoinTable({ name: 'detail_expertises' })
   expertises: Expertise[];
+
+  @ManyToMany(() => Position, (positions) => positions.details)
+  @JoinTable({ name: 'detail_positions' })
+  positions: Position[];
 }
