@@ -20,6 +20,15 @@ export class UsersService {
     private roleService: RolesService
   ) {}
 
+  private async findWithRole(name: string): Promise<{ data: User[] }> {
+    const data = await this.userRepository.find({
+      select: ['name', 'email', 'profile', 'google_image'],
+      relations: ['roles'],
+      where: { roles: { name } }
+    });
+    return { data };
+  }
+
   async findAll(): Promise<{ data: User[] }> {
     const data = await this.userRepository.find({
       relations: ['roles']
@@ -28,21 +37,19 @@ export class UsersService {
   }
 
   async findCoachs(): Promise<{ data: User[] }> {
-    const data = await this.userRepository.find({
-      select: ['name', 'email', 'profile', 'google_image'],
-      relations: ['roles'],
-      where: { roles: { name: 'coach' } }
-    });
-    return { data };
+    return this.findWithRole('coach');
   }
 
-  async findStaffMembers(): Promise<{ data: User[] }> {
-    const data = await this.userRepository.find({
-      select: ['name', 'email', 'profile', 'google_image'],
-      relations: ['roles'],
-      where: { roles: { name: 'staff' } }
-    });
-    return { data };
+  async findStaff(): Promise<{ data: User[] }> {
+    return this.findWithRole('staff');
+  }
+
+  async findUsers(): Promise<{ data: User[] }> {
+    return this.findWithRole('user');
+  }
+
+  async findAdmins(): Promise<{ data: User[] }> {
+    return this.findWithRole('user');
   }
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {

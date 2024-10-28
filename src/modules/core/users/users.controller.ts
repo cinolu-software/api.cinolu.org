@@ -30,9 +30,19 @@ export class UsersController {
   }
 
   @Public()
-  @Get('staff-members')
-  findStaffMembers(): Promise<{ data: User[] }> {
-    return this.userService.findStaffMembers();
+  @Get('staff')
+  findStaff(): Promise<{ data: User[] }> {
+    return this.userService.findStaff();
+  }
+
+  @Get('admins')
+  findAdmins(): Promise<{ data: User[] }> {
+    return this.userService.findAdmins();
+  }
+
+  @Get('users')
+  findUsers(): Promise<{ data: User[] }> {
+    return this.userService.findUsers();
   }
 
   @Get(':id')
