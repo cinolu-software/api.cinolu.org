@@ -17,6 +17,9 @@ export class CreateProgramDto {
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];
 
+  @IsArray({ message: 'La catégorie est obligatoire' })
+  categories: string[];
+
   @IsNotEmpty({ message: 'Les conditions du programme sont obligatoires' })
   requirements: CreateRequirementDto[];
 

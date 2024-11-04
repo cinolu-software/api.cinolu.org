@@ -5,6 +5,7 @@ import { User } from '../../../../core/users/entities/user.entity';
 import { BaseEntity } from '../../../../../common/entities/base.entity';
 import { Partner } from '../../partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
+import { Category } from '../../categories/entities/category.entity';
 
 @Entity()
 export class Program extends BaseEntity {
@@ -35,6 +36,10 @@ export class Program extends BaseEntity {
   @ManyToMany(() => Type, (type) => type.programs)
   @JoinTable({ name: 'program_types' })
   types: Type[];
+
+  @ManyToMany(() => Category, (category) => category.programs)
+  @JoinTable({ name: 'program_categories' })
+  categories: Category[];
 
   @ManyToMany(() => Partner, (partner) => partner.programs)
   @JoinTable({ name: 'program_partners' })

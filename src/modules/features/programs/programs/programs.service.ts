@@ -25,6 +25,7 @@ export class ProgramsService {
       const data = await this.programRepository.save({
         ...dto,
         requirements,
+        categories: dto.categories.map((category) => ({ id: category })),
         types: dto.types.map((type) => ({ id: type })),
         partners: dto.partners.map((id) => ({ id }))
       });
@@ -42,9 +43,13 @@ export class ProgramsService {
   }
 
   async findAll(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
-    const { page, type, hideFinished } = queryParams;
-    const query = this.programRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
+    const { page, type, category, hideFinished } = queryParams;
+    const query = this.programRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.types', 'types')
+      .leftJoinAndSelect('p.categories', 'categories');
     if (type) query.andWhere('types.name = :type', { type });
+    if (category) query.andWhere('categories.name = :category', { category });
     if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });
     const take: number = 9;
     const skip = ((page || 1) - 1) * take;
@@ -82,9 +87,10 @@ export class ProgramsService {
       const data = await this.programRepository.save({
         id,
         ...dto,
-        types: dto.types?.map((type) => ({ id: type })) || program.types,
+        categories: dto.categories.map((category) => ({ id: category })) || program.categories,
+        types: dto?.types.map((type) => ({ id: type })) || program.types,
         requirements: dto?.requirements || program.requirements,
-        partners: dto.partners?.map((id) => ({ id })) || program.partners
+        partners: dto?.partners.map((id) => ({ id })) || program.partners
       });
       return { data };
     } catch {

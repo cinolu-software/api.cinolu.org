@@ -20,6 +20,7 @@ import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { PositionsModule } from './features/users/positions/positions.module';
+import { CategoriesModule } from './features/programs/categories/categories.module';
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { PositionsModule } from './features/users/positions/positions.module';
     PartnersModule,
     PartnershipsModule,
     ExpertisesModule,
-    PositionsModule
+    PositionsModule,
+    CategoriesModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
 })
