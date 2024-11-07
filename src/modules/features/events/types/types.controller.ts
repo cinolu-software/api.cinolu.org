@@ -5,7 +5,7 @@ import { UpdateTypeDto } from './dto/update-type.dto';
 import { Type } from './entities/type.entity';
 import { Public } from '../../../../common/decorators/public.decorator';
 
-@Controller('program-types')
+@Controller('event-types')
 export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
