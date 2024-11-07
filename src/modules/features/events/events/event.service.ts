@@ -21,11 +21,12 @@ export class EventsService {
       await this.throwIfExist(dto.name);
       const data = await this.eventRepository.save({
         ...dto,
+        responsible: { id: dto.responsible },
         types: dto.types.map((type) => ({ id: type }))
       });
       return { data };
     } catch {
-      throw new BadRequestException('Erreur lors de la création du programme');
+      throw new BadRequestException("Erreur lors de la création de l'évenement");
     }
   }
 
@@ -33,7 +34,7 @@ export class EventsService {
     const program = await this.eventRepository.findOne({
       where: { name }
     });
-    if (program) throw new BadRequestException('Le programme existe déjà');
+    if (program) throw new BadRequestException("l'évenement existe déjà");
   }
 
   async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
@@ -66,21 +67,22 @@ export class EventsService {
       });
       return { data };
     } catch {
-      throw new BadRequestException('Erreur lors de la récupération du programme');
+      throw new BadRequestException("Erreur lors de la récupération de l'évenement");
     }
   }
 
   async update(id: string, dto: UpdateEventDto): Promise<{ data: Event }> {
     try {
-      const { data: program } = await this.findOne(id);
+      const { data: event } = await this.findOne(id);
       const data = await this.eventRepository.save({
         id,
         ...dto,
-        types: dto?.types.map((type) => ({ id: type })) || program.types
+        responsible: { id: dto.responsible },
+        types: dto?.types.map((type) => ({ id: type })) || event.types
       });
       return { data };
     } catch {
-      throw new BadRequestException('Erreur lors de la modification du programme');
+      throw new BadRequestException("Erreur lors de la modification de l'évenement");
     }
   }
 
@@ -112,7 +114,7 @@ export class EventsService {
       await this.findOne(id);
       await this.eventRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Erreur lors de la suppression du programme');
+      throw new BadRequestException("Erreur lors de la suppression de l'évenement");
     }
   }
 }
