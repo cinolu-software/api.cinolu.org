@@ -3,7 +3,7 @@ import { Column, Entity, ManyToMany } from 'typeorm';
 import { BaseEntity } from '../../../../../common/entities/base.entity';
 
 @Entity()
-export class Type extends BaseEntity {
+export class ProgramType extends BaseEntity {
   @Column()
   name: string;
 

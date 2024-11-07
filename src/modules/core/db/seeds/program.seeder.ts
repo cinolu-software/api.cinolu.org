@@ -6,8 +6,8 @@ import { Partner } from '../../../features/programs/partners/entities/partner.en
 import { Partnership } from '../../../features/programs/partnerships/entities/partnership.entity';
 import { Program } from '../../../features/programs/programs/entities/program.entity';
 import { Requirement } from '../../../features/programs/requirements/entities/requirement.entity';
-import { Type } from '../../../features/programs/types/entities/type.entity';
-import { Category } from '../../../features/programs/categories/entities/category.entity';
+import { ProgramType } from '../../../features/programs/types/entities/type.entity';
+import { ProgramCategory } from '../../../features/programs/categories/entities/category.entity';
 
 export default class ProgramSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -18,7 +18,8 @@ export default class ProgramSeeder implements Seeder {
     await dataSource.query('TRUNCATE TABLE partnership;');
     await dataSource.query('TRUNCATE TABLE program;');
     await dataSource.query('TRUNCATE TABLE requirement;');
-    await dataSource.query('TRUNCATE TABLE type;');
+    await dataSource.query('TRUNCATE TABLE program_type;');
+    await dataSource.query('TRUNCATE TABLE program_category;');
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
     /**
@@ -28,8 +29,8 @@ export default class ProgramSeeder implements Seeder {
     const partnerRepository = dataSource.getRepository(Partner);
     const programRepository = dataSource.getRepository(Program);
     const requirementRepository = dataSource.getRepository(Requirement);
-    const typeRepository = dataSource.getRepository(Type);
-    const categoryRepository = dataSource.getRepository(Category);
+    const typeRepository = dataSource.getRepository(ProgramType);
+    const categoryRepository = dataSource.getRepository(ProgramCategory);
 
     /**
      * Create types

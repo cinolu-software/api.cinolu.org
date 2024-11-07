@@ -2,7 +2,7 @@ import { Attachment } from 'src/modules/utilities/attachments/entities/attachmen
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Type } from '../../types/entities/type.entity';
+import { EventType } from '../../types/entities/type.entity';
 
 @Entity()
 export class Event extends BaseEntity {
@@ -37,7 +37,7 @@ export class Event extends BaseEntity {
   @OneToMany(() => Attachment, (attachment) => attachment.program)
   attachments: Attachment[];
 
-  @ManyToMany(() => Type, (type) => type.events)
+  @ManyToMany(() => EventType, (type) => type.events)
   @JoinTable({ name: 'event_types' })
-  types: Type[];
+  types: EventType[];
 }

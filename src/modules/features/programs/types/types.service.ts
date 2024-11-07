@@ -1,18 +1,18 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
-import { Type } from './entities/type.entity';
+import { ProgramType } from './entities/type.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class TypesService {
   constructor(
-    @InjectRepository(Type)
-    private typeRepository: Repository<Type>
+    @InjectRepository(ProgramType)
+    private typeRepository: Repository<ProgramType>
   ) {}
 
-  async create(dto: CreateTypeDto): Promise<{ data: Type }> {
+  async create(dto: CreateTypeDto): Promise<{ data: ProgramType }> {
     try {
       const data = await this.typeRepository.save(dto);
       return { data };
@@ -21,12 +21,12 @@ export class TypesService {
     }
   }
 
-  async findAll(): Promise<{ data: Type[] }> {
+  async findAll(): Promise<{ data: ProgramType[] }> {
     const data = await this.typeRepository.find();
     return { data };
   }
 
-  async findOne(id: string): Promise<{ data: Type }> {
+  async findOne(id: string): Promise<{ data: ProgramType }> {
     try {
       const data = await this.typeRepository.findOneOrFail({
         where: { id }
@@ -37,7 +37,7 @@ export class TypesService {
     }
   }
 
-  async update(id: string, dto: UpdateTypeDto): Promise<{ data: Type }> {
+  async update(id: string, dto: UpdateTypeDto): Promise<{ data: ProgramType }> {
     try {
       const { data: type } = await this.findOne(id);
       const data = await this.typeRepository.save({ ...type, ...dto });

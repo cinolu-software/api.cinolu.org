@@ -3,7 +3,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 import { Event } from '../../events/entities/event.entity';
 
 @Entity()
-export class Type extends BaseEntity {
+export class EventType extends BaseEntity {
   @Column()
   name: string;
 
