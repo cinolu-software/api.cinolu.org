@@ -5,7 +5,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
 import { Public } from '../../../../common/decorators/public.decorator';
 
-@Controller('categories')
+@Controller('program-categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
