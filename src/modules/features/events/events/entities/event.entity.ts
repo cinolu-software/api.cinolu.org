@@ -1,5 +1,5 @@
 import { Attachment } from 'src/modules/utilities/attachments/entities/attachment.entity';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Type } from '../../types/entities/type.entity';
@@ -30,8 +30,9 @@ export class Event extends BaseEntity {
   @Column({ type: 'date' })
   ended_at: Date;
 
-  @ManyToMany(() => User, (user) => user.programs)
-  users: User[];
+  @ManyToOne(() => User, (user) => user.events)
+  @JoinColumn({ name: 'responsibleId' })
+  responsible: User;
 
   @OneToMany(() => Attachment, (attachment) => attachment.program)
   attachments: Attachment[];

@@ -1,9 +1,10 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Role } from 'src/modules/core/roles/entities/role.entity';
 import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Notification } from 'src/modules/utilities/notifications/entities/notification.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Detail } from './detail.entity';
+import { Event } from '../../../features/events/events/entities/event.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -45,4 +46,7 @@ export class User extends BaseEntity {
 
   @OneToOne(() => Detail, (detail) => detail.user)
   detail: Detail;
+
+  @OneToMany(() => Event, (event) => event.responsible)
+  events: Event[];
 }

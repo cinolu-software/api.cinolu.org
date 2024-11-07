@@ -13,6 +13,9 @@ export class CreateEventDto {
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
   ended_at: Date;
 
+  @IsNotEmpty({ message: 'Le responsable est obligatoire' })
+  responsible: string;
+
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];
 }
