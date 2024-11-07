@@ -26,7 +26,7 @@ export class EventsService {
       });
       return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de la création de l'évenement");
+      throw new BadRequestException("Erreur lors de la création de l'événement");
     }
   }
 
@@ -34,14 +34,14 @@ export class EventsService {
     const program = await this.eventRepository.findOne({
       where: { name }
     });
-    if (program) throw new BadRequestException("l'évenement existe déjà");
+    if (program) throw new BadRequestException("l'événement existe déjà");
   }
 
   async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     const { page, type } = queryParams;
     const query = this.eventRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
     if (type) query.andWhere('types.name = :type', { type });
-    const take: number = 9;
+    const take: number = 6;
     const skip = ((page || 1) - 1) * take;
     const events: Event[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();
     const count = await query.getCount();
@@ -67,7 +67,7 @@ export class EventsService {
       });
       return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de la récupération de l'évenement");
+      throw new BadRequestException("Erreur lors de la récupération de l'événement");
     }
   }
 
@@ -82,7 +82,7 @@ export class EventsService {
       });
       return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de la modification de l'évenement");
+      throw new BadRequestException("Erreur lors de la modification de l'événement");
     }
   }
 
@@ -114,7 +114,7 @@ export class EventsService {
       await this.findOne(id);
       await this.eventRepository.softDelete(id);
     } catch {
-      throw new BadRequestException("Erreur lors de la suppression de l'évenement");
+      throw new BadRequestException("Erreur lors de la suppression de l'événement");
     }
   }
 }
