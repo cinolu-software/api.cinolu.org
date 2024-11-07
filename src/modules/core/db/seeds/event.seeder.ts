@@ -66,6 +66,6 @@ export default class EventSeeder implements Seeder {
           )
       );
     };
-    await createProgram(50);
+    await createProgram(30);
   }
 }
