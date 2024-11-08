@@ -42,11 +42,7 @@ export default class EventSeeder implements Seeder {
       );
     };
 
-    /**
-     * Create partner
-     * @param count
-     */
-    const createProgram = async (count: number): Promise<Event[]> => {
+    const createPrograms = async (count: number): Promise<Event[]> => {
       const users = await getStaffUsers();
       return await Promise.all(
         Array(count)
@@ -56,8 +52,9 @@ export default class EventSeeder implements Seeder {
               name: faker.commerce.productName(),
               description: faker.commerce.productDescription(),
               location: faker.location.city(),
-              attendees_total: faker.number.int({ min: 40, max: 50 }),
-              attendees_number: faker.number.int({ min: 40, max: 50 }),
+              attendees: faker.number.int({ min: 40, max: 50 }),
+              event_type: faker.helpers.arrayElement(['physical', 'online']),
+              online_link: faker.internet.url(),
               started_at: faker.date.recent(),
               ended_at: faker.helpers.arrayElement([faker.date.soon(), faker.date.past()]),
               responsible: users[faker.number.int({ min: 1, max: 10 })],
@@ -66,6 +63,6 @@ export default class EventSeeder implements Seeder {
           )
       );
     };
-    await createProgram(30);
+    await createPrograms(23);
   }
 }

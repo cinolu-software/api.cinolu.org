@@ -38,9 +38,10 @@ export class EventsService {
   }
 
   async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
-    const { page, type } = queryParams;
+    const { page, type, eventType } = queryParams;
     const query = this.eventRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
     if (type) query.andWhere('types.name = :type', { type });
+    if (eventType) query.andWhere('event_type = :eventType', { eventType });
     const take: number = 6;
     const skip = ((page || 1) - 1) * take;
     const events: Event[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();

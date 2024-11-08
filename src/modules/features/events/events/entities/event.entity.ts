@@ -22,10 +22,13 @@ export class Event extends BaseEntity {
   started_at: Date;
 
   @Column({ type: 'bigint', default: 0 })
-  attendees_total: number;
+  attendees: number;
 
-  @Column({ type: 'bigint', default: 0 })
-  attendees_number: number;
+  @Column({ type: 'enum', enum: ['physical', 'online'], default: 'physical' })
+  event_type: 'physical' | 'online';
+
+  @Column({ nullable: true })
+  online_link: string;
 
   @Column({ type: 'date' })
   ended_at: Date;
