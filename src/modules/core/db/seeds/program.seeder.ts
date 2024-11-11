@@ -110,6 +110,7 @@ export default class ProgramSeeder implements Seeder {
           .map(async () =>
             partnerRepository.save({
               name: faker.company.name(),
+              website_link: faker.internet.url(),
               description: faker.commerce.productDescription(),
               partnerships: await createPartnerships(10)
             })
