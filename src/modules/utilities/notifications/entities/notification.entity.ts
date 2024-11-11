@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany, ManyToMany } from 'typeorm';
 import { User } from '../../../core/users/entities/user.entity';
-import { Attachment } from '../../attachments/entities/attachment.entity';
 import { BaseEntity } from '../../../../common/entities/base.entity';
+import { NotificationAttachment } from './attachment.entity';
 
 @Entity()
 export class Notification extends BaseEntity {
@@ -30,6 +30,6 @@ export class Notification extends BaseEntity {
   @ManyToMany(() => User, (user) => user.notifications)
   recipients: User[];
 
-  @OneToMany(() => Attachment, (attachment) => attachment.notification)
-  attachments: Attachment[];
+  @OneToMany(() => NotificationAttachment, (attachment) => attachment.notification)
+  attachments: NotificationAttachment[];
 }

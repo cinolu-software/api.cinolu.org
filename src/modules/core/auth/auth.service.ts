@@ -64,9 +64,7 @@ export class AuthService {
   async addUser(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const { data } = await this.usersService.create(dto);
-      const token = await this.generateToken(data, '30min');
-      const url = this._frontEndUrl + 'sign-in?token=' + token;
-      this.eventEmitter.emit('user.created', { user: data, token: url });
+      this.eventEmitter.emit('user.created', { user: data });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
@@ -128,8 +126,8 @@ export class AuthService {
     try {
       const { data: user } = await this.usersService.findByEmail(dto.email);
       const token = await this.generateToken(user, '15min');
-      const url = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
-      this.eventEmitter.emit('user.reset-password', { user, token: url });
+      const link = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
+      this.eventEmitter.emit('user.reset-password', { user, link });
     } catch {
       throw new BadRequestException('Aucun utilisateur trouvé avec cet email');
     }

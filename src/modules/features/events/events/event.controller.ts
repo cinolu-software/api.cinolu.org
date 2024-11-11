@@ -56,29 +56,24 @@ export class EventsController {
     return this.eventsService.uploadImage(id, file);
   }
 
-  @Post('attachment/:id')
-  @UseInterceptors(
-    FileInterceptor('attachment', {
-      storage: diskStorage({
-        destination: './uploads/attachments',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
-  addAttachment(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Event }> {
-    return this.eventsService.addAttachment(id, file);
-  }
+  // @Post('attachment/:id')
+  // @UseInterceptors(
+  //   FileInterceptor('attachment', {
+  //     storage: diskStorage({
+  //       destination: './uploads/attachments',
+  //       filename: function (_req, file, cb) {
+  //         cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+  //       }
+  //     })
+  //   })
+  // )
+  // addAttachment(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Event }> {
+  //   return this.eventsService.addAttachment(id, file);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateEventDto): Promise<{ data: Event }> {
     return this.eventsService.update(id, updateProgramDto);
-  }
-
-  @Delete('attachment/:id')
-  removeAttachment(@Param('id') id: string): Promise<void> {
-    return this.eventsService.removeAttachment(id);
   }
 
   @Delete('restore/:id')

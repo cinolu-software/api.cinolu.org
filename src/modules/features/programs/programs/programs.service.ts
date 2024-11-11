@@ -4,8 +4,6 @@ import { UpdateProgramDto } from './dto/update-program.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
-import { AttachmentsService } from 'src/modules/utilities/attachments/attachments.service';
-import { RequirementsService } from '../requirements/requirements.service';
 import { QueryParams } from './types/query-params.type';
 import * as fs from 'fs-extra';
 
@@ -13,18 +11,16 @@ import * as fs from 'fs-extra';
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private programRepository: Repository<Program>,
-    private requirementsService: RequirementsService,
-    private attachmentsService: AttachmentsService
+    private programRepository: Repository<Program>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<{ data: Program }> {
     try {
       await this.throwIfExist(dto.name);
-      const { data: requirements } = await this.requirementsService.createMany(dto.requirements);
+      // const { data: requirements } = await this.requirementsService.createMany(dto.requirements);
       const data = await this.programRepository.save({
         ...dto,
-        requirements,
+        // requirements,
         categories: dto.categories.map((category) => ({ id: category })),
         types: dto.types.map((type) => ({ id: type })),
         partners: dto.partners.map((id) => ({ id }))
@@ -95,25 +91,6 @@ export class ProgramsService {
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la modification du programme');
-    }
-  }
-
-  async addAttachment(id: string, file: Express.Multer.File): Promise<{ data: Program }> {
-    await this.findOne(id);
-    try {
-      const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
-      const data = await this.programRepository.save({ id, attachments: [attachment] });
-      return { data };
-    } catch {
-      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
-    }
-  }
-
-  async removeAttachment(id: string): Promise<void> {
-    try {
-      await this.attachmentsService.remove(id);
-    } catch {
-      throw new BadRequestException('Erreur lors de la suppression de la pièce jointe');
     }
   }
 

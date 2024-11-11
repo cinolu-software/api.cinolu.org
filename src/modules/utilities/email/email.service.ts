@@ -9,13 +9,13 @@ export class EmailService {
   constructor(private readonly mailerSerive: MailerService) {}
 
   @OnEvent('user.reset-password')
-  async resetEmail({ user, token }: { user: User; token: string }): Promise<void> {
+  async resetEmail({ user, link }: { user: User; link: string }): Promise<void> {
     try {
       await this.mailerSerive.sendMail({
         to: user.email,
         subject: 'Réinitialisation du mot de passe',
         template: 'reset-password',
-        context: { user, token }
+        context: { user, link }
       });
     } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");

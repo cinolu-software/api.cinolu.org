@@ -1,11 +1,12 @@
-import { Attachment } from 'src/modules/utilities/attachments/entities/attachment.entity';
-import { Requirement } from 'src/modules/features/programs/requirements/entities/requirement.entity';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { User } from '../../../../core/users/entities/user.entity';
-import { BaseEntity } from '../../../../../common/entities/base.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { Partner } from '../../partners/entities/partner.entity';
 import { ProgramType } from '../../types/entities/type.entity';
 import { ProgramCategory } from '../../categories/entities/category.entity';
+import { Requirement } from './requirement.entity';
+import { ProgramPhase } from './phase.entity';
+import { ProgramDocument } from './document.entity';
+import { ProgramApplication } from './application.entity';
 
 @Entity()
 export class Program extends BaseEntity {
@@ -24,11 +25,14 @@ export class Program extends BaseEntity {
   @Column({ type: 'date' })
   ended_at: Date;
 
-  @ManyToMany(() => User, (user) => user.programs)
-  users: User[];
+  @Column()
+  targeted_audience: string;
 
-  @OneToMany(() => Attachment, (attachment) => attachment.program)
-  attachments: Attachment[];
+  @OneToMany(() => ProgramPhase, (phase) => phase.program)
+  phases: ProgramPhase[];
+
+  @OneToMany(() => ProgramApplication, (application) => application.program)
+  applications: ProgramApplication[];
 
   @OneToMany(() => Requirement, (requirement) => requirement.program)
   requirements: Requirement[];
@@ -44,4 +48,7 @@ export class Program extends BaseEntity {
   @ManyToMany(() => Partner, (partner) => partner.programs)
   @JoinTable({ name: 'program_partners' })
   partners: Partner[];
+
+  @OneToMany(() => ProgramDocument, (document) => document.program)
+  documents: ProgramDocument[];
 }

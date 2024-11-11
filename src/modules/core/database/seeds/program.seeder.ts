@@ -5,7 +5,7 @@ import { fakerFR as faker } from '@faker-js/faker';
 import { Partner } from '../../../features/programs/partners/entities/partner.entity';
 import { Partnership } from '../../../features/programs/partnerships/entities/partnership.entity';
 import { Program } from '../../../features/programs/programs/entities/program.entity';
-import { Requirement } from '../../../features/programs/requirements/entities/requirement.entity';
+import { Requirement } from '../../../features/programs/programs/entities/requirement.entity';
 import { ProgramType } from '../../../features/programs/types/entities/type.entity';
 import { ProgramCategory } from '../../../features/programs/categories/entities/category.entity';
 
@@ -130,6 +130,7 @@ export default class ProgramSeeder implements Seeder {
             programRepository.save({
               name: faker.commerce.productName(),
               description: faker.commerce.productDescription(),
+              targeted_audience: faker.commerce.productAdjective(),
               started_at: faker.date.recent(),
               ended_at: faker.helpers.arrayElement([faker.date.soon(), faker.date.past()]),
               types: await createTypes(faker.number.int({ min: 1, max: 2 })),

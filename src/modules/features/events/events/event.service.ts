@@ -4,7 +4,6 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Repository } from 'typeorm';
-import { AttachmentsService } from 'src/modules/utilities/attachments/attachments.service';
 import { QueryParams } from './types/query-params.type';
 import * as fs from 'fs-extra';
 
@@ -12,8 +11,7 @@ import * as fs from 'fs-extra';
 export class EventsService {
   constructor(
     @InjectRepository(Event)
-    private eventRepository: Repository<Event>,
-    private attachmentsService: AttachmentsService
+    private eventRepository: Repository<Event>
   ) {}
 
   async create(dto: CreateEventDto): Promise<{ data: Event }> {
@@ -84,25 +82,6 @@ export class EventsService {
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la modification de l'événement");
-    }
-  }
-
-  async addAttachment(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
-    await this.findOne(id);
-    try {
-      const { data: attachment } = await this.attachmentsService.create({ name: file.filename });
-      const data = await this.eventRepository.save({ id, attachments: [attachment] });
-      return { data };
-    } catch {
-      throw new BadRequestException("Erreur lors de l'ajout de la pièce jointe");
-    }
-  }
-
-  async removeAttachment(id: string): Promise<void> {
-    try {
-      await this.attachmentsService.remove(id);
-    } catch {
-      throw new BadRequestException('Erreur lors de la suppression de la pièce jointe');
     }
   }
 

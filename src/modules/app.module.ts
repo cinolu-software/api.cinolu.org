@@ -7,15 +7,13 @@ import { AuthModule } from './core/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UsersModule } from './core/users/users.module';
-import { DbModule } from './core/db/db.module';
+import { DatabaseModule } from './core/database/database.module';
 import { RolesModule } from './core/roles/roles.module';
 import { PartnersModule } from './features/programs/partners/partners.module';
 import { PartnershipsModule } from './features/programs/partnerships/partnerships.module';
 import { ProgramsModule } from './features/programs/programs/programs.module';
-import { RequirementsModule } from './features/programs/requirements/requirements.module';
 import { TypesModule as ProgramTypesModule } from './features/programs/types/types.module';
 import { ExpertisesModule } from './features/users/expertises/expertises.module';
-import { AttachmentsModule } from './utilities/attachments/attachments.module';
 import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
 import { AuthGuard } from './core/auth/guards/auth.guard';
@@ -46,10 +44,8 @@ import { TypesModule as EventTypesModules } from './features/events/types/types.
     UsersModule,
     RolesModule,
     EmailModule,
-    DbModule,
+    DatabaseModule,
     ProgramsModule,
-    AttachmentsModule,
-    RequirementsModule,
     ProgramTypesModule,
     NotificationModule,
     PartnersModule,

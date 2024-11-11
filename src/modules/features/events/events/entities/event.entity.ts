@@ -1,5 +1,4 @@
-import { Attachment } from 'src/modules/utilities/attachments/entities/attachment.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { EventType } from '../../types/entities/type.entity';
@@ -36,9 +35,6 @@ export class Event extends BaseEntity {
   @ManyToOne(() => User, (user) => user.events)
   @JoinColumn({ name: 'responsibleId' })
   responsible: User;
-
-  @OneToMany(() => Attachment, (attachment) => attachment.program)
-  attachments: Attachment[];
 
   @ManyToMany(() => EventType, (type) => type.events)
   @JoinTable({ name: 'event_types' })

@@ -3,19 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { AttachmentsService } from '../attachments/attachments.service';
 import { Notification } from './entities/notification.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CurrentUser } from '../../../common/decorators/user.decorator';
 import { User } from '../../core/users/entities/user.entity';
 import { UsersService } from '../../core/users/users.service';
+import { NotificationAttachment } from './entities/attachment.entity';
 
 @Injectable()
 export class NotificationService {
   constructor(
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
-    private attachmentsService: AttachmentsService,
+    @InjectRepository(NotificationAttachment)
+    private attachmentRepository: Repository<NotificationAttachment>,
     private usersService: UsersService,
     private eventEmitter: EventEmitter2
   ) {}
@@ -36,7 +37,7 @@ export class NotificationService {
     try {
       const { data: notification } = await this.findOne(id);
       const attachments = await Promise.all(
-        files.map((file) => this.attachmentsService.create({ name: file.filename }).then((res) => res.data))
+        files.map((file) => this.attachmentRepository.save({ name: file.filename }))
       );
       const data = await this.notificationRepository.save({ ...notification, attachments });
       return { data };

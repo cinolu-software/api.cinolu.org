@@ -7,17 +7,17 @@ config({
   path: '.env'
 });
 
-const options: DataSourceOptions & SeederOptions = {
+export const typeOrmOptions: DataSourceOptions & SeederOptions = {
   type: 'mysql',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
   database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  migrations: ['src/modules/core/db/migrations/**'],
+  migrations: ['src/modules/core/database/migrations/**'],
   entities: ['dist/**/*.entity.js'],
-  seeds: ['dist/src/modules/core/db/seeds/**{.ts,.js}']
+  seeds: ['dist/src/modules/core/database/seeds/**{.ts,.js}']
 };
 
-export const dataSource = new DataSource(options);
+export const dataSource = new DataSource(typeOrmOptions);
 dataSource.initialize();

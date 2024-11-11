@@ -5,6 +5,7 @@ import { Notification } from 'src/modules/utilities/notifications/entities/notif
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Detail } from './detail.entity';
 import { Event } from '../../../features/events/events/entities/event.entity';
+import { ProgramApplication } from '../../../features/programs/programs/entities/application.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -36,9 +37,12 @@ export class User extends BaseEntity {
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
 
-  @ManyToMany(() => Program, (program) => program.users)
-  @JoinTable({ name: 'user_programs' })
-  programs: Program[];
+  @OneToMany(() => ProgramApplication, (application) => application.applicant)
+  applications: ProgramApplication[];
+
+  @ManyToMany(() => Program)
+  @JoinTable({ name: 'user_enrolled_programs' })
+  enrolled_programs: Program[];
 
   @ManyToMany(() => Notification, (notification) => notification.recipients)
   @JoinTable({ name: 'user_notifications' })

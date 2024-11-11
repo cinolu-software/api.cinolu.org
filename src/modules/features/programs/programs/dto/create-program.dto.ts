@@ -1,5 +1,4 @@
 import { IsArray, IsNotEmpty } from 'class-validator';
-import { CreateRequirementDto } from 'src/modules/features/programs/requirements/dto/create-requirement.dto';
 
 export class CreateProgramDto {
   @IsNotEmpty({ message: 'Le nom du programme est obligatoire' })
@@ -21,7 +20,7 @@ export class CreateProgramDto {
   categories: string[];
 
   @IsNotEmpty({ message: 'Les conditions du programme sont obligatoires' })
-  requirements: CreateRequirementDto[];
+  requirements: { name: string; description: string }[];
 
   @IsNotEmpty({ message: 'Les partenaires sont recquis' })
   partners: string[];
