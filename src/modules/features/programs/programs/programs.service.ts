@@ -49,7 +49,7 @@ export class ProgramsService {
     if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });
     const take: number = 9;
     const skip = ((page || 1) - 1) * take;
-    const programs: Program[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();
+    const programs: Program[] = await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getMany();
     const count = await query.getCount();
     return { data: { programs, count } };
   }
@@ -69,7 +69,7 @@ export class ProgramsService {
     try {
       const data = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['attachments', 'requirements', 'types', 'partners', 'categories']
+        relations: ['requirements', 'types', 'partners', 'categories']
       });
       return { data };
     } catch {
@@ -78,6 +78,8 @@ export class ProgramsService {
   }
 
   async update(id: string, dto: UpdateProgramDto): Promise<{ data: Program }> {
+    console.log('cliked');
+    return;
     try {
       const { data: program } = await this.findOne(id);
       const data = await this.programRepository.save({

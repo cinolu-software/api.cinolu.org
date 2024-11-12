@@ -76,7 +76,7 @@ export class ProgramsController {
     return this.programsService.update(id, updateProgramDto);
   }
 
-  @Delete('restore/:id')
+  @Post('restore/:id')
   restore(@Param('id') id: string): Promise<void> {
     return this.programsService.restore(id);
   }

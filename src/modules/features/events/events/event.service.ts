@@ -62,7 +62,7 @@ export class EventsService {
     try {
       const data = await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['attachments', 'types']
+        relations: ['types']
       });
       return { data };
     } catch {

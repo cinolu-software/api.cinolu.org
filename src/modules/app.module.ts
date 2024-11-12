@@ -16,11 +16,13 @@ import { TypesModule as ProgramTypesModule } from './features/programs/types/typ
 import { ExpertisesModule } from './features/users/expertises/expertises.module';
 import { EmailModule } from './utilities/email/email.module';
 import { NotificationModule } from './utilities/notifications/notifications.module';
-import { AuthGuard } from './core/auth/guards/auth.guard';
+import { LocalAuthGuard } from './core/auth/guards/auth.guard';
 import { PositionsModule } from './features/users/positions/positions.module';
 import { CategoriesModule } from './features/programs/categories/categories.module';
 import { EventsModule } from './features/events/events/event.module';
 import { TypesModule as EventTypesModules } from './features/events/types/types.module';
+import { CaslModule } from 'nest-casl';
+import { Roles } from './app.roles';
 
 @Module({
   imports: [
@@ -40,6 +42,10 @@ import { TypesModule as EventTypesModules } from './features/events/types/types.
         signOptions: { expiresIn: '1d' }
       })
     }),
+    CaslModule.forRoot<Roles>({
+      superuserRole: Roles.Admin,
+      getUserFromRequest: (request) => request.currentUser
+    }),
     AuthModule,
     UsersModule,
     RolesModule,
@@ -56,6 +62,6 @@ import { TypesModule as EventTypesModules } from './features/events/types/types.
     EventsModule,
     EventTypesModules
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }]
+  providers: [{ provide: APP_GUARD, useClass: LocalAuthGuard }]
 })
 export class AppModule {}
