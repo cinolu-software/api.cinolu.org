@@ -8,6 +8,8 @@ import { ProgramDocument } from './modules/documents/entities/document.entity';
 import { ProgramApplication } from './modules/applications/entities/application.entity';
 import { Requirement } from './modules/requirements/entities/requirement.entity';
 import { ProgramMilestone } from './modules/milestones/entities/milestone.entity';
+import { DocumentsController } from './modules/documents/documents.controller';
+import { DocumentsService } from './modules/documents/documents.service';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { ProgramMilestone } from './modules/milestones/entities/milestone.entity
       ProgramApplication
     ])
   ],
-  controllers: [ProgramsController],
-  providers: [ProgramsService]
+  controllers: [ProgramsController, DocumentsController],
+  providers: [ProgramsService, DocumentsService]
 })
 export class ProgramsModule {}

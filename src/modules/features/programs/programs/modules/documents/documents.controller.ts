@@ -11,7 +11,7 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 
 @Controller('program-documents')
 @Roles(RolesEnum.Staff)
-export class ProgramsController {
+export class DocumentsController {
   constructor(private readonly documentService: DocumentsService) {}
 
   @Post('')
