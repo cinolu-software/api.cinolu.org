@@ -108,6 +108,8 @@ export default class UserSeeder implements Seeder {
       );
     };
 
+    await createUsers(10, 'staff', 'staff1234');
+    await createUsers(20, 'coach', 'coach1234');
     await userRepository.save({
       name: faker.person.firstName(),
       address: faker.location.streetAddress(),
@@ -115,9 +117,7 @@ export default class UserSeeder implements Seeder {
       email: 'admin@admin.com',
       verified_at: faker.date.recent(),
       password: await bcrypt.hash('admin1234', 10),
-      roles: [await roleRepository.findOneBy({ name: 'admin' })]
+      roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
     });
-    await createUsers(10, 'staff', 'staff1234');
-    await createUsers(20, 'coach', 'coach1234');
   }
 }

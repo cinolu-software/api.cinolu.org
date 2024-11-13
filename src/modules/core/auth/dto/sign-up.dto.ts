@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
-import { Match } from '../../../../common/decorators/match.decorator';
+import { Match } from '../decorators/match.decorator';
 
 export class SignupDto {
   @IsEmail({}, { message: "L'email saisi est invalide" })

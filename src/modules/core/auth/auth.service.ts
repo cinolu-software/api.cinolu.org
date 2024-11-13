@@ -2,7 +2,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { User } from '../users/entities/user.entity';

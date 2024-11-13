@@ -3,9 +3,12 @@ import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { ProgramType } from './entities/type.entity';
-import { Public } from '../../../../common/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
+import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
 
 @Controller('program-types')
+@Roles(RolesEnum.Staff)
 export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
@@ -14,8 +17,9 @@ export class TypesController {
     return this.typesService.create(createTypeDto);
   }
 
-  @Public()
   @Get()
+  @Public()
+  @Roles(RolesEnum.Guest)
   findAll(): Promise<{ data: ProgramType[] }> {
     return this.typesService.findAll();
   }

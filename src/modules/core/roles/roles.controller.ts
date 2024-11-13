@@ -3,8 +3,11 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
+import { Roles } from '../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../common/access-control/enums/roles.enum';
 
 @Controller('roles')
+@Roles(RolesEnum.Staff)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
@@ -18,7 +21,6 @@ export class RolesController {
     return this.rolesService.findAll();
   }
 
-  // roles/1
   @Get(':id')
   findOne(@Param('id') id: string): Promise<{ data: Role }> {
     return this.rolesService.findOne(id);

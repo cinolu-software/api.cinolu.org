@@ -3,8 +3,12 @@ import { PositionsService } from './expertises.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { Position } from './entities/position.entity';
 import { UpdatePositionDto } from './dto/update-position.dto';
+import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('postions')
+@Roles(RolesEnum.Staff)
 export class PositionsController {
   constructor(private readonly PostionsService: PositionsService) {}
 
@@ -14,11 +18,15 @@ export class PositionsController {
   }
 
   @Get()
+  @Public()
+  @Roles(RolesEnum.Guest)
   findAll(): Promise<{ data: Position[] }> {
     return this.PostionsService.findAll();
   }
 
   @Get(':id')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Position }> {
     return this.PostionsService.findOne(id);
   }

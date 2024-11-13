@@ -5,7 +5,7 @@ import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { Notification } from './entities/notification.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { CurrentUser } from '../../core/auth/decorators/user.decorator';
 import { User } from '../../core/users/entities/user.entity';
 import { UsersService } from '../../core/users/users.service';
 import { NotificationAttachment } from './entities/attachment.entity';

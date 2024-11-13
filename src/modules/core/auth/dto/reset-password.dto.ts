@@ -1,5 +1,5 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-import { Match } from '../../../../common/decorators/match.decorator';
+import { Match } from '../decorators/match.decorator';
 
 export class ResetPasswordDto {
   @IsNotEmpty({ message: 'Le code ne peut pas être vide' })

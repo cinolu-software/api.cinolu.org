@@ -6,10 +6,15 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Notification } from './entities/notification.entity';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { CurrentUser } from '../../core/auth/decorators/user.decorator';
 import { User } from '../../core/users/entities/user.entity';
+import { Roles } from '../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../common/access-control/enums/roles.enum';
+import { Public } from '../../core/auth/decorators/public.decorator';
 
 @Controller('notifications')
+@Public()
+@Roles(RolesEnum.Staff)
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
@@ -42,19 +47,22 @@ export class NotificationController {
   }
 
   @Get('user/:id')
+  @Roles(RolesEnum.User)
   async findUserNotifications(@Param('id') id: string): Promise<{ data: Notification[] }> {
     return await this.notificationService.findUserNotifications(id);
   }
 
   @Get('user/:id/:isRead')
+  @Roles(RolesEnum.User)
   async filterUserNotifications(
-    @Param('id') id: string,
+    @Param() id: string,
     @Param('isRead') isRead: boolean
   ): Promise<{ data: Notification[] }> {
     return await this.notificationService.filterUserNotifications(id, isRead);
   }
 
   @Patch('read/:id')
+  @Roles(RolesEnum.User)
   async markAsRead(@Param('id') id: string): Promise<{ data: Notification }> {
     return await this.notificationService.markAsRead(id);
   }

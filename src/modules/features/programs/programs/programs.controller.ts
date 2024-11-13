@@ -17,10 +17,13 @@ import { Program } from './entities/program.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Public } from 'src/common/decorators/public.decorator';
 import { QueryParams } from './types/query-params.type';
+import { Public } from 'src/modules/core/auth/decorators/public.decorator';
+import { Roles } from 'src/common/access-control/decorators/roles.decorators';
+import { RolesEnum } from 'src/common/access-control/enums/roles.enum';
 
 @Controller('programs')
+@Roles(RolesEnum.Staff)
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
@@ -29,14 +32,16 @@ export class ProgramsController {
     return this.programsService.create(createProgramDto);
   }
 
-  @Public()
   @Get('')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     return this.programsService.findAll(queryParams);
   }
 
-  @Public()
   @Get(':id')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.findOne(id);
   }

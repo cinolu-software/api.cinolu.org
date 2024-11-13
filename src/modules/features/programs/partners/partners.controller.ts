@@ -6,8 +6,12 @@ import { Partner } from './entities/partner.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('partners')
+@Roles(RolesEnum.Staff)
 export class PartnersController {
   constructor(private readonly partnersService: PartnersService) {}
 
@@ -17,11 +21,15 @@ export class PartnersController {
   }
 
   @Get()
+  @Public()
+  @Roles(RolesEnum.Guest)
   findAll(): Promise<{ data: Partner[] }> {
     return this.partnersService.findAll();
   }
 
   @Get(':id')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Partner }> {
     return this.partnersService.findOne(id);
   }

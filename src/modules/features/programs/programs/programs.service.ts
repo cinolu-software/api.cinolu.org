@@ -78,8 +78,6 @@ export class ProgramsService {
   }
 
   async update(id: string, dto: UpdateProgramDto): Promise<{ data: Program }> {
-    console.log('cliked');
-    return;
     try {
       const { data: program } = await this.findOne(id);
       const data = await this.programRepository.save({

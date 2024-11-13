@@ -8,7 +8,7 @@ import UpdateProfileDto from '../auth/dto/update-profile.dto';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { CurrentUser } from '../auth/decorators/user.decorator';
 import { RolesService } from '../roles/roles.service';
 import AddDetailsDto from './dto/add-details.dto';
 
@@ -49,14 +49,14 @@ export class UsersService {
   }
 
   async findAdmins(): Promise<{ data: User[] }> {
-    return this.findWithRole('user');
+    return this.findWithRole('admin');
   }
 
   async create(dto: CreateUserDto): Promise<{ data: User }> {
     try {
       const user: User = await this.userRepository.save({
         ...dto,
-        password: '12345678',
+        password: Math.floor(100000 + Math.random() * 900000).toString(),
         verified_at: new Date(),
         roles: dto.roles?.map((id) => ({ id }))
       });
@@ -97,8 +97,10 @@ export class UsersService {
   }
 
   async getVerifiedUser(email: string): Promise<{ data: User }> {
-    const { data: user } = await this.findByEmail(email);
-    if (!user.verified_at) throw new BadRequestException();
+    const { data } = await this.findByEmail(email);
+    if (!data.verified_at) throw new BadRequestException();
+    const roles = data.roles.map((role) => role.name);
+    const user = { ...data, roles } as unknown as User;
     return { data: user };
   }
 
@@ -161,14 +163,12 @@ export class UsersService {
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
       const { data: userRole } = await this.roleService.findByName('user');
-      const user = await this.userRepository.findOne({
-        where: { email: dto.email }
-      });
+      const { data: user } = await this.findByEmail(dto.email);
       if (user && !user.profile) {
         user.google_image = dto.google_image;
         await this.userRepository.save(user);
+        return { data: user };
       }
-      if (user) return { data: user };
       const newUser = await this.userRepository.save({
         ...dto,
         verified_at: new Date(),
@@ -208,7 +208,6 @@ export class UsersService {
   async uploadImage(@CurrentUser() currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currenUser.id);
-
       if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);
       delete user.password;
       const data = await this.userRepository.save({ ...user, profile: file.filename });
@@ -231,7 +230,7 @@ export class UsersService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.userRepository.delete(id);
+      await this.userRepository.softDelete(id);
     } catch {
       throw new BadRequestException("Erreur lors de la suppression de l'utilisateur");
     }

@@ -3,9 +3,12 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
-import { Public } from '../../../../common/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
+import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
 
 @Controller('program-categories')
+@Roles(RolesEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -14,13 +17,16 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto);
   }
 
-  @Public()
   @Get()
+  @Public()
+  @Roles(RolesEnum.Guest)
   findAll(): Promise<{ data: ProgramCategory[] }> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: ProgramCategory }> {
     return this.categoriesService.findOne(id);
   }

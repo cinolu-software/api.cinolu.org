@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public } from '../../../common/decorators/public.decorator';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
+import { Public } from './decorators/public.decorator';
+import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';

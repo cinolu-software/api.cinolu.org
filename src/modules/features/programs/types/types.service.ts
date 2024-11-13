@@ -50,7 +50,7 @@ export class TypesService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.typeRepository.delete(id);
+      await this.typeRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Impossible de supprimer le type');
     }

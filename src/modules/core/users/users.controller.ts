@@ -5,11 +5,14 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { CurrentUser } from '../../../common/decorators/user.decorator';
-import { Public } from '../../../common/decorators/public.decorator';
+import { CurrentUser } from '../auth/decorators/user.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import AddDetailsDto from './dto/add-details.dto';
+import { Roles } from 'src/common/access-control/decorators/roles.decorators';
+import { RolesEnum } from 'src/common/access-control/enums/roles.enum';
 
 @Controller('users')
+@Roles(RolesEnum.Staff)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
@@ -19,23 +22,27 @@ export class UsersController {
   }
 
   @Post('add-details')
+  @Roles(RolesEnum.User)
   addDetail(@CurrentUser() user: User, dto: AddDetailsDto): Promise<{ data: User }> {
     return this.userService.addDetails(user, dto);
   }
 
-  @Public()
   @Get('coachs')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findCoachs(): Promise<{ data: User[] }> {
     return this.userService.findCoachs();
   }
 
-  @Public()
   @Get('staff')
+  @Public()
+  @Roles(RolesEnum.Guest)
   findStaff(): Promise<{ data: User[] }> {
     return this.userService.findStaff();
   }
 
   @Get('admins')
+  @Public()
   findAdmins(): Promise<{ data: User[] }> {
     return this.userService.findAdmins();
   }
@@ -71,6 +78,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(RolesEnum.Admin)
   remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }
