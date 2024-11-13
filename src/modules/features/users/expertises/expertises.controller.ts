@@ -4,8 +4,8 @@ import { CreateExpertiseDto } from './dto/create-expertise.dto';
 import { UpdateExpertiseDto } from './dto/update-expertise.dto';
 import { Expertise } from './entities/expertise.entity';
 import { Public } from '../../../core/auth/decorators/public.decorator';
-import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../core/access-control/enums/roles.enum';
 
 @Controller('user-expertises')
 @Roles(RolesEnum.Staff)

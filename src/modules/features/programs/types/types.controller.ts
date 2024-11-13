@@ -4,8 +4,8 @@ import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { ProgramType } from './entities/type.entity';
 import { Public } from '../../../core/auth/decorators/public.decorator';
-import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../core/access-control/enums/roles.enum';
 
 @Controller('program-types')
 @Roles(RolesEnum.Staff)

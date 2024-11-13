@@ -8,8 +8,8 @@ import { User } from './entities/user.entity';
 import { CurrentUser } from '../auth/decorators/user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
 import AddDetailsDto from './dto/add-details.dto';
-import { Roles } from 'src/common/access-control/decorators/roles.decorators';
-import { RolesEnum } from 'src/common/access-control/enums/roles.enum';
+import { Roles } from 'src/modules/core/access-control/decorators/roles.decorators';
+import { RolesEnum } from 'src/modules/core/access-control/enums/roles.enum';
 
 @Controller('users')
 @Roles(RolesEnum.Staff)

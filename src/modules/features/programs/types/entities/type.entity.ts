@@ -1,6 +1,6 @@
 import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../../../../common/entities/base.entity';
+import { BaseEntity } from '../../../../utilities/entities/base.entity';
 
 @Entity()
 export class ProgramType extends BaseEntity {

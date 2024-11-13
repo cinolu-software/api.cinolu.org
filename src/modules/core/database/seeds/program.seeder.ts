@@ -5,7 +5,7 @@ import { fakerFR as faker } from '@faker-js/faker';
 import { Partner } from '../../../features/programs/partners/entities/partner.entity';
 import { Partnership } from '../../../features/programs/partnerships/entities/partnership.entity';
 import { Program } from '../../../features/programs/programs/entities/program.entity';
-import { Requirement } from '../../../features/programs/programs/entities/requirement.entity';
+import { Requirement } from '../../../features/programs/programs/modules/requirements/entities/requirement.entity';
 import { ProgramType } from '../../../features/programs/types/entities/type.entity';
 import { ProgramCategory } from '../../../features/programs/categories/entities/category.entity';
 

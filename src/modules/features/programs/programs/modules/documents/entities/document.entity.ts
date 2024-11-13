@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Program } from './program.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { Program } from '../../../entities/program.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 
 @Entity()
 export class ProgramDocument extends BaseEntity {

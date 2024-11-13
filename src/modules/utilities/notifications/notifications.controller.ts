@@ -8,8 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Notification } from './entities/notification.entity';
 import { CurrentUser } from '../../core/auth/decorators/user.decorator';
 import { User } from '../../core/users/entities/user.entity';
-import { Roles } from '../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../core/access-control/enums/roles.enum';
 import { Public } from '../../core/auth/decorators/public.decorator';
 
 @Controller('notifications')

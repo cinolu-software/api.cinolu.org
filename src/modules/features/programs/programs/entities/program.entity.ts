@@ -1,12 +1,12 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 import { Partner } from '../../partners/entities/partner.entity';
 import { ProgramType } from '../../types/entities/type.entity';
 import { ProgramCategory } from '../../categories/entities/category.entity';
-import { Requirement } from './requirement.entity';
-import { ProgramPhase } from './phase.entity';
-import { ProgramDocument } from './document.entity';
-import { ProgramApplication } from './application.entity';
+import { Requirement } from '../modules/requirements/entities/requirement.entity';
+import { ProgramPhase } from '../modules/phases/entities/phase.entity';
+import { ProgramDocument } from '../modules/documents/entities/document.entity';
+import { ProgramApplication } from '../modules/applications/entities/application.entity';
 
 @Entity()
 export class Program extends BaseEntity {

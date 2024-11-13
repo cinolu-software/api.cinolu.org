@@ -19,8 +19,8 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Public } from 'src/modules/core/auth/decorators/public.decorator';
 import { QueryParams } from './types/query-params.type';
-import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../core/access-control/enums/roles.enum';
 
 @Controller('events')
 @Roles(RolesEnum.Staff)

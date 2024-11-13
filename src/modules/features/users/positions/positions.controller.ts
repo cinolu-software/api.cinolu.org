@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PositionsService } from './expertises.service';
+import { PositionsService } from './positions.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { Position } from './entities/position.entity';
 import { UpdatePositionDto } from './dto/update-position.dto';
-import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../core/access-control/enums/roles.enum';
 import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('postions')

@@ -4,8 +4,8 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
 import { Public } from '../../../core/auth/decorators/public.decorator';
-import { Roles } from '../../../../common/access-control/decorators/roles.decorators';
-import { RolesEnum } from '../../../../common/access-control/enums/roles.enum';
+import { Roles } from '../../../core/access-control/decorators/roles.decorators';
+import { RolesEnum } from '../../../core/access-control/enums/roles.enum';
 
 @Controller('program-categories')
 @Roles(RolesEnum.Staff)

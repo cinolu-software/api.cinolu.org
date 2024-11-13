@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
-import { Program } from './program.entity';
-import { ProgramMilestone } from './milestone.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
+import { Program } from '../../../entities/program.entity';
+import { ProgramMilestone } from '../../milestones/entities/milestone.entity';
 
 @Entity()
 export class ProgramPhase extends BaseEntity {

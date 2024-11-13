@@ -19,8 +19,8 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from './types/query-params.type';
 import { Public } from 'src/modules/core/auth/decorators/public.decorator';
-import { Roles } from 'src/common/access-control/decorators/roles.decorators';
-import { RolesEnum } from 'src/common/access-control/enums/roles.enum';
+import { Roles } from 'src/modules/core/access-control/decorators/roles.decorators';
+import { RolesEnum } from 'src/modules/core/access-control/enums/roles.enum';
 
 @Controller('programs')
 @Roles(RolesEnum.Staff)
@@ -60,21 +60,6 @@ export class ProgramsController {
   uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Program }> {
     return this.programsService.uploadImage(id, file);
   }
-
-  // @Post('attachment/:id')
-  // @UseInterceptors(
-  //   FileInterceptor('attachment', {
-  //     storage: diskStorage({
-  //       destination: './uploads/attachments',
-  //       filename: function (_req, file, cb) {
-  //         cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-  //       }
-  //     })
-  //   })
-  // )
-  // addAttachment(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Program }> {
-  //   return this.programsService.addAttachment(id, file);
-  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: Program }> {

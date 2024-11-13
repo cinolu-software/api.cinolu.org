@@ -1,6 +1,6 @@
 import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 
 @Entity()
 export class Requirement extends BaseEntity {

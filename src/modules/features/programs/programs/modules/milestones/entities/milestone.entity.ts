@@ -1,6 +1,6 @@
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { ProgramPhase } from './phase.entity';
+import { ProgramPhase } from '../../phases/entities/phase.entity';
 
 @Entity()
 export class ProgramMilestone extends BaseEntity {

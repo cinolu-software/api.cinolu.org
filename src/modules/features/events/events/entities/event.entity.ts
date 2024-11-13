@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 import { EventType } from '../../types/entities/type.entity';
 
 @Entity()

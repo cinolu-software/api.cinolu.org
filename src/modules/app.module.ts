@@ -21,8 +21,8 @@ import { CategoriesModule } from './features/programs/categories/categories.modu
 import { EventsModule } from './features/events/events/event.module';
 import { TypesModule as EventTypesModules } from './features/events/types/types.module';
 import { AuthGuard } from './core/auth/guards/auth.guard';
-import { AccessControlGuard } from '../common/access-control/guards/access-control.guard';
-import { AccessControlModule } from '../common/access-control/access-control.module';
+import { AccessControlGuard } from './core/access-control/guards/access-control.guard';
+import { AccessControlModule } from './core/access-control/access-control.module';
 
 @Module({
   imports: [

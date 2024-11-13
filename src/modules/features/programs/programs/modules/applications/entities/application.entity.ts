@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, Column, JoinColumn } from 'typeorm';
-import { User } from '../../../../core/users/entities/user.entity';
-import { Program } from './program.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { User } from 'src/modules/core/users/entities/user.entity';
+import { Program } from '../../../entities/program.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 import { ApplicationStatus } from '../enum/application-status.enum';
 
 @Entity()

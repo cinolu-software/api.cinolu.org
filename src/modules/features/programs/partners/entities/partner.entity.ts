@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../../../../common/entities/base.entity';
+import { BaseEntity } from '../../../../utilities/entities/base.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Partnership } from '../../partnerships/entities/partnership.entity';
 

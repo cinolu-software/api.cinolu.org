@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../../../../common/entities/base.entity';
+import { BaseEntity } from '../../../../utilities/entities/base.entity';
 import { Detail } from '../../../../core/users/entities/detail.entity';
 
 @Entity()

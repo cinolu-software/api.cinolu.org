@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany, ManyToMany } from 'typeorm';
 import { User } from '../../../core/users/entities/user.entity';
-import { BaseEntity } from '../../../../common/entities/base.entity';
+import { BaseEntity } from '../../entities/base.entity';
 import { NotificationAttachment } from './attachment.entity';
 
 @Entity()

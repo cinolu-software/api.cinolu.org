@@ -2,10 +2,10 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from 'type
 import { Role } from 'src/modules/core/roles/entities/role.entity';
 import { Program } from 'src/modules/features/programs/programs/entities/program.entity';
 import { Notification } from 'src/modules/utilities/notifications/entities/notification.entity';
-import { BaseEntity } from 'src/common/entities/base.entity';
+import { BaseEntity } from 'src/modules/utilities/entities/base.entity';
 import { Detail } from './detail.entity';
 import { Event } from '../../../features/events/events/entities/event.entity';
-import { ProgramApplication } from '../../../features/programs/programs/entities/application.entity';
+import { ProgramApplication } from '../../../features/programs/programs/modules/applications/entities/application.entity';
 
 @Entity()
 export class User extends BaseEntity {
