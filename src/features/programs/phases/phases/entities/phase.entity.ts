@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
-import { Program } from '../../programs/entities/program.entity';
+import { Program } from '../../../programs/entities/program.entity';
 import { Requirement } from '../../requirements/entities/requirement.entity';
 
 @Entity()

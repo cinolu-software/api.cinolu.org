@@ -1,8 +1,8 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { Partner } from '../../partners/entities/partner.entity';
+import { Partner } from '../../../partners/partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
 import { Category } from '../../categories/entities/category.entity';
-import { Phase } from '../../phases/entities/phase.entity';
+import { Phase } from '../../phases/phases/entities/phase.entity';
 import { Document } from '../../documents/entities/document.entity';
 import { Application } from '../../applications/entities/application.entity';
 import { BaseEntity } from '@core/utilities/base.entity';

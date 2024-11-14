@@ -2,8 +2,8 @@ import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { fakerFR as faker } from '@faker-js/faker';
 import { Category } from '../../../../features/programs/categories/entities/category.entity';
-import { Partner } from '../../../../features/programs/partners/entities/partner.entity';
-import { Partnership } from '../../../../features/programs/partnerships/entities/partnership.entity';
+import { Partner } from '../../../../features/partners/partners/entities/partner.entity';
+import { Partnership } from '../../../../features/partners/partnerships/entities/partnership.entity';
 import { Program } from '../../../../features/programs/programs/entities/program.entity';
 import { Type } from '../../../../features/programs/types/entities/type.entity';
 
