@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { fakerFR as faker } from '@faker-js/faker';
 import { Event } from '../../../../features/events/events/entities/event.entity';
 import { EventType } from '../../../../features/events/types/entities/type.entity';
-import { User } from '../../../../features/users/users/entities/user.entity';
+import { User } from '../../users/users/entities/user.entity';
 
 export default class EventSeeder implements Seeder {
   async run(dataSource: DataSource) {

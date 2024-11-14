@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Detail } from './detail.entity';
-import { BaseEntity } from '../../../../@core/utilities/base.entity';
+import { BaseEntity } from '../../../../utilities/base.entity';
 
 @Entity()
 export class Social extends BaseEntity {

@@ -7,8 +7,8 @@ import { Notification } from './entities/notification.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CurrentUser } from '../auth/decorators/user.decorator';
 import { NotificationAttachment } from './entities/attachment.entity';
-import { User } from '../../../features/users/users/entities/user.entity';
-import { UsersService } from '../../../features/users/users/users.service';
+import { User } from '../users/users/entities/user.entity';
+import { UsersService } from '../users/users/users.service';
 
 @Injectable()
 export class NotificationService {

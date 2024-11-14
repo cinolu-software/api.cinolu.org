@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Notification } from '../notifications/entities/notification.entity';
-import { User } from '../../../features/users/users/entities/user.entity';
+import { User } from '../users/users/entities/user.entity';
 
 @Injectable()
 export class EmailService {

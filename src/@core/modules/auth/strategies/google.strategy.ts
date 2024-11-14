@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CreateWithGoogleDto } from '../dto/sign-up-with-google.dto';
 import { GoogleProfile } from '../types/google-profile.interface';
-import { UsersService } from '../../../../features/users/users/users.service';
+import { UsersService } from '../../users/users/users.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {

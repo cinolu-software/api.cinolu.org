@@ -1,16 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { SignupDto } from '../../../@core/modules/auth/dto/sign-up.dto';
 import CreateUserDto from './dto/create-user.dto';
-import { CreateWithGoogleDto } from '../../../@core/modules/auth/dto/sign-up-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import UpdateProfileDto from '../../../@core/modules/auth/dto/update-profile.dto';
 import { In, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { CurrentUser } from '../../../@core/modules/auth/decorators/user.decorator';
 import AddDetailsDto from './dto/add-details.dto';
 import { RolesService } from '../roles/roles.service';
+import { CurrentUser } from '../../auth/decorators/user.decorator';
+import { SignupDto, CreateWithGoogleDto } from '../../auth/dto';
+import UpdateProfileDto from '../../auth/dto/update-profile.dto';
 
 @Injectable()
 export class UsersService {

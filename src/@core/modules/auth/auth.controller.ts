@@ -9,10 +9,10 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
-import CreateUserDto from '../../../features/users/users/dto/create-user.dto';
-import { User } from '../../../features/users/users/entities/user.entity';
 import { Rights } from './decorators/rights.decorators';
 import { RightsEnum } from './enums/rights.enum';
+import CreateUserDto from '../users/users/dto/create-user.dto';
+import { User } from '../users/users/entities/user.entity';
 
 @Controller('auth')
 @Rights(RightsEnum.User)

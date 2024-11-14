@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany, ManyToMany } from 'typeorm';
 import { BaseEntity } from '../../../utilities/base.entity';
 import { NotificationAttachment } from './attachment.entity';
-import { User } from '../../../../features/users/users/entities/user.entity';
+import { User } from '../../users/users/entities/user.entity';
 
 @Entity()
 export class Notification extends BaseEntity {

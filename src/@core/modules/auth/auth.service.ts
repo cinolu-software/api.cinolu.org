@@ -10,9 +10,9 @@ import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import CreateUserDto from '../../../features/users/users/dto/create-user.dto';
-import { User } from '../../../features/users/users/entities/user.entity';
-import { UsersService } from '../../../features/users/users/users.service';
+import CreateUserDto from '../users/users/dto/create-user.dto';
+import { User } from '../users/users/entities/user.entity';
+import { UsersService } from '../users/users/users.service';
 
 @Injectable()
 export class AuthService {

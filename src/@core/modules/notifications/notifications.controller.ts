@@ -7,9 +7,9 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Notification } from './entities/notification.entity';
 import { CurrentUser } from '../auth/decorators/user.decorator';
-import { User } from '../../../features/users/users/entities/user.entity';
 import { Rights } from '../auth/decorators/rights.decorators';
 import { RightsEnum } from '../auth/enums/rights.enum';
+import { User } from '../users/users/entities/user.entity';
 
 @Controller('notifications')
 @Rights(RightsEnum.Staff)

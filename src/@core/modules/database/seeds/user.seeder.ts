@@ -2,12 +2,12 @@ import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
-import { Expertise } from '../../../../features/users/expertises/entities/expertise.entity';
-import { Position } from '../../../../features/users/positions/entities/position.entity';
-import { Role } from '../../../../features/users/roles/entities/role.entity';
-import { Detail } from '../../../../features/users/users/entities/detail.entity';
-import { Social } from '../../../../features/users/users/entities/social.entity';
-import { User } from '../../../../features/users/users/entities/user.entity';
+import { Detail } from '../../users/users/entities/detail.entity';
+import { Social } from '../../users/users/entities/social.entity';
+import { User } from '../../users/users/entities/user.entity';
+import { Expertise } from '../../users/expertises/entities/expertise.entity';
+import { Position } from '../../users/positions/entities/position.entity';
+import { Role } from '../../users/roles/entities/role.entity';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {

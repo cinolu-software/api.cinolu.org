@@ -3,9 +3,9 @@ import { Notification } from '@core/modules/notifications/entities/notification.
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Detail } from './detail.entity';
 import { Role } from '../../roles/entities/role.entity';
-import { Event } from '../../../events/events/entities/event.entity';
-import { Program } from '../../../programs/programs/entities/program.entity';
-import { ProgramApplication } from '../../../programs/applications/entities/application.entity';
+import { ProgramApplication } from '../../../../../features/programs/applications/entities/application.entity';
+import { Program } from '../../../../../features/programs/programs/entities/program.entity';
+import { Event } from '../../../../../features/events/events/entities/event.entity';
 
 @Entity()
 export class User extends BaseEntity {
