@@ -17,10 +17,8 @@ export class ProgramsService {
   async create(dto: CreateProgramDto): Promise<{ data: Program }> {
     try {
       await this.throwIfExist(dto.name);
-      // const { data: requirements } = await this.requirementsService.createMany(dto.requirements);
       const data = await this.programRepository.save({
         ...dto,
-        // requirements,
         categories: dto.categories.map((category) => ({ id: category })),
         types: dto.types.map((type) => ({ id: type })),
         partners: dto.partners.map((id) => ({ id }))
@@ -54,7 +52,7 @@ export class ProgramsService {
     return { data: { programs, count } };
   }
 
-  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Program }> {
+  async addImage(id: string, file: Express.Multer.File): Promise<{ data: Program }> {
     try {
       const { data: program } = await this.findOne(id);
       if (program.image) await fs.promises.unlink(`./uploads/programs/${program.image}`);
@@ -69,7 +67,7 @@ export class ProgramsService {
     try {
       const data = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['requirements', 'types', 'partners', 'categories']
+        relations: ['requirements', 'types', 'partners', 'categories', 'documents']
       });
       return { data };
     } catch {
@@ -94,8 +92,15 @@ export class ProgramsService {
     }
   }
 
-  async restore(id: string): Promise<void> {
-    await this.programRepository.restore(id);
+  async restore(id: string): Promise<{ data: Program }> {
+    try {
+      const res = await this.programRepository.restore(id);
+      if (!res.affected) throw new BadRequestException();
+      const { data } = await this.findOne(id);
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la restauration du programme');
+    }
   }
 
   async remove(id: string): Promise<void> {

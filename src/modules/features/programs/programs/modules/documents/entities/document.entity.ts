@@ -10,8 +10,8 @@ export class ProgramDocument extends BaseEntity {
   @Column('text')
   description: string;
 
-  @Column()
-  file_path: string;
+  @Column({ nullable: true })
+  file_name: string;
 
   @ManyToOne(() => Program, (program) => program.documents)
   @JoinColumn({ name: 'programId' })

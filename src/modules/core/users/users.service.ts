@@ -5,12 +5,12 @@ import CreateUserDto from './dto/create-user.dto';
 import { CreateWithGoogleDto } from '../auth/dto/sign-up-with-google.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UpdateProfileDto from '../auth/dto/update-profile.dto';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { CurrentUser } from '../auth/decorators/user.decorator';
-import { RolesService } from '../roles/roles.service';
 import AddDetailsDto from './dto/add-details.dto';
+import { RolesService } from '../../features/users/roles/roles.service';
 
 @Injectable()
 export class UsersService {
@@ -87,9 +87,11 @@ export class UsersService {
   async verifyEmail(email: string): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findByEmail(email);
-      user.verified_at = new Date();
       delete user.password;
-      const data = await this.userRepository.save(user);
+      const data = await this.userRepository.save({
+        ...user,
+        verified_at: new Date()
+      });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
@@ -97,8 +99,10 @@ export class UsersService {
   }
 
   async getVerifiedUser(email: string): Promise<{ data: User }> {
-    const { data } = await this.findByEmail(email);
-    if (!data.verified_at) throw new BadRequestException();
+    const data = await this.userRepository.findOneOrFail({
+      where: { email, verified_at: Not(IsNull()) },
+      relations: ['roles']
+    });
     const roles = data.roles.map((role) => role.name);
     const user = { ...data, roles } as unknown as User;
     return { data: user };

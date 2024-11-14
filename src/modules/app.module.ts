@@ -8,7 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UsersModule } from './core/users/users.module';
 import { DatabaseModule } from './core/database/database.module';
-import { RolesModule } from './core/roles/roles.module';
 import { PartnersModule } from './features/programs/partners/partners.module';
 import { PartnershipsModule } from './features/programs/partnerships/partnerships.module';
 import { ProgramsModule } from './features/programs/programs/programs.module';
@@ -23,6 +22,7 @@ import { TypesModule as EventTypesModules } from './features/events/types/types.
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { AccessControlGuard } from './core/access-control/guards/access-control.guard';
 import { AccessControlModule } from './core/access-control/access-control.module';
+import { RolesModule } from './features/users/roles/roles.module';
 
 @Module({
   imports: [

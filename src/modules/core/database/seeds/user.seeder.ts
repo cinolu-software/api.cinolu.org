@@ -1,13 +1,13 @@
 import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { User } from 'src/modules/core/users/entities/user.entity';
-import { Role } from 'src/modules/core/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { Detail } from '../../users/entities/detail.entity';
 import { Expertise } from '../../../features/users/expertises/entities/expertise.entity';
 import { Position } from '../../../features/users/positions/entities/position.entity';
 import { Social } from '../../users/entities/social.entity';
+import { Role } from '../../../features/users/roles/entities/role.entity';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {

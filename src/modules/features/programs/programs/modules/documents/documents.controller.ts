@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,16 +14,22 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 export class DocumentsController {
   constructor(private readonly documentService: DocumentsService) {}
 
+  @Get('')
+  @Roles(RolesEnum.Guest)
+  findAll(): Promise<{ data: ProgramDocument[] }> {
+    return this.documentService.findAll();
+  }
+
   @Post('')
   create(@Body() createDocumentDto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
     return this.documentService.create(createDocumentDto);
   }
 
-  @Post('image/:id')
+  @Post('document/:id')
   @UseInterceptors(
-    FileInterceptor('thumb', {
+    FileInterceptor('document', {
       storage: diskStorage({
-        destination: './uploads/programs',
+        destination: './uploads/programs/documents',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
@@ -34,9 +40,19 @@ export class DocumentsController {
     return this.documentService.addFile(id, file);
   }
 
+  @Delete('document/:id')
+  removeFile(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
+    return this.documentService.removeFile(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: ProgramDocument }> {
     return this.documentService.update(id, updateProgramDto);
+  }
+
+  @Post('restore/:id')
+  restore(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
+    return this.documentService.restore(id);
   }
 
   @Delete(':id')

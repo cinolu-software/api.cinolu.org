@@ -57,8 +57,8 @@ export class ProgramsController {
       })
     })
   )
-  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Program }> {
-    return this.programsService.uploadImage(id, file);
+  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Program }> {
+    return this.programsService.addImage(id, file);
   }
 
   @Patch(':id')
@@ -67,7 +67,7 @@ export class ProgramsController {
   }
 
   @Post('restore/:id')
-  restore(@Param('id') id: string): Promise<void> {
+  restore(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.restore(id);
   }
 

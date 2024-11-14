@@ -4,6 +4,7 @@ import { ProgramDocument } from './entities/document.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class DocumentsService {
@@ -11,6 +12,11 @@ export class DocumentsService {
     @InjectRepository(ProgramDocument)
     private documentsRepository: Repository<ProgramDocument>
   ) {}
+
+  async findAll(): Promise<{ data: ProgramDocument[] }> {
+    const data = await this.documentsRepository.find();
+    return { data };
+  }
 
   async create(dto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
     try {
@@ -39,7 +45,7 @@ export class DocumentsService {
       const data = await this.documentsRepository.save({
         ...document,
         ...dto,
-        program: { id: dto.program }
+        program: dto.program ? { id: dto.program } : document.program
       });
       return { data };
     } catch {
@@ -47,16 +53,42 @@ export class DocumentsService {
     }
   }
 
-  async addFile(documentId: string, file: Express.Multer.File): Promise<{ data: ProgramDocument }> {
+  async addFile(id: string, file: Express.Multer.File): Promise<{ data: ProgramDocument }> {
     try {
-      const document = await this.findOne(documentId);
+      const document = await this.findOne(id);
+      if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
       const data = await this.documentsRepository.save({
         ...document,
-        file_path: file.filename
+        file_name: file.filename
       });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de l'ajout du fichier au document");
+    }
+  }
+
+  async removeFile(id: string): Promise<{ data: ProgramDocument }> {
+    try {
+      const document = await this.findOne(id);
+      if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
+      const data = await this.documentsRepository.save({
+        ...document,
+        file_name: null
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de l'ajout du fichier au document");
+    }
+  }
+
+  async restore(id: string): Promise<{ data: ProgramDocument }> {
+    try {
+      const res = await this.documentsRepository.restore(id);
+      if (!res.affected) throw new BadRequestException();
+      const data = await this.findOne(id);
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la restauration du document');
     }
   }
 

@@ -1,36 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { RolesEnum } from './enums/roles.enum';
-
-interface IsAuthorizedParams {
-  currentRoles: RolesEnum[];
-  requiredRole: RolesEnum;
-}
+import { Ihierarchy } from './types/hierarchy.type';
+import { IAuthorizedParams } from './types/authorized-params.type';
 
 @Injectable()
 export class AccessControlService {
-  private hierarchies: { role: string; priority: number }[] = [];
-  private priority: number = 1;
+  #hierarchies: Ihierarchy[] = [];
 
   constructor() {
     this.buildRoles([RolesEnum.Guest, RolesEnum.User, RolesEnum.Coach, RolesEnum.Staff, RolesEnum.Admin]);
   }
 
   private buildRoles(roles: RolesEnum[]): void {
-    this.hierarchies = roles.map((role) => {
-      const priority = this.priority++;
+    this.#hierarchies = roles.map((role, i) => {
+      const priority = ++i;
       return { role, priority };
     });
   }
 
   private getPriority(role: RolesEnum): number {
-    const hierarchy = this.hierarchies.find((h) => h.role === role);
+    const hierarchy = this.#hierarchies.find((h) => h.role === role);
     return hierarchy ? hierarchy.priority : -1;
   }
 
-  public isAuthorized({ currentRoles, requiredRole }: IsAuthorizedParams): boolean {
+  public isAuthorized({ currentRoles, requiredRole }: IAuthorizedParams): boolean {
     const requiredPriority = this.getPriority(requiredRole);
-    const currentPriorities = currentRoles?.map((role) => this.getPriority(role)) ?? [1];
-    const currentHighPriority = Math.max(...currentPriorities);
+    if (requiredPriority === 1) return true;
+    const currentPriorities = currentRoles?.map((role) => this.getPriority(role));
+    const currentHighPriority = currentPriorities ? Math.max(...currentPriorities) : 1;
     return currentHighPriority >= requiredPriority;
   }
 }
