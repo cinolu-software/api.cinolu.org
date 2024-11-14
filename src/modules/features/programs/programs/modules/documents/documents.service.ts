@@ -10,17 +10,17 @@ import * as fs from 'fs-extra';
 export class DocumentsService {
   constructor(
     @InjectRepository(ProgramDocument)
-    private documentsRepository: Repository<ProgramDocument>
+    private documentRepository: Repository<ProgramDocument>
   ) {}
 
   async findAll(): Promise<{ data: ProgramDocument[] }> {
-    const data = await this.documentsRepository.find();
+    const data = await this.documentRepository.find();
     return { data };
   }
 
   async create(dto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
     try {
-      const data = await this.documentsRepository.save({
+      const data = await this.documentRepository.save({
         ...dto,
         program: { id: dto.program }
       });
@@ -32,7 +32,7 @@ export class DocumentsService {
 
   async findOne(id: string): Promise<ProgramDocument> {
     try {
-      const document = await this.documentsRepository.findOneOrFail({ where: { id } });
+      const document = await this.documentRepository.findOneOrFail({ where: { id } });
       return document;
     } catch {
       throw new BadRequestException('Erreur lors de la lecture du document');
@@ -42,7 +42,7 @@ export class DocumentsService {
   async update(id: string, dto: UpdateDocumentDto): Promise<{ data: ProgramDocument }> {
     try {
       const document = await this.findOne(id);
-      const data = await this.documentsRepository.save({
+      const data = await this.documentRepository.save({
         ...document,
         ...dto,
         program: dto.program ? { id: dto.program } : document.program
@@ -57,7 +57,7 @@ export class DocumentsService {
     try {
       const document = await this.findOne(id);
       if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
-      const data = await this.documentsRepository.save({
+      const data = await this.documentRepository.save({
         ...document,
         file_name: file.filename
       });
@@ -71,7 +71,7 @@ export class DocumentsService {
     try {
       const document = await this.findOne(id);
       if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
-      const data = await this.documentsRepository.save({
+      const data = await this.documentRepository.save({
         ...document,
         file_name: null
       });
@@ -83,7 +83,7 @@ export class DocumentsService {
 
   async restore(id: string): Promise<{ data: ProgramDocument }> {
     try {
-      const res = await this.documentsRepository.restore(id);
+      const res = await this.documentRepository.restore(id);
       if (!res.affected) throw new BadRequestException();
       const data = await this.findOne(id);
       return { data };
@@ -95,7 +95,7 @@ export class DocumentsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.documentsRepository.softDelete(id);
+      await this.documentRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Erreur survenue lors de la suppression du document');
     }

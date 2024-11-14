@@ -12,17 +12,17 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 @Controller('program-documents')
 @Roles(RolesEnum.Staff)
 export class DocumentsController {
-  constructor(private readonly documentService: DocumentsService) {}
+  constructor(private readonly documentsService: DocumentsService) {}
 
   @Get('')
   @Roles(RolesEnum.Guest)
   findAll(): Promise<{ data: ProgramDocument[] }> {
-    return this.documentService.findAll();
+    return this.documentsService.findAll();
   }
 
   @Post('')
   create(@Body() createDocumentDto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
-    return this.documentService.create(createDocumentDto);
+    return this.documentsService.create(createDocumentDto);
   }
 
   @Post('document/:id')
@@ -37,26 +37,26 @@ export class DocumentsController {
     })
   )
   addFile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: ProgramDocument }> {
-    return this.documentService.addFile(id, file);
+    return this.documentsService.addFile(id, file);
   }
 
   @Delete('document/:id')
   removeFile(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
-    return this.documentService.removeFile(id);
+    return this.documentsService.removeFile(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: ProgramDocument }> {
-    return this.documentService.update(id, updateProgramDto);
+    return this.documentsService.update(id, updateProgramDto);
   }
 
   @Post('restore/:id')
   restore(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
-    return this.documentService.restore(id);
+    return this.documentsService.restore(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
-    return this.documentService.remove(id);
+    return this.documentsService.remove(id);
   }
 }

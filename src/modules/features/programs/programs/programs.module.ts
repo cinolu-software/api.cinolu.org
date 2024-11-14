@@ -10,6 +10,8 @@ import { Requirement } from './modules/requirements/entities/requirement.entity'
 import { ProgramMilestone } from './modules/milestones/entities/milestone.entity';
 import { DocumentsController } from './modules/documents/documents.controller';
 import { DocumentsService } from './modules/documents/documents.service';
+import { RequirementsController } from './modules/requirements/requirements.controller';
+import { RequirementsService } from './modules/requirements/requirements.service';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { DocumentsService } from './modules/documents/documents.service';
       ProgramApplication
     ])
   ],
-  controllers: [ProgramsController, DocumentsController],
-  providers: [ProgramsService, DocumentsService]
+  controllers: [ProgramsController, DocumentsController, RequirementsController],
+  providers: [ProgramsService, DocumentsService, RequirementsService]
 })
 export class ProgramsModule {}
