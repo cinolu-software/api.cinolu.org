@@ -16,7 +16,7 @@ export default class ProgramSeeder implements Seeder {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.query('TRUNCATE TABLE partnership;');
     await dataSource.query('TRUNCATE TABLE program;');
-    await dataSource.query('TRUNCATE TABLE requirement;');
+    await dataSource.query('TRUNCATE TABLE program_requirement;');
     await dataSource.query('TRUNCATE TABLE program_type;');
     await dataSource.query('TRUNCATE TABLE program_category;');
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
