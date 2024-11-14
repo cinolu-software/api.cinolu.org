@@ -25,7 +25,9 @@ export class PartnersService {
   }
 
   async findAll(): Promise<{ data: Partner[] }> {
-    const data = await this.partnerRepository.find();
+    const data = await this.partnerRepository.find({
+      relations: ['partnerships']
+    });
     return { data };
   }
 
@@ -42,7 +44,8 @@ export class PartnersService {
   async findOne(id: string): Promise<{ data: Partner }> {
     try {
       const data = await this.partnerRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['partnerships']
       });
       return { data };
     } catch {
