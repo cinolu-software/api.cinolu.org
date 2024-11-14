@@ -7,4 +7,4 @@ import { ProgramPhase } from './entities/phase.entity';
   controllers: [],
   providers: []
 })
-export class ProgramPhasesModule {}
+export class PhasesModule {}

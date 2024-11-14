@@ -1,7 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Program } from '../../programs/entities/program.entity';
-import { ProgramMilestone } from '../../milestones/entities/milestone.entity';
 
 @Entity()
 export class ProgramPhase extends BaseEntity {
@@ -20,7 +19,4 @@ export class ProgramPhase extends BaseEntity {
   @ManyToOne(() => Program, (program) => program.phases)
   @JoinColumn({ name: 'programId' })
   program: Program;
-
-  @OneToMany(() => ProgramMilestone, (milestone) => milestone.phase)
-  milestones: ProgramMilestone[];
 }

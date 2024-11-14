@@ -1,22 +1,22 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProgramRequirement } from './entities/requirement.entity';
+import { Requirement } from './entities/requirement.entity';
 import { CreateRequirementDto, UpdateRequirementDto } from './dto';
 
 @Injectable()
 export class RequirementsService {
   constructor(
-    @InjectRepository(ProgramRequirement)
-    private requirementRepository: Repository<ProgramRequirement>
+    @InjectRepository(Requirement)
+    private requirementRepository: Repository<Requirement>
   ) {}
 
-  async findAll(): Promise<{ data: ProgramRequirement[] }> {
+  async findAll(): Promise<{ data: Requirement[] }> {
     const data = await this.requirementRepository.find();
     return { data };
   }
 
-  async create(dto: CreateRequirementDto): Promise<{ data: ProgramRequirement }> {
+  async create(dto: CreateRequirementDto): Promise<{ data: Requirement }> {
     try {
       const data = await this.requirementRepository.save({
         ...dto,
@@ -28,7 +28,7 @@ export class RequirementsService {
     }
   }
 
-  async findOne(id: string): Promise<ProgramRequirement> {
+  async findOne(id: string): Promise<Requirement> {
     try {
       const document = await this.requirementRepository.findOneOrFail({ where: { id } });
       return document;
@@ -37,7 +37,7 @@ export class RequirementsService {
     }
   }
 
-  async update(id: string, dto: UpdateRequirementDto): Promise<{ data: ProgramRequirement }> {
+  async update(id: string, dto: UpdateRequirementDto): Promise<{ data: Requirement }> {
     try {
       const document = await this.findOne(id);
       const data = await this.requirementRepository.save({
@@ -51,7 +51,7 @@ export class RequirementsService {
     }
   }
 
-  async restore(id: string): Promise<{ data: ProgramRequirement }> {
+  async restore(id: string): Promise<{ data: Requirement }> {
     try {
       const res = await this.requirementRepository.restore(id);
       if (!res.affected) throw new BadRequestException();

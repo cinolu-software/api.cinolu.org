@@ -5,7 +5,7 @@ import { ApplicationStatus } from '../enum/application-status.enum';
 import { User } from '@core/modules/users/users/entities/user.entity';
 
 @Entity()
-export class ProgramApplication extends BaseEntity {
+export class Application extends BaseEntity {
   @ManyToOne(() => Program, (program) => program.applications)
   @JoinColumn({ name: 'programId' })
   program: Program;

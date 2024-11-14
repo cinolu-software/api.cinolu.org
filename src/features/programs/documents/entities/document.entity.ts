@@ -3,7 +3,7 @@ import { Program } from '../../programs/entities/program.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
 
 @Entity()
-export class ProgramDocument extends BaseEntity {
+export class Document extends BaseEntity {
   @Column()
   title: string;
 

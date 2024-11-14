@@ -15,6 +15,4 @@ export class CreatePhaseDto {
 
   @IsNotEmpty()
   program: string;
-
-  milestones: string[];
 }

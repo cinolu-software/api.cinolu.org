@@ -4,7 +4,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateProgramDto } from '../programs/dto/update-program.dto';
 import { DocumentsService } from './documents.service';
-import { ProgramDocument } from './entities/document.entity';
+import { Document } from './entities/document.entity';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
@@ -16,12 +16,12 @@ export class DocumentsController {
 
   @Get('')
   @Rights(RightsEnum.Guest)
-  findAll(): Promise<{ data: ProgramDocument[] }> {
+  findAll(): Promise<{ data: Document[] }> {
     return this.documentsService.findAll();
   }
 
   @Post('')
-  create(@Body() createDocumentDto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
+  create(@Body() createDocumentDto: CreateDocumentDto): Promise<{ data: Document }> {
     return this.documentsService.create(createDocumentDto);
   }
 
@@ -36,22 +36,22 @@ export class DocumentsController {
       })
     })
   )
-  addFile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: ProgramDocument }> {
+  addFile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Document }> {
     return this.documentsService.addFile(id, file);
   }
 
   @Delete('document/:id')
-  removeFile(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
+  removeFile(@Param('id') id: string): Promise<{ data: Document }> {
     return this.documentsService.removeFile(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: ProgramDocument }> {
+  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: Document }> {
     return this.documentsService.update(id, updateProgramDto);
   }
 
   @Post('restore/:id')
-  restore(@Param('id') id: string): Promise<{ data: ProgramDocument }> {
+  restore(@Param('id') id: string): Promise<{ data: Document }> {
     return this.documentsService.restore(id);
   }
 

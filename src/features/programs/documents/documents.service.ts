@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { ProgramDocument } from './entities/document.entity';
+import { Document } from './entities/document.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
@@ -9,16 +9,16 @@ import * as fs from 'fs-extra';
 @Injectable()
 export class DocumentsService {
   constructor(
-    @InjectRepository(ProgramDocument)
-    private documentRepository: Repository<ProgramDocument>
+    @InjectRepository(Document)
+    private documentRepository: Repository<Document>
   ) {}
 
-  async findAll(): Promise<{ data: ProgramDocument[] }> {
+  async findAll(): Promise<{ data: Document[] }> {
     const data = await this.documentRepository.find();
     return { data };
   }
 
-  async create(dto: CreateDocumentDto): Promise<{ data: ProgramDocument }> {
+  async create(dto: CreateDocumentDto): Promise<{ data: Document }> {
     try {
       const data = await this.documentRepository.save({
         ...dto,
@@ -30,7 +30,7 @@ export class DocumentsService {
     }
   }
 
-  async findOne(id: string): Promise<ProgramDocument> {
+  async findOne(id: string): Promise<Document> {
     try {
       const document = await this.documentRepository.findOneOrFail({ where: { id } });
       return document;
@@ -39,7 +39,7 @@ export class DocumentsService {
     }
   }
 
-  async update(id: string, dto: UpdateDocumentDto): Promise<{ data: ProgramDocument }> {
+  async update(id: string, dto: UpdateDocumentDto): Promise<{ data: Document }> {
     try {
       const document = await this.findOne(id);
       const data = await this.documentRepository.save({
@@ -53,7 +53,7 @@ export class DocumentsService {
     }
   }
 
-  async addFile(id: string, file: Express.Multer.File): Promise<{ data: ProgramDocument }> {
+  async addFile(id: string, file: Express.Multer.File): Promise<{ data: Document }> {
     try {
       const document = await this.findOne(id);
       if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
@@ -67,7 +67,7 @@ export class DocumentsService {
     }
   }
 
-  async removeFile(id: string): Promise<{ data: ProgramDocument }> {
+  async removeFile(id: string): Promise<{ data: Document }> {
     try {
       const document = await this.findOne(id);
       if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
@@ -81,7 +81,7 @@ export class DocumentsService {
     }
   }
 
-  async restore(id: string): Promise<{ data: ProgramDocument }> {
+  async restore(id: string): Promise<{ data: Document }> {
     try {
       const res = await this.documentRepository.restore(id);
       if (!res.affected) throw new BadRequestException();

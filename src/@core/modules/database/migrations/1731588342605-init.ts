@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Init1731585644720 implements MigrationInterface {
-  name = 'Init1731585644720';
+export class Init1731588342605 implements MigrationInterface {
+  name = 'Init1731588342605';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,22 +11,16 @@ export class Init1731585644720 implements MigrationInterface {
       `CREATE TABLE \`partner\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`website_link\` varchar(255) NULL, \`profile\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_type\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`category\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_category\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
-    );
-    await queryRunner.query(
-      `CREATE TABLE \`program_requirement\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
-    );
-    await queryRunner.query(
-      `CREATE TABLE \`program_milestone\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`due_date\` datetime NOT NULL, \`phaseId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`requirement\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`program_phase\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`started_at\` datetime NOT NULL, \`ended_at\` datetime NOT NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`title\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`file_name\` varchar(255) NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`title\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`file_name\` varchar(255) NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`notification_attachment\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`notificationId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
@@ -59,10 +53,13 @@ export class Init1731585644720 implements MigrationInterface {
       `CREATE TABLE \`user\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`email\` varchar(255) NOT NULL, \`name\` varchar(255) NOT NULL, \`password\` varchar(255) NULL, \`phone_number\` varchar(255) NULL, \`address\` varchar(255) NULL, \`google_image\` varchar(255) NULL, \`profile\` varchar(255) NULL, \`verified_at\` datetime NULL, UNIQUE INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_application\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`status\` enum ('pending', 'shortlisted', 'accepted', 'rejected') NOT NULL DEFAULT 'pending', \`reviewer_comment\` text NULL, \`applied_at\` datetime NULL, \`programId\` varchar(36) NULL, \`userId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`application\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`status\` enum ('pending', 'shortlisted', 'accepted', 'rejected') NOT NULL DEFAULT 'pending', \`reviewer_comment\` text NULL, \`applied_at\` datetime NULL, \`programId\` varchar(36) NULL, \`userId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`program\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`description\` text NOT NULL, \`started_at\` date NOT NULL, \`ended_at\` date NOT NULL, \`targeted_audience\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`type\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`partner_partnerships\` (\`partnerId\` varchar(36) NOT NULL, \`partnershipId\` varchar(36) NOT NULL, INDEX \`IDX_c85a39fefb2689f9f5370287a8\` (\`partnerId\`), INDEX \`IDX_6582d84eb0b6f8300447ed9817\` (\`partnershipId\`), PRIMARY KEY (\`partnerId\`, \`partnershipId\`)) ENGINE=InnoDB`
@@ -86,25 +83,22 @@ export class Init1731585644720 implements MigrationInterface {
       `CREATE TABLE \`user_notifications\` (\`userId\` varchar(36) NOT NULL, \`notificationId\` varchar(36) NOT NULL, INDEX \`IDX_cb22b968fe41a9f8b219327fde\` (\`userId\`), INDEX \`IDX_01a2c65f414d36cfe6f5d950fb\` (\`notificationId\`), PRIMARY KEY (\`userId\`, \`notificationId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_types\` (\`programId\` varchar(36) NOT NULL, \`programTypeId\` varchar(36) NOT NULL, INDEX \`IDX_bdf28310b9d3b46206d4af849e\` (\`programId\`), INDEX \`IDX_6b487aeaed07e040f00b72c2ba\` (\`programTypeId\`), PRIMARY KEY (\`programId\`, \`programTypeId\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`program_types\` (\`programId\` varchar(36) NOT NULL, \`typeId\` varchar(36) NOT NULL, INDEX \`IDX_bdf28310b9d3b46206d4af849e\` (\`programId\`), INDEX \`IDX_07bec1f774bf3a158032e69981\` (\`typeId\`), PRIMARY KEY (\`programId\`, \`typeId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`program_categories\` (\`programId\` varchar(36) NOT NULL, \`programCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_0024194a585e55ead317be949f\` (\`programId\`), INDEX \`IDX_61cba5da37064204bae386e14f\` (\`programCategoryId\`), PRIMARY KEY (\`programId\`, \`programCategoryId\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`program_categories\` (\`programId\` varchar(36) NOT NULL, \`categoryId\` varchar(36) NOT NULL, INDEX \`IDX_0024194a585e55ead317be949f\` (\`programId\`), INDEX \`IDX_8516a3b399822b154597b22fc2\` (\`categoryId\`), PRIMARY KEY (\`programId\`, \`categoryId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`program_partners\` (\`programId\` varchar(36) NOT NULL, \`partnerId\` varchar(36) NOT NULL, INDEX \`IDX_0bd24970b5d5af86eb70db324f\` (\`programId\`), INDEX \`IDX_3dc64ed72399fb3c40ffc92257\` (\`partnerId\`), PRIMARY KEY (\`programId\`, \`partnerId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_requirement\` ADD CONSTRAINT \`FK_8d5f8c46df76c6ac36932a9b23d\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`program_milestone\` ADD CONSTRAINT \`FK_abb4a269069b57b54a3887a6ffc\` FOREIGN KEY (\`phaseId\`) REFERENCES \`program_phase\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`requirement\` ADD CONSTRAINT \`FK_a7b0856adc3ad35494b6d5c5c78\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`program_phase\` ADD CONSTRAINT \`FK_d7ee72ae99aa4ee6d4d28a70b07\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_document\` ADD CONSTRAINT \`FK_3ca30dedf5278d68b2d0ab95431\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`document\` ADD CONSTRAINT \`FK_f2bf8d12e931bb9eee1ec1e9975\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`notification_attachment\` ADD CONSTRAINT \`FK_f74c03d05745ce57bf806d3600b\` FOREIGN KEY (\`notificationId\`) REFERENCES \`notification\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
@@ -122,10 +116,10 @@ export class Init1731585644720 implements MigrationInterface {
       `ALTER TABLE \`event\` ADD CONSTRAINT \`FK_e195b4c478ace2cf124c13ed11e\` FOREIGN KEY (\`responsibleId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_application\` ADD CONSTRAINT \`FK_6f25c754d387c59da58a5395f4e\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`application\` ADD CONSTRAINT \`FK_cf336e5a3d2e9c4448abbfa594c\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_application\` ADD CONSTRAINT \`FK_8a66fa046f06aa150600c625691\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`application\` ADD CONSTRAINT \`FK_b4ae3fea4a24b4be1a86dacf8a2\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`partner_partnerships\` ADD CONSTRAINT \`FK_c85a39fefb2689f9f5370287a89\` FOREIGN KEY (\`partnerId\`) REFERENCES \`partner\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
@@ -173,13 +167,13 @@ export class Init1731585644720 implements MigrationInterface {
       `ALTER TABLE \`program_types\` ADD CONSTRAINT \`FK_bdf28310b9d3b46206d4af849ef\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_types\` ADD CONSTRAINT \`FK_6b487aeaed07e040f00b72c2bac\` FOREIGN KEY (\`programTypeId\`) REFERENCES \`program_type\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`program_types\` ADD CONSTRAINT \`FK_07bec1f774bf3a158032e699813\` FOREIGN KEY (\`typeId\`) REFERENCES \`type\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`program_categories\` ADD CONSTRAINT \`FK_0024194a585e55ead317be949ff\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE \`program_categories\` ADD CONSTRAINT \`FK_61cba5da37064204bae386e14f2\` FOREIGN KEY (\`programCategoryId\`) REFERENCES \`program_category\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`program_categories\` ADD CONSTRAINT \`FK_8516a3b399822b154597b22fc27\` FOREIGN KEY (\`categoryId\`) REFERENCES \`category\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`program_partners\` ADD CONSTRAINT \`FK_0bd24970b5d5af86eb70db324ff\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
@@ -192,9 +186,9 @@ export class Init1731585644720 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE \`program_partners\` DROP FOREIGN KEY \`FK_3dc64ed72399fb3c40ffc922574\``);
     await queryRunner.query(`ALTER TABLE \`program_partners\` DROP FOREIGN KEY \`FK_0bd24970b5d5af86eb70db324ff\``);
-    await queryRunner.query(`ALTER TABLE \`program_categories\` DROP FOREIGN KEY \`FK_61cba5da37064204bae386e14f2\``);
+    await queryRunner.query(`ALTER TABLE \`program_categories\` DROP FOREIGN KEY \`FK_8516a3b399822b154597b22fc27\``);
     await queryRunner.query(`ALTER TABLE \`program_categories\` DROP FOREIGN KEY \`FK_0024194a585e55ead317be949ff\``);
-    await queryRunner.query(`ALTER TABLE \`program_types\` DROP FOREIGN KEY \`FK_6b487aeaed07e040f00b72c2bac\``);
+    await queryRunner.query(`ALTER TABLE \`program_types\` DROP FOREIGN KEY \`FK_07bec1f774bf3a158032e699813\``);
     await queryRunner.query(`ALTER TABLE \`program_types\` DROP FOREIGN KEY \`FK_bdf28310b9d3b46206d4af849ef\``);
     await queryRunner.query(`ALTER TABLE \`user_notifications\` DROP FOREIGN KEY \`FK_01a2c65f414d36cfe6f5d950fb2\``);
     await queryRunner.query(`ALTER TABLE \`user_notifications\` DROP FOREIGN KEY \`FK_cb22b968fe41a9f8b219327fde8\``);
@@ -214,8 +208,8 @@ export class Init1731585644720 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE \`detail_expertises\` DROP FOREIGN KEY \`FK_7dd9446d9806e9c3824e293b14d\``);
     await queryRunner.query(`ALTER TABLE \`partner_partnerships\` DROP FOREIGN KEY \`FK_6582d84eb0b6f8300447ed98176\``);
     await queryRunner.query(`ALTER TABLE \`partner_partnerships\` DROP FOREIGN KEY \`FK_c85a39fefb2689f9f5370287a89\``);
-    await queryRunner.query(`ALTER TABLE \`program_application\` DROP FOREIGN KEY \`FK_8a66fa046f06aa150600c625691\``);
-    await queryRunner.query(`ALTER TABLE \`program_application\` DROP FOREIGN KEY \`FK_6f25c754d387c59da58a5395f4e\``);
+    await queryRunner.query(`ALTER TABLE \`application\` DROP FOREIGN KEY \`FK_b4ae3fea4a24b4be1a86dacf8a2\``);
+    await queryRunner.query(`ALTER TABLE \`application\` DROP FOREIGN KEY \`FK_cf336e5a3d2e9c4448abbfa594c\``);
     await queryRunner.query(`ALTER TABLE \`event\` DROP FOREIGN KEY \`FK_e195b4c478ace2cf124c13ed11e\``);
     await queryRunner.query(`ALTER TABLE \`detail\` DROP FOREIGN KEY \`FK_e83149aca9ac7b7eedbad3ac43d\``);
     await queryRunner.query(`ALTER TABLE \`social\` DROP FOREIGN KEY \`FK_d305cec4892bce9c4d52871194f\``);
@@ -223,17 +217,16 @@ export class Init1731585644720 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE \`notification_attachment\` DROP FOREIGN KEY \`FK_f74c03d05745ce57bf806d3600b\``
     );
-    await queryRunner.query(`ALTER TABLE \`program_document\` DROP FOREIGN KEY \`FK_3ca30dedf5278d68b2d0ab95431\``);
+    await queryRunner.query(`ALTER TABLE \`document\` DROP FOREIGN KEY \`FK_f2bf8d12e931bb9eee1ec1e9975\``);
     await queryRunner.query(`ALTER TABLE \`program_phase\` DROP FOREIGN KEY \`FK_d7ee72ae99aa4ee6d4d28a70b07\``);
-    await queryRunner.query(`ALTER TABLE \`program_milestone\` DROP FOREIGN KEY \`FK_abb4a269069b57b54a3887a6ffc\``);
-    await queryRunner.query(`ALTER TABLE \`program_requirement\` DROP FOREIGN KEY \`FK_8d5f8c46df76c6ac36932a9b23d\``);
+    await queryRunner.query(`ALTER TABLE \`requirement\` DROP FOREIGN KEY \`FK_a7b0856adc3ad35494b6d5c5c78\``);
     await queryRunner.query(`DROP INDEX \`IDX_3dc64ed72399fb3c40ffc92257\` ON \`program_partners\``);
     await queryRunner.query(`DROP INDEX \`IDX_0bd24970b5d5af86eb70db324f\` ON \`program_partners\``);
     await queryRunner.query(`DROP TABLE \`program_partners\``);
-    await queryRunner.query(`DROP INDEX \`IDX_61cba5da37064204bae386e14f\` ON \`program_categories\``);
+    await queryRunner.query(`DROP INDEX \`IDX_8516a3b399822b154597b22fc2\` ON \`program_categories\``);
     await queryRunner.query(`DROP INDEX \`IDX_0024194a585e55ead317be949f\` ON \`program_categories\``);
     await queryRunner.query(`DROP TABLE \`program_categories\``);
-    await queryRunner.query(`DROP INDEX \`IDX_6b487aeaed07e040f00b72c2ba\` ON \`program_types\``);
+    await queryRunner.query(`DROP INDEX \`IDX_07bec1f774bf3a158032e69981\` ON \`program_types\``);
     await queryRunner.query(`DROP INDEX \`IDX_bdf28310b9d3b46206d4af849e\` ON \`program_types\``);
     await queryRunner.query(`DROP TABLE \`program_types\``);
     await queryRunner.query(`DROP INDEX \`IDX_01a2c65f414d36cfe6f5d950fb\` ON \`user_notifications\``);
@@ -257,8 +250,9 @@ export class Init1731585644720 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX \`IDX_6582d84eb0b6f8300447ed9817\` ON \`partner_partnerships\``);
     await queryRunner.query(`DROP INDEX \`IDX_c85a39fefb2689f9f5370287a8\` ON \`partner_partnerships\``);
     await queryRunner.query(`DROP TABLE \`partner_partnerships\``);
+    await queryRunner.query(`DROP TABLE \`type\``);
     await queryRunner.query(`DROP TABLE \`program\``);
-    await queryRunner.query(`DROP TABLE \`program_application\``);
+    await queryRunner.query(`DROP TABLE \`application\``);
     await queryRunner.query(`DROP INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` ON \`user\``);
     await queryRunner.query(`DROP TABLE \`user\``);
     await queryRunner.query(`DROP TABLE \`event\``);
@@ -272,12 +266,10 @@ export class Init1731585644720 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE \`social\``);
     await queryRunner.query(`DROP TABLE \`notification\``);
     await queryRunner.query(`DROP TABLE \`notification_attachment\``);
-    await queryRunner.query(`DROP TABLE \`program_document\``);
+    await queryRunner.query(`DROP TABLE \`document\``);
     await queryRunner.query(`DROP TABLE \`program_phase\``);
-    await queryRunner.query(`DROP TABLE \`program_milestone\``);
-    await queryRunner.query(`DROP TABLE \`program_requirement\``);
-    await queryRunner.query(`DROP TABLE \`program_category\``);
-    await queryRunner.query(`DROP TABLE \`program_type\``);
+    await queryRunner.query(`DROP TABLE \`requirement\``);
+    await queryRunner.query(`DROP TABLE \`category\``);
     await queryRunner.query(`DROP TABLE \`partner\``);
     await queryRunner.query(`DROP TABLE \`partnership\``);
   }

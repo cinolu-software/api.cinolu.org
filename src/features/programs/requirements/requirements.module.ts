@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RequirementsController } from './requirements.controller';
 import { RequirementsService } from './requirements.service';
-import { ProgramRequirement } from './entities/requirement.entity';
+import { Requirement } from './entities/requirement.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProgramRequirement])],
+  imports: [TypeOrmModule.forFeature([Requirement])],
   controllers: [RequirementsController],
   providers: [RequirementsService]
 })
-export class ProgramRequirementsModule {}
+export class RequirementsModule {}

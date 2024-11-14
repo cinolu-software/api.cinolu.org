@@ -1,11 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Partner } from '../../partners/entities/partner.entity';
-import { ProgramType } from '../../types/entities/type.entity';
-import { ProgramCategory } from '../../categories/entities/category.entity';
-import { ProgramRequirement } from '../../requirements/entities/requirement.entity';
+import { Type } from '../../types/entities/type.entity';
+import { Category } from '../../categories/entities/category.entity';
+import { Requirement } from '../../requirements/entities/requirement.entity';
 import { ProgramPhase } from '../../phases/entities/phase.entity';
-import { ProgramDocument } from '../../documents/entities/document.entity';
-import { ProgramApplication } from '../../applications/entities/application.entity';
+import { Document } from '../../documents/entities/document.entity';
+import { Application } from '../../applications/entities/application.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
 
 @Entity()
@@ -31,24 +31,24 @@ export class Program extends BaseEntity {
   @OneToMany(() => ProgramPhase, (phase) => phase.program)
   phases: ProgramPhase[];
 
-  @OneToMany(() => ProgramApplication, (application) => application.program)
-  applications: ProgramApplication[];
+  @OneToMany(() => Application, (application) => application.program)
+  applications: Application[];
 
-  @OneToMany(() => ProgramRequirement, (requirement) => requirement.program)
-  requirements: ProgramRequirement[];
+  @OneToMany(() => Requirement, (requirement) => requirement.program)
+  requirements: Requirement[];
 
-  @ManyToMany(() => ProgramType, (type) => type.programs)
+  @ManyToMany(() => Type, (type) => type.programs)
   @JoinTable({ name: 'program_types' })
-  types: ProgramType[];
+  types: Type[];
 
-  @ManyToMany(() => ProgramCategory, (category) => category.programs)
+  @ManyToMany(() => Category, (category) => category.programs)
   @JoinTable({ name: 'program_categories' })
-  categories: ProgramCategory[];
+  categories: Category[];
 
   @ManyToMany(() => Partner, (partner) => partner.programs)
   @JoinTable({ name: 'program_partners' })
   partners: Partner[];
 
-  @OneToMany(() => ProgramDocument, (document) => document.program)
-  documents: ProgramDocument[];
+  @OneToMany(() => Document, (document) => document.program)
+  documents: Document[];
 }

@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Patch, Param, Delete, Get } from '@nestjs/common';
 import { RequirementsService } from './requirements.service';
-import { ProgramRequirement } from './entities/requirement.entity';
+import { Requirement } from './entities/requirement.entity';
 import { CreateRequirementDto, UpdateRequirementDto } from './dto';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
@@ -12,22 +12,22 @@ export class RequirementsController {
 
   @Get('')
   @Rights(RightsEnum.Guest)
-  findAll(): Promise<{ data: ProgramRequirement[] }> {
+  findAll(): Promise<{ data: Requirement[] }> {
     return this.requirementsService.findAll();
   }
 
   @Post('')
-  create(@Body() dto: CreateRequirementDto): Promise<{ data: ProgramRequirement }> {
+  create(@Body() dto: CreateRequirementDto): Promise<{ data: Requirement }> {
     return this.requirementsService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateRequirementDto): Promise<{ data: ProgramRequirement }> {
+  update(@Param('id') id: string, @Body() dto: UpdateRequirementDto): Promise<{ data: Requirement }> {
     return this.requirementsService.update(id, dto);
   }
 
   @Post('restore/:id')
-  restore(@Param('id') id: string): Promise<{ data: ProgramRequirement }> {
+  restore(@Param('id') id: string): Promise<{ data: Requirement }> {
     return this.requirementsService.restore(id);
   }
 

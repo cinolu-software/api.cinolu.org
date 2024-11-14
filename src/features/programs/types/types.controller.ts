@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
-import { ProgramType } from './entities/type.entity';
+import { Type } from './entities/type.entity';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
 
@@ -12,23 +12,23 @@ export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
   @Post()
-  create(@Body() createTypeDto: CreateTypeDto): Promise<{ data: ProgramType }> {
+  create(@Body() createTypeDto: CreateTypeDto): Promise<{ data: Type }> {
     return this.typesService.create(createTypeDto);
   }
 
   @Get()
   @Rights(RightsEnum.Guest)
-  findAll(): Promise<{ data: ProgramType[] }> {
+  findAll(): Promise<{ data: Type[] }> {
     return this.typesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: ProgramType }> {
+  findOne(@Param('id') id: string): Promise<{ data: Type }> {
     return this.typesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTypeDto): Promise<{ data: ProgramType }> {
+  update(@Param('id') id: string, @Body() dto: UpdateTypeDto): Promise<{ data: Type }> {
     return this.typesService.update(id, dto);
   }
 

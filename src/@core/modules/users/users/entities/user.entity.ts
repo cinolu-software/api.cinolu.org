@@ -3,7 +3,7 @@ import { Notification } from '@core/modules/notifications/entities/notification.
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Detail } from './detail.entity';
 import { Role } from '../../roles/entities/role.entity';
-import { ProgramApplication } from '../../../../../features/programs/applications/entities/application.entity';
+import { Application } from '../../../../../features/programs/applications/entities/application.entity';
 import { Program } from '../../../../../features/programs/programs/entities/program.entity';
 import { Event } from '../../../../../features/events/events/entities/event.entity';
 
@@ -37,8 +37,8 @@ export class User extends BaseEntity {
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
 
-  @OneToMany(() => ProgramApplication, (application) => application.applicant)
-  applications: ProgramApplication[];
+  @OneToMany(() => Application, (application) => application.applicant)
+  applications: Application[];
 
   @ManyToMany(() => Program)
   @JoinTable({ name: 'user_enrolled_programs' })
