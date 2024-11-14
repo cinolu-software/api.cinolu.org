@@ -67,7 +67,7 @@ export class ProgramsService {
     try {
       const data = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['requirements', 'types', 'partners', 'categories', 'documents']
+        relations: ['types', 'partners', 'categories', 'documents', 'phases']
       });
       return { data };
     } catch {
@@ -83,7 +83,6 @@ export class ProgramsService {
         ...dto,
         categories: dto.categories.map((category) => ({ id: category })) || program.categories,
         types: dto?.types.map((type) => ({ id: type })) || program.types,
-        requirements: dto?.requirements || program.requirements,
         partners: dto?.partners.map((id) => ({ id })) || program.partners
       });
       return { data };

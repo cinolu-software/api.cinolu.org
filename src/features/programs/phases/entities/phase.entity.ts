@@ -1,13 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Program } from '../../programs/entities/program.entity';
+import { Requirement } from '../../requirements/entities/requirement.entity';
 
 @Entity()
-export class ProgramPhase extends BaseEntity {
+export class Phase extends BaseEntity {
   @Column()
   name: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   description: string;
 
   @Column({ type: 'datetime' })
@@ -19,4 +20,7 @@ export class ProgramPhase extends BaseEntity {
   @ManyToOne(() => Program, (program) => program.phases)
   @JoinColumn({ name: 'programId' })
   program: Program;
+
+  @OneToMany(() => Requirement, (requirement) => requirement.phase)
+  requirements: Requirement[];
 }

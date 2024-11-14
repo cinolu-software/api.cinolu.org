@@ -20,7 +20,7 @@ export class RequirementsService {
     try {
       const data = await this.requirementRepository.save({
         ...dto,
-        program: { id: dto.program }
+        phase: { id: dto.phase }
       });
       return { data };
     } catch {
@@ -43,7 +43,7 @@ export class RequirementsService {
       const data = await this.requirementRepository.save({
         ...document,
         ...dto,
-        program: dto.program ? { id: dto.program } : document.program
+        phase: dto.phase ? { id: dto.phase } : document.phase
       });
       return { data };
     } catch {

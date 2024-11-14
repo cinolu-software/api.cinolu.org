@@ -2,8 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Partner } from '../../partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
 import { Category } from '../../categories/entities/category.entity';
-import { Requirement } from '../../requirements/entities/requirement.entity';
-import { ProgramPhase } from '../../phases/entities/phase.entity';
+import { Phase } from '../../phases/entities/phase.entity';
 import { Document } from '../../documents/entities/document.entity';
 import { Application } from '../../applications/entities/application.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
@@ -28,14 +27,11 @@ export class Program extends BaseEntity {
   @Column()
   targeted_audience: string;
 
-  @OneToMany(() => ProgramPhase, (phase) => phase.program)
-  phases: ProgramPhase[];
+  @OneToMany(() => Phase, (phase) => phase.program)
+  phases: Phase[];
 
   @OneToMany(() => Application, (application) => application.program)
   applications: Application[];
-
-  @OneToMany(() => Requirement, (requirement) => requirement.program)
-  requirements: Requirement[];
 
   @ManyToMany(() => Type, (type) => type.programs)
   @JoinTable({ name: 'program_types' })

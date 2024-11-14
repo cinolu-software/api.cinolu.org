@@ -8,5 +8,5 @@ export class CreateRequirementDto {
   description: string;
 
   @IsNotEmpty()
-  program: string;
+  phase: string;
 }

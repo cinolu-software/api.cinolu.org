@@ -5,7 +5,6 @@ import { Category } from '../../../../features/programs/categories/entities/cate
 import { Partner } from '../../../../features/programs/partners/entities/partner.entity';
 import { Partnership } from '../../../../features/programs/partnerships/entities/partnership.entity';
 import { Program } from '../../../../features/programs/programs/entities/program.entity';
-import { Requirement } from '../../../../features/programs/requirements/entities/requirement.entity';
 import { Type } from '../../../../features/programs/types/entities/type.entity';
 
 export default class ProgramSeeder implements Seeder {
@@ -16,7 +15,6 @@ export default class ProgramSeeder implements Seeder {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.query('TRUNCATE TABLE partnership;');
     await dataSource.query('TRUNCATE TABLE program;');
-    await dataSource.query('TRUNCATE TABLE requirement;');
     await dataSource.query('TRUNCATE TABLE type;');
     await dataSource.query('TRUNCATE TABLE category;');
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
@@ -27,7 +25,6 @@ export default class ProgramSeeder implements Seeder {
     const partnershipRepository = dataSource.getRepository(Partnership);
     const partnerRepository = dataSource.getRepository(Partner);
     const programRepository = dataSource.getRepository(Program);
-    const requirementRepository = dataSource.getRepository(Requirement);
     const typeRepository = dataSource.getRepository(Type);
     const categoryRepository = dataSource.getRepository(Category);
 
@@ -59,23 +56,6 @@ export default class ProgramSeeder implements Seeder {
           .map(() =>
             categoryRepository.save({
               name: faker.commerce.department(),
-              description: faker.commerce.productDescription()
-            })
-          )
-      );
-    };
-
-    /**
-     * Create requirement
-     * @param count
-     */
-    const createRequirements = async (count: number): Promise<Requirement[]> => {
-      return await Promise.all(
-        Array(count)
-          .fill('')
-          .map(() =>
-            requirementRepository.save({
-              name: faker.commerce.productAdjective(),
               description: faker.commerce.productDescription()
             })
           )
@@ -134,7 +114,6 @@ export default class ProgramSeeder implements Seeder {
               ended_at: faker.helpers.arrayElement([faker.date.soon(), faker.date.past()]),
               types: await createTypes(faker.number.int({ min: 1, max: 2 })),
               categories: await createCategories(faker.number.int({ min: 1, max: 2 })),
-              requirements: await createRequirements(faker.number.int({ min: 1, max: 3 })),
               partners: await createPartners(faker.number.int({ min: 1, max: 5 }))
             })
           )
