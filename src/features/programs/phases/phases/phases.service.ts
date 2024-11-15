@@ -19,7 +19,7 @@ export class PhasesService {
       });
       return { data };
     } catch {
-      throw new BadRequestException('Erreur survenue lors de la création du type');
+      throw new BadRequestException('Erreur survenue lors de la soumission de la phase');
     }
   }
 
@@ -32,11 +32,11 @@ export class PhasesService {
     try {
       const data = await this.phaseRepository.findOneOrFail({
         where: { id },
-        relations: ['documents', 'program']
+        relations: ['documents', 'program', 'requirements']
       });
       return { data };
     } catch {
-      throw new NotFoundException('Impossible de récupérer le type');
+      throw new NotFoundException('Impossible de récupérer la phase');
     }
   }
 
@@ -50,7 +50,7 @@ export class PhasesService {
       });
       return { data };
     } catch {
-      throw new BadRequestException('Erreur survenue lors de la modification du type');
+      throw new BadRequestException('Erreur survenue lors de la modification de la phase');
     }
   }
 
@@ -59,7 +59,7 @@ export class PhasesService {
       await this.findOne(id);
       await this.phaseRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Impossible de supprimer le type');
+      throw new BadRequestException('Impossible de supprimer la phase');
     }
   }
 }

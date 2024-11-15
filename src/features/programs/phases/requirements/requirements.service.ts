@@ -16,22 +16,27 @@ export class RequirementsService {
     return { data };
   }
 
-  async create(dto: CreateRequirementDto): Promise<{ data: Requirement }> {
+  async create(dto: CreateRequirementDto): Promise<{ data: Requirement[] }> {
     try {
-      const data = await this.requirementRepository.save({
-        ...dto,
-        phase: { id: dto.phase }
-      });
+      const data = await Promise.all(
+        dto.requirements.map(
+          async (d) =>
+            await this.requirementRepository.save({
+              ...d,
+              phase: { id: dto.phase }
+            })
+        )
+      );
       return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de l'ajout du document");
+      throw new BadRequestException("Erreur lors de l'ajout du prérecquis");
     }
   }
 
   async findOne(id: string): Promise<Requirement> {
     try {
-      const document = await this.requirementRepository.findOneOrFail({ where: { id } });
-      return document;
+      const requirment = await this.requirementRepository.findOneOrFail({ where: { id } });
+      return requirment;
     } catch {
       throw new BadRequestException('Erreur lors de la lecture du prérecquis');
     }
@@ -39,11 +44,11 @@ export class RequirementsService {
 
   async update(id: string, dto: UpdateRequirementDto): Promise<{ data: Requirement }> {
     try {
-      const document = await this.findOne(id);
+      const requirment = await this.findOne(id);
       const data = await this.requirementRepository.save({
-        ...document,
+        ...requirment,
         ...dto,
-        phase: dto.phase ? { id: dto.phase } : document.phase
+        phase: requirment.phase
       });
       return { data };
     } catch {

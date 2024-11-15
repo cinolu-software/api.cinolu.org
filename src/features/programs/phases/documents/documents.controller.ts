@@ -9,7 +9,7 @@ import { CreateDocumentDto } from './dto/create-document.dto';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
 
-@Controller('program-phase-documents')
+@Controller('phase-documents')
 @Rights(RightsEnum.Staff)
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}

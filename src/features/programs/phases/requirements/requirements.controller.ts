@@ -5,7 +5,7 @@ import { CreateRequirementDto, UpdateRequirementDto } from './dto';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
 
-@Controller('program-requirements')
+@Controller('phase-requirements')
 @Rights(RightsEnum.Staff)
 export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
@@ -17,7 +17,8 @@ export class RequirementsController {
   }
 
   @Post('')
-  create(@Body() dto: CreateRequirementDto): Promise<{ data: Requirement }> {
+  @Rights(RightsEnum.Guest)
+  create(@Body() dto: CreateRequirementDto): Promise<{ data: Requirement[] }> {
     return this.requirementsService.create(dto);
   }
 

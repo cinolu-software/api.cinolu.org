@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateRequirementDto } from './create-requirement.dto';
+import { IsNotEmpty } from 'class-validator';
 
-export class UpdateRequirementDto extends PartialType(CreateRequirementDto) {}
+export class UpdateRequirementDto {
+  @IsNotEmpty()
+  name: string;
+
+  @IsNotEmpty()
+  description: string;
+
+  @IsNotEmpty()
+  phase: string;
+}

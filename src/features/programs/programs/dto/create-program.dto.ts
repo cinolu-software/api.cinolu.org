@@ -13,14 +13,14 @@ export class CreateProgramDto {
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
   ended_at: Date;
 
+  @IsNotEmpty()
+  targeted_audience: string;
+
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];
 
   @IsArray({ message: 'La catégorie est obligatoire' })
   categories: string[];
-
-  @IsNotEmpty({ message: 'Les conditions du programme sont obligatoires' })
-  requirements: { name: string; description: string }[];
 
   @IsNotEmpty({ message: 'Les partenaires sont recquis' })
   partners: string[];

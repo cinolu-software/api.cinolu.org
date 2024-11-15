@@ -1,5 +1,5 @@
 import { Reflector } from '@nestjs/core';
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { RIGHTS_POLICY } from '../decorators/rights.decorators';
 import { RightsEnum } from '../enums/rights.enum';
 import { RightsService } from '../rights.service';
@@ -19,6 +19,11 @@ export class RightsGuard implements CanActivate {
     if (!requiredRole) return true;
     const req = ctx.switchToHttp().getRequest();
     const user = req.user;
-    return this.rightsService.isAuthorized({ currentRoles: user?.roles, requiredRole });
+    try {
+      this.rightsService.isAuthorized({ currentRoles: user?.roles, requiredRole });
+      return true;
+    } catch {
+      throw new UnauthorizedException("Vous n'avez juste pas le droit !");
+    }
   }
 }

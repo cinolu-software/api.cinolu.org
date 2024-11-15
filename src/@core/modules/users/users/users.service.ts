@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import AddDetailsDto from './dto/add-details.dto';
 import { RolesService } from '../roles/roles.service';
-import { CurrentUser } from '../../auth/decorators/user.decorator';
 import { SignupDto, CreateWithGoogleDto } from '../../auth/dto';
 import UpdateProfileDto from '../../auth/dto/update-profile.dto';
 
@@ -121,7 +120,7 @@ export class UsersService {
     }
   }
 
-  async addDetails(@CurrentUser() currentUser: User, dto: AddDetailsDto): Promise<{ data: User }> {
+  async addDetails(currentUser: User, dto: AddDetailsDto): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currentUser.id);
       const isCoach = user.roles.map((role) => role.name).includes('coach');
@@ -197,7 +196,7 @@ export class UsersService {
     }
   }
 
-  async updateProfile(@CurrentUser() currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
+  async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currentUser.id);
       delete user.password;
@@ -208,7 +207,7 @@ export class UsersService {
     }
   }
 
-  async uploadImage(@CurrentUser() currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
+  async uploadImage(currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currenUser.id);
       if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);

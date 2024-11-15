@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RightsEnum } from './enums/rights.enum';
 import { Ihierarchy } from './types/hierarchy.type';
 import { IAuthorizedParams } from './types/authorized-params.type';
@@ -23,11 +23,12 @@ export class RightsService {
     return hierarchy ? hierarchy.priority : -1;
   }
 
-  public isAuthorized({ currentRoles, requiredRole }: IAuthorizedParams): boolean {
+  public isAuthorized({ currentRoles, requiredRole }: IAuthorizedParams): void {
     const requiredPriority = this.getPriority(requiredRole);
-    if (requiredPriority === 1) return true;
     const currentPriorities = currentRoles?.map((role) => this.getPriority(role)) ?? [1];
     const currentHighPriority = Math.max(...currentPriorities);
-    return currentHighPriority >= requiredPriority;
+    if (!(currentHighPriority >= requiredPriority)) {
+      throw new UnauthorizedException();
+    }
   }
 }

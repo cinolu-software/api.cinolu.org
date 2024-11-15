@@ -5,7 +5,6 @@ import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { Notification } from './entities/notification.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CurrentUser } from '../auth/decorators/user.decorator';
 import { NotificationAttachment } from './entities/attachment.entity';
 import { User } from '../users/users/entities/user.entity';
 import { UsersService } from '../users/users/users.service';
@@ -21,7 +20,7 @@ export class NotificationService {
     private eventEmitter: EventEmitter2
   ) {}
 
-  async create(@CurrentUser() user: User, dto: CreateNotificationDto): Promise<{ data: Notification }> {
+  async create(user: User, dto: CreateNotificationDto): Promise<{ data: Notification }> {
     const recipients = await this.findRecipients(dto.recipients);
     const data = await this.notificationRepository.save({
       ...dto,

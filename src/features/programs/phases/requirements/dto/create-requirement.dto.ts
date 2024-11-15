@@ -1,12 +1,21 @@
 import { IsNotEmpty } from 'class-validator';
+import { FieldType } from '../enum/form-type.enum';
+
+interface IRequirementDto {
+  name: string;
+  description: string;
+}
 
 export class CreateRequirementDto {
   @IsNotEmpty()
-  name: string;
+  field_type: FieldType;
 
   @IsNotEmpty()
-  description: string;
+  is_formField: boolean;
 
   @IsNotEmpty()
   phase: string;
+
+  @IsNotEmpty()
+  requirements: IRequirementDto[];
 }

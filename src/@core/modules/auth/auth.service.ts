@@ -2,7 +2,6 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
 import { BadRequestException, Injectable, Req, Res } from '@nestjs/common';
-import { CurrentUser } from './decorators/user.decorator';
 import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
@@ -103,16 +102,16 @@ export class AuthService {
     return this.jwtService.signAsync(payload, { secret: this._jwtSecret, expiresIn });
   }
 
-  async profile(@CurrentUser() user: User): Promise<{ data: User }> {
+  async profile(user: User): Promise<{ data: User }> {
     const { data } = await this.usersService.getVerifiedUser(user.email);
     return { data };
   }
 
-  async updateProfile(@CurrentUser() currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
-    return await this.usersService.updateProfile(currentUser, dto);
+  async updateProfile(user: User, dto: UpdateProfileDto): Promise<{ data: User }> {
+    return await this.usersService.updateProfile(user, dto);
   }
 
-  async updatePassword(@CurrentUser() user: User, dto: UpdatePasswordDto): Promise<{ data: User }> {
+  async updatePassword(user: User, dto: UpdatePasswordDto): Promise<{ data: User }> {
     try {
       await this.verifyPassword(dto.old_password, user.password);
       await this.usersService.updatePassword(user.id, dto.password);

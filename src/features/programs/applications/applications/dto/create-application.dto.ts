@@ -2,7 +2,7 @@ import { IsNotEmpty, IsObject } from 'class-validator';
 
 export class CreateApplicationDto {
   @IsObject()
-  answer: JSON;
+  answers: JSON;
 
   @IsNotEmpty()
   program: string;

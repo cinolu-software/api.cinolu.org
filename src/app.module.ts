@@ -65,7 +65,8 @@ import { ReviewsModule } from './features/programs/applications/reviews/reviews.
     PhasesModule,
     ProgramTypesModule,
     RequirementsModule,
-    ReviewsModule
+    ReviewsModule,
+    PhasesModule
   ],
   providers: [{ provide: APP_GUARD, useClass: RightsGuard }]
 })
