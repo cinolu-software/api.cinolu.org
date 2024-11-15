@@ -10,4 +10,7 @@ export class CreateReviewDto {
 
   @IsNotEmpty()
   comment: string;
+
+  @IsNotEmpty()
+  application: string;
 }

@@ -8,7 +8,7 @@ import { User } from '@core/modules/users/users/entities/user.entity';
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
 
-@Controller('program-application-reviews')
+@Controller('application-reviews')
 @Rights(RightsEnum.Coach)
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}

@@ -16,6 +16,7 @@ export class ReviewsService {
     try {
       const data = await this.reviewRepository.save({
         ...dto,
+        application: { id: dto.application },
         reviewer: user
       });
       return { data };
@@ -31,7 +32,10 @@ export class ReviewsService {
 
   async findOne(id: string): Promise<{ data: Review }> {
     try {
-      const data = await this.reviewRepository.findOneOrFail({ where: { id } });
+      const data = await this.reviewRepository.findOneOrFail({
+        where: { id },
+        relations: ['application', 'reviewer']
+      });
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue lors de la lecture du review');
@@ -43,6 +47,7 @@ export class ReviewsService {
       const { data: review } = await this.findOne(id);
       const data = await this.reviewRepository.save({
         ...dto,
+        application: review.application,
         reviewer: review.reviewer
       });
       return { data };
