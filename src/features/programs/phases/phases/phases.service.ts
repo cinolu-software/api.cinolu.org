@@ -31,7 +31,8 @@ export class PhasesService {
   async findOne(id: string): Promise<{ data: Phase }> {
     try {
       const data = await this.phaseRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['documents', 'program']
       });
       return { data };
     } catch {

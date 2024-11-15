@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Program } from '../../programs/entities/program.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
+import { Phase } from '../../phases/phases/entities/phase.entity';
 
 @Entity()
 export class Document extends BaseEntity {
@@ -13,7 +13,7 @@ export class Document extends BaseEntity {
   @Column({ nullable: true })
   file_name: string;
 
-  @ManyToOne(() => Program, (program) => program.documents)
+  @ManyToOne(() => Phase, (phase) => phase.documents)
   @JoinColumn({ name: 'programId' })
-  program: Program;
+  phase: Phase;
 }

@@ -67,7 +67,7 @@ export class ProgramsService {
     try {
       const data = await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['types', 'partners', 'categories', 'documents', 'phases']
+        relations: ['types', 'partners', 'categories', 'phases']
       });
       return { data };
     } catch {

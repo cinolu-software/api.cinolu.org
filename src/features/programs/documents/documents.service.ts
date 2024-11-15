@@ -22,7 +22,7 @@ export class DocumentsService {
     try {
       const data = await this.documentRepository.save({
         ...dto,
-        program: { id: dto.program }
+        phase: { id: dto.phase }
       });
       return { data };
     } catch {
@@ -45,7 +45,7 @@ export class DocumentsService {
       const data = await this.documentRepository.save({
         ...document,
         ...dto,
-        program: dto.program ? { id: dto.program } : document.program
+        phase: { id: dto?.phase ?? document.phase.id }
       });
       return { data };
     } catch {

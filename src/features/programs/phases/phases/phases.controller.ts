@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PhasesService } from './phases.service';
-
 import { Rights } from '@core/modules/auth/decorators/rights.decorators';
 import { RightsEnum } from '@core/modules/auth/enums/rights.enum';
 import { CreatePhaseDto, UpdatePhaseDto } from './dto';

@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Program } from '../../../programs/entities/program.entity';
 import { Requirement } from '../../requirements/entities/requirement.entity';
+import { Document } from '../../../documents/entities/document.entity';
 
 @Entity()
 export class Phase extends BaseEntity {
@@ -17,10 +18,13 @@ export class Phase extends BaseEntity {
   @Column({ type: 'datetime' })
   ended_at: Date;
 
+  @OneToMany(() => Requirement, (requirement) => requirement.phase)
+  requirements: Requirement[];
+
+  @OneToMany(() => Document, (document) => document.phase)
+  documents: Document[];
+
   @ManyToOne(() => Program, (program) => program.phases)
   @JoinColumn({ name: 'programId' })
   program: Program;
-
-  @OneToMany(() => Requirement, (requirement) => requirement.phase)
-  requirements: Requirement[];
 }

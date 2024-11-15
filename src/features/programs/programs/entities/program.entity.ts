@@ -3,7 +3,6 @@ import { Partner } from '../../../partners/partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { Phase } from '../../phases/phases/entities/phase.entity';
-import { Document } from '../../documents/entities/document.entity';
 import { Application } from '../../applications/entities/application.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
 
@@ -44,7 +43,4 @@ export class Program extends BaseEntity {
   @ManyToMany(() => Partner, (partner) => partner.programs)
   @JoinTable({ name: 'program_partners' })
   partners: Partner[];
-
-  @OneToMany(() => Document, (document) => document.program)
-  documents: Document[];
 }

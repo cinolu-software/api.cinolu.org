@@ -8,5 +8,5 @@ export class CreateDocumentDto {
   description: string;
 
   @IsNotEmpty()
-  program: string;
+  phase: string;
 }
