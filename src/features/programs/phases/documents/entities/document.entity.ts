@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
-import { Phase } from '../../phases/phases/entities/phase.entity';
+import { Phase } from '../../phases/entities/phase.entity';
 
 @Entity()
 export class Document extends BaseEntity {

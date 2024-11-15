@@ -3,7 +3,7 @@ import { Partner } from '../../../partners/partners/entities/partner.entity';
 import { Type } from '../../types/entities/type.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { Phase } from '../../phases/phases/entities/phase.entity';
-import { Application } from '../../applications/entities/application.entity';
+import { Application } from '../../applications/applications/entities/application.entity';
 import { BaseEntity } from '@core/utilities/base.entity';
 
 @Entity()

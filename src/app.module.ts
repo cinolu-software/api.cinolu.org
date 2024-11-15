@@ -16,15 +16,16 @@ import { PartnershipsModule } from './features/partners/partnerships/partnership
 import { ProgramsModule } from './features/programs/programs/programs.module';
 import { ProgramTypesModule } from './features/programs/types/types.module';
 import { EventTypesModule } from './features/events/types/types.module';
-import { ApplicationsModule } from './features/programs/applications/applications.module';
+import { ApplicationsModule } from './features/programs/applications/applications/applications.module';
 import { CategoriesModule } from './features/programs/categories/categories.module';
-import { DocumentsModule } from './features/programs/documents/documents.module';
+import { DocumentsModule } from './features/programs/phases/documents/documents.module';
 import { PhasesModule } from './features/programs/phases/phases/phase.module';
 import { RequirementsModule } from './features/programs/phases/requirements/requirements.module';
 import { ExpertisesModule } from '@core/modules/users/expertises/expertises.module';
 import { PositionsModule } from '@core/modules/users/positions/positions.module';
 import { RolesModule } from '@core/modules/users/roles/roles.module';
 import { UsersModule } from '@core/modules/users/users/users.module';
+import { ReviewsModule } from './features/programs/applications/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -63,7 +64,8 @@ import { UsersModule } from '@core/modules/users/users/users.module';
     DocumentsModule,
     PhasesModule,
     ProgramTypesModule,
-    RequirementsModule
+    RequirementsModule,
+    ReviewsModule
   ],
   providers: [{ provide: APP_GUARD, useClass: RightsGuard }]
 })

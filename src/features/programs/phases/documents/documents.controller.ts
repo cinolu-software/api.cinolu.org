@@ -2,7 +2,7 @@ import { Controller, Post, Body, Patch, Param, Delete, UseInterceptors, Uploaded
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdateProgramDto } from '../programs/dto/update-program.dto';
+import { UpdateProgramDto } from '../../programs/dto/update-program.dto';
 import { DocumentsService } from './documents.service';
 import { Document } from './entities/document.entity';
 import { CreateDocumentDto } from './dto/create-document.dto';

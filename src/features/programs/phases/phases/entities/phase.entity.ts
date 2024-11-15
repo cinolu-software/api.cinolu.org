@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Program } from '../../../programs/entities/program.entity';
 import { Requirement } from '../../requirements/entities/requirement.entity';
-import { Document } from '../../../documents/entities/document.entity';
+import { Document } from '../../documents/entities/document.entity';
 
 @Entity()
 export class Phase extends BaseEntity {

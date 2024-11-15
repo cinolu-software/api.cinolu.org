@@ -3,9 +3,10 @@ import { Notification } from '@core/modules/notifications/entities/notification.
 import { BaseEntity } from '@core/utilities/base.entity';
 import { Detail } from './detail.entity';
 import { Role } from '../../roles/entities/role.entity';
-import { Application } from '../../../../../features/programs/applications/entities/application.entity';
+import { Application } from '../../../../../features/programs/applications/applications/entities/application.entity';
 import { Program } from '../../../../../features/programs/programs/entities/program.entity';
 import { Event } from '../../../../../features/events/events/entities/event.entity';
+import { Review } from '../../../../../features/programs/applications/reviews/entities/review.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -36,6 +37,9 @@ export class User extends BaseEntity {
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
+
+  @OneToMany(() => Review, (review) => review.reviewer)
+  reviews: Review[];
 
   @OneToMany(() => Application, (application) => application.applicant)
   applications: Application[];
