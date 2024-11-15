@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { resolve } from 'path';
 import { AuthModule } from '@core/modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -31,7 +31,7 @@ import { ReviewsModule } from './features/programs/applications/reviews/reviews.
   imports: [
     EventEmitterModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', '..'),
+      rootPath: resolve(__dirname, '../../'),
       renderPath: '/uploads'
     }),
     ConfigModule.forRoot({
