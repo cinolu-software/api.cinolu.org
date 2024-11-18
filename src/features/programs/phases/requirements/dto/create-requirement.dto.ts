@@ -1,5 +1,4 @@
 import { IsNotEmpty } from 'class-validator';
-import { FieldType } from '../enum/form-type.enum';
 
 interface IRequirementDto {
   name: string;
@@ -7,12 +6,6 @@ interface IRequirementDto {
 }
 
 export class CreateRequirementDto {
-  @IsNotEmpty()
-  field_type: FieldType;
-
-  @IsNotEmpty()
-  is_formField: boolean;
-
   @IsNotEmpty()
   phase: string;
 

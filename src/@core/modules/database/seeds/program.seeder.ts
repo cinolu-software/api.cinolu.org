@@ -6,6 +6,8 @@ import { Partner } from '../../../../features/partners/partners/entities/partner
 import { Partnership } from '../../../../features/partners/partnerships/entities/partnership.entity';
 import { Program } from '../../../../features/programs/programs/entities/program.entity';
 import { Type } from '../../../../features/programs/types/entities/type.entity';
+import { Phase } from '../../../../features/programs/phases/phases/entities/phase.entity';
+import { Requirement } from '../../../../features/programs/phases/requirements/entities/requirement.entity';
 
 export default class ProgramSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -16,6 +18,7 @@ export default class ProgramSeeder implements Seeder {
     await dataSource.query('TRUNCATE TABLE partnership;');
     await dataSource.query('TRUNCATE TABLE program;');
     await dataSource.query('TRUNCATE TABLE type;');
+    await dataSource.query('TRUNCATE TABLE phase;');
     await dataSource.query('TRUNCATE TABLE category;');
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
@@ -26,12 +29,45 @@ export default class ProgramSeeder implements Seeder {
     const partnerRepository = dataSource.getRepository(Partner);
     const programRepository = dataSource.getRepository(Program);
     const typeRepository = dataSource.getRepository(Type);
+    const phaseRepository = dataSource.getRepository(Phase);
+    const requirementRepository = dataSource.getRepository(Requirement);
     const categoryRepository = dataSource.getRepository(Category);
 
-    /**
-     * Create types
-     * @param count
-     */
+    const createRequirements = async (count: number) => {
+      return Promise.all(
+        Array(count)
+          .fill('')
+          .map(() =>
+            requirementRepository.save({
+              name: faker.commerce.productName(),
+              description: faker.commerce.productDescription()
+            })
+          )
+      );
+    };
+
+    const createPhases = async (count: number) => {
+      const requirements = await createRequirements(faker.number.int({ min: 1, max: 2 }));
+      const form = JSON.stringify({
+        name: `${faker.commerce.productAdjective()} ?`,
+        type: faker.helpers.arrayElement(['text', 'textarea', 'number', 'date', 'file', 'select'])
+      }) as unknown as JSON;
+      return Promise.all(
+        Array(count)
+          .fill('')
+          .map(() =>
+            phaseRepository.save({
+              name: faker.finance.accountName(),
+              description: faker.commerce.productAdjective(),
+              started_at: faker.date.past(),
+              ended_at: faker.date.future(),
+              requirements,
+              form
+            })
+          )
+      );
+    };
+
     const createTypes = async (count: number) => {
       return Promise.all(
         Array(count)
@@ -45,10 +81,6 @@ export default class ProgramSeeder implements Seeder {
       );
     };
 
-    /**
-     * Create types
-     * @param count
-     */
     const createCategories = async (count: number) => {
       return Promise.all(
         Array(count)
@@ -62,10 +94,6 @@ export default class ProgramSeeder implements Seeder {
       );
     };
 
-    /**
-     * Create partnership
-     * @param count
-     */
     const createPartnerships = async (count: number): Promise<Partnership[]> => {
       return await Promise.all(
         Array(count)
@@ -78,10 +106,6 @@ export default class ProgramSeeder implements Seeder {
       );
     };
 
-    /**
-     * Create partner
-     * @param count
-     */
     const createPartners = async (count: number): Promise<Partner[]> => {
       return await Promise.all(
         Array(count)
@@ -91,17 +115,13 @@ export default class ProgramSeeder implements Seeder {
               name: faker.company.name(),
               website_link: faker.internet.url(),
               description: faker.commerce.productDescription(),
-              partnerships: await createPartnerships(10)
+              partnerships: await createPartnerships(faker.number.int({ min: 1, max: 2 }))
             })
           )
       );
     };
 
-    /**
-     * Create partner
-     * @param count
-     */
-    const createProgram = async (count: number): Promise<Program[]> => {
+    const createPrograms = async (count: number): Promise<Program[]> => {
       return await Promise.all(
         Array(count)
           .fill('')
@@ -110,15 +130,16 @@ export default class ProgramSeeder implements Seeder {
               name: faker.commerce.productName(),
               description: faker.commerce.productDescription(),
               targeted_audience: faker.commerce.productAdjective(),
-              started_at: faker.date.recent(),
-              ended_at: faker.helpers.arrayElement([faker.date.soon(), faker.date.past()]),
+              started_at: faker.date.past(),
+              ended_at: faker.helpers.arrayElement([faker.date.past(), faker.date.future()]),
               types: await createTypes(faker.number.int({ min: 1, max: 2 })),
+              phases: await createPhases(faker.number.int({ min: 1, max: 3 })),
               categories: await createCategories(faker.number.int({ min: 1, max: 2 })),
-              partners: await createPartners(faker.number.int({ min: 1, max: 5 }))
+              partners: await createPartners(faker.number.int({ min: 1, max: 3 }))
             })
           )
       );
     };
-    await createProgram(50);
+    await createPrograms(50);
   }
 }
