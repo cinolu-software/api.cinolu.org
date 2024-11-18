@@ -49,11 +49,12 @@ export default class ProgramSeeder implements Seeder {
     const createPhases = async (count: number) => {
       const requirements = await createRequirements(faker.number.int({ min: 1, max: 2 }));
       const form = JSON.stringify({
-        iputs: Array(faker.number.int({ min: 5, max: 10 }))
+        iputs: Array(faker.number.int({ min: 4, max: 5 }))
           .fill('')
           .map(() => ({
-            name: `${faker.commerce.productAdjective()} ?`,
-            type: faker.helpers.arrayElement(['text', 'number', 'textearea'])
+            label: faker.commerce.department(),
+            name: faker.commerce.productAdjective(),
+            type: faker.helpers.arrayElement(['text', 'number', 'textarea'])
           }))
       }) as unknown as JSON;
       return Promise.all(
