@@ -54,6 +54,7 @@ export default class ProgramSeeder implements Seeder {
           .map(() => ({
             label: faker.commerce.department(),
             name: faker.commerce.productAdjective(),
+            required: faker.helpers.arrayElement([true, false]),
             type: faker.helpers.arrayElement(['text', 'number', 'textarea'])
           }))
       }) as unknown as JSON;
