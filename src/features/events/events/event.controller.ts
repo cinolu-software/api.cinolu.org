@@ -43,6 +43,12 @@ export class EventsController {
     return this.eventsService.findOne(id);
   }
 
+  @Get('find-ids')
+  @Rights(RightsEnum.Guest)
+  findIds(): Promise<{ data: Event[] }> {
+    return this.eventsService.findIds();
+  }
+
   @Post('image/:id')
   @UseInterceptors(
     FileInterceptor('thumb', {

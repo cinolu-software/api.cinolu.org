@@ -31,16 +31,22 @@ export class ProgramsController {
     return this.programsService.create(createProgramDto);
   }
 
-  @Get('')
-  @Rights(RightsEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
-    return this.programsService.findAll(queryParams);
-  }
-
   @Get(':id')
   @Rights(RightsEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.findOne(id);
+  }
+
+  @Get('find-ids')
+  @Rights(RightsEnum.Guest)
+  findIds(): Promise<{ data: Program[] }> {
+    return this.programsService.findIds();
+  }
+
+  @Get('')
+  @Rights(RightsEnum.Guest)
+  findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
+    return this.programsService.findAll(queryParams);
   }
 
   @Post('image/:id')
