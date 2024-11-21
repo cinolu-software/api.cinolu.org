@@ -9,17 +9,11 @@ export class CreatePhaseDto {
   description: string;
 
   @IsNotEmpty()
-  @Transform(({ value }) => {
-    const [day, month, year] = value.split('/');
-    return new Date(+year, +month - 1, +day);
-  })
+  @Transform(({ value }) => new Date(value))
   started_at: Date;
 
   @IsNotEmpty()
-  @Transform(({ value }) => {
-    const [day, month, year] = value.split('/');
-    return new Date(+year, +month - 1, +day);
-  })
+  @Transform(({ value }) => new Date(value))
   ended_at: Date;
 
   @IsNotEmpty()

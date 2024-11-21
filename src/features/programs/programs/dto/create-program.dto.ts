@@ -9,17 +9,11 @@ export class CreateProgramDto {
   description: string;
 
   @IsNotEmpty({ message: 'La date de début du programme est obligatoire' })
-  @Transform(({ value }) => {
-    const [day, month, year] = value.split('/');
-    return new Date(+year, +month - 1, +day);
-  })
+  @Transform(({ value }) => new Date(value))
   started_at: Date;
 
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
-  @Transform(({ value }) => {
-    const [day, month, year] = value.split('/');
-    return new Date(+year, +month - 1, +day);
-  })
+  @Transform(({ value }) => new Date(value))
   ended_at: Date;
 
   @IsNotEmpty()
