@@ -18,7 +18,7 @@ export class Phase extends BaseEntity {
   @Column({ type: 'datetime' })
   ended_at: Date;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'json', nullable: true })
   form: JSON;
 
   @OneToMany(() => Requirement, (requirement) => requirement.phase)

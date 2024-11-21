@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreateProgramDto {
@@ -8,9 +9,17 @@ export class CreateProgramDto {
   description: string;
 
   @IsNotEmpty({ message: 'La date de début du programme est obligatoire' })
+  @Transform(({ value }) => {
+    const [day, month, year] = value.split('/');
+    return new Date(+year, +month - 1, +day);
+  })
   started_at: Date;
 
   @IsNotEmpty({ message: 'La date de fin du programme est obligatoire' })
+  @Transform(({ value }) => {
+    const [day, month, year] = value.split('/');
+    return new Date(+year, +month - 1, +day);
+  })
   ended_at: Date;
 
   @IsNotEmpty()
