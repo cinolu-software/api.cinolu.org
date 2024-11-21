@@ -31,16 +31,16 @@ export class ProgramsController {
     return this.programsService.create(createProgramDto);
   }
 
+  @Get('ids')
+  @Rights(RightsEnum.Guest)
+  findIds(): Promise<{ data: Program[] }> {
+    return this.programsService.findIds();
+  }
+
   @Get(':id')
   @Rights(RightsEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.findOne(id);
-  }
-
-  @Get('find-ids')
-  @Rights(RightsEnum.Guest)
-  findIds(): Promise<{ data: Program[] }> {
-    return this.programsService.findIds();
   }
 
   @Get('')

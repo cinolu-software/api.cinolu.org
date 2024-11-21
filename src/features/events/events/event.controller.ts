@@ -37,16 +37,16 @@ export class EventsController {
     return this.eventsService.findAll(queryParams);
   }
 
+  @Get('ids')
+  @Rights(RightsEnum.Guest)
+  findIds(): Promise<{ data: Event[] }> {
+    return this.eventsService.findIds();
+  }
+
   @Get(':id')
   @Rights(RightsEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Event }> {
     return this.eventsService.findOne(id);
-  }
-
-  @Get('find-ids')
-  @Rights(RightsEnum.Guest)
-  findIds(): Promise<{ data: Event[] }> {
-    return this.eventsService.findIds();
   }
 
   @Post('image/:id')
