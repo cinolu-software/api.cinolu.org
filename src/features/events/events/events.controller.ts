@@ -10,7 +10,7 @@ import {
   UploadedFile,
   Query
 } from '@nestjs/common';
-import { EventsService } from './event.service';
+import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
@@ -35,12 +35,6 @@ export class EventsController {
   @Rights(RightsEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     return this.eventsService.findAll(queryParams);
-  }
-
-  @Get('ids')
-  @Rights(RightsEnum.Guest)
-  findIds(): Promise<{ data: Event[] }> {
-    return this.eventsService.findIds();
   }
 
   @Get(':id')

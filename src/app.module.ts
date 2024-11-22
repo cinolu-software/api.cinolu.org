@@ -10,7 +10,7 @@ import { DatabaseModule } from '@core/modules/database/database.module';
 import { RightsGuard } from '@core/modules/auth/guards/rights.guard';
 import { EmailModule } from '@core/modules/email/email.module';
 import { NotificationModule } from '@core/modules/notifications/notifications.module';
-import { EventsModule } from './features/events/events/event.module';
+import { EventsModule } from './features/events/events/events.module';
 import { PartnersModule } from './features/partners/partners/partners.module';
 import { PartnershipsModule } from './features/partners/partnerships/partnerships.module';
 import { ProgramsModule } from './features/programs/programs/programs.module';

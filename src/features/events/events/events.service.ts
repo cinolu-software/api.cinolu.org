@@ -35,11 +35,6 @@ export class EventsService {
     if (program) throw new BadRequestException("l'événement existe déjà");
   }
 
-  async findIds(): Promise<{ data: Event[] }> {
-    const data = await this.eventRepository.createQueryBuilder('e').select(['e.id']).getMany();
-    return { data };
-  }
-
   async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     const { page, type, eventType } = queryParams;
     const query = this.eventRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');

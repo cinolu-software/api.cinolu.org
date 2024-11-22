@@ -36,11 +36,6 @@ export class ProgramsService {
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
 
-  async findIds(): Promise<{ data: Program[] }> {
-    const data = await this.programRepository.createQueryBuilder('p').select(['p.id']).getMany();
-    return { data };
-  }
-
   async findAll(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     const { page, type, category, hideFinished } = queryParams;
     const query = this.programRepository
