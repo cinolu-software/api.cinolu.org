@@ -19,6 +19,15 @@ export class CreateProgramDto {
   @IsNotEmpty()
   targeted_audience: string;
 
+  @IsNotEmpty()
+  aim: string;
+
+  @IsNotEmpty()
+  prize: string;
+
+  @IsNotEmpty()
+  town: string;
+
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];
 

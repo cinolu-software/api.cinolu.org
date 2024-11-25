@@ -23,8 +23,17 @@ export class Program extends BaseEntity {
   @Column({ type: 'date' })
   ended_at: Date;
 
-  @Column()
+  @Column({ type: 'text' })
   targeted_audience: string;
+
+  @Column({ type: 'text' })
+  aim: string;
+
+  @Column({ type: 'text' })
+  prize: string;
+
+  @Column()
+  town: string;
 
   @OneToMany(() => Phase, (phase) => phase.program)
   phases: Phase[];
