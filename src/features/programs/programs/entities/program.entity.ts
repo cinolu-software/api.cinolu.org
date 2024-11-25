@@ -26,13 +26,13 @@ export class Program extends BaseEntity {
   @Column({ type: 'text' })
   targeted_audience: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   aim: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   prize: string;
 
-  @Column()
+  @Column({ nullable: true })
   town: string;
 
   @OneToMany(() => Phase, (phase) => phase.program)
