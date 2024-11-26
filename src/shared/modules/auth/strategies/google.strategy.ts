@@ -9,8 +9,8 @@ import { UsersService } from '../../users/users/users.service';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly userService: UsersService,
-    readonly configService: ConfigService
+    private userService: UsersService,
+    configService: ConfigService
   ) {
     super({
       clientID: configService.get('GOOGLE_CLIENT_ID'),

@@ -165,7 +165,9 @@ export class UsersService {
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
       const { data: userRole } = await this.roleService.findByName('user');
-      const { data: user } = await this.findByEmail(dto.email);
+      const user = await this.userRepository.findOne({
+        where: { email: dto.email }
+      });
       if (user && !user.profile) {
         user.google_image = dto.google_image;
         await this.userRepository.save(user);
