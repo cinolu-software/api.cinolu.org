@@ -12,7 +12,7 @@ import { UsersModule } from '../users/users/users.module';
 @Module({
   imports: [PassportModule, UsersModule, EmailModule],
   controllers: [AuthController],
-  providers: [AuthService, RightsService, LocalStrategy, GoogleStrategy, SessionSerializer],
+  providers: [AuthService, RightsService, LocalStrategy, SessionSerializer, GoogleStrategy],
   exports: [RightsService]
 })
 export class AuthModule {}

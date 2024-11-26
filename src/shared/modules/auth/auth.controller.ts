@@ -22,7 +22,7 @@ export class AuthController {
   @Post('sign-in')
   @Rights(RightsEnum.Guest)
   @UseGuards(LocalAuthGuard)
-  singIn(@Req() req: Request) {
+  singIn(@Req() req: Request): Promise<{ data: Express.User }> {
     return this.authService.signIn(req);
   }
 
