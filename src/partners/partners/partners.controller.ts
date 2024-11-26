@@ -31,7 +31,7 @@ export class PartnersController {
     return this.partnersService.findOne(id);
   }
 
-  @Post('profile')
+  @Post(':id/profile')
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
