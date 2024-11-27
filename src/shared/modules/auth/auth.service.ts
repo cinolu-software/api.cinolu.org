@@ -103,8 +103,12 @@ export class AuthService {
   }
 
   async profile(user: User): Promise<{ data: User }> {
-    const { data } = await this.usersService.getVerifiedUser(user.email);
-    return { data };
+    try {
+      const { data } = await this.usersService.getVerifiedUser(user.email);
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la récupération du profil');
+    }
   }
 
   async updateProfile(user: User, dto: UpdateProfileDto): Promise<{ data: User }> {
