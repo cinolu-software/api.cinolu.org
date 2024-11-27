@@ -175,12 +175,12 @@ export class UsersService {
         const { data } = await this.getVerifiedUser(user.email);
         return { data };
       }
-      await this.userRepository.save({
+      const newUser = await this.userRepository.save({
         ...dto,
         verified_at: new Date(),
         roles: [userRole]
       });
-      const { data } = await this.getVerifiedUser(dto.email);
+      const { data } = await this.getVerifiedUser(newUser.email);
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la récupération de l'utilisateur");
