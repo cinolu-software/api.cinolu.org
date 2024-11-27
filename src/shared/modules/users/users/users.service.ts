@@ -9,6 +9,7 @@ import AddDetailsDto from './dto/add-details.dto';
 import { RolesService } from '../roles/roles.service';
 import { SignupDto, CreateWithGoogleDto } from '../../auth/dto';
 import UpdateProfileDto from '../../auth/dto/update-profile.dto';
+import { Role } from '../roles/entities/role.entity';
 
 @Injectable()
 export class UsersService {
@@ -168,23 +169,31 @@ export class UsersService {
       const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });
-      if (user && !user.profile) {
-        user.google_image = dto.google_image;
-        user.verified_at = new Date();
-        await this.userRepository.save(user);
-        const { data } = await this.getVerifiedUser(user.email);
-        return { data };
-      }
-      const newUser = await this.userRepository.save({
-        ...dto,
-        verified_at: new Date(),
-        roles: [userRole]
-      });
-      const { data } = await this.getVerifiedUser(newUser.email);
-      return { data };
+      if (user) return await this.#updateExistingUser(user, dto);
+      return await this.#createNewUser(dto, userRole);
     } catch {
       throw new BadRequestException("Erreur lors de la récupération de l'utilisateur");
     }
+  }
+
+  async #updateExistingUser(user: User, dto: CreateWithGoogleDto): Promise<{ data: User }> {
+    if (!user.profile) {
+      user.google_image = dto.google_image;
+      user.verified_at = new Date();
+      await this.userRepository.save(user);
+    }
+    const { data } = await this.getVerifiedUser(user.email);
+    return { data };
+  }
+
+  async #createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<{ data: User }> {
+    const newUser = await this.userRepository.save({
+      ...dto,
+      verified_at: new Date(),
+      roles: [userRole]
+    });
+    const { data } = await this.getVerifiedUser(newUser.email);
+    return { data };
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<{ data: User }> {
