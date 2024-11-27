@@ -14,9 +14,9 @@ export const typeOrmOptions: DataSourceOptions & SeederOptions = {
   database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  migrations: ['src/shared/modules/database/migrations/**'],
+  migrations: ['src/modules/database/migrations/**'],
   entities: ['dist/**/*.entity.js'],
-  seeds: ['dist/src/shared/modules/database/seeds/**.js']
+  seeds: ['dist/src/modules/database/seeds/**.js']
 };
 
 export const dataSource = new DataSource(typeOrmOptions);
