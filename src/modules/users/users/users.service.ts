@@ -228,7 +228,9 @@ export class UsersService {
       const { data: user } = await this.findOne(currenUser.id);
       if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);
       delete user.password;
-      const data = await this.userRepository.save({ ...user, profile: file.filename });
+      await this.userRepository.save({ ...user, profile: file.filename });
+      const { data } = await this.getVerifiedUser(user.email);
+
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
