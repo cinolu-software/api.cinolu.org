@@ -62,8 +62,8 @@ export class AuthService {
 
   async addUser(dto: CreateUserDto): Promise<{ data: User }> {
     try {
-      const { data } = await this.usersService.create(dto);
-      this.eventEmitter.emit('user.created', { user: data });
+      const { data, password } = await this.usersService.create(dto);
+      this.eventEmitter.emit('user.created', { user: data, password });
       return { data };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");

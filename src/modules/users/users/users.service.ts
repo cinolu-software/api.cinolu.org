@@ -51,15 +51,16 @@ export class UsersService {
     return this.findWithRole('admin');
   }
 
-  async create(dto: CreateUserDto): Promise<{ data: User }> {
+  async create(dto: CreateUserDto): Promise<{ data: User; password: string }> {
     try {
-      const user: User = await this.userRepository.save({
+      const password = Math.floor(100000 + Math.random() * 900000).toString();
+      const data: User = await this.userRepository.save({
         ...dto,
-        password: Math.floor(100000 + Math.random() * 900000).toString(),
+        password,
         verified_at: new Date(),
         roles: dto.roles?.map((id) => ({ id }))
       });
-      return { data: user };
+      return { data, password };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
     }

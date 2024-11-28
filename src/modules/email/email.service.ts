@@ -58,13 +58,13 @@ export class EmailService {
   }
 
   @OnEvent('user.created')
-  async createdEmail({ user }: { user: User }): Promise<void> {
+  async createdEmail({ user, password }: { user: User; password: string }): Promise<void> {
     try {
       await this.mailerSerive.sendMail({
         to: user.email,
         subject: 'Bienvenue sur cinolu.org',
         template: 'welcome',
-        context: { user }
+        context: { user, password }
       });
     } catch {
       throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
