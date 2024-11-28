@@ -215,7 +215,8 @@ export class UsersService {
     try {
       const { data: user } = await this.findOne(currentUser.id);
       delete user.password;
-      const data: User = await this.userRepository.save({ ...user, ...dto });
+      await this.userRepository.save({ ...user, ...dto });
+      const { data } = await this.getVerifiedUser(user.email);
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la modification du profil');
