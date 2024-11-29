@@ -55,7 +55,7 @@ export class ProgramsService {
   async addImage(id: string, file: Express.Multer.File): Promise<{ data: Program }> {
     try {
       const { data: program } = await this.findOne(id);
-      if (program.image) await fs.promises.unlink(`./uploads/programs/${program.image}`);
+      if (program.image) await fs.unlink(`./uploads/programs/${program.image}`);
       const data = await this.programRepository.save({ ...program, image: file.filename });
       return { data };
     } catch {
