@@ -4,6 +4,7 @@ import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Partner } from './entities/partner.entity';
 import { Repository } from 'typeorm';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class PartnersService {
@@ -34,6 +35,7 @@ export class PartnersService {
   async addProfile(id: string, file: Express.Multer.File) {
     try {
       const { data: partner } = await this.findOne(id);
+      if (partner.profile) await fs.unlink(`./uploads/partners/${partner.profile}`);
       const data = await this.partnerRepository.save({ ...partner, profile: file.filename });
       return { data };
     } catch {
