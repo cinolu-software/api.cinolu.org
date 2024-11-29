@@ -59,6 +59,7 @@ export class UsersController {
   }
 
   @Post('image-profile')
+  @Rights(RightsEnum.User)
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
