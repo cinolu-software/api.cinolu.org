@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -62,12 +61,11 @@ export class UsersController {
   @Rights(RightsEnum.User)
   @UseInterceptors(
     FileInterceptor('thumb', {
-      storage: diskStorage({
-        destination: './uploads/profiles',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
+      dest: './uploads/profiles',
+      fileFilter(_req, file, callback) {
+        file.filename = `${uuidv4()}.${file.mimetype.split('/')[1]}`;
+        callback(null, true);
+      }
     })
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<{ data: User }> {
