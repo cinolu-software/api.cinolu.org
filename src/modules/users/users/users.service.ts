@@ -226,7 +226,7 @@ export class UsersService {
   async uploadImage(currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currenUser.id);
-      if (user.profile) await fs.promises.unlink(`./uploads/profiles/${user.profile}`);
+      if (user.profile) await fs.unlink(`./uploads/profiles/${user.profile}`);
       delete user.password;
       await this.userRepository.save({ ...user, profile: file.filename });
       const { data } = await this.getVerifiedUser(user.email);
