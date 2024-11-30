@@ -5,27 +5,26 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AuthModule } from './modules/auth/auth.module';
-import { RightsGuard } from './modules/auth/guards/rights.guard';
-import { EmailModule } from './modules/email/email.module';
-import { NotificationModule } from './modules/notifications/notifications.module';
-import { ExpertisesModule } from './modules/users/expertises/expertises.module';
-import { PositionsModule } from './modules/users/positions/positions.module';
-import { RolesModule } from './modules/users/roles/roles.module';
-import { UsersModule } from './modules/users/users/users.module';
-import { EventsModule } from './modules/events/events/events.module';
-import { EventTypesModule } from './modules/events/types/types.module';
-import { PartnersModule } from './modules/partners/partners/partners.module';
-import { PartnershipsModule } from './modules/partners/partnerships/partnerships.module';
-import { ApplicationsModule } from './modules/programs/applications/applications/applications.module';
-import { ReviewsModule } from './modules/programs/applications/reviews/reviews.module';
-import { CategoriesModule } from './modules/programs/categories/categories.module';
-import { DocumentsModule } from './modules/programs/phases/documents/documents.module';
-import { PhasesModule } from './modules/programs/phases/phases/phase.module';
-import { RequirementsModule } from './modules/programs/phases/requirements/requirements.module';
-import { ProgramsModule } from './modules/programs/programs/programs.module';
-import { ProgramTypesModule } from './modules/programs/types/types.module';
-import { DatabaseModule } from './modules/database/database.module';
+import { ApplicationsModule } from './applications/applications.module';
+import { AuthModule } from './auth/auth.module';
+import { RightsGuard } from './auth/guards/rights.guard';
+import { CategoriesModule } from './categories/categories.module';
+import { DatabaseModule } from './database/database.module';
+import { DocumentsModule } from './documents/documents.module';
+import { EmailModule } from './email/email.module';
+import { EventTypesModule } from './event-types/types.module';
+import { EventsModule } from './events/events.module';
+import { ExpertisesModule } from './expertises/expertises.module';
+import { PartnersModule } from './partners/partners.module';
+import { PartnershipsModule } from './partnerships/partnerships.module';
+import { PhasesModule } from './phases/phase.module';
+import { PositionsModule } from './positions/positions.module';
+import { ProgramTypesModule } from './program-types/types.module';
+import { ProgramsModule } from './programs/programs.module';
+import { RequirementsModule } from './requirements/requirements.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { RolesModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -52,7 +51,6 @@ import { DatabaseModule } from './modules/database/database.module';
     DatabaseModule,
     ProgramsModule,
     ProgramTypesModule,
-    NotificationModule,
     PartnersModule,
     PartnershipsModule,
     ExpertisesModule,
