@@ -144,7 +144,7 @@ export class UsersService {
     try {
       const data: User = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles', 'detail', 'detail.socials']
+        relations: ['roles', 'detail']
       });
       return { data };
     } catch {
