@@ -17,9 +17,9 @@ import { Program } from './entities/program.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { QueryParams } from './types/query-params.type';
 import { Rights } from '../shared/decorators/rights.decorators';
 import { RightsEnum } from '../shared/enums/rights.enum';
+import { QueryParams } from './utils/query-params.type';
 
 @Controller('programs')
 @Rights(RightsEnum.Staff)

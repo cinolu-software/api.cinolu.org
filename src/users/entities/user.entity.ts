@@ -1,11 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Detail } from './detail.entity';
-import { Role } from '../../roles/entities/role.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
-import { Application } from '../../applications/entities/application.entity';
-import { Review } from '../../reviews/entities/review.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Event } from '../../events/entities/event.entity';
+import { Application } from '../../programs/applications/entities/application.entity';
+import { Review } from '../../programs/applications/reviews/entities/review.entity';
+import { Role } from '../roles/entities/role.entity';
 
 @Entity()
 export class User extends BaseEntity {

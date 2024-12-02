@@ -6,10 +6,10 @@ import { In, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import AddDetailsDto from './dto/add-details.dto';
-import { RolesService } from '../roles/roles.service';
-import { Role } from '../roles/entities/role.entity';
 import { SignupDto, CreateWithGoogleDto } from '../auth/dto';
 import UpdateProfileDto from '../auth/dto/update-profile.dto';
+import { Role } from './roles/entities/role.entity';
+import { RolesService } from './roles/roles.service';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +22,7 @@ export class UsersService {
   private async findWithRole(name: string): Promise<{ data: User[] }> {
     const data = await this.userRepository.find({
       select: ['id', 'name', 'email', 'profile', 'google_image', 'address', 'phone_number'],
-      relations: ['roles', 'detail', 'detail.expertises', 'detail.positions', 'detail.socials'],
+      relations: ['roles', 'detail', 'detail.expertises', 'detail.positions'],
       where: { roles: { name } }
     });
     return { data };

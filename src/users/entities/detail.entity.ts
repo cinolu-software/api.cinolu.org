@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { User } from './user.entity';
-import { Expertise } from '../../expertises/entities/expertise.entity';
-import { Position } from '../../positions/entities/position.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
+import { Expertise } from '../expertises/entities/expertise.entity';
+import { Position } from '../positions/entities/position.entity';
 
 @Entity()
 export class Detail extends BaseEntity {

@@ -17,7 +17,7 @@ import { Event } from './entities/event.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { QueryParams } from './types/query-params.type';
+import { QueryParams } from './utils/query-params.type';
 import { Rights } from '../shared/decorators/rights.decorators';
 import { RightsEnum } from '../shared/enums/rights.enum';
 

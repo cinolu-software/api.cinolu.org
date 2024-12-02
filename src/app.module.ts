@@ -5,26 +5,26 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { ApplicationsModule } from './applications/applications.module';
 import { AuthModule } from './auth/auth.module';
 import { RightsGuard } from './auth/guards/rights.guard';
-import { CategoriesModule } from './categories/categories.module';
 import { DatabaseModule } from './database/database.module';
-import { DocumentsModule } from './documents/documents.module';
 import { EmailModule } from './email/email.module';
-import { EventTypesModule } from './event-types/types.module';
 import { EventsModule } from './events/events.module';
-import { ExpertisesModule } from './expertises/expertises.module';
 import { PartnersModule } from './partners/partners.module';
-import { PartnershipsModule } from './partnerships/partnerships.module';
-import { PhasesModule } from './phases/phase.module';
-import { PositionsModule } from './positions/positions.module';
-import { ProgramTypesModule } from './program-types/types.module';
 import { ProgramsModule } from './programs/programs.module';
-import { RequirementsModule } from './requirements/requirements.module';
-import { ReviewsModule } from './reviews/reviews.module';
-import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
+import { EventTypesModule } from './events/types/types.module';
+import { PartnershipsModule } from './partners/partnerships/partnerships.module';
+import { ApplicationsModule } from './programs/applications/applications.module';
+import { ReviewsModule } from './programs/applications/reviews/reviews.module';
+import { CategoriesModule } from './programs/categories/categories.module';
+import { DocumentsModule } from './programs/phases/documents/documents.module';
+import { PhasesModule } from './programs/phases/phase.module';
+import { RequirementsModule } from './programs/phases/requirements/requirements.module';
+import { ProgramTypesModule } from './programs/types/types.module';
+import { ExpertisesModule } from './users/expertises/expertises.module';
+import { PositionsModule } from './users/positions/positions.module';
+import { RolesModule } from './users/roles/roles.module';
 
 @Module({
   imports: [

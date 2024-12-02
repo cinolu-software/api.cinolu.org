@@ -2,8 +2,8 @@ import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
-import { Role } from '../../roles/entities/role.entity';
 import { User } from '../../users/entities/user.entity';
+import { Role } from '../../users/roles/entities/role.entity';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {

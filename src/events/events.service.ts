@@ -4,7 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Repository } from 'typeorm';
-import { QueryParams } from './types/query-params.type';
+import { QueryParams } from './utils/query-params.type';
 import * as fs from 'fs-extra';
 
 @Injectable()

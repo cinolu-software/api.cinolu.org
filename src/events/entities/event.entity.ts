@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { EventType } from '../../event-types/entities/type.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { User } from '../../users/entities/user.entity';
+import { EventType } from '../types/entities/type.entity';
 
 @Entity()
 export class Event extends BaseEntity {

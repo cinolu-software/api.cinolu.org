@@ -4,8 +4,8 @@ import { UpdateProgramDto } from './dto/update-program.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
-import { QueryParams } from './types/query-params.type';
 import * as fs from 'fs-extra';
+import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
 export class ProgramsService {
