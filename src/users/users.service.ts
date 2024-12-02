@@ -22,7 +22,7 @@ export class UsersService {
   private async findWithRole(name: string): Promise<{ data: User[] }> {
     const data = await this.userRepository.find({
       select: ['id', 'name', 'email', 'profile', 'google_image', 'address', 'phone_number'],
-      relations: ['roles', 'detail', 'detail.expertises', 'detail.positions'],
+      relations: ['roles', 'detail'],
       where: { roles: { name } }
     });
     return { data };
