@@ -1,10 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { Partner } from '../../partners/entities/partner.entity';
-import { Application } from '../applications/entities/application.entity';
-import { Category } from '../categories/entities/category.entity';
-import { Phase } from '../phases/entities/phase.entity';
-import { Type } from '../types/entities/type.entity';
+import { Application } from './application.entity';
+import { Category } from './category.entity';
+import { Phase } from './phase.entity';
+import { Type } from './type.entity';
 
 @Entity()
 export class Program extends BaseEntity {

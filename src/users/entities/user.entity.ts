@@ -3,9 +3,9 @@ import { Detail } from './detail.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Event } from '../../events/entities/event.entity';
-import { Application } from '../../programs/applications/entities/application.entity';
-import { Review } from '../../programs/applications/reviews/entities/review.entity';
-import { Role } from '../roles/entities/role.entity';
+import { Application } from '../../programs/entities/application.entity';
+import { Review } from '../../programs/entities/review.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class User extends BaseEntity {

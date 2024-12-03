@@ -1,9 +1,5 @@
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
-
-enum EventType {
-  PHYSICAL = 'physical',
-  ONLINE = 'online'
-}
+import { EventType } from '../utils/event-type.enum';
 
 export class CreateEventDto {
   @IsNotEmpty({ message: "'Le nom de l'évémement est obligatoire'" })

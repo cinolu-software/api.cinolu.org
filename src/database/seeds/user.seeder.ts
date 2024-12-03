@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
-import { Role } from '../../users/roles/entities/role.entity';
+import { Role } from '../../users/entities/role.entity';
 
 export default class UserSeeder implements Seeder {
   async run(dataSource: DataSource) {
