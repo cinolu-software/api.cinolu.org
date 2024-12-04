@@ -19,7 +19,7 @@ export class Review extends BaseEntity {
   @JoinColumn({ name: 'applicationId' })
   application: Application;
 
-  @ManyToOne(() => User, (user) => user.reviews)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'reviwerId' })
   reviewer: User;
 }

@@ -1,17 +1,22 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../shared/utils/base.entity';
+import { Call } from './call.entity';
+import { CallApplicationReview } from './review.entity';
 import { User } from '../../users/entities/user.entity';
-import { ApplicationReview } from './review.entity';
 
 @Entity()
 export class CallApplication extends BaseEntity {
   @Column({ type: 'json' })
   answers: JSON;
 
-  @OneToMany(() => ApplicationReview, (review) => review.application)
-  reviews: ApplicationReview[];
+  @ManyToOne(() => Call)
+  @JoinColumn()
+  call: Call;
 
-  @ManyToOne(() => User, (user) => user.applications)
-  @JoinColumn({ name: 'userId' })
+  @ManyToOne(() => User)
+  @JoinColumn()
   applicant: User;
+
+  @OneToMany(() => CallApplicationReview, (review) => review.application)
+  reviews: CallApplicationReview[];
 }

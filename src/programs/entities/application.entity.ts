@@ -16,7 +16,7 @@ export class Application extends BaseEntity {
   @JoinColumn({ name: 'programId' })
   program: Program;
 
-  @ManyToOne(() => User, (user) => user.applications)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   applicant: User;
 }

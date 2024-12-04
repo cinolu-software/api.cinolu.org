@@ -4,6 +4,7 @@ import { UpdateCallDto } from '../dto/update-call.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Call } from '../entities/call.entity';
 import { Repository } from 'typeorm';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class CallsService {
@@ -45,6 +46,17 @@ export class CallsService {
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
+    }
+  }
+
+  async addImage(id: string, file: Express.Multer.File): Promise<{ data: Call }> {
+    try {
+      const { data: call } = await this.findOne(id);
+      if (call.image) await fs.unlink(`./uploads/calls/${call.image}`);
+      const data = await this.callRepository.save({ ...call, image: file.filename });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }
 

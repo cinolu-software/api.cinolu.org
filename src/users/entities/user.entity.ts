@@ -3,8 +3,6 @@ import { Detail } from './detail.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Event } from '../../events/entities/event.entity';
-import { Application } from '../../programs/entities/application.entity';
-import { Review } from '../../programs/entities/review.entity';
 import { Role } from './role.entity';
 
 @Entity()
@@ -36,12 +34,6 @@ export class User extends BaseEntity {
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
-
-  @OneToMany(() => Review, (review) => review.reviewer)
-  reviews: Review[];
-
-  @OneToMany(() => Application, (application) => application.applicant)
-  applications: Application[];
 
   @ManyToMany(() => Program)
   @JoinTable({ name: 'user_enrolled_programs' })

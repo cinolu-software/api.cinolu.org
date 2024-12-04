@@ -4,16 +4,16 @@ import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { CreateReviewDto } from '../dto/create-review.dto';
 import { UpdateReviewDto } from '../dto/update-review.dto';
-import { ApplicationReview } from '../entities/review.entity';
+import { CallApplicationReview } from '../entities/review.entity';
 
 @Injectable()
 export class ReviewsService {
   constructor(
-    @InjectRepository(ApplicationReview)
-    private reviewRepository: Repository<ApplicationReview>
+    @InjectRepository(CallApplicationReview)
+    private reviewRepository: Repository<CallApplicationReview>
   ) {}
 
-  async create(user: User, dto: CreateReviewDto): Promise<{ data: ApplicationReview }> {
+  async create(user: User, dto: CreateReviewDto): Promise<{ data: CallApplicationReview }> {
     try {
       const data = await this.reviewRepository.save({
         ...dto,
@@ -26,12 +26,12 @@ export class ReviewsService {
     }
   }
 
-  async findAll(): Promise<{ data: ApplicationReview[] }> {
+  async findAll(): Promise<{ data: CallApplicationReview[] }> {
     const data = await this.reviewRepository.find();
     return { data };
   }
 
-  async findOne(id: string): Promise<{ data: ApplicationReview }> {
+  async findOne(id: string): Promise<{ data: CallApplicationReview }> {
     try {
       const data = await this.reviewRepository.findOneOrFail({
         where: { id },
@@ -43,13 +43,12 @@ export class ReviewsService {
     }
   }
 
-  async update(id: string, dto: UpdateReviewDto): Promise<{ data: ApplicationReview }> {
+  async update(id: string, dto: UpdateReviewDto): Promise<{ data: CallApplicationReview }> {
     try {
       const { data: review } = await this.findOne(id);
       const data = await this.reviewRepository.save({
         ...dto,
-        application: review.application,
-        reviewer: review.reviewer
+        application: review.application
       });
       return { data };
     } catch {
