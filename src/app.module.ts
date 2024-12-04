@@ -13,6 +13,7 @@ import { EventsModule } from './events/events.module';
 import { PartnersModule } from './partners/partners.module';
 import { ProgramsModule } from './programs/programs.module';
 import { UsersModule } from './users/users.module';
+import { CallsModule } from './calls/calls.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     ProgramsModule,
     PartnersModule,
-    EventsModule
+    EventsModule,
+    CallsModule
   ],
   providers: [{ provide: APP_GUARD, useClass: RightsGuard }]
 })
