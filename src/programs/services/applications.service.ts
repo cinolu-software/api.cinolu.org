@@ -20,7 +20,6 @@ export class ApplicationsService {
         program: { id: dto.program },
         applicant: user
       });
-
       return { data };
     } catch {
       throw new BadRequestException('Erreur survenue lors de la création du type');
