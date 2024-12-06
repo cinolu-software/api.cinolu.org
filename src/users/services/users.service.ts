@@ -236,7 +236,7 @@ export class UsersService {
 
   async updatePassword(id: string, password: string): Promise<{ data: User }> {
     try {
-      const { data } = await this.getVerifiedUser(id);
+      const { data } = await this.findOne(id);
       await this.userRepository.update(data.id, { password });
       return { data };
     } catch {

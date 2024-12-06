@@ -107,7 +107,8 @@ export class AuthService {
   async updatePassword(user: User, dto: UpdatePasswordDto): Promise<{ data: User }> {
     try {
       await this.usersService.updatePassword(user.id, dto.password);
-      return { data: user };
+      const { data } = await this.usersService.getVerifiedUser(user.email);
+      return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la mise à jour du mot de passe');
     }
