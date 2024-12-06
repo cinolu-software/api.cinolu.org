@@ -1,6 +1,6 @@
 import { IsOptional } from 'class-validator';
 
-export default class AddDetailsDto {
+export class CreateDetailsDto {
   @IsOptional()
   bio: string;
 

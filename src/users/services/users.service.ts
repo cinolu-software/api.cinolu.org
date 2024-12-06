@@ -4,20 +4,22 @@ import { In, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignupDto, CreateWithGoogleDto } from '../../auth/dto';
 import UpdateProfileDto from '../../auth/dto/update-profile.dto';
-import AddDetailsDto from '../dto/add-details.dto';
+import { CreateDetailsDto } from '../dto/create-detail.dto';
 import CreateUserDto from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Role } from '../entities/role.entity';
 import { User } from '../entities/user.entity';
 import { RolesService } from './roles.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DetailsService } from './details.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private roleService: RolesService,
+    private rolesService: RolesService,
+    private detailsService: DetailsService,
     private eventEmitter: EventEmitter2
   ) {}
 
@@ -113,7 +115,7 @@ export class UsersService {
 
   async signUp(dto: SignupDto): Promise<{ data: User }> {
     try {
-      const { data: userRole } = await this.roleService.findByName('user');
+      const { data: userRole } = await this.rolesService.findByName('user');
       delete dto.password_confirm;
       const data: User = await this.userRepository.save({
         ...dto,
@@ -125,18 +127,14 @@ export class UsersService {
     }
   }
 
-  async addDetails(currentUser: User, dto: AddDetailsDto): Promise<{ data: User }> {
+  async addDetail(currentUser: User, dto: CreateDetailsDto): Promise<{ data: User }> {
     try {
       const { data: user } = await this.findOne(currentUser.id);
       delete user.password;
-      const data = await this.userRepository.save({
-        ...user,
-        detail: {
-          ...dto,
-          expertises: dto?.expertises?.map((id) => ({ id })),
-          positions: dto?.positions?.map((id) => ({ id }))
-        }
-      });
+      const userDetail = { ...user.detail, ...dto };
+      const { data: detail } = await this.detailsService.addDetail(userDetail);
+      await this.userRepository.save({ ...user, detail });
+      const { data } = await this.getVerifiedUser(user.email);
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -166,7 +164,7 @@ export class UsersService {
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
     try {
-      const { data: userRole } = await this.roleService.findByName('user');
+      const { data: userRole } = await this.rolesService.findByName('user');
       const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });

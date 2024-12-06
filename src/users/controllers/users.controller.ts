@@ -4,7 +4,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
-import AddDetailsDto from '../dto/add-details.dto';
+import { CreateDetailsDto } from '../dto/create-detail.dto';
 import { Rights } from '../../shared/decorators/rights.decorators';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
 import { RightsEnum } from '../../shared/enums/rights.enum';
@@ -29,8 +29,8 @@ export class UsersController {
 
   @Post('add-details')
   @Rights(RightsEnum.User)
-  addDetail(@CurrentUser() user: User, @Body() dto: AddDetailsDto): Promise<{ data: User }> {
-    return this.userService.addDetails(user, dto);
+  addDetail(@CurrentUser() user: User, @Body() dto: CreateDetailsDto): Promise<{ data: User }> {
+    return this.userService.addDetail(user, dto);
   }
 
   @Get('coachs')

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { User } from './user.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { Expertise } from './expertise.entity';
@@ -13,7 +13,6 @@ export class Detail extends BaseEntity {
   socials: JSON;
 
   @OneToOne(() => User, (user) => user.detail)
-  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ManyToMany(() => Expertise, (expertise) => expertise.details)

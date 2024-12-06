@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Detail } from './detail.entity';
 import { BaseEntity } from '../../shared/utils/base.entity';
 import { Program } from '../../programs/entities/program.entity';
@@ -40,6 +40,7 @@ export class User extends BaseEntity {
   enrolled_programs: Program[];
 
   @OneToOne(() => Detail, (detail) => detail.user)
+  @JoinColumn()
   detail: Detail;
 
   @OneToMany(() => Event, (event) => event.responsible)

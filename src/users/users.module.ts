@@ -15,11 +15,12 @@ import { RolesService } from './services/roles.service';
 import { Expertise } from './entities/expertise.entity';
 import { Position } from './entities/position.entity';
 import { Role } from './entities/role.entity';
+import { DetailsService } from './services/details.service';
 
 @Module({
   imports: [EmailModule, TypeOrmModule.forFeature([User, Expertise, Position, Role, Detail])],
   controllers: [UsersController, ExpertisesController, PositionsController, RolesController],
-  providers: [UsersService, ExpertisesService, PositionsService, RolesService, UserSubscriber],
+  providers: [UsersService, DetailsService, ExpertisesService, PositionsService, RolesService, UserSubscriber],
   exports: [UsersService]
 })
 export class UsersModule {}
