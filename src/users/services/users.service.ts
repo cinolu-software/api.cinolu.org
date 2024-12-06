@@ -10,13 +10,15 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { Role } from '../entities/role.entity';
 import { User } from '../entities/user.entity';
 import { RolesService } from './roles.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private roleService: RolesService
+    private roleService: RolesService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   private async findWithRole(name: string): Promise<{ data: User[] }> {
@@ -60,6 +62,7 @@ export class UsersService {
         verified_at: new Date(),
         roles: dto.roles?.map((id) => ({ id }))
       });
+      this.eventEmitter.emit('user.created', { user: data, password });
       return { data, password };
     } catch {
       throw new BadRequestException("Erreur lors de la création de l'utilisateur");
@@ -101,7 +104,7 @@ export class UsersService {
   async getVerifiedUser(email: string): Promise<{ data: User }> {
     const data = await this.userRepository.findOneOrFail({
       where: { email, verified_at: Not(IsNull()) },
-      relations: ['roles']
+      relations: ['roles', 'detail']
     });
     const roles = data.roles.map((role) => role.name);
     const user = { ...data, roles } as unknown as User;
@@ -130,8 +133,8 @@ export class UsersService {
         ...user,
         detail: {
           ...dto,
-          expertises: dto?.expertises.map((id) => ({ id })),
-          positions: dto?.positions.map((id) => ({ id }))
+          expertises: dto?.expertises?.map((id) => ({ id })),
+          positions: dto?.positions?.map((id) => ({ id }))
         }
       });
       return { data };
@@ -235,7 +238,7 @@ export class UsersService {
 
   async updatePassword(id: string, password: string): Promise<{ data: User }> {
     try {
-      const { data } = await this.findOne(id);
+      const { data } = await this.getVerifiedUser(id);
       await this.userRepository.update(data.id, { password });
       return { data };
     } catch {

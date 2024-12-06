@@ -9,11 +9,18 @@ import { Rights } from '../../shared/decorators/rights.decorators';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
 import { RightsEnum } from '../../shared/enums/rights.enum';
 import { UsersService } from '../services/users.service';
+import CreateUserDto from '../dto/create-user.dto';
 
 @Controller('users')
 @Rights(RightsEnum.Staff)
 export class UsersController {
   constructor(private userService: UsersService) {}
+
+  @Post('')
+  @Rights(RightsEnum.Staff)
+  addUser(@Body() dto: CreateUserDto): Promise<{ data: User }> {
+    return this.userService.create(dto);
+  }
 
   @Get('')
   findAll(): Promise<{ data: User[] }> {
@@ -22,7 +29,7 @@ export class UsersController {
 
   @Post('add-details')
   @Rights(RightsEnum.User)
-  addDetail(@CurrentUser() user: User, dto: AddDetailsDto): Promise<{ data: User }> {
+  addDetail(@CurrentUser() user: User, @Body() dto: AddDetailsDto): Promise<{ data: User }> {
     return this.userService.addDetails(user, dto);
   }
 
