@@ -47,6 +47,18 @@ export class EventsService {
     return { data: { events, count } };
   }
 
+  async findLatests(): Promise<{ data: Event[] }> {
+    try {
+      const data = await this.eventRepository.find({
+        order: { ended_at: 'DESC' },
+        take: 5
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Erreur lors de la récupération du dernier événement');
+    }
+  }
+
   async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
     try {
       const { data: program } = await this.findOne(id);

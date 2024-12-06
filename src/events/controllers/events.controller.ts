@@ -31,6 +31,12 @@ export class EventsController {
     return this.eventsService.create(createProgramDto);
   }
 
+  @Get('find-latest')
+  @Rights(RightsEnum.Guest)
+  findLatests(): Promise<{ data: Event[] }> {
+    return this.eventsService.findLatests();
+  }
+
   @Get('')
   @Rights(RightsEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
