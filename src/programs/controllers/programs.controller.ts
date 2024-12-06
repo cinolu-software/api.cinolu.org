@@ -30,6 +30,11 @@ export class ProgramsController {
   create(@Body() createProgramDto: CreateProgramDto): Promise<{ data: Program }> {
     return this.programsService.create(createProgramDto);
   }
+  @Get('find-latest')
+  @Rights(RightsEnum.Guest)
+  findLatests(): Promise<{ data: Program[] }> {
+    return this.programsService.findLatests();
+  }
 
   @Get(':id')
   @Rights(RightsEnum.Guest)
