@@ -11,7 +11,6 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Rights } from '../shared/decorators/rights.decorators';
 import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RightsEnum } from '../shared/enums/rights.enum';
-import CreateUserDto from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
@@ -42,12 +41,6 @@ export class AuthController {
   @Rights(RightsEnum.Guest)
   signUp(@Body() dto: SignupDto): Promise<{ data: User }> {
     return this.authService.signUp(dto);
-  }
-
-  @Post('add-user')
-  @Rights(RightsEnum.Staff)
-  addUser(@Body() dto: CreateUserDto): Promise<{ data: User }> {
-    return this.authService.addUser(dto);
   }
 
   @Post('sign-out')

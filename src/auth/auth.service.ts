@@ -9,7 +9,6 @@ import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import CreateUserDto from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/services/users.service';
 
@@ -60,16 +59,6 @@ export class AuthService {
     }
   }
 
-  async addUser(dto: CreateUserDto): Promise<{ data: User }> {
-    try {
-      const { data, password } = await this.usersService.create(dto);
-      this.eventEmitter.emit('user.created', { user: data, password });
-      return { data };
-    } catch {
-      throw new BadRequestException("Erreur lors de la création de l'utilisateur");
-    }
-  }
-
   async verifyEmail(token: string): Promise<{ data: User }> {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: this._jwtSecret });
@@ -117,7 +106,6 @@ export class AuthService {
 
   async updatePassword(user: User, dto: UpdatePasswordDto): Promise<{ data: User }> {
     try {
-      await this.verifyPassword(dto.old_password, user.password);
       await this.usersService.updatePassword(user.id, dto.password);
       return { data: user };
     } catch {
