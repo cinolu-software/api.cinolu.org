@@ -1,10 +1,7 @@
-import { IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import { IsNotEmpty, MinLength } from 'class-validator';
 import { Match } from '../../shared/decorators/match.decorator';
 
 export class UpdatePasswordDto {
-  @IsOptional()
-  old_password: string;
-
   @MinLength(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' })
   password: string;
 
