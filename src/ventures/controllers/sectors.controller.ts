@@ -4,7 +4,7 @@ import { CreateSectorDto } from '../dto/create-sector.dto';
 import { UpdateSectorDto } from '../dto/update-sector.dto';
 import { Sector } from '../entities/sectors.entity';
 
-@Controller('ventures')
+@Controller('sectors')
 export class SectorsController {
   constructor(private readonly sectorsService: SectorsService) {}
 
