@@ -1,12 +1,12 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Detail } from './detail.entity';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Event } from '../../events/entities/event.entity';
 import { Role } from './role.entity';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends AbstractEntity {
   @Column({ unique: true })
   email: string;
 

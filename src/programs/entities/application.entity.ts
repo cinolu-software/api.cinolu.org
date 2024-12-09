@@ -2,10 +2,10 @@ import { Entity, ManyToOne, Column, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Program } from './program.entity';
 import { Review } from './review.entity';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 
 @Entity()
-export class Application extends BaseEntity {
+export class Application extends AbstractEntity {
   @Column({ type: 'json' })
   answers: JSON;
 

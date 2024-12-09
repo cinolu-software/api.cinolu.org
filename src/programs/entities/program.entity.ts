@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Partner } from '../../partners/entities/partner.entity';
 import { Application } from './application.entity';
 import { Category } from './category.entity';
@@ -7,7 +7,7 @@ import { Phase } from './phase.entity';
 import { Type } from './type.entity';
 
 @Entity()
-export class Program extends BaseEntity {
+export class Program extends AbstractEntity {
   @Column()
   name: string;
 
@@ -31,6 +31,9 @@ export class Program extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   prize: string;
+
+  @Column({ type: 'boolean', default: false })
+  is_published: boolean;
 
   @Column({ nullable: true })
   town: string;

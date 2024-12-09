@@ -5,19 +5,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 import { CreateDetailsDto } from '../dto/create-detail.dto';
-import { Rights } from '../../shared/decorators/rights.decorators';
+import { Authorization } from '../../shared/decorators/rights.decorators';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { UsersService } from '../services/users.service';
 import CreateUserDto from '../dto/create-user.dto';
 
 @Controller('users')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post('')
-  @Rights(RightsEnum.Staff)
+  @Authorization(RoleEnum.Staff)
   addUser(@Body() dto: CreateUserDto): Promise<{ data: User }> {
     return this.userService.create(dto);
   }
@@ -28,19 +28,19 @@ export class UsersController {
   }
 
   @Post('add-details')
-  @Rights(RightsEnum.User)
+  @Authorization(RoleEnum.User)
   addDetail(@CurrentUser() user: User, @Body() dto: CreateDetailsDto): Promise<{ data: User }> {
     return this.userService.addDetail(user, dto);
   }
 
   @Get('coachs')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findCoachs(): Promise<{ data: User[] }> {
     return this.userService.findCoachs();
   }
 
   @Get('staff')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findStaff(): Promise<{ data: User[] }> {
     return this.userService.findStaff();
   }
@@ -66,7 +66,7 @@ export class UsersController {
   }
 
   @Post('image-profile')
-  @Rights(RightsEnum.User)
+  @Authorization(RoleEnum.User)
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
@@ -82,7 +82,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Rights(RightsEnum.Admin)
+  @Authorization(RoleEnum.Admin)
   remove(@Param('id') id: string): Promise<void> {
     return this.userService.remove(id);
   }

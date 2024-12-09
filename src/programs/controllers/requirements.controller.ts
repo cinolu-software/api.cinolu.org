@@ -1,24 +1,24 @@
 import { Controller, Post, Body, Patch, Param, Delete, Get } from '@nestjs/common';
 import { RequirementsService } from '../services/requirements.service';
 import { Requirement } from '../entities/requirement.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreateRequirementDto } from '../dto/create-requirement.dto';
 import { UpdateRequirementDto } from '../dto/update-requirement.dto';
 
 @Controller('phase-requirements')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class RequirementsController {
   constructor(private readonly requirementsService: RequirementsService) {}
 
   @Get('')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Requirement[] }> {
     return this.requirementsService.findAll();
   }
 
   @Post('')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   create(@Body() dto: CreateRequirementDto): Promise<{ data: Requirement[] }> {
     return this.requirementsService.create(dto);
   }

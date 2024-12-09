@@ -37,7 +37,11 @@ export class EventsService {
 
   async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     const { page, type, eventType } = queryParams;
-    const query = this.eventRepository.createQueryBuilder('p').leftJoinAndSelect('p.types', 'types');
+    const query = this.eventRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.types', 'types')
+      .leftJoinAndSelect('p.responsible', 'responsible');
+    query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (type) query.andWhere('types.name = :type', { type });
     if (eventType) query.andWhere('event_type = :eventType', { eventType });
     const take: number = 6;
@@ -45,6 +49,16 @@ export class EventsService {
     const events: Event[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();
     const count = await query.getCount();
     return { data: { events, count } };
+  }
+
+  async publish(id: string): Promise<{ data: Event }> {
+    try {
+      await this.eventRepository.update(id, { is_published: true });
+      const { data } = await this.findOne(id);
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la publication de l'événement");
+    }
   }
 
   async findLatests(): Promise<{ data: Event[] }> {
@@ -59,7 +73,7 @@ export class EventsService {
     }
   }
 
-  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
+  async addImage(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
     try {
       const { data: program } = await this.findOne(id);
       if (program.image) await fs.promises.unlink(`./uploads/events/${program.image}`);

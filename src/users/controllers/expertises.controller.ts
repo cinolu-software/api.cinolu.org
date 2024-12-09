@@ -3,11 +3,11 @@ import { ExpertisesService } from '../services/expertises.service';
 import { CreateExpertiseDto } from '../dto/create-expertise.dto';
 import { UpdateExpertiseDto } from '../dto/update-expertise.dto';
 import { Expertise } from '../entities/expertise.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('user-expertises')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class ExpertisesController {
   constructor(private readonly expertisesService: ExpertisesService) {}
 
@@ -17,7 +17,7 @@ export class ExpertisesController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Expertise[] }> {
     return this.expertisesService.findAll();
   }

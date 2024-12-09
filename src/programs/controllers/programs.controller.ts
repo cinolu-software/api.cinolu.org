@@ -13,8 +13,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreateProgramDto } from '../dto/create-program.dto';
 import { UpdateProgramDto } from '../dto/update-program.dto';
 import { Program } from '../entities/program.entity';
@@ -22,7 +22,7 @@ import { ProgramsService } from '../services/programs.service';
 import { QueryParams } from '../utils/query-params.type';
 
 @Controller('programs')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
@@ -31,21 +31,26 @@ export class ProgramsController {
     return this.programsService.create(createProgramDto);
   }
   @Get('find-latest')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findLatests(): Promise<{ data: Program[] }> {
     return this.programsService.findLatests();
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Program }> {
     return this.programsService.findOne(id);
   }
 
   @Get('')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     return this.programsService.findAll(queryParams);
+  }
+
+  @Post('publish/:id')
+  publish(@Param('id') id: string): Promise<{ data: Program }> {
+    return this.programsService.publish(id);
   }
 
   @Post('image/:id')

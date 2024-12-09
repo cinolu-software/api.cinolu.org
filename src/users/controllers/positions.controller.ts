@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PositionsService } from '../services/positions.service';
 import { Position } from '../entities/position.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreatePositionDto } from '../dto/create-position.dto';
 import { UpdatePositionDto } from '../dto/update-position.dto';
 
 @Controller('postions')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class PositionsController {
   constructor(private readonly PostionsService: PositionsService) {}
 
@@ -17,13 +17,13 @@ export class PositionsController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Position[] }> {
     return this.PostionsService.findAll();
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Position }> {
     return this.PostionsService.findOne(id);
   }

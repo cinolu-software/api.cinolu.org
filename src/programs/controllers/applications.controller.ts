@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApplicationsService } from '../services/applications.service';
 import { Application } from '../entities/application.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
+import { Authorization } from '../../shared/decorators/rights.decorators';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { User } from '../../users/entities/user.entity';
 import { CreateApplicationDto } from '../dto/create-application.dto';
 import { UpdateApplicationDto } from '../dto/update-application.dto';
 
 @Controller('program-applications')
-@Rights(RightsEnum.User)
+@Authorization(RoleEnum.User)
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
@@ -19,13 +19,13 @@ export class ApplicationsController {
   }
 
   @Get()
-  @Rights(RightsEnum.Staff)
+  @Authorization(RoleEnum.Staff)
   findAll(): Promise<{ data: Application[] }> {
     return this.applicationsService.findAll();
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Staff)
+  @Authorization(RoleEnum.Staff)
   findOne(@Param('id') id: string): Promise<{ data: Application }> {
     return this.applicationsService.findOne(id);
   }
@@ -36,7 +36,7 @@ export class ApplicationsController {
   }
 
   @Delete(':id')
-  @Rights(RightsEnum.Admin)
+  @Authorization(RoleEnum.Admin)
   remove(@Param('id') id: string): Promise<void> {
     return this.applicationsService.remove(id);
   }

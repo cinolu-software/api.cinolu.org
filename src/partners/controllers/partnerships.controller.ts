@@ -2,12 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CreatePartnershipDto } from '../dto/create-partnership.dto';
 import { UpdatePartnershipDto } from '../dto/update-partnership.dto';
 import { Partnership } from '../entities/partnership.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { PartnershipsService } from '../services/partnerships.service';
 
 @Controller('partnerships')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class PartnershipsController {
   constructor(private readonly partnershipTypesService: PartnershipsService) {}
 
@@ -17,7 +17,7 @@ export class PartnershipsController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Partnership[] }> {
     return this.partnershipTypesService.findAll();
   }

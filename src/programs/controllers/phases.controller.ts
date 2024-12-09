@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PhasesService } from '../services/phases.service';
 import { Phase } from '../entities/phase.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreatePhaseDto } from '../dto/create-phase.dto';
 import { UpdatePhaseDto } from '../dto/update-phase.dto';
 
 @Controller('program-phases')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class PhasesController {
   constructor(private readonly phasesService: PhasesService) {}
 
@@ -17,13 +17,13 @@ export class PhasesController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Phase[] }> {
     return this.phasesService.findAll();
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Phase }> {
     return this.phasesService.findOne(id);
   }

@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Program } from './program.entity';
 import { Requirement } from './requirement.entity';
 import { Document } from './document.entity';
 
 @Entity()
-export class Phase extends BaseEntity {
+export class Phase extends AbstractEntity {
   @Column()
   name: string;
 

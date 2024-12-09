@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { Category } from '../entities/category.entity';
 import { CategoriesService } from '../services/categories.service';
 
 @Controller('program-categories')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -17,13 +17,13 @@ export class CategoriesController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Category[] }> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Category }> {
     return this.categoriesService.findOne(id);
   }

@@ -18,11 +18,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from '../utils/query-params.type';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('events')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
@@ -31,20 +31,25 @@ export class EventsController {
     return this.eventsService.create(createProgramDto);
   }
 
+  @Post('publish/:id')
+  publish(@Param('id') id: string): Promise<{ data: Event }> {
+    return this.eventsService.publish(id);
+  }
+
   @Get('find-latest')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findLatests(): Promise<{ data: Event[] }> {
     return this.eventsService.findLatests();
   }
 
   @Get('')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     return this.eventsService.findAll(queryParams);
   }
 
   @Get(':id')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Event }> {
     return this.eventsService.findOne(id);
   }
@@ -61,7 +66,7 @@ export class EventsController {
     })
   )
   uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Event }> {
-    return this.eventsService.uploadImage(id, file);
+    return this.eventsService.addImage(id, file);
   }
 
   @Patch(':id')

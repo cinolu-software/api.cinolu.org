@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { User } from '../../users/entities/user.entity';
 import { EventType } from './type.entity';
 
 @Entity()
-export class Event extends BaseEntity {
+export class Event extends AbstractEntity {
   @Column()
   name: string;
 
@@ -22,6 +22,9 @@ export class Event extends BaseEntity {
 
   @Column({ type: 'bigint', default: 0 })
   attendees: number;
+
+  @Column({ type: 'boolean', default: false })
+  is_published: boolean;
 
   @Column({ type: 'enum', enum: ['physical', 'online'], default: 'physical' })
   event_type: 'physical' | 'online';

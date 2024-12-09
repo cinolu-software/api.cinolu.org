@@ -1,6 +1,6 @@
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 
 export interface IAuthorizedParams {
-  currentRoles: RightsEnum[];
-  requiredRole: RightsEnum;
+  currentRoles: RoleEnum[];
+  requiredRole: RoleEnum;
 }

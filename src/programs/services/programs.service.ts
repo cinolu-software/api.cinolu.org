@@ -42,6 +42,7 @@ export class ProgramsService {
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.types', 'types')
       .leftJoinAndSelect('p.categories', 'categories');
+    query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (type) query.andWhere('types.name = :type', { type });
     if (category) query.andWhere('categories.name = :category', { category });
     if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });
@@ -84,6 +85,16 @@ export class ProgramsService {
       return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la récupération du programme');
+    }
+  }
+
+  async publish(id: string): Promise<{ data: Program }> {
+    try {
+      await this.programRepository.update(id, { is_published: true });
+      const { data } = await this.findOne(id);
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la publication de l'événement");
     }
   }
 

@@ -4,18 +4,18 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { DocumentsService } from '../services/documents.service';
 import { CreateDocumentDto } from '../dto/create-document.dto';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { UpdateProgramDto } from '../dto/update-program.dto';
 import { Document } from '../entities/document.entity';
 
 @Controller('phase-documents')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Get('')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Document[] }> {
     return this.documentsService.findAll();
   }

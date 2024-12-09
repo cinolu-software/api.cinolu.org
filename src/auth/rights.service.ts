@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { RightsEnum } from '../shared/enums/rights.enum';
+import { RoleEnum } from '../shared/enums/roles.enum';
 import { Ihierarchy } from './types/hierarchy.type';
 import { IAuthorizedParams } from './types/authorized-params.type';
 
@@ -8,17 +8,17 @@ export class RightsService {
   #hierarchies: Ihierarchy[] = [];
 
   constructor() {
-    this.buildRoles([RightsEnum.Guest, RightsEnum.User, RightsEnum.Coach, RightsEnum.Staff, RightsEnum.Admin]);
+    this.buildRoles([RoleEnum.Guest, RoleEnum.User, RoleEnum.Coach, RoleEnum.Staff, RoleEnum.Admin]);
   }
 
-  private buildRoles(roles: RightsEnum[]): void {
+  private buildRoles(roles: RoleEnum[]): void {
     this.#hierarchies = roles.map((role, i) => {
       const priority = ++i;
       return { role, priority };
     });
   }
 
-  private getPriority(role: RightsEnum): number {
+  private getPriority(role: RoleEnum): number {
     const hierarchy = this.#hierarchies.find((h) => h.role === role);
     return hierarchy ? hierarchy.priority : -1;
   }

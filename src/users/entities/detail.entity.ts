@@ -1,11 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { User } from './user.entity';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Expertise } from './expertise.entity';
 import { Position } from './position.entity';
 
 @Entity()
-export class Detail extends BaseEntity {
+export class Detail extends AbstractEntity {
   @Column({ type: 'text' })
   bio: string;
 

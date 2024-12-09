@@ -3,11 +3,11 @@ import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
 import { UpdateRoleDto } from '../dto/update-role.dto';
 import { Role } from '../entities/role.entity';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('roles')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 

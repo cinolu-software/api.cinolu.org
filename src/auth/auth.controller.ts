@@ -8,37 +8,37 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { Rights } from '../shared/decorators/rights.decorators';
+import { Authorization } from '../shared/decorators/rights.decorators';
 import { CurrentUser } from '../shared/decorators/user.decorator';
-import { RightsEnum } from '../shared/enums/rights.enum';
+import { RoleEnum } from '../shared/enums/roles.enum';
 import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
-@Rights(RightsEnum.User)
+@Authorization(RoleEnum.User)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('sign-in')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   @UseGuards(LocalAuthGuard)
   singIn(@Req() req: Request): Promise<{ data: Express.User }> {
     return this.authService.signIn(req);
   }
 
   @Get('sign-in')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   @UseGuards(GoogleAuthGuard)
   signInWithGoogle(): void {}
 
   @Get('google/redirect')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Res() res: Response): Promise<void> {
     return this.authService.signInWithGoogle(res);
   }
 
   @Post('sign-up')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   signUp(@Body() dto: SignupDto): Promise<{ data: User }> {
     return this.authService.signUp(dto);
   }
@@ -54,37 +54,37 @@ export class AuthController {
   }
 
   @Patch('profile')
-  @Rights(RightsEnum.User)
+  @Authorization(RoleEnum.User)
   updateProfile(@CurrentUser() currentUser: User, @Body() data: UpdateProfileDto): Promise<{ data: User }> {
     return this.authService.updateProfile(currentUser, data);
   }
 
   @Patch('update-password')
-  @Rights(RightsEnum.User)
+  @Authorization(RoleEnum.User)
   updatePassword(@CurrentUser() user: User, @Body() dto: UpdatePasswordDto): Promise<{ data: User }> {
     return this.authService.updatePassword(user, dto);
   }
 
   @Post('forgot-password')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   forgotPassword(@Body() dto: forgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(dto);
   }
 
   @Post('verify-email/resend-token')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   resendSignupToken(@Body() dto: { email: string }): Promise<void> {
     return this.authService.resendToken(dto.email);
   }
 
   @Post('verify-email')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   verifyUserEmail(@Body() dto: { token: string }): Promise<{ data: User }> {
     return this.authService.verifyEmail(dto.token);
   }
 
   @Post('reset-password')
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   resetPassword(@Body() dto: ResetPasswordDto): Promise<{ data: User }> {
     return this.authService.resetPassword(dto);
   }

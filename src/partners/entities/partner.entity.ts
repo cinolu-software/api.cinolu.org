@@ -1,10 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../shared/utils/base.entity';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Partnership } from './partnership.entity';
 
 @Entity()
-export class Partner extends BaseEntity {
+export class Partner extends AbstractEntity {
   @Column()
   name: string;
 

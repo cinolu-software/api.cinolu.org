@@ -2,12 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TypesService } from '../services/types.service';
 import { CreateTypeDto } from '../dto/create-type.dto';
 import { UpdateTypeDto } from '../dto/update-type.dto';
-import { Rights } from '../../shared/decorators/rights.decorators';
-import { RightsEnum } from '../../shared/enums/rights.enum';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 import { Type } from '../entities/type.entity';
 
 @Controller('program-types')
-@Rights(RightsEnum.Staff)
+@Authorization(RoleEnum.Staff)
 export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
@@ -17,7 +17,7 @@ export class TypesController {
   }
 
   @Get()
-  @Rights(RightsEnum.Guest)
+  @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Type[] }> {
     return this.typesService.findAll();
   }
