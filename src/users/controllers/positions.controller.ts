@@ -6,7 +6,7 @@ import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreatePositionDto } from '../dto/create-position.dto';
 import { UpdatePositionDto } from '../dto/update-position.dto';
 
-@Controller('postions')
+@Controller('positions')
 @Authorization(RoleEnum.Staff)
 export class PositionsController {
   constructor(private readonly PostionsService: PositionsService) {}
