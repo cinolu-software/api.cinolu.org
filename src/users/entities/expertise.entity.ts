@@ -1,0 +1,15 @@
+import { Column, Entity, ManyToMany } from 'typeorm';
+import { AbstractEntity } from '../../shared/utils/abstract.entity';
+import { Detail } from './detail.entity';
+
+@Entity()
+export class Expertise extends AbstractEntity {
+  @Column()
+  name: string;
+
+  @Column({ type: 'text' })
+  description: string;
+
+  @ManyToMany(() => Detail, (detail) => detail.expertises)
+  details: Detail[];
+}
