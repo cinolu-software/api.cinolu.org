@@ -36,13 +36,23 @@ export class ProgramsService {
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
 
-  async findAll(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
+  async findAll(): Promise<{ data: Program[] }> {
+    const data = await this.programRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.types', 'types')
+      .leftJoinAndSelect('p.categories', 'categories')
+      .orderBy('p.started_at', 'DESC')
+      .getMany();
+    return { data };
+  }
+
+  async findPublished(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     const { page, type, category, hideFinished } = queryParams;
     const query = this.programRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.types', 'types')
-      .leftJoinAndSelect('p.categories', 'categories');
-    query.andWhere('p.is_published = :isPublished', { isPublished: true });
+      .leftJoinAndSelect('p.categories', 'categories')
+      .andWhere('p.is_published = :isPublished', { isPublished: true });
     if (type) query.andWhere('types.name = :type', { type });
     if (category) query.andWhere('categories.name = :category', { category });
     if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });

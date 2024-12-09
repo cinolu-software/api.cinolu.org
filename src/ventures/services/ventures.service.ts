@@ -26,6 +26,11 @@ export class VenturesService {
   }
 
   async findAll(): Promise<{ data: Venture[] }> {
+    const data = await this.ventureRepository.find();
+    return { data };
+  }
+
+  async findPublished(): Promise<{ data: Venture[] }> {
     const data = await this.ventureRepository.find({
       where: { is_published: true }
     });

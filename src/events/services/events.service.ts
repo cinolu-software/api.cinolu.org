@@ -35,7 +35,17 @@ export class EventsService {
     if (program) throw new BadRequestException("l'événement existe déjà");
   }
 
-  async findAll(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
+  async findAll(): Promise<{ data: Event[] }> {
+    const data = await this.eventRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.types', 'types')
+      .leftJoinAndSelect('p.responsible', 'responsible')
+      .orderBy('p.ended_at', 'DESC')
+      .getMany();
+    return { data };
+  }
+
+  async findPublished(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
     const { page, type, eventType } = queryParams;
     const query = this.eventRepository
       .createQueryBuilder('p')

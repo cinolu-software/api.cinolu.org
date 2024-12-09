@@ -43,9 +43,14 @@ export class EventsController {
   }
 
   @Get('')
+  findAll(): Promise<{ data: Event[] }> {
+    return this.eventsService.findAll();
+  }
+
+  @Get('find-published')
   @Authorization(RoleEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
-    return this.eventsService.findAll(queryParams);
+  findPublished(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
+    return this.eventsService.findPublished(queryParams);
   }
 
   @Get(':id')

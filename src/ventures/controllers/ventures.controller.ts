@@ -6,8 +6,11 @@ import { UpdateVentureDto } from '../dto/update-venture.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { Authorization } from '../../shared/decorators/rights.decorators';
+import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('ventures')
+@Authorization(RoleEnum.User)
 export class VenturesController {
   constructor(private readonly venturesService: VenturesService) {}
 
@@ -17,16 +20,25 @@ export class VenturesController {
   }
 
   @Post('publish/:id')
+  @Authorization(RoleEnum.Staff)
   publish(@Param('id') id: string): Promise<{ data: Venture }> {
     return this.venturesService.publish(id);
   }
 
+  @Get('find-published')
+  @Authorization(RoleEnum.Guest)
+  findPublished(): Promise<{ data: Venture[] }> {
+    return this.venturesService.findPublished();
+  }
+
   @Get()
+  @Authorization(RoleEnum.Staff)
   findAll(): Promise<{ data: Venture[] }> {
     return this.venturesService.findAll();
   }
 
   @Get(':id')
+  @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Venture }> {
     return this.venturesService.findOne(id);
   }
@@ -52,6 +64,7 @@ export class VenturesController {
   }
 
   @Delete(':id')
+  @Authorization(RoleEnum.Staff)
   remove(@Param('id') id: string): Promise<void> {
     return this.venturesService.remove(id);
   }

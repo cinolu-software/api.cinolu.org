@@ -43,9 +43,14 @@ export class ProgramsController {
   }
 
   @Get('')
+  findAll(): Promise<{ data: Program[] }> {
+    return this.programsService.findAll();
+  }
+
+  @Get('find-published')
   @Authorization(RoleEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
-    return this.programsService.findAll(queryParams);
+  findPublished(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
+    return this.programsService.findPublished(queryParams);
   }
 
   @Post('publish/:id')
