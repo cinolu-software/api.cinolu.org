@@ -19,6 +19,12 @@ export class VenturesController {
     return this.venturesService.create(dto);
   }
 
+  @Get()
+  @Authorization(RoleEnum.Staff)
+  findAll(): Promise<{ data: Venture[] }> {
+    return this.venturesService.findAll();
+  }
+
   @Post('publish/:id')
   @Authorization(RoleEnum.Staff)
   publish(@Param('id') id: string): Promise<{ data: Venture }> {
@@ -29,12 +35,6 @@ export class VenturesController {
   @Authorization(RoleEnum.Guest)
   findPublished(): Promise<{ data: Venture[] }> {
     return this.venturesService.findPublished();
-  }
-
-  @Get()
-  @Authorization(RoleEnum.Staff)
-  findAll(): Promise<{ data: Venture[] }> {
-    return this.venturesService.findAll();
   }
 
   @Get(':id')

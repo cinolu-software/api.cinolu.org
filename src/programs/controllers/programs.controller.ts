@@ -30,27 +30,28 @@ export class ProgramsController {
   create(@Body() createProgramDto: CreateProgramDto): Promise<{ data: Program }> {
     return this.programsService.create(createProgramDto);
   }
-  @Get('find-latest')
-  @Authorization(RoleEnum.Guest)
-  findLatests(): Promise<{ data: Program[] }> {
-    return this.programsService.findLatests();
-  }
-
-  @Get(':id')
-  @Authorization(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<{ data: Program }> {
-    return this.programsService.findOne(id);
-  }
 
   @Get('')
   findAll(): Promise<{ data: Program[] }> {
     return this.programsService.findAll();
   }
 
+  @Get('find-latest')
+  @Authorization(RoleEnum.Guest)
+  findLatests(): Promise<{ data: Program[] }> {
+    return this.programsService.findLatests();
+  }
+
   @Get('find-published')
   @Authorization(RoleEnum.Guest)
   findPublished(@Query() queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
     return this.programsService.findPublished(queryParams);
+  }
+
+  @Get(':id')
+  @Authorization(RoleEnum.Guest)
+  findOne(@Param('id') id: string): Promise<{ data: Program }> {
+    return this.programsService.findOne(id);
   }
 
   @Post('publish/:id')

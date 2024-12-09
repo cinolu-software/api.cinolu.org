@@ -31,20 +31,15 @@ export class EventsController {
     return this.eventsService.create(createProgramDto);
   }
 
-  @Post('publish/:id')
-  publish(@Param('id') id: string): Promise<{ data: Event }> {
-    return this.eventsService.publish(id);
+  @Get('')
+  findAll(): Promise<{ data: Event[] }> {
+    return this.eventsService.findAll();
   }
 
   @Get('find-latest')
   @Authorization(RoleEnum.Guest)
   findLatests(): Promise<{ data: Event[] }> {
     return this.eventsService.findLatests();
-  }
-
-  @Get('')
-  findAll(): Promise<{ data: Event[] }> {
-    return this.eventsService.findAll();
   }
 
   @Get('find-published')
@@ -57,6 +52,11 @@ export class EventsController {
   @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Event }> {
     return this.eventsService.findOne(id);
+  }
+
+  @Post('publish/:id')
+  publish(@Param('id') id: string): Promise<{ data: Event }> {
+    return this.eventsService.publish(id);
   }
 
   @Post('image/:id')
