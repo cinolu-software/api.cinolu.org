@@ -50,7 +50,7 @@ export class PositionsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.positionRepository.delete(id);
+      await this.positionRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }

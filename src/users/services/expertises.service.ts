@@ -50,7 +50,7 @@ export class ExpertisesService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.expertisesRepository.delete(id);
+      await this.expertisesRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
