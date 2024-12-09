@@ -63,7 +63,7 @@ export class ProgramsService {
     return { data: { programs, count } };
   }
 
-  async findLatests(): Promise<{ data: Program[] }> {
+  async findRecent(): Promise<{ data: Program[] }> {
     try {
       const data = await this.programRepository.find({
         order: { ended_at: 'DESC' },

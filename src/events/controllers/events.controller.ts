@@ -36,10 +36,10 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  @Get('find-latest')
+  @Get('find-recent')
   @Authorization(RoleEnum.Guest)
-  findLatests(): Promise<{ data: Event[] }> {
-    return this.eventsService.findLatests();
+  findRecent(): Promise<{ data: Event[] }> {
+    return this.eventsService.findRecent();
   }
 
   @Get('find-published')

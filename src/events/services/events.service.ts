@@ -71,7 +71,7 @@ export class EventsService {
     }
   }
 
-  async findLatests(): Promise<{ data: Event[] }> {
+  async findRecent(): Promise<{ data: Event[] }> {
     try {
       const data = await this.eventRepository.find({
         order: { ended_at: 'DESC' },

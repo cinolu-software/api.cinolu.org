@@ -36,10 +36,10 @@ export class ProgramsController {
     return this.programsService.findAll();
   }
 
-  @Get('find-latest')
+  @Get('find-recent')
   @Authorization(RoleEnum.Guest)
-  findLatests(): Promise<{ data: Program[] }> {
-    return this.programsService.findLatests();
+  findRecent(): Promise<{ data: Program[] }> {
+    return this.programsService.findRecent();
   }
 
   @Get('find-published')
