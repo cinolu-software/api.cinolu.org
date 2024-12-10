@@ -1,7 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Sector } from './sectors.entity';
 import { StageEnum } from '../enum/stage.enum';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Venture extends AbstractEntity {
@@ -32,4 +33,8 @@ export class Venture extends AbstractEntity {
   @ManyToMany(() => Sector, (sector) => sector.ventures)
   @JoinTable({ name: 'ventures_sectors' })
   sectors: Sector[];
+
+  @ManyToOne(() => User, (user) => user.ventures)
+  @JoinColumn()
+  user: User;
 }
