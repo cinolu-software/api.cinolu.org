@@ -8,6 +8,8 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Authorization } from '../../shared/decorators/rights.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
+import { CurrentUser } from '../../shared/decorators/user.decorator';
+import { User } from '../../users/entities/user.entity';
 
 @Controller('ventures')
 @Authorization(RoleEnum.User)
@@ -15,8 +17,8 @@ export class VenturesController {
   constructor(private readonly venturesService: VenturesService) {}
 
   @Post()
-  create(@Body() dto: CreateVentureDto): Promise<{ data: Venture }> {
-    return this.venturesService.create(dto);
+  create(@CurrentUser() user: User, @Body() dto: CreateVentureDto): Promise<{ data: Venture }> {
+    return this.venturesService.create(user, dto);
   }
 
   @Get()
