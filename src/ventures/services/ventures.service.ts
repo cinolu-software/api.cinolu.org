@@ -27,6 +27,17 @@ export class VenturesService {
     }
   }
 
+  async findByUser(user: User): Promise<{ data: Venture[] }> {
+    try {
+      const data = await this.ventureRepository.find({
+        where: { user: { id: user.id } }
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Une erreur est survenue sur le serveur');
+    }
+  }
+
   async findAll(): Promise<{ data: Venture[] }> {
     const data = await this.ventureRepository.find();
     return { data };
@@ -74,11 +85,14 @@ export class VenturesService {
 
   async update(id: string, dto: UpdateVentureDto): Promise<{ data: Venture }> {
     try {
-      const { data: venture } = await this.findOne(id);
+      const venture = await this.ventureRepository.findOneOrFail({
+        where: { id }
+      });
+
       await this.ventureRepository.save({
-        ...venture,
+        id: venture.id,
         ...dto,
-        sectors: dto?.sectors?.map((id) => ({ id })) ?? venture.sectors
+        sectors: dto?.sectors?.map((id) => ({ id }))
       });
       const { data } = await this.findOne(id);
       return { data };
