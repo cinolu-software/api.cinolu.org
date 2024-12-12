@@ -9,7 +9,7 @@ export class Venture extends AbstractEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   image: string;
 
   @Column()
