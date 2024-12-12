@@ -76,7 +76,6 @@ export class VenturesService {
     try {
       const { data: venture } = await this.findOne(id);
       await this.ventureRepository.save({
-        ...venture,
         ...dto,
         sectors: dto?.sectors?.map((id) => ({ id })) ?? venture.sectors
       });

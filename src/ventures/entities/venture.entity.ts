@@ -12,7 +12,7 @@ export class Venture extends AbstractEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column()
+  @Column({ type: 'text' })
   pitch: string;
 
   @Column({ type: 'boolean', default: false })
