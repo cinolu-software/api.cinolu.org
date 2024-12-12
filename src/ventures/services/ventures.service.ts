@@ -43,7 +43,7 @@ export class VenturesService {
     try {
       const data = await this.ventureRepository.findOneOrFail({
         where: { id },
-        relations: ['sectors']
+        relations: ['sectors', 'user']
       });
       return { data };
     } catch {
