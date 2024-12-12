@@ -33,7 +33,7 @@ export class VenturesController {
     return this.venturesService.publish(id);
   }
 
-  @Post('find-by-user')
+  @Get('find-by-user')
   @Authorization(RoleEnum.Guest)
   findByUser(@CurrentUser() user: User): Promise<{ data: Venture[] }> {
     return this.venturesService.findByUser(user);
