@@ -36,14 +36,15 @@ export class ProgramsService {
     if (program) throw new BadRequestException('Le programme existe déjà');
   }
 
-  async findAll(): Promise<{ data: Program[] }> {
-    const data = await this.programRepository
+  async findAll(): Promise<{ data: { programs: Program[]; count: number } }> {
+    const query = this.programRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.types', 'types')
       .leftJoinAndSelect('p.categories', 'categories')
-      .orderBy('p.started_at', 'DESC')
-      .getMany();
-    return { data };
+      .orderBy('p.started_at', 'DESC');
+    const programs = await query.getMany();
+    const count = await query.getCount();
+    return { data: { programs, count } };
   }
 
   async findPublished(queryParams: QueryParams): Promise<{ data: { programs: Program[]; count: number } }> {
