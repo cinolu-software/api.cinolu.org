@@ -68,6 +68,7 @@ export class ProgramsService {
     try {
       const data = await this.programRepository.find({
         order: { ended_at: 'DESC' },
+        relations: ['types'],
         where: { is_published: true },
         take: 3
       });

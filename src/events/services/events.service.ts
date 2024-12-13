@@ -76,6 +76,7 @@ export class EventsService {
     try {
       const data = await this.eventRepository.find({
         order: { ended_at: 'DESC' },
+        relations: ['types'],
         where: { is_published: true },
         take: 3
       });
