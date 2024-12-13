@@ -32,7 +32,7 @@ export class EventsController {
   }
 
   @Get('')
-  findAll(): Promise<{ data: Event[] }> {
+  findAll(): Promise<{ data: { events: Event[]; count: number } }> {
     return this.eventsService.findAll();
   }
 
