@@ -4,6 +4,7 @@ import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Program } from '../../programs/entities/program.entity';
 import { Event } from '../../events/entities/event.entity';
 import { Role } from './role.entity';
+import { Venture } from '../../ventures/entities/venture.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -45,4 +46,7 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Event, (event) => event.responsible)
   events: Event[];
+
+  @OneToMany(() => Venture, (venture) => venture.user)
+  ventures: Venture[];
 }

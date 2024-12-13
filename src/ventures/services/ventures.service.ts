@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateVentureDto } from '../dto/create-venture.dto';
 import { UpdateVentureDto } from '../dto/update-venture.dto';
 import * as fs from 'fs-extra';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class VenturesService {
@@ -13,11 +14,23 @@ export class VenturesService {
     private ventureRepository: Repository<Venture>
   ) {}
 
-  async create(dto: CreateVentureDto): Promise<{ data: Venture }> {
+  async create(user: User, dto: CreateVentureDto): Promise<{ data: Venture }> {
     try {
       const data = await this.ventureRepository.save({
         ...dto,
+        user: { id: user.id },
         sectors: dto.sectors.map((id) => ({ id }))
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException('Une erreur est survenue sur le serveur');
+    }
+  }
+
+  async findByUser(user: User): Promise<{ data: Venture[] }> {
+    try {
+      const data = await this.ventureRepository.find({
+        where: { user: { id: user.id } }
       });
       return { data };
     } catch {
@@ -41,7 +54,7 @@ export class VenturesService {
     try {
       const data = await this.ventureRepository.findOneOrFail({
         where: { id },
-        relations: ['sectors']
+        relations: ['sectors', 'user']
       });
       return { data };
     } catch {
@@ -72,11 +85,14 @@ export class VenturesService {
 
   async update(id: string, dto: UpdateVentureDto): Promise<{ data: Venture }> {
     try {
-      const { data: venture } = await this.findOne(id);
+      const venture = await this.ventureRepository.findOneOrFail({
+        where: { id }
+      });
+
       await this.ventureRepository.save({
-        ...venture,
+        id: venture.id,
         ...dto,
-        sectors: dto?.sectors?.map((id) => ({ id })) ?? venture.sectors
+        sectors: dto?.sectors?.map((id) => ({ id }))
       });
       const { data } = await this.findOne(id);
       return { data };
