@@ -32,7 +32,7 @@ export class ProgramsController {
   }
 
   @Get('')
-  findAll(): Promise<{ data: { programs: Program[]; count: number } }> {
+  findAll(): Promise<{ data: Program[] }> {
     return this.programsService.findAll();
   }
 
