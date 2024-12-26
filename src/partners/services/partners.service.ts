@@ -72,7 +72,7 @@ export class PartnersService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.partnerRepository.delete(id);
+      await this.partnerRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Une erreur est surnue lors de la suppression');
     }
