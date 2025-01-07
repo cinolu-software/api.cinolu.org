@@ -25,10 +25,21 @@ export class PartnersService {
     }
   }
 
-  async findAll(): Promise<{ data: Partner[] }> {
-    const data = await this.partnerRepository.find({
+  async findAll(): Promise<{ data: { [key: string]: Partner[] } }> {
+    const partners = await this.partnerRepository.find({
       relations: ['partnerships']
     });
+
+    const data = partners.reduce((acc, partner) => {
+      partner.partnerships.forEach(({ name }) => {
+        acc[name] = acc[name] || [];
+        if (!acc[name].includes(partner)) {
+          acc[name].push(partner);
+        }
+      });
+      return acc;
+    }, {});
+
     return { data };
   }
 

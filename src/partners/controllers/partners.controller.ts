@@ -21,7 +21,7 @@ export class PartnersController {
 
   @Get()
   @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Partner[] }> {
+  findAll(): Promise<{ data: { [key: string]: Partner[] } }> {
     return this.partnersService.findAll();
   }
 
