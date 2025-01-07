@@ -21,42 +21,42 @@ import { Project } from '../entities/project.entity';
 import { ProjectsService } from '../services/projects.service';
 import { QueryParams } from '../utils/query-params.type';
 
-@Controller('programs')
+@Controller('projects')
 @Authorization(RoleEnum.Staff)
 export class ProjectsController {
-  constructor(private readonly programsService: ProjectsService) {}
+  constructor(private readonly projectsService: ProjectsService) {}
 
   @Post('')
   create(@Body() createProgramDto: CreateProgramDto): Promise<{ data: Project }> {
-    return this.programsService.create(createProgramDto);
+    return this.projectsService.create(createProgramDto);
   }
 
   @Get('')
   findAll(): Promise<{ data: Project[] }> {
-    return this.programsService.findAll();
+    return this.projectsService.findAll();
   }
 
   @Get('find-recent')
   @Authorization(RoleEnum.Guest)
   findRecent(): Promise<{ data: Project[] }> {
-    return this.programsService.findRecent();
+    return this.projectsService.findRecent();
   }
 
   @Get('find-published')
   @Authorization(RoleEnum.Guest)
   findPublished(@Query() queryParams: QueryParams): Promise<{ data: { programs: Project[]; count: number } }> {
-    return this.programsService.findPublished(queryParams);
+    return this.projectsService.findPublished(queryParams);
   }
 
   @Get(':id')
   @Authorization(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<{ data: Project }> {
-    return this.programsService.findOne(id);
+    return this.projectsService.findOne(id);
   }
 
   @Post('publish/:id')
   publish(@Param('id') id: string): Promise<{ data: Project }> {
-    return this.programsService.publish(id);
+    return this.projectsService.publish(id);
   }
 
   @Post('image/:id')
@@ -71,21 +71,21 @@ export class ProjectsController {
     })
   )
   addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Project }> {
-    return this.programsService.addImage(id, file);
+    return this.projectsService.addImage(id, file);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: Project }> {
-    return this.programsService.update(id, updateProgramDto);
+    return this.projectsService.update(id, updateProgramDto);
   }
 
   @Post('restore/:id')
   restore(@Param('id') id: string): Promise<{ data: Project }> {
-    return this.programsService.restore(id);
+    return this.projectsService.restore(id);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
-    return this.programsService.remove(id);
+    return this.projectsService.remove(id);
   }
 }
