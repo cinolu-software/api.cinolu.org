@@ -25,7 +25,7 @@ export class PartnersService {
     }
   }
 
-  async findAll(): Promise<{ data: { [key: string]: Partner[] } }> {
+  async findAll(): Promise<{ data: Record<string, Partner[]> }> {
     const partners = await this.partnerRepository.find({
       relations: ['partnerships']
     });
