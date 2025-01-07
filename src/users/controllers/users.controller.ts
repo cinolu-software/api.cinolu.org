@@ -11,6 +11,7 @@ import { RoleEnum } from '../../shared/enums/roles.enum';
 import { UsersService } from '../services/users.service';
 import CreateUserDto from '../dto/create-user.dto';
 
+
 @Controller('users')
 @Authorization(RoleEnum.Staff)
 export class UsersController {

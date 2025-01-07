@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Detail } from './detail.entity';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Program } from '../../programs/entities/program.entity';
-import { Event } from '../../events/entities/event.entity';
 import { Role } from './role.entity';
 import { Venture } from '../../ventures/entities/venture.entity';
+import { Event } from '../../activities/events/entities/event.entity';
+import { Project } from '../../activities/projects/entities/project.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -36,9 +36,9 @@ export class User extends AbstractEntity {
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
 
-  @ManyToMany(() => Program)
-  @JoinTable({ name: 'user_enrolled_programs' })
-  enrolled_programs: Program[];
+  @ManyToMany(() => Project)
+  @JoinTable({ name: 'user_enrolled_projects' })
+  enrolled_projects: Project[];
 
   @OneToOne(() => Detail, (detail) => detail.user)
   @JoinColumn()

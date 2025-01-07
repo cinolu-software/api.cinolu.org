@@ -9,11 +9,12 @@ import { AuthModule } from './auth/auth.module';
 import { AuthorizationGuard } from './auth/guards/authorization.guard';
 import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './email/email.module';
-import { EventsModule } from './events/events.module';
+import { EventsModule } from './activities/events/events.module';
 import { PartnersModule } from './partners/partners.module';
-import { ProgramsModule } from './programs/programs.module';
+import { ProjectsModule } from './activities/projects/projects.module';
 import { UsersModule } from './users/users.module';
 import { VenturesModule } from './ventures/ventures.module';
+import { ProgramsModule } from './programs/programs.module';
 
 @Module({
   imports: [
@@ -37,10 +38,11 @@ import { VenturesModule } from './ventures/ventures.module';
     UsersModule,
     EmailModule,
     DatabaseModule,
-    ProgramsModule,
+    ProjectsModule,
     PartnersModule,
     EventsModule,
-    VenturesModule
+    VenturesModule,
+    ProgramsModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthorizationGuard }]
 })

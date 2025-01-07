@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Program } from '../../programs/entities/program.entity';
+import { Project } from '../../activities/projects/entities/project.entity';
 import { Partnership } from './partnership.entity';
 
 @Entity()
@@ -21,6 +21,6 @@ export class Partner extends AbstractEntity {
   @JoinTable({ name: 'partner_partnerships' })
   partnerships: Partnership[];
 
-  @ManyToMany(() => Program, (program) => program.partners)
-  programs: Program[];
+  @ManyToMany(() => Project, (program) => program.partners)
+  projects: Project[];
 }
