@@ -3,8 +3,8 @@ import { Detail } from './detail.entity';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Role } from './role.entity';
 import { Venture } from '../../ventures/entities/venture.entity';
-import { Event } from '../../activities/events/entities/event.entity';
-import { Project } from '../../activities/projects/entities/project.entity';
+import { Event } from '../../programs/activities/events/entities/event.entity';
+import { Project } from '../../programs/activities/projects/entities/project.entity';
 
 @Entity()
 export class User extends AbstractEntity {

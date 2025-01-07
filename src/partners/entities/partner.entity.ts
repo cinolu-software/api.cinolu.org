@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Project } from '../../activities/projects/entities/project.entity';
+import { Project } from '../../programs/activities/projects/entities/project.entity';
 import { Partnership } from './partnership.entity';
 
 @Entity()
