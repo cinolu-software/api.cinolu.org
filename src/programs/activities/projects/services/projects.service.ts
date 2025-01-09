@@ -48,7 +48,7 @@ export class ProjectsService {
     return { data };
   }
 
-  async findPublished(queryParams: QueryParams): Promise<{ data: { programs: Project[]; count: number } }> {
+  async findPublished(queryParams: QueryParams): Promise<{ data: { projects: Project[]; count: number } }> {
     const { page, type, category, hideFinished } = queryParams;
     const query = this.programRepository
       .createQueryBuilder('p')
@@ -60,9 +60,9 @@ export class ProjectsService {
     if (hideFinished) query.andWhere('p.ended_at > :now', { now: new Date() });
     const take: number = 9;
     const skip = ((page || 1) - 1) * take;
-    const programs: Project[] = await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getMany();
+    const projects: Project[] = await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getMany();
     const count = await query.getCount();
-    return { data: { programs, count } };
+    return { data: { projects, count } };
   }
 
   async findRecent(): Promise<{ data: Project[] }> {

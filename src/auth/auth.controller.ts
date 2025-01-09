@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignupDto } from './dto/sign-up.dto';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
@@ -37,12 +36,6 @@ export class AuthController {
     return this.authService.signInWithGoogle(res);
   }
 
-  @Post('sign-up')
-  @Authorization(RoleEnum.Guest)
-  signUp(@Body() dto: SignupDto): Promise<{ data: User }> {
-    return this.authService.signUp(dto);
-  }
-
   @Post('sign-out')
   signOut(@Req() req: Request) {
     return this.authService.signOut(req);
@@ -69,18 +62,6 @@ export class AuthController {
   @Authorization(RoleEnum.Guest)
   forgotPassword(@Body() dto: forgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(dto);
-  }
-
-  @Post('verify-email/resend-token')
-  @Authorization(RoleEnum.Guest)
-  resendSignupToken(@Body() dto: { email: string }): Promise<void> {
-    return this.authService.resendToken(dto.email);
-  }
-
-  @Post('verify-email')
-  @Authorization(RoleEnum.Guest)
-  verifyUserEmail(@Body() dto: { token: string }): Promise<{ data: User }> {
-    return this.authService.verifyEmail(dto.token);
   }
 
   @Post('reset-password')

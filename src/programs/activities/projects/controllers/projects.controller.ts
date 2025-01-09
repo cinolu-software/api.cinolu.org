@@ -44,7 +44,7 @@ export class ProjectsController {
 
   @Get('find-published')
   @Authorization(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<{ data: { programs: Project[]; count: number } }> {
+  findPublished(@Query() queryParams: QueryParams): Promise<{ data: { projects: Project[]; count: number } }> {
     return this.projectsService.findPublished(queryParams);
   }
 
