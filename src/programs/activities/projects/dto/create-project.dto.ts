@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsArray, IsNotEmpty } from 'class-validator';
 
-export class CreateProgramDto {
+export class CreateProjectDto {
   @IsNotEmpty({ message: 'Le nom du programme est obligatoire' })
   name: string;
 
@@ -29,7 +29,7 @@ export class CreateProgramDto {
   town: string;
 
   @IsNotEmpty()
-  program: string;
+  project: string;
 
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];

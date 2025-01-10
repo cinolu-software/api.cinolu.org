@@ -15,8 +15,8 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Authorization } from '../../../../shared/decorators/rights.decorators';
 import { RoleEnum } from '../../../../shared/enums/roles.enum';
-import { CreateProgramDto } from '../dto/create-project.dto';
-import { UpdateProgramDto } from '../dto/update-project.dto';
+import { CreateProjectDto } from '../dto/create-project.dto';
+import { UpdateProjectDto } from '../dto/update-project.dto';
 import { Project } from '../entities/project.entity';
 import { ProjectsService } from '../services/projects.service';
 import { QueryParams } from '../utils/query-params.type';
@@ -27,8 +27,8 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post('')
-  create(@Body() createProgramDto: CreateProgramDto): Promise<{ data: Project }> {
-    return this.projectsService.create(createProgramDto);
+  create(@Body() dto: CreateProjectDto): Promise<{ data: Project }> {
+    return this.projectsService.create(dto);
   }
 
   @Get('')
@@ -63,7 +63,7 @@ export class ProjectsController {
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
-        destination: './uploads/programs',
+        destination: './uploads/projects',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
@@ -75,8 +75,8 @@ export class ProjectsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: Project }> {
-    return this.projectsService.update(id, updateProgramDto);
+  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<{ data: Project }> {
+    return this.projectsService.update(id, dto);
   }
 
   @Post('restore/:id')

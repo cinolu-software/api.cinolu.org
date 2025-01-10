@@ -6,7 +6,7 @@ import { DocumentsService } from '../services/documents.service';
 import { CreateDocumentDto } from '../dto/create-document.dto';
 import { Authorization } from '../../../../../shared/decorators/rights.decorators';
 import { RoleEnum } from '../../../../../shared/enums/roles.enum';
-import { UpdateProgramDto } from '../../dto/update-project.dto';
+import { UpdateProjectDto } from '../../dto/update-project.dto';
 import { Document } from '../entities/document.entity';
 
 @Controller('phase-documents')
@@ -46,8 +46,8 @@ export class DocumentsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<{ data: Document }> {
-    return this.documentsService.update(id, updateProgramDto);
+  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<{ data: Document }> {
+    return this.documentsService.update(id, dto);
   }
 
   @Post('restore/:id')
