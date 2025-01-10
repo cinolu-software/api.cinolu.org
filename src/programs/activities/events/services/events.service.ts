@@ -79,7 +79,7 @@ export class EventsService {
         order: { ended_at: 'DESC' },
         relations: ['types'],
         where: { is_published: true },
-        take: 3
+        take: 5
       });
       return { data };
     } catch {
