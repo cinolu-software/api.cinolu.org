@@ -25,11 +25,10 @@ export class PartnersService {
     }
   }
 
-  async findAll(): Promise<{ data: Record<string, Partner[]> }> {
+  async findGrouped(): Promise<{ data: Record<string, Partner[]> }> {
     const partners = await this.partnerRepository.find({
       relations: ['partnerships']
     });
-
     const data = partners.reduce((acc, partner) => {
       partner.partnerships.forEach(({ name }) => {
         acc[name] = acc[name] || [];
@@ -40,6 +39,13 @@ export class PartnersService {
       return acc;
     }, {});
 
+    return { data };
+  }
+
+  async findAll(): Promise<{ data: Partner[] }> {
+    const data = await this.partnerRepository.find({
+      relations: ['partnerships']
+    });
     return { data };
   }
 

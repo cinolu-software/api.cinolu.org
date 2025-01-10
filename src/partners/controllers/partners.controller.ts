@@ -19,9 +19,14 @@ export class PartnersController {
     return this.partnersService.create(dto);
   }
 
-  @Get()
+  @Get('find-grouped')
   @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Record<string, Partner[]> }> {
+  findGrouped(): Promise<{ data: Record<string, Partner[]> }> {
+    return this.partnersService.findGrouped();
+  }
+
+  @Get()
+  findAll(): Promise<{ data: Partner[] }> {
     return this.partnersService.findAll();
   }
 
