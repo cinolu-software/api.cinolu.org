@@ -29,7 +29,7 @@ export class CreateProjectDto {
   town: string;
 
   @IsNotEmpty()
-  project: string;
+  program: string;
 
   @IsArray({ message: 'Le type est obligatoire' })
   types: string[];

@@ -19,7 +19,7 @@ export class ProjectsService {
       await this.throwIfExist(dto.name);
       const data = await this.projectRepository.save({
         ...dto,
-        project: { id: dto.project },
+        program: { id: dto.program },
         categories: dto.categories.map((category) => ({ id: category })),
         types: dto.types.map((type) => ({ id: type })),
         partners: dto.partners.map((id) => ({ id }))
@@ -116,7 +116,7 @@ export class ProjectsService {
       const data = await this.projectRepository.save({
         id,
         ...dto,
-        project: { id: dto.project },
+        program: { id: dto.program },
         categories: dto.categories.map((category) => ({ id: category })) || project.categories,
         types: dto?.types.map((type) => ({ id: type })) || project.types,
         partners: dto?.partners.map((id) => ({ id })) || project.partners
