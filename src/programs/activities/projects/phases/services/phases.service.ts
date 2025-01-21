@@ -33,7 +33,7 @@ export class PhasesService {
     try {
       const data = await this.phaseRepository.findOneOrFail({
         where: { id },
-        relations: ['documents', 'program', 'requirements']
+        relations: ['documents', 'project', 'requirements']
       });
       return { data };
     } catch {
@@ -50,7 +50,8 @@ export class PhasesService {
         project: phase.project
       });
       return { data };
-    } catch {
+    } catch(e) {
+      console.log(e)
       throw new BadRequestException('Erreur survenue lors de la modification de la phase');
     }
   }
