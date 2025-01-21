@@ -35,7 +35,7 @@ export class ApplicationsService {
     try {
       const data = await this.applicationRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'applicant']
+        relations: ['project', 'applicant']
       });
       return { data };
     } catch {
