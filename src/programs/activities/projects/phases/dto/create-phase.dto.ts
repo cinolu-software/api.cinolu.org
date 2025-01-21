@@ -17,7 +17,7 @@ export class CreatePhaseDto {
   ended_at: Date;
 
   @IsNotEmpty()
-  program: string;
+  project: string;
 
   @IsOptional()
   form: JSON;

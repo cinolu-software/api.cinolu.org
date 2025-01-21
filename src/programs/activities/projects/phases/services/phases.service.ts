@@ -16,7 +16,7 @@ export class PhasesService {
     try {
       const data = await this.phaseRepository.save({
         ...dto,
-        program: { id: dto.program }
+        project: { id: dto.project }
       });
       return { data };
     } catch {
