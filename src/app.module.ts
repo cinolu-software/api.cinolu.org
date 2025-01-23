@@ -9,14 +9,14 @@ import { AuthModule } from './auth/auth.module';
 import { AuthorizationGuard } from './auth/guards/authorization.guard';
 import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './email/email.module';
-import { EventsModule } from './programs/activities/events/events.module';
+import { EventsModule } from './programs/events/events.module';
 import { PartnersModule } from './partners/partners.module';
-import { ProjectsModule } from './programs/activities/projects/projects.module';
+import { ProjectsModule } from './programs/projects/projects.module';
 import { UsersModule } from './users/users.module';
 import { VenturesModule } from './ventures/ventures.module';
 import { ProgramsModule } from './programs/programs.module';
-import { PhasesModule } from './programs/activities/projects/phases/phases.module';
-import { ApplicationsModule } from './programs/activities/projects/applications/applications.module';
+import { PhasesModule } from './programs/projects/phases/phases.module';
+import { ApplicationsModule } from './programs/projects/applications/applications.module';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Project } from '../activities/projects/entities/project.entity';
-import { Event } from '../activities/events/entities/event.entity';
+import { Project } from '../projects/entities/project.entity';
+import { Event } from '../events/entities/event.entity';
 
 @Entity()
 export class Program extends AbstractEntity {

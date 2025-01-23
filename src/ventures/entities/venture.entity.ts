@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Sector } from './sectors.entity';
+import { Sector } from '../sectors/entities/sector.entity';
 import { StageEnum } from '../enum/stage.enum';
 import { User } from '../../users/entities/user.entity';
 

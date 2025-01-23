@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
-import { Detail } from './detail.entity';
+import { Detail } from '../details/entities/detail.entity';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
-import { Role } from './role.entity';
+import { Role } from '../roles/entities/role.entity';
 import { Venture } from '../../ventures/entities/venture.entity';
-import { Event } from '../../programs/activities/events/entities/event.entity';
-import { Project } from '../../programs/activities/projects/entities/project.entity';
+import { Event } from '../../programs/events/entities/event.entity';
+import { Project } from '../../programs/projects/entities/project.entity';
 
 @Entity()
 export class User extends AbstractEntity {
