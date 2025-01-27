@@ -5,6 +5,8 @@ import { Role } from '../roles/entities/role.entity';
 import { Venture } from '../../ventures/entities/venture.entity';
 import { Event } from '../../programs/events/entities/event.entity';
 import { Project } from '../../programs/projects/entities/project.entity';
+import { Post } from '../../blog/posts/entities/post.entity';
+import { Comment } from '../../blog/comments/entities/comment.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -31,6 +33,12 @@ export class User extends AbstractEntity {
 
   @Column({ type: 'datetime', nullable: true, default: null })
   verified_at: Date;
+
+  @OneToMany(() => Post, (post) => post.author)
+  posts: Post[];
+
+  @OneToMany(() => Comment, (comment) => comment.by)
+  comments: Comment[];
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({ name: 'user_roles' })

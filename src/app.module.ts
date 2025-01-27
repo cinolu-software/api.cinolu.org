@@ -15,8 +15,8 @@ import { ProjectsModule } from './programs/projects/projects.module';
 import { UsersModule } from './users/users.module';
 import { VenturesModule } from './ventures/ventures.module';
 import { ProgramsModule } from './programs/programs.module';
-import { PhasesModule } from './programs/projects/phases/phases.module';
 import { ApplicationsModule } from './programs/projects/applications/applications.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -45,8 +45,8 @@ import { ApplicationsModule } from './programs/projects/applications/application
     EventsModule,
     VenturesModule,
     ProgramsModule,
-    PhasesModule,
-    ApplicationsModule
+    ApplicationsModule,
+    BlogModule
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthorizationGuard }]
 })

@@ -8,6 +8,7 @@ import { ExpertisesModule } from './expertises/expertises.module';
 import { PositionsModule } from './positions/positions.module';
 import { RolesModule } from './roles/roles.module';
 import { DetailsModule } from './details/details.module';
+import { UserSubscriber } from './subscribers/user.subscriber';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { DetailsModule } from './details/details.module';
     DetailsModule
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UserSubscriber],
   exports: [UsersService]
 })
 export class UsersModule {}

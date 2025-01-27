@@ -9,12 +9,12 @@ import { Repository } from 'typeorm';
 export class ExpertisesService {
   constructor(
     @InjectRepository(Expertise)
-    private expertisesRepository: Repository<Expertise>
+    private expertiseRepository: Repository<Expertise>
   ) {}
 
   async create(dto: CreateExpertiseDto): Promise<{ data: Expertise }> {
     try {
-      const data = await this.expertisesRepository.save({ ...dto });
+      const data = await this.expertiseRepository.save({ ...dto });
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -22,13 +22,13 @@ export class ExpertisesService {
   }
 
   async findAll(): Promise<{ data: Expertise[] }> {
-    const data = await this.expertisesRepository.find();
+    const data = await this.expertiseRepository.find();
     return { data };
   }
 
   async findOne(id: string): Promise<{ data: Expertise }> {
     try {
-      const data = await this.expertisesRepository.findOneOrFail({
+      const data = await this.expertiseRepository.findOneOrFail({
         where: { id }
       });
       return { data };
@@ -40,7 +40,7 @@ export class ExpertisesService {
   async update(id: string, dto: UpdateExpertiseDto): Promise<{ data: Expertise }> {
     try {
       const { data: expertise } = await this.findOne(id);
-      const data = await this.expertisesRepository.save({ ...expertise, ...dto });
+      const data = await this.expertiseRepository.save({ ...expertise, ...dto });
       return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
@@ -50,7 +50,7 @@ export class ExpertisesService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.expertisesRepository.softDelete(id);
+      await this.expertiseRepository.softDelete(id);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
