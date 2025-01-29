@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UploadedFile,
+  UseInterceptors,
+  Query
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -10,6 +21,7 @@ import { RoleEnum } from '../../shared/enums/roles.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { QueryParams } from './utils/query-params.type';
 
 @Controller('blog-posts')
 @Authorization(RoleEnum.Staff)
@@ -37,8 +49,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll(): Promise<{ data: P[] }> {
-    return this.postsService.findAll();
+  findAll(@Query() queryParams: QueryParams): Promise<{ data: [P[], number] }> {
+    return this.postsService.findAll(queryParams);
   }
 
   @Get(':id')

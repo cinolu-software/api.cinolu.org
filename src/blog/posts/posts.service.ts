@@ -6,6 +6,7 @@ import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import * as fs from 'fs-extra';
+import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
 export class PostsService {
@@ -27,8 +28,19 @@ export class PostsService {
     }
   }
 
-  async findAll(): Promise<{ data: Post[] }> {
-    const data = await this.postRepository.find();
+  async findAll(queryParams: QueryParams): Promise<{ data: [Post[], number] }> {
+    const { page = 1, category } = queryParams;
+    const take = 12;
+    const skip = (page - 1) * take;
+    const where = {};
+    if (category) where['category'] = { category };
+    const data = await this.postRepository.findAndCount({
+      where,
+      take,
+      skip,
+      relations: ['category'],
+      order: { created_at: 'DESC' }
+    });
     return { data };
   }
 
