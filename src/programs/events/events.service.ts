@@ -36,31 +36,29 @@ export class EventsService {
     if (program) throw new BadRequestException("l'événement existe déjà");
   }
 
-  async findAll(): Promise<{ data: { events: Event[]; count: number } }> {
-    const query = this.eventRepository
-      .createQueryBuilder('p')
-      .leftJoinAndSelect('p.types', 'types')
-      .leftJoinAndSelect('p.responsible', 'responsible')
-      .orderBy('p.ended_at', 'DESC');
-    const events = await query.getMany();
-    const count = await query.getCount();
-    return { data: { events, count } };
+  async findAll(): Promise<{ data: [Event[], number] }> {
+    const data = await this.eventRepository.findAndCount({
+      relations: ['types', 'responsible'],
+      order: { ended_at: 'DESC' }
+    });
+    return { data };
   }
 
-  async findPublished(queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
-    const { page, type, eventType } = queryParams;
-    const query = this.eventRepository
-      .createQueryBuilder('p')
-      .leftJoinAndSelect('p.types', 'types')
-      .leftJoinAndSelect('p.responsible', 'responsible');
-    query.andWhere('p.is_published = :isPublished', { isPublished: true });
-    if (type) query.andWhere('types.name = :type', { type });
-    if (eventType) query.andWhere('event_type = :eventType', { eventType });
-    const take: number = 6;
-    const skip = ((page || 1) - 1) * take;
-    const events: Event[] = await query.skip(skip).take(take).orderBy('p.ended_at', 'DESC').getMany();
-    const count = await query.getCount();
-    return { data: { events, count } };
+  async findPublished(queryParams: QueryParams): Promise<{ data: [Event[], number] }> {
+    const { page = 1, type, eventType } = queryParams;
+    const take = 6;
+    const skip = (page - 1) * take;
+    const where = { is_published: true };
+    if (type) where['types'] = { name: type };
+    if (eventType) where['event_type'] = eventType;
+    const data = await this.eventRepository.findAndCount({
+      where,
+      take,
+      skip,
+      relations: ['types', 'responsible'],
+      order: { ended_at: 'DESC' }
+    });
+    return { data };
   }
 
   async publish(id: string): Promise<{ data: Event }> {
@@ -87,7 +85,7 @@ export class EventsService {
     }
   }
 
-  async addImage(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
+  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Event }> {
     try {
       const { data: program } = await this.findOne(id);
       if (program.image) await fs.promises.unlink(`./uploads/events/${program.image}`);

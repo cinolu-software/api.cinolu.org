@@ -32,7 +32,7 @@ export class EventsController {
   }
 
   @Get('')
-  findAll(): Promise<{ data: { events: Event[]; count: number } }> {
+  findAll(): Promise<{ data: [Event[], number] }> {
     return this.eventsService.findAll();
   }
 
@@ -44,7 +44,7 @@ export class EventsController {
 
   @Get('find-published')
   @Authorization(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<{ data: { events: Event[]; count: number } }> {
+  findPublished(@Query() queryParams: QueryParams): Promise<{ data: [Event[], number] }> {
     return this.eventsService.findPublished(queryParams);
   }
 
@@ -71,7 +71,7 @@ export class EventsController {
     })
   )
   uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Event }> {
-    return this.eventsService.addImage(id, file);
+    return this.eventsService.uploadImage(id, file);
   }
 
   @Patch(':id')
