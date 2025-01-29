@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class PostsService {
@@ -40,6 +41,17 @@ export class PostsService {
       return { data };
     } catch {
       throw new BadRequestException();
+    }
+  }
+
+  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Post }> {
+    try {
+      const { data: post } = await this.findOne(id);
+      if (post.image) await fs.unlink(`./uploads/posts/${post.image}`);
+      const data = await this.postRepository.save({ ...post, image: file.filename });
+      return { data };
+    } catch {
+      throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }
 
