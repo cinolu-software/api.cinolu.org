@@ -48,19 +48,20 @@ export class ProjectsService {
     return { data };
   }
 
-  async findPublished(queryParams: QueryParams): Promise<{ data: { projects: Project[]; count: number } }> {
-    const { page, type } = queryParams;
-    const query = this.projectRepository
-      .createQueryBuilder('p')
-      .leftJoinAndSelect('p.types', 'types')
-      .leftJoinAndSelect('p.categories', 'categories')
-      .andWhere('p.is_published = :isPublished', { isPublished: true });
-    if (type) query.andWhere('types.name = :type', { type });
-    const take: number = 9;
-    const skip = ((page || 1) - 1) * take;
-    const projects: Project[] = await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getMany();
-    const count = await query.getCount();
-    return { data: { projects, count } };
+  async findPublished(queryParams: QueryParams): Promise<{ data: [Project[], number] }> {
+    const { page = 1, type } = queryParams;
+    const take = 9;
+    const skip = (page - 1) * take;
+    const where = { is_published: true };
+    if (type) where['types'] = { name: type };
+    const data = await this.projectRepository.findAndCount({
+      where,
+      relations: ['types', 'categories'],
+      take,
+      skip,
+      order: { started_at: 'DESC' }
+    });
+    return { data };
   }
 
   async findRecent(): Promise<{ data: Project[] }> {
