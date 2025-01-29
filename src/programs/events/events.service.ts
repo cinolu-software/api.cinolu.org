@@ -46,7 +46,7 @@ export class EventsService {
 
   async findPublished(queryParams: QueryParams): Promise<{ data: [Event[], number] }> {
     const { page = 1, type, eventType } = queryParams;
-    const take = 6;
+    const take = 9;
     const skip = (page - 1) * take;
     const where = { is_published: true };
     if (type) where['types'] = { name: type };
