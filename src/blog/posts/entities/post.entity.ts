@@ -12,6 +12,9 @@ export class Post extends AbstractEntity {
   @Column({ type: 'text' })
   content: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
