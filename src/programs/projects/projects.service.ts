@@ -93,7 +93,7 @@ export class ProjectsService {
     try {
       const data = await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['types', 'partners', 'categories', 'phases', 'phases.requirements']
+        relations: ['types', 'partners', 'program', 'categories', 'phases', 'phases.requirements']
       });
       return { data };
     } catch {
@@ -117,10 +117,10 @@ export class ProjectsService {
       const data = await this.projectRepository.save({
         id,
         ...dto,
-        program: { id: dto.program },
-        categories: dto.categories.map((category) => ({ id: category })) || project.categories,
-        types: dto?.types.map((type) => ({ id: type })) || project.types,
-        partners: dto?.partners.map((id) => ({ id })) || project.partners
+        program: { id: dto?.program ?? project.program.id },
+        categories: dto.categories.map((category) => ({ id: category })) ?? project.categories,
+        types: dto?.types.map((type) => ({ id: type })) ?? project.types,
+        partners: dto?.partners.map((id) => ({ id })) ?? project.partners
       });
       return { data };
     } catch {
