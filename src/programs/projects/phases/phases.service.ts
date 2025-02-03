@@ -24,6 +24,17 @@ export class PhasesService {
     }
   }
 
+  async findByProject(id: string): Promise<{ data: Phase[] }> {
+    try {
+      const data = await this.phaseRepository.find({
+        where: { project: { id } }
+      });
+      return { data };
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findAll(): Promise<{ data: Phase[] }> {
     const data = await this.phaseRepository.find();
     return { data };

@@ -16,6 +16,12 @@ export class PhasesController {
     return this.phasesService.create(dto);
   }
 
+  @Get('project/:id')
+  @Authorization(RoleEnum.Guest)
+  findByProject(@Param('id') id: string): Promise<{ data: Phase[] }> {
+    return this.phasesService.findByProject(id);
+  }
+
   @Get()
   @Authorization(RoleEnum.Guest)
   findAll(): Promise<{ data: Phase[] }> {
