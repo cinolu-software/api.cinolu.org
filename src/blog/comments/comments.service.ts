@@ -13,39 +13,36 @@ export class CommentsService {
     private readonly commentRepository: Repository<Comment>
   ) {}
 
-  async create(user: User, dto: CreateCommentDto): Promise<{ data: Comment }> {
+  async create(user: User, dto: CreateCommentDto): Promise<Comment> {
     try {
-      const data = await this.commentRepository.save({
+      return await this.commentRepository.save({
         ...dto,
         by: { id: user.id },
         post: { id: dto.post }
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findOne(id: string): Promise<{ data: Comment }> {
+  async findOne(id: string): Promise<Comment> {
     try {
-      const data = await this.commentRepository.findOneOrFail({
+      return await this.commentRepository.findOneOrFail({
         where: { id },
         relations: ['by', 'post']
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async update(id: string, dto: UpdateCommentDto): Promise<{ data: Comment }> {
+  async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
-      const { data: comment } = await this.findOne(id);
-      const data = await this.commentRepository.save({
+      const comment = await this.findOne(id);
+      return await this.commentRepository.save({
         ...dto,
         post: { id: comment.post.id }
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }

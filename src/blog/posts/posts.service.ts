@@ -15,67 +15,62 @@ export class PostsService {
     private postRepository: Repository<Post>
   ) {}
 
-  async create(user: User, dto: CreatePostDto): Promise<{ data: Post }> {
+  async create(user: User, dto: CreatePostDto): Promise<Post> {
     try {
-      const data = await this.postRepository.save({
+      return await this.postRepository.save({
         ...dto,
         author: { id: user.id },
         category: { id: dto.category }
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(queryParams: QueryParams): Promise<{ data: [Post[], number] }> {
+  async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
     const { page = 1, category } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
     const where = {};
     if (category) where['category'] = { category };
-    const data = await this.postRepository.findAndCount({
+    return await this.postRepository.findAndCount({
       where,
       take,
       skip,
       relations: ['category'],
       order: { created_at: 'DESC' }
     });
-    return { data };
   }
 
-  async findOne(id: string): Promise<{ data: Post }> {
+  async findOne(id: string): Promise<Post> {
     try {
-      const data = await this.postRepository.findOneOrFail({
+      return await this.postRepository.findOneOrFail({
         where: { id },
         relations: ['comments', 'author', 'category']
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async uploadImage(id: string, file: Express.Multer.File): Promise<{ data: Post }> {
+  async uploadImage(id: string, file: Express.Multer.File): Promise<Post> {
     try {
-      const { data: post } = await this.findOne(id);
+      const post = await this.findOne(id);
       if (post.image) await fs.unlink(`./uploads/posts/${post.image}`);
-      const data = await this.postRepository.save({ ...post, image: file.filename });
-      return { data };
+      return await this.postRepository.save({ ...post, image: file.filename });
     } catch {
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }
 
-  async update(id: string, dto: UpdatePostDto): Promise<{ data: Post }> {
+  async update(id: string, dto: UpdatePostDto): Promise<Post> {
     try {
-      const { data: post } = await this.findOne(id);
-      const data = await this.postRepository.save({
+      const post = await this.findOne(id);
+      return await this.postRepository.save({
         ...dto,
         author: { id: post.author.id },
         category: { id: dto?.category ?? post.category.id }
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }

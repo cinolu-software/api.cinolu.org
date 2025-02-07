@@ -29,7 +29,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@CurrentUser() user: User, @Body() dto: CreatePostDto): Promise<{ data: P }> {
+  create(@CurrentUser() user: User, @Body() dto: CreatePostDto): Promise<P> {
     return this.postsService.create(user, dto);
   }
 
@@ -44,22 +44,22 @@ export class PostsController {
       })
     })
   )
-  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: P }> {
+  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<P> {
     return this.postsService.uploadImage(id, file);
   }
 
   @Get()
-  findAll(@Query() queryParams: QueryParams): Promise<{ data: [P[], number] }> {
+  findAll(@Query() queryParams: QueryParams): Promise<[P[], number]> {
     return this.postsService.findAll(queryParams);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: P }> {
+  findOne(@Param('id') id: string): Promise<P> {
     return this.postsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePostDto): Promise<{ data: P }> {
+  update(@Param('id') id: string, @Body() dto: UpdatePostDto): Promise<P> {
     return this.postsService.update(id, dto);
   }
 

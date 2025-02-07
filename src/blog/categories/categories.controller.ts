@@ -12,23 +12,23 @@ export class CategoriesController {
 
   @Post()
   @Auth(RoleEnum.Staff)
-  create(@Body() dto: CreateCategoryDto): Promise<{ data: BlogCategory }> {
+  create(@Body() dto: CreateCategoryDto): Promise<BlogCategory> {
     return this.categoriesService.create(dto);
   }
 
   @Get()
-  findAll(): Promise<{ data: BlogCategory[] }> {
+  findAll(): Promise<BlogCategory[]> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: BlogCategory }> {
+  findOne(@Param('id') id: string): Promise<BlogCategory> {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
   @Auth(RoleEnum.Staff)
-  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<{ data: BlogCategory }> {
+  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<BlogCategory> {
     return this.categoriesService.update(id, dto);
   }
 

@@ -12,34 +12,32 @@ export class CategoriesService {
     private readonly categoryRepository: Repository<BlogCategory>
   ) {}
 
-  async create(dto: CreateCategoryDto): Promise<{ data: BlogCategory }> {
+  async create(dto: CreateCategoryDto): Promise<BlogCategory> {
     try {
-      const data = await this.categoryRepository.save(dto);
-      return { data };
+      return await this.categoryRepository.save(dto);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: BlogCategory[] }> {
-    const data = await this.categoryRepository.find();
-    return { data };
+  async findAll(): Promise<BlogCategory[]> {
+    return await this.categoryRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: BlogCategory }> {
+  async findOne(id: string): Promise<BlogCategory> {
     try {
-      const data = await this.categoryRepository.findOneOrFail({ where: { id } });
-      return { data };
+      return await this.categoryRepository.findOneOrFail({
+        where: { id }
+      });
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async update(id: string, dto: UpdateCategoryDto): Promise<{ data: BlogCategory }> {
+  async update(id: string, dto: UpdateCategoryDto): Promise<BlogCategory> {
     try {
-      const { data: category } = await this.findOne(id);
-      const data = await this.categoryRepository.save({ ...category, ...dto });
-      return { data };
+      const category = await this.findOne(id);
+      return await this.categoryRepository.save({ ...category, ...dto });
     } catch {
       throw new BadRequestException();
     }
