@@ -10,6 +10,7 @@ importers:
     dependencies:
       '@nestjs-modules/mailer':
         specifier: ^2.0.2
+<<<<<<< HEAD
         version: 2.0.2(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(nodemailer@6.10.0)
       '@nestjs/common':
         specifier: ^11.0.7
@@ -47,6 +48,39 @@ importers:
       '@nestjs/websockets':
         specifier: ^11.0.7
         version: 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(@nestjs/platform-socket.io@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+        version: 2.0.2(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(nodemailer@6.10.0)
+      '@nestjs/common':
+        specifier: ^11.0.5
+        version: 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/config':
+        specifier: ^4.0.0
+        version: 4.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1)
+      '@nestjs/core':
+        specifier: ^11.0.5
+        version: 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/event-emitter':
+        specifier: ^3.0.0
+        version: 3.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)
+      '@nestjs/jwt':
+        specifier: ^11.0.0
+        version: 11.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))
+      '@nestjs/mapped-types':
+        specifier: ^2.1.0
+        version: 2.1.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
+      '@nestjs/passport':
+        specifier: ^11.0.4
+        version: 11.0.5(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(passport@0.7.0)
+      '@nestjs/platform-express':
+        specifier: ^11.0.5
+        version: 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)
+      '@nestjs/serve-static':
+        specifier: ^5.0.1
+        version: 5.0.1(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(express@5.0.1)
+      '@nestjs/typeorm':
+        specifier: ^11.0.0
+        version: 11.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))
+>>>>>>> 7608064 (feat: local modif)
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -112,15 +146,23 @@ importers:
         version: 4.8.1
       typeorm:
         specifier: ^0.3.20
+<<<<<<< HEAD
         version: 0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
       typeorm-extension:
         specifier: ^3.6.3
         version: 3.6.3(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)))
+=======
+        version: 0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+      typeorm-extension:
+        specifier: ^3.6.3
+        version: 3.6.3(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))
+>>>>>>> 7608064 (feat: local modif)
       uuid:
         specifier: ^11.0.5
         version: 11.0.5
     devDependencies:
       '@commitlint/cli':
+<<<<<<< HEAD
         specifier: ^19.7.1
         version: 19.7.1(@types/node@22.13.1)(typescript@5.7.3)
       '@commitlint/config-conventional':
@@ -128,6 +170,15 @@ importers:
         version: 19.7.1
       '@eslint/js':
         specifier: ^9.19.0
+=======
+        specifier: ^19.6.1
+        version: 19.7.1(@types/node@22.13.0)(typescript@5.7.3)
+      '@commitlint/config-conventional':
+        specifier: ^19.6.0
+        version: 19.7.1
+      '@eslint/js':
+        specifier: ^9.18.0
+>>>>>>> 7608064 (feat: local modif)
         version: 9.19.0
       '@faker-js/faker':
         specifier: ^9.4.0
@@ -137,13 +188,22 @@ importers:
         version: 1.0.11
       '@nestjs/cli':
         specifier: ^11.0.2
+<<<<<<< HEAD
         version: 11.0.2(@types/node@22.13.1)
+=======
+        version: 11.0.2(@types/node@22.13.0)
+>>>>>>> 7608064 (feat: local modif)
       '@nestjs/schematics':
         specifier: ^11.0.0
         version: 11.0.0(chokidar@4.0.3)(typescript@5.7.3)
       '@nestjs/testing':
+<<<<<<< HEAD
         specifier: ^11.0.7
         version: 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(@nestjs/platform-express@11.0.8)
+=======
+        specifier: ^11.0.5
+        version: 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(@nestjs/platform-express@11.0.7)
+>>>>>>> 7608064 (feat: local modif)
       '@types/bcrypt':
         specifier: ^5.0.2
         version: 5.0.2
@@ -163,8 +223,13 @@ importers:
         specifier: ^1.4.12
         version: 1.4.12
       '@types/node':
+<<<<<<< HEAD
         specifier: ^22.13.1
         version: 22.13.1
+=======
+        specifier: ^22.10.9
+        version: 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       '@types/nodemailer':
         specifier: ^6.4.17
         version: 6.4.17
@@ -187,6 +252,7 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       '@typescript-eslint/eslint-plugin':
+<<<<<<< HEAD
         specifier: ^8.23.0
         version: 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       '@typescript-eslint/parser':
@@ -194,6 +260,15 @@ importers:
         version: 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       eslint:
         specifier: ^9.19.0
+=======
+        specifier: ^8.21.0
+        version: 8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.21.0
+        version: 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      eslint:
+        specifier: ^9.18.0
+>>>>>>> 7608064 (feat: local modif)
         version: 9.19.0(jiti@2.4.2)
       eslint-config-prettier:
         specifier: ^10.0.1
@@ -209,7 +284,11 @@ importers:
         version: 9.1.7
       jest:
         specifier: ^29.7.0
+<<<<<<< HEAD
         version: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+        version: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -221,19 +300,32 @@ importers:
         version: 7.0.0
       ts-jest:
         specifier: ^29.2.5
+<<<<<<< HEAD
         version: 29.2.5(@babel/core@7.26.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.7))(jest@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)))(typescript@5.7.3)
+=======
+        version: 29.2.5(@babel/core@7.26.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.7))(jest@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       ts-loader:
         specifier: ^9.5.2
         version: 9.5.2(typescript@5.7.3)(webpack@5.97.1)
       ts-node:
         specifier: ^10.9.2
+<<<<<<< HEAD
         version: 10.9.2(@types/node@22.13.1)(typescript@5.7.3)
+=======
+        version: 10.9.2(@types/node@22.13.0)(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
       typescript-eslint:
+<<<<<<< HEAD
         specifier: ^8.23.0
         version: 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+=======
+        specifier: ^8.21.0
+        version: 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
 
 packages:
 
@@ -894,8 +986,13 @@ packages:
       '@swc/core':
         optional: true
 
+<<<<<<< HEAD
   '@nestjs/common@11.0.8':
     resolution: {integrity: sha512-IB6wEl8RgT/vWzb6p3cmBwTY3R0qfQWvO8lW0PfIv4DTJfUiVqNNEikonGuH/6TX8KvRXNhXHCaQZrUN00Xe6g==}
+=======
+  '@nestjs/common@11.0.7':
+    resolution: {integrity: sha512-2HXwaFem0IUCMoruOIC57wSxuRBBRJQwfcuHw6dsL15bqekpgmR8I53zT4RGfX7bgRDr8tINvzRun8PFeSiVgA==}
+>>>>>>> 7608064 (feat: local modif)
     peerDependencies:
       class-transformer: '*'
       class-validator: '*'
@@ -913,8 +1010,13 @@ packages:
       '@nestjs/common': ^10.0.0 || ^11.0.0
       rxjs: ^7.1.0
 
+<<<<<<< HEAD
   '@nestjs/core@11.0.8':
     resolution: {integrity: sha512-GQLLdZnjZOmV4Q+TzQ8YuHvEYOneRhzsDbSJRkKdFFAVuoVh+q1nWZy+bZNeTxdWZFGL2Rve70X5jc4MoSXJqQ==}
+=======
+  '@nestjs/core@11.0.7':
+    resolution: {integrity: sha512-LRijT+lXBpWjySJDNI+P18T+JiYOrpIBP/y8B+ObJN+sdaV3AFNT8cdf1U4hnkDbNGuIvVx1yNiRi6QNNVyw3A==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: '>= 20'}
     peerDependencies:
       '@nestjs/common': ^11.0.0
@@ -961,8 +1063,13 @@ packages:
       '@nestjs/common': ^10.0.0 || ^11.0.0
       passport: ^0.5.0 || ^0.6.0 || ^0.7.0
 
+<<<<<<< HEAD
   '@nestjs/platform-express@11.0.8':
     resolution: {integrity: sha512-Ru7seOYYglKNGQFzNALE5ilLqkdtX/ge6AJDKLMt+WI7iElZ7lXjT40fE3+HVUiZODunmeKQ7jVxcQyZwLafVA==}
+=======
+  '@nestjs/platform-express@11.0.7':
+    resolution: {integrity: sha512-n8CyhzQ6ESvjdvtIg6cwO77MON79TrUp4mHUJ2oOlypx0zU7nGgY2Ak+dMPPYII9OZqS95OPXDZ9wQjlzlYbAw==}
+>>>>>>> 7608064 (feat: local modif)
     peerDependencies:
       '@nestjs/common': ^11.0.0
       '@nestjs/core': ^11.0.0
@@ -995,8 +1102,13 @@ packages:
       fastify:
         optional: true
 
+<<<<<<< HEAD
   '@nestjs/testing@11.0.8':
     resolution: {integrity: sha512-5Reqec4MQSm4nFasKE5Pd799cAx3MmjkweF17Wgj/EJNWhFgVdv6N9OUIWXbU8nc8Pjso1fJmv0KJyN6h51qOA==}
+=======
+  '@nestjs/testing@11.0.7':
+    resolution: {integrity: sha512-ZDvfhnPRWwdEBNfS96eYVlMbG/E/4ekHJy7cnbRdyu8wSHGSipdQ2fXEomDFevTY0FOuJGdgMyE+nwy4wsm8AQ==}
+>>>>>>> 7608064 (feat: local modif)
     peerDependencies:
       '@nestjs/common': ^11.0.0
       '@nestjs/core': ^11.0.0
@@ -1189,8 +1301,13 @@ packages:
   '@types/multer@1.4.12':
     resolution: {integrity: sha512-pQ2hoqvXiJt2FP9WQVLPRO+AmiIm/ZYkavPlIQnx282u4ZrVdztx0pkh3jjpQt0Kz+YI0YhSG264y08UJKoUQg==}
 
+<<<<<<< HEAD
   '@types/node@22.13.1':
     resolution: {integrity: sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==}
+=======
+  '@types/node@22.13.0':
+    resolution: {integrity: sha512-ClIbNe36lawluuvq3+YYhnIN2CELi+6q8NpnM7PYp4hBn/TatfboPgVSm2rwKRfnV2M+Ty9GWDFI64KEe+kysA==}
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/nodemailer@6.4.17':
     resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
@@ -1252,51 +1369,89 @@ packages:
   '@types/yargs@17.0.33':
     resolution: {integrity: sha512-WpxBCKWPLr4xSsHgz511rFJAM+wS28w2zEO1QDNY5zM/S8ok70NNfztH0xwhqKyaK0OHCbN98LDAZuy1ctxDkA==}
 
+<<<<<<< HEAD
   '@typescript-eslint/eslint-plugin@8.23.0':
     resolution: {integrity: sha512-vBz65tJgRrA1Q5gWlRfvoH+w943dq9K1p1yDBY2pc+a1nbBLZp7fB9+Hk8DaALUbzjqlMfgaqlVPT1REJdkt/w==}
+=======
+  '@typescript-eslint/eslint-plugin@8.22.0':
+    resolution: {integrity: sha512-4Uta6REnz/xEJMvwf72wdUnC3rr4jAQf5jnTkeRQ9b6soxLxhDEbS/pfMPoJLDfFPNVRdryqWUIV/2GZzDJFZw==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       '@typescript-eslint/parser': ^8.0.0 || ^8.0.0-alpha.0
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.8.0'
 
+<<<<<<< HEAD
   '@typescript-eslint/parser@8.23.0':
     resolution: {integrity: sha512-h2lUByouOXFAlMec2mILeELUbME5SZRN/7R9Cw2RD2lRQQY08MWMM+PmVVKKJNK1aIwqTo9t/0CvOxwPbRIE2Q==}
+=======
+  '@typescript-eslint/parser@8.22.0':
+    resolution: {integrity: sha512-MqtmbdNEdoNxTPzpWiWnqNac54h8JDAmkWtJExBVVnSrSmi9z+sZUt0LfKqk9rjqmKOIeRhO4fHHJ1nQIjduIQ==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.8.0'
 
+<<<<<<< HEAD
   '@typescript-eslint/scope-manager@8.23.0':
     resolution: {integrity: sha512-OGqo7+dXHqI7Hfm+WqkZjKjsiRtFUQHPdGMXzk5mYXhJUedO7e/Y7i8AK3MyLMgZR93TX4bIzYrfyVjLC+0VSw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@typescript-eslint/type-utils@8.23.0':
     resolution: {integrity: sha512-iIuLdYpQWZKbiH+RkCGc6iu+VwscP5rCtQ1lyQ7TYuKLrcZoeJVpcLiG8DliXVkUxirW/PWlmS+d6yD51L9jvA==}
+=======
+  '@typescript-eslint/scope-manager@8.22.0':
+    resolution: {integrity: sha512-/lwVV0UYgkj7wPSw0o8URy6YI64QmcOdwHuGuxWIYznO6d45ER0wXUbksr9pYdViAofpUCNJx/tAzNukgvaaiQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@typescript-eslint/type-utils@8.22.0':
+    resolution: {integrity: sha512-NzE3aB62fDEaGjaAYZE4LH7I1MUwHooQ98Byq0G0y3kkibPJQIXVUspzlFOmOfHhiDLwKzMlWxaNv+/qcZurJA==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.8.0'
 
+<<<<<<< HEAD
   '@typescript-eslint/types@8.23.0':
     resolution: {integrity: sha512-1sK4ILJbCmZOTt9k4vkoulT6/y5CHJ1qUYxqpF1K/DBAd8+ZUL4LlSCxOssuH5m4rUaaN0uS0HlVPvd45zjduQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@typescript-eslint/typescript-estree@8.23.0':
     resolution: {integrity: sha512-LcqzfipsB8RTvH8FX24W4UUFk1bl+0yTOf9ZA08XngFwMg4Kj8A+9hwz8Cr/ZS4KwHrmo9PJiLZkOt49vPnuvQ==}
+=======
+  '@typescript-eslint/types@8.22.0':
+    resolution: {integrity: sha512-0S4M4baNzp612zwpD4YOieP3VowOARgK2EkN/GBn95hpyF8E2fbMT55sRHWBq+Huaqk3b3XK+rxxlM8sPgGM6A==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@typescript-eslint/typescript-estree@8.22.0':
+    resolution: {integrity: sha512-SJX99NAS2ugGOzpyhMza/tX+zDwjvwAtQFLsBo3GQxiGcvaKlqGBkmZ+Y1IdiSi9h4Q0Lr5ey+Cp9CGWNY/F/w==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <5.8.0'
 
+<<<<<<< HEAD
   '@typescript-eslint/utils@8.23.0':
     resolution: {integrity: sha512-uB/+PSo6Exu02b5ZEiVtmY6RVYO7YU5xqgzTIVZwTHvvK3HsL8tZZHFaTLFtRG3CsV4A5mhOv+NZx5BlhXPyIA==}
+=======
+  '@typescript-eslint/utils@8.22.0':
+    resolution: {integrity: sha512-T8oc1MbF8L+Bk2msAvCUzjxVB2Z2f+vXYfcucE2wOmYs7ZUwco5Ep0fYZw8quNwOiw9K8GYVL+Kgc2pETNTLOg==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.8.0'
 
+<<<<<<< HEAD
   '@typescript-eslint/visitor-keys@8.23.0':
     resolution: {integrity: sha512-oWWhcWDLwDfu++BGTZcmXWqpwtkwb5o7fxUIGksMQQDSdPW9prsSnfIOZMlsj4vBOSrcnjIUZMiIjODgGosFhQ==}
+=======
+  '@typescript-eslint/visitor-keys@8.22.0':
+    resolution: {integrity: sha512-AWpYAXnUgvLNabGTy3uBylkgZoosva/miNd1I8Bz3SjotmQPbVqhO4Cczo8AsZ44XVErEBPr/CRSgaj8sG7g0w==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@webassemblyjs/ast@1.14.1':
@@ -1642,8 +1797,13 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
 
+<<<<<<< HEAD
   caniuse-lite@1.0.30001697:
     resolution: {integrity: sha512-GwNPlWJin8E+d7Gxq96jxM6w0w+VFeyyXRsjU58emtkYqnbwHqXm5uT2uCmO0RQE9htWknOP4xtBlLmM/gWxvQ==}
+=======
+  caniuse-lite@1.0.30001696:
+    resolution: {integrity: sha512-pDCPkvzfa39ehJtJ+OwGT/2yvT2SbjfHhiIW2LWOAcMQ7BzwxT/XuyUp4OTOd0XFWA6BKw0JalnBHgSi5DGJBQ==}
+>>>>>>> 7608064 (feat: local modif)
 
   chalk@3.0.0:
     resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
@@ -2103,8 +2263,13 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
+<<<<<<< HEAD
   electron-to-chromium@1.5.93:
     resolution: {integrity: sha512-M+29jTcfNNoR9NV7la4SwUqzWAxEwnc7ThA5e1m6LRSotmpfpCpLcIfgtSCVL+MllNLgAyM/5ru86iMRemPzDQ==}
+=======
+  electron-to-chromium@1.5.90:
+    resolution: {integrity: sha512-C3PN4aydfW91Natdyd449Kw+BzhLmof6tzy5W1pFC5SpQxVXT+oyiyOG9AgYYSN9OdA/ik3YkCrpwqI8ug5Tug==}
+>>>>>>> 7608064 (feat: local modif)
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -3976,8 +4141,13 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
+<<<<<<< HEAD
   semver@7.7.1:
     resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
+=======
+  semver@7.7.0:
+    resolution: {integrity: sha512-DrfFnPzblFmNrIZzg5RzHegbiRWg7KMR7btwi2yjHwx06zsUbO5g613sVwEV7FTwmzJu+Io0lJe2GJ3LxqpvBQ==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: '>=10'}
     hasBin: true
 
@@ -4419,8 +4589,13 @@ packages:
       typeorm-aurora-data-api-driver:
         optional: true
 
+<<<<<<< HEAD
   typescript-eslint@8.23.0:
     resolution: {integrity: sha512-/LBRo3HrXr5LxmrdYSOCvoAMm7p2jNizNfbIpCgvG4HMsnoprRUOce/+8VJ9BDYWW68rqIENE/haVLWPeFZBVQ==}
+=======
+  typescript-eslint@8.22.0:
+    resolution: {integrity: sha512-Y2rj210FW1Wb6TWXzQc5+P+EWI9/zdS57hLEc0gnyuvdzWo8+Y8brKlbj0muejonhMI/xAZCnZZwjbIfv1CkOw==}
+>>>>>>> 7608064 (feat: local modif)
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
@@ -4687,11 +4862,19 @@ snapshots:
     optionalDependencies:
       chokidar: 4.0.3
 
+<<<<<<< HEAD
   '@angular-devkit/schematics-cli@19.1.3(@types/node@22.13.1)(chokidar@4.0.3)':
     dependencies:
       '@angular-devkit/core': 19.1.3(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.1.3(chokidar@4.0.3)
       '@inquirer/prompts': 7.2.1(@types/node@22.13.1)
+=======
+  '@angular-devkit/schematics-cli@19.1.3(@types/node@22.13.0)(chokidar@4.0.3)':
+    dependencies:
+      '@angular-devkit/core': 19.1.3(chokidar@4.0.3)
+      '@angular-devkit/schematics': 19.1.3(chokidar@4.0.3)
+      '@inquirer/prompts': 7.2.1(@types/node@22.13.0)
+>>>>>>> 7608064 (feat: local modif)
       ansi-colors: 4.1.3
       symbol-observable: 4.0.0
       yargs-parser: 21.1.1
@@ -4914,11 +5097,19 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
+<<<<<<< HEAD
   '@commitlint/cli@19.7.1(@types/node@22.13.1)(typescript@5.7.3)':
     dependencies:
       '@commitlint/format': 19.5.0
       '@commitlint/lint': 19.7.1
       '@commitlint/load': 19.6.1(@types/node@22.13.1)(typescript@5.7.3)
+=======
+  '@commitlint/cli@19.7.1(@types/node@22.13.0)(typescript@5.7.3)':
+    dependencies:
+      '@commitlint/format': 19.5.0
+      '@commitlint/lint': 19.7.1
+      '@commitlint/load': 19.6.1(@types/node@22.13.0)(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       '@commitlint/read': 19.5.0
       '@commitlint/types': 19.5.0
       tinyexec: 0.3.2
@@ -4956,7 +5147,11 @@ snapshots:
   '@commitlint/is-ignored@19.7.1':
     dependencies:
       '@commitlint/types': 19.5.0
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@commitlint/lint@19.7.1':
     dependencies:
@@ -4965,7 +5160,11 @@ snapshots:
       '@commitlint/rules': 19.6.0
       '@commitlint/types': 19.5.0
 
+<<<<<<< HEAD
   '@commitlint/load@19.6.1(@types/node@22.13.1)(typescript@5.7.3)':
+=======
+  '@commitlint/load@19.6.1(@types/node@22.13.0)(typescript@5.7.3)':
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@commitlint/config-validator': 19.5.0
       '@commitlint/execute-rule': 19.5.0
@@ -4973,7 +5172,11 @@ snapshots:
       '@commitlint/types': 19.5.0
       chalk: 5.4.1
       cosmiconfig: 9.0.0(typescript@5.7.3)
+<<<<<<< HEAD
       cosmiconfig-typescript-loader: 6.1.0(@types/node@22.13.1)(cosmiconfig@9.0.0(typescript@5.7.3))(typescript@5.7.3)
+=======
+      cosmiconfig-typescript-loader: 6.1.0(@types/node@22.13.0)(cosmiconfig@9.0.0(typescript@5.7.3))(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -5130,6 +5333,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.1': {}
 
+<<<<<<< HEAD
   '@inquirer/checkbox@4.1.1(@types/node@22.13.1)':
     dependencies:
       '@inquirer/core': 10.1.6(@types/node@22.13.1)
@@ -5151,6 +5355,29 @@ snapshots:
     dependencies:
       '@inquirer/figures': 1.0.10
       '@inquirer/type': 3.0.4(@types/node@22.13.1)
+=======
+  '@inquirer/checkbox@4.1.1(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/figures': 1.0.10
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      ansi-escapes: 4.3.2
+      yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/confirm@5.1.5(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/core@10.1.6(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/figures': 1.0.10
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+>>>>>>> 7608064 (feat: local modif)
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
       mute-stream: 2.0.0
@@ -5158,6 +5385,7 @@ snapshots:
       wrap-ansi: 6.2.0
       yoctocolors-cjs: 2.1.2
     optionalDependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
 
   '@inquirer/editor@4.2.6(@types/node@22.13.1)':
@@ -5258,6 +5486,108 @@ snapshots:
   '@inquirer/type@3.0.4(@types/node@22.13.1)':
     optionalDependencies:
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+
+  '@inquirer/editor@4.2.6(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      external-editor: 3.1.0
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/expand@4.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/figures@1.0.10': {}
+
+  '@inquirer/input@4.1.5(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/number@3.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/password@4.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      ansi-escapes: 4.3.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/prompts@7.2.1(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/checkbox': 4.1.1(@types/node@22.13.0)
+      '@inquirer/confirm': 5.1.5(@types/node@22.13.0)
+      '@inquirer/editor': 4.2.6(@types/node@22.13.0)
+      '@inquirer/expand': 4.0.8(@types/node@22.13.0)
+      '@inquirer/input': 4.1.5(@types/node@22.13.0)
+      '@inquirer/number': 3.0.8(@types/node@22.13.0)
+      '@inquirer/password': 4.0.8(@types/node@22.13.0)
+      '@inquirer/rawlist': 4.0.8(@types/node@22.13.0)
+      '@inquirer/search': 3.0.8(@types/node@22.13.0)
+      '@inquirer/select': 4.0.8(@types/node@22.13.0)
+      '@types/node': 22.13.0
+
+  '@inquirer/prompts@7.2.3(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/checkbox': 4.1.1(@types/node@22.13.0)
+      '@inquirer/confirm': 5.1.5(@types/node@22.13.0)
+      '@inquirer/editor': 4.2.6(@types/node@22.13.0)
+      '@inquirer/expand': 4.0.8(@types/node@22.13.0)
+      '@inquirer/input': 4.1.5(@types/node@22.13.0)
+      '@inquirer/number': 3.0.8(@types/node@22.13.0)
+      '@inquirer/password': 4.0.8(@types/node@22.13.0)
+      '@inquirer/rawlist': 4.0.8(@types/node@22.13.0)
+      '@inquirer/search': 3.0.8(@types/node@22.13.0)
+      '@inquirer/select': 4.0.8(@types/node@22.13.0)
+      '@types/node': 22.13.0
+
+  '@inquirer/rawlist@4.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/search@3.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/figures': 1.0.10
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/select@4.0.8(@types/node@22.13.0)':
+    dependencies:
+      '@inquirer/core': 10.1.6(@types/node@22.13.0)
+      '@inquirer/figures': 1.0.10
+      '@inquirer/type': 3.0.4(@types/node@22.13.0)
+      ansi-escapes: 4.3.2
+      yoctocolors-cjs: 2.1.2
+    optionalDependencies:
+      '@types/node': 22.13.0
+
+  '@inquirer/type@3.0.4(@types/node@22.13.0)':
+    optionalDependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -5281,27 +5611,43 @@ snapshots:
   '@jest/console@29.7.0':
     dependencies:
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       jest-message-util: 29.7.0
       jest-util: 29.7.0
       slash: 3.0.0
 
+<<<<<<< HEAD
   '@jest/core@29.7.0(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))':
+=======
+  '@jest/core@29.7.0(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))':
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@jest/console': 29.7.0
       '@jest/reporters': 29.7.0
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 3.9.0
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
+<<<<<<< HEAD
       jest-config: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+      jest-config: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -5326,7 +5672,11 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       jest-mock: 29.7.0
 
   '@jest/expect-utils@29.7.0':
@@ -5344,7 +5694,11 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -5366,7 +5720,11 @@ snapshots:
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       '@jridgewell/trace-mapping': 0.3.25
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       collect-v8-coverage: 1.0.2
       exit: 0.1.2
@@ -5436,7 +5794,11 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -5478,17 +5840,29 @@ snapshots:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
       tar: 6.2.1
     transitivePeerDependencies:
       - encoding
       - supports-color
 
+<<<<<<< HEAD
   '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(nodemailer@6.10.0)':
     dependencies:
       '@css-inline/css-inline': 0.14.1
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/core': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.8)(@nestjs/websockets@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+  '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(nodemailer@6.10.0)':
+    dependencies:
+      '@css-inline/css-inline': 0.14.1
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       glob: 10.3.12
       nodemailer: 6.10.0
     optionalDependencies:
@@ -5504,12 +5878,21 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+<<<<<<< HEAD
   '@nestjs/cli@11.0.2(@types/node@22.13.1)':
     dependencies:
       '@angular-devkit/core': 19.1.3(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.1.3(chokidar@4.0.3)
       '@angular-devkit/schematics-cli': 19.1.3(@types/node@22.13.1)(chokidar@4.0.3)
       '@inquirer/prompts': 7.2.3(@types/node@22.13.1)
+=======
+  '@nestjs/cli@11.0.2(@types/node@22.13.0)':
+    dependencies:
+      '@angular-devkit/core': 19.1.3(chokidar@4.0.3)
+      '@angular-devkit/schematics': 19.1.3(chokidar@4.0.3)
+      '@angular-devkit/schematics-cli': 19.1.3(@types/node@22.13.0)(chokidar@4.0.3)
+      '@inquirer/prompts': 7.2.3(@types/node@22.13.0)
+>>>>>>> 7608064 (feat: local modif)
       '@nestjs/schematics': 11.0.0(chokidar@4.0.3)(typescript@5.7.3)
       ansis: 3.9.0
       chokidar: 4.0.3
@@ -5531,7 +5914,11 @@ snapshots:
       - uglify-js
       - webpack-cli
 
+<<<<<<< HEAD
   '@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
+=======
+  '@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       iterare: 1.2.1
       reflect-metadata: 0.2.2
@@ -5542,17 +5929,29 @@ snapshots:
       class-transformer: 0.5.1
       class-validator: 0.14.1
 
+<<<<<<< HEAD
   '@nestjs/config@4.0.0(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+  '@nestjs/config@4.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       dotenv: 16.4.7
       dotenv-expand: 12.0.1
       lodash: 4.17.21
       rxjs: 7.8.1
 
+<<<<<<< HEAD
   '@nestjs/core@11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.8)(@nestjs/websockets@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+  '@nestjs/core@11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       '@nuxt/opencollective': 0.4.1
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -5562,6 +5961,7 @@ snapshots:
       tslib: 2.8.1
       uid: 2.0.2
     optionalDependencies:
+<<<<<<< HEAD
       '@nestjs/platform-express': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)
       '@nestjs/websockets': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(@nestjs/platform-socket.io@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
 
@@ -5580,11 +5980,31 @@ snapshots:
   '@nestjs/mapped-types@2.1.0(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+      '@nestjs/platform-express': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)
+
+  '@nestjs/event-emitter@3.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      eventemitter2: 6.4.9
+
+  '@nestjs/jwt@11.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@types/jsonwebtoken': 9.0.7
+      jsonwebtoken: 9.0.2
+
+  '@nestjs/mapped-types@2.1.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       reflect-metadata: 0.2.2
     optionalDependencies:
       class-transformer: 0.5.1
       class-validator: 0.14.1
 
+<<<<<<< HEAD
   '@nestjs/passport@11.0.5(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(passport@0.7.0)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -5594,6 +6014,17 @@ snapshots:
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/core': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.8)(@nestjs/websockets@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+  '@nestjs/passport@11.0.5(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(passport@0.7.0)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      passport: 0.7.0
+
+  '@nestjs/platform-express@11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       cors: 2.8.5
       express: 5.0.1
       multer: 1.4.5-lts.1
@@ -5625,14 +6056,22 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
+<<<<<<< HEAD
   '@nestjs/serve-static@5.0.2(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(express@5.0.1)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/core': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.8)(@nestjs/websockets@11.0.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+=======
+  '@nestjs/serve-static@5.0.1(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(express@5.0.1)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+>>>>>>> 7608064 (feat: local modif)
       path-to-regexp: 8.2.0
     optionalDependencies:
       express: 5.0.1
 
+<<<<<<< HEAD
   '@nestjs/testing@11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.8)(@nestjs/platform-express@11.0.8)':
     dependencies:
       '@nestjs/common': 11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -5660,6 +6099,23 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@nestjs/platform-socket.io': 11.0.8(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/websockets@11.0.8)(rxjs@7.8.1)
+=======
+  '@nestjs/testing@11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(@nestjs/platform-express@11.0.7)':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      tslib: 2.8.1
+    optionalDependencies:
+      '@nestjs/platform-express': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)
+
+  '@nestjs/typeorm@11.0.0(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))':
+    dependencies:
+      '@nestjs/common': 11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 11.0.7(@nestjs/common@11.0.7(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@11.0.7)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.1
+      typeorm: 0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -5736,11 +6192,16 @@ snapshots:
 
   '@types/bcrypt@5.0.2':
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
+<<<<<<< HEAD
       '@types/node': 22.13.1
 
   '@types/connect@3.4.38':
@@ -5750,6 +6211,17 @@ snapshots:
   '@types/conventional-commits-parser@5.0.1':
     dependencies:
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+
+  '@types/connect@3.4.38':
+    dependencies:
+      '@types/node': 22.13.0
+
+  '@types/conventional-commits-parser@5.0.1':
+    dependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/cookiejar@2.1.5': {}
 
@@ -5774,7 +6246,11 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.6':
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       '@types/qs': 6.9.18
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5793,11 +6269,19 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
+<<<<<<< HEAD
       '@types/node': 22.13.1
 
   '@types/graceful-fs@4.1.9':
     dependencies:
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+
+  '@types/graceful-fs@4.1.9':
+    dependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/http-errors@2.0.4': {}
 
@@ -5820,16 +6304,28 @@ snapshots:
 
   '@types/jsonfile@6.1.4':
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
 
   '@types/jsonwebtoken@9.0.7':
     dependencies:
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+
+  '@types/jsonwebtoken@9.0.7':
+    dependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/jsonwebtoken@9.0.8':
     dependencies:
       '@types/ms': 2.1.0
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/methods@1.1.4': {}
 
@@ -5849,17 +6345,29 @@ snapshots:
     dependencies:
       '@types/express': 5.0.0
 
+<<<<<<< HEAD
   '@types/node@22.13.1':
+=======
+  '@types/node@22.13.0':
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       undici-types: 6.20.0
 
   '@types/nodemailer@6.4.17':
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
 
   '@types/oauth@0.9.6':
     dependencies:
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+
+  '@types/oauth@0.9.6':
+    dependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/passport-google-oauth20@2.0.16':
     dependencies:
@@ -5903,12 +6411,20 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       '@types/send': 0.17.4
 
   '@types/stack-utils@2.0.3': {}
@@ -5917,7 +6433,11 @@ snapshots:
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       form-data: 4.0.1
 
   '@types/supertest@6.0.2':
@@ -5935,6 +6455,7 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
+<<<<<<< HEAD
   '@typescript-eslint/eslint-plugin@8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -5943,6 +6464,16 @@ snapshots:
       '@typescript-eslint/type-utils': 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       '@typescript-eslint/utils': 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       '@typescript-eslint/visitor-keys': 8.23.0
+=======
+  '@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@eslint-community/regexpp': 4.12.1
+      '@typescript-eslint/parser': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/scope-manager': 8.22.0
+      '@typescript-eslint/type-utils': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/visitor-keys': 8.22.0
+>>>>>>> 7608064 (feat: local modif)
       eslint: 9.19.0(jiti@2.4.2)
       graphemer: 1.4.0
       ignore: 5.3.2
@@ -5952,18 +6483,28 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.23.0
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.7.3)
       '@typescript-eslint/visitor-keys': 8.23.0
+=======
+  '@typescript-eslint/parser@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@typescript-eslint/scope-manager': 8.22.0
+      '@typescript-eslint/types': 8.22.0
+      '@typescript-eslint/typescript-estree': 8.22.0(typescript@5.7.3)
+      '@typescript-eslint/visitor-keys': 8.22.0
+>>>>>>> 7608064 (feat: local modif)
       debug: 4.4.0
       eslint: 9.19.0(jiti@2.4.2)
       typescript: 5.7.3
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/scope-manager@8.23.0':
     dependencies:
       '@typescript-eslint/types': 8.23.0
@@ -5973,6 +6514,17 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.7.3)
       '@typescript-eslint/utils': 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+=======
+  '@typescript-eslint/scope-manager@8.22.0':
+    dependencies:
+      '@typescript-eslint/types': 8.22.0
+      '@typescript-eslint/visitor-keys': 8.22.0
+
+  '@typescript-eslint/type-utils@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@typescript-eslint/typescript-estree': 8.22.0(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       debug: 4.4.0
       eslint: 9.19.0(jiti@2.4.2)
       ts-api-utils: 2.0.1(typescript@5.7.3)
@@ -5980,36 +6532,64 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/types@8.23.0': {}
 
   '@typescript-eslint/typescript-estree@8.23.0(typescript@5.7.3)':
     dependencies:
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/visitor-keys': 8.23.0
+=======
+  '@typescript-eslint/types@8.22.0': {}
+
+  '@typescript-eslint/typescript-estree@8.22.0(typescript@5.7.3)':
+    dependencies:
+      '@typescript-eslint/types': 8.22.0
+      '@typescript-eslint/visitor-keys': 8.22.0
+>>>>>>> 7608064 (feat: local modif)
       debug: 4.4.0
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
       ts-api-utils: 2.0.1(typescript@5.7.3)
       typescript: 5.7.3
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/utils@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.4.1(eslint@9.19.0(jiti@2.4.2))
       '@typescript-eslint/scope-manager': 8.23.0
       '@typescript-eslint/types': 8.23.0
       '@typescript-eslint/typescript-estree': 8.23.0(typescript@5.7.3)
+=======
+  '@typescript-eslint/utils@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.4.1(eslint@9.19.0(jiti@2.4.2))
+      '@typescript-eslint/scope-manager': 8.22.0
+      '@typescript-eslint/types': 8.22.0
+      '@typescript-eslint/typescript-estree': 8.22.0(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       eslint: 9.19.0(jiti@2.4.2)
       typescript: 5.7.3
     transitivePeerDependencies:
       - supports-color
 
+<<<<<<< HEAD
   '@typescript-eslint/visitor-keys@8.23.0':
     dependencies:
       '@typescript-eslint/types': 8.23.0
+=======
+  '@typescript-eslint/visitor-keys@8.22.0':
+    dependencies:
+      '@typescript-eslint/types': 8.22.0
+>>>>>>> 7608064 (feat: local modif)
       eslint-visitor-keys: 4.2.0
 
   '@webassemblyjs/ast@1.14.1':
@@ -6348,8 +6928,13 @@ snapshots:
 
   browserslist@4.24.4:
     dependencies:
+<<<<<<< HEAD
       caniuse-lite: 1.0.30001697
       electron-to-chromium: 1.5.93
+=======
+      caniuse-lite: 1.0.30001696
+      electron-to-chromium: 1.5.90
+>>>>>>> 7608064 (feat: local modif)
       node-releases: 2.0.19
       update-browserslist-db: 1.1.2(browserslist@4.24.4)
 
@@ -6403,7 +6988,11 @@ snapshots:
 
   camelcase@6.3.0: {}
 
+<<<<<<< HEAD
   caniuse-lite@1.0.30001697: {}
+=======
+  caniuse-lite@1.0.30001696: {}
+>>>>>>> 7608064 (feat: local modif)
 
   chalk@3.0.0:
     dependencies:
@@ -6630,9 +7219,15 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
+<<<<<<< HEAD
   cosmiconfig-typescript-loader@6.1.0(@types/node@22.13.1)(cosmiconfig@9.0.0(typescript@5.7.3))(typescript@5.7.3):
     dependencies:
       '@types/node': 22.13.1
+=======
+  cosmiconfig-typescript-loader@6.1.0(@types/node@22.13.0)(cosmiconfig@9.0.0(typescript@5.7.3))(typescript@5.7.3):
+    dependencies:
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       cosmiconfig: 9.0.0(typescript@5.7.3)
       jiti: 2.4.2
       typescript: 5.7.3
@@ -6655,13 +7250,21 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.3
 
+<<<<<<< HEAD
   create-jest@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)):
+=======
+  create-jest@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
+<<<<<<< HEAD
       jest-config: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+      jest-config: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -6855,7 +7458,11 @@ snapshots:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
     optional: true
 
   ee-first@1.1.1: {}
@@ -6864,7 +7471,11 @@ snapshots:
     dependencies:
       jake: 10.9.2
 
+<<<<<<< HEAD
   electron-to-chromium@1.5.93: {}
+=======
+  electron-to-chromium@1.5.90: {}
+>>>>>>> 7608064 (feat: local modif)
 
   emittery@0.13.1: {}
 
@@ -7241,7 +7852,11 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
       tapable: 2.2.1
       typescript: 5.7.3
       webpack: 5.97.1
@@ -7634,7 +8249,11 @@ snapshots:
       '@babel/parser': 7.26.7
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
     transitivePeerDependencies:
       - supports-color
 
@@ -7694,7 +8313,11 @@ snapshots:
       '@jest/expect': 29.7.0
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       co: 4.6.0
       dedent: 1.5.3
@@ -7714,6 +8337,7 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
+<<<<<<< HEAD
   jest-cli@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)):
     dependencies:
       '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
@@ -7724,6 +8348,18 @@ snapshots:
       exit: 0.1.2
       import-local: 3.2.0
       jest-config: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+  jest-cli@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)):
+    dependencies:
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+      '@jest/test-result': 29.7.0
+      '@jest/types': 29.6.3
+      chalk: 4.1.2
+      create-jest: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+      exit: 0.1.2
+      import-local: 3.2.0
+      jest-config: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -7733,7 +8369,11 @@ snapshots:
       - supports-color
       - ts-node
 
+<<<<<<< HEAD
   jest-config@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)):
+=======
+  jest-config@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@babel/core': 7.26.7
       '@jest/test-sequencer': 29.7.0
@@ -7758,8 +8398,13 @@ snapshots:
       slash: 3.0.0
       strip-json-comments: 3.1.1
     optionalDependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
       ts-node: 10.9.2(@types/node@22.13.1)(typescript@5.7.3)
+=======
+      '@types/node': 22.13.0
+      ts-node: 10.9.2(@types/node@22.13.0)(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -7788,7 +8433,11 @@ snapshots:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
@@ -7798,7 +8447,11 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@types/graceful-fs': 4.1.9
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -7837,7 +8490,11 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       jest-util: 29.7.0
 
   jest-pnp-resolver@1.2.3(jest-resolve@29.7.0):
@@ -7872,7 +8529,11 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       emittery: 0.13.1
       graceful-fs: 4.2.11
@@ -7900,7 +8561,11 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       cjs-module-lexer: 1.4.3
       collect-v8-coverage: 1.0.2
@@ -7939,14 +8604,22 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
     transitivePeerDependencies:
       - supports-color
 
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -7965,7 +8638,11 @@ snapshots:
     dependencies:
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.13.1
@@ -7974,23 +8651,40 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
   jest-worker@29.7.0:
     dependencies:
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
+<<<<<<< HEAD
   jest@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)):
     dependencies:
       '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
       '@jest/types': 29.6.3
       import-local: 3.2.0
       jest-cli: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+  jest@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)):
+    dependencies:
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+      '@jest/types': 29.6.3
+      import-local: 3.2.0
+      jest-cli: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -8060,7 +8754,11 @@ snapshots:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
 
   jstransformer@1.0.0:
     dependencies:
@@ -8252,7 +8950,11 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
 
   make-error@1.3.6: {}
 
@@ -9303,7 +10005,11 @@ snapshots:
 
   semver@6.3.1: {}
 
+<<<<<<< HEAD
   semver@7.7.1: {}
+=======
+  semver@7.7.0: {}
+>>>>>>> 7608064 (feat: local modif)
 
   send@1.1.0:
     dependencies:
@@ -9621,17 +10327,29 @@ snapshots:
     dependencies:
       typescript: 5.7.3
 
+<<<<<<< HEAD
   ts-jest@29.2.5(@babel/core@7.26.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.7))(jest@29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)))(typescript@5.7.3):
+=======
+  ts-jest@29.2.5(@babel/core@7.26.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.7))(jest@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))(typescript@5.7.3):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       bs-logger: 0.2.6
       ejs: 3.1.10
       fast-json-stable-stringify: 2.1.0
+<<<<<<< HEAD
       jest: 29.7.0(@types/node@22.13.1)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
+=======
+      jest: 29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+>>>>>>> 7608064 (feat: local modif)
       jest-util: 29.7.0
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
       typescript: 5.7.3
       yargs-parser: 21.1.1
     optionalDependencies:
@@ -9645,19 +10363,31 @@ snapshots:
       chalk: 4.1.2
       enhanced-resolve: 5.18.1
       micromatch: 4.0.8
+<<<<<<< HEAD
       semver: 7.7.1
+=======
+      semver: 7.7.0
+>>>>>>> 7608064 (feat: local modif)
       source-map: 0.7.4
       typescript: 5.7.3
       webpack: 5.97.1
 
+<<<<<<< HEAD
   ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3):
+=======
+  ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
+<<<<<<< HEAD
       '@types/node': 22.13.1
+=======
+      '@types/node': 22.13.0
+>>>>>>> 7608064 (feat: local modif)
       acorn: 8.14.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -9704,7 +10434,11 @@ snapshots:
 
   typedarray@0.0.6: {}
 
+<<<<<<< HEAD
   typeorm-extension@3.6.3(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))):
+=======
+  typeorm-extension@3.6.3(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@faker-js/faker': 8.4.1
       consola: 3.4.0
@@ -9714,10 +10448,17 @@ snapshots:
       rapiq: 0.9.0
       reflect-metadata: 0.2.2
       smob: 1.5.0
+<<<<<<< HEAD
       typeorm: 0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3))
       yargs: 17.7.2
 
   typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.1)(typescript@5.7.3)):
+=======
+      typeorm: 0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3))
+      yargs: 17.7.2
+
+  typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)):
+>>>>>>> 7608064 (feat: local modif)
     dependencies:
       '@sqltools/formatter': 1.2.5
       app-root-path: 3.1.0
@@ -9736,6 +10477,7 @@ snapshots:
       yargs: 17.7.2
     optionalDependencies:
       mysql2: 3.12.0
+<<<<<<< HEAD
       ts-node: 10.9.2(@types/node@22.13.1)(typescript@5.7.3)
     transitivePeerDependencies:
       - supports-color
@@ -9745,6 +10487,17 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 8.23.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       '@typescript-eslint/parser': 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
       '@typescript-eslint/utils': 8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+=======
+      ts-node: 10.9.2(@types/node@22.13.0)(typescript@5.7.3)
+    transitivePeerDependencies:
+      - supports-color
+
+  typescript-eslint@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/parser': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.22.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3)
+>>>>>>> 7608064 (feat: local modif)
       eslint: 9.19.0(jiti@2.4.2)
       typescript: 5.7.3
     transitivePeerDependencies:
