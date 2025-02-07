@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateChatDto } from './dto/create-chat.dto';
 
 @Injectable()
@@ -28,16 +28,6 @@ export class ChatService {
     { id: '1', name: 'Wilfried Musanzi' },
     { id: '2', name: 'Musa Lwalwa' }
   ];
-
-  async identifyUser(id: string) {
-    try {
-      const user = this.users.find((user) => user.id === id);
-      if (!user) throw new NotFoundException();
-      return user;
-    } catch {
-      throw new NotFoundException();
-    }
-  }
 
   async getMessages() {
     return this.messages;

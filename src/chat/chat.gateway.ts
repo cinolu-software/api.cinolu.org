@@ -1,32 +1,37 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { UsersService } from '../users/users.service';
 import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
 
-@WebSocketGateway({ cors: true, credentials: true })
-export class ChatGateway {
+@WebSocketGateway({
+  cors: {
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    credentials: true
+  }
+})
+export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly chatService: ChatService) {}
+  constructor(
+    private userService: UsersService,
+    private chatService: ChatService
+  ) {}
 
-  @SubscribeMessage('joinChat')
-  async handleJoin(@MessageBody('id') userId: string, @ConnectedSocket() client: Socket) {
-    const user = await this.chatService.identifyUser(userId);
-    const messages = await this.chatService.getMessages();
-    client.emit('loadMessages', messages);
-    client.broadcast.emit('userJoined', user);
+  async handleConnection(client: Socket) {
+    const { userId } = client.handshake.query;
+    if (!userId) client.disconnect(true);
+    try {
+      const user = await this.userService.findOne(userId as string);
+      const messages = await this.chatService.getMessages();
+      client.broadcast.emit('userJoined', user);
+      client.emit('loadMessages', messages);
+    } catch {
+      client.disconnect(true);
+    }
   }
 
-  @SubscribeMessage('sendMessage')
-  async handleMessage(@MessageBody() data: CreateChatDto) {
-    const newMessage = await this.chatService.sendMesssage(data);
-    this.server.emit('receiveMessage', newMessage);
-  }
-
-  @SubscribeMessage('typing')
-  async handleTyping(@MessageBody() data: { senderId: string; isTyping: boolean }) {
-    const user = await this.chatService.identifyUser(data.senderId);
-    this.server.emit('userTyping', user);
-  }
+  @SubscribeMessage('message')
+  handleMessage() {}
 }

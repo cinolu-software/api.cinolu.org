@@ -7,11 +7,11 @@ import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('blog-categories')
-@Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
+  @Auth(RoleEnum.Staff)
   create(@Body() dto: CreateCategoryDto): Promise<{ data: BlogCategory }> {
     return this.categoriesService.create(dto);
   }
@@ -27,11 +27,13 @@ export class CategoriesController {
   }
 
   @Patch(':id')
+  @Auth(RoleEnum.Staff)
   update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<{ data: BlogCategory }> {
     return this.categoriesService.update(id, dto);
   }
 
   @Delete(':id')
+  @Auth(RoleEnum.Staff)
   remove(@Param('id') id: string): Promise<void> {
     return this.categoriesService.remove(id);
   }

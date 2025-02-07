@@ -9,7 +9,7 @@ export class CategorySubscriber implements EntitySubscriberInterface<BlogCategor
   }
 
   async beforeInsert(event: InsertEvent<BlogCategory>): Promise<void> {
-    const { slug } = event.entity;
-    event.entity.slug = slugify(slug, { lower: true });
+    const { name } = event.entity;
+    event.entity.slug = slugify(name, { lower: true });
   }
 }
