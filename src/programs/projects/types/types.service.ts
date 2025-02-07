@@ -12,36 +12,32 @@ export class TypesService {
     private typeRepository: Repository<Type>
   ) {}
 
-  async create(dto: CreateTypeDto): Promise<{ data: Type }> {
+  async create(dto: CreateTypeDto): Promise<Type> {
     try {
-      const data = await this.typeRepository.save(dto);
-      return { data };
+      return await this.typeRepository.save(dto);
     } catch {
       throw new BadRequestException('Erreur survenue lors de la création du type');
     }
   }
 
-  async findAll(): Promise<{ data: Type[] }> {
-    const data = await this.typeRepository.find();
-    return { data };
+  async findAll(): Promise<Type[]> {
+    return await this.typeRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Type }> {
+  async findOne(id: string): Promise<Type> {
     try {
-      const data = await this.typeRepository.findOneOrFail({
+      return await this.typeRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
     } catch {
       throw new NotFoundException('Impossible de récupérer le type');
     }
   }
 
-  async update(id: string, dto: UpdateTypeDto): Promise<{ data: Type }> {
+  async update(id: string, dto: UpdateTypeDto): Promise<Type> {
     try {
-      const { data: type } = await this.findOne(id);
-      const data = await this.typeRepository.save({ ...type, ...dto });
-      return { data };
+      const type = await this.findOne(id);
+      return await this.typeRepository.save({ ...type, ...dto });
     } catch {
       throw new BadRequestException('Erreur survenue lors de la modification du type');
     }

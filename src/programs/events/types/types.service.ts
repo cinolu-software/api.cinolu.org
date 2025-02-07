@@ -12,36 +12,32 @@ export class TypesService {
     private typeRepository: Repository<EventType>
   ) {}
 
-  async create(dto: CreateTypeDto): Promise<{ data: EventType }> {
+  async create(dto: CreateTypeDto): Promise<EventType> {
     try {
-      const data = await this.typeRepository.save(dto);
-      return { data };
+      return await this.typeRepository.save(dto);
     } catch {
       throw new BadRequestException('Erreur survenue lors de la création du type');
     }
   }
 
-  async findAll(): Promise<{ data: EventType[] }> {
-    const data = await this.typeRepository.find();
-    return { data };
+  async findAll(): Promise<EventType[]> {
+    return await this.typeRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: EventType }> {
+  async findOne(id: string): Promise<EventType> {
     try {
-      const data = await this.typeRepository.findOneOrFail({
+      return await this.typeRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
     } catch {
       throw new NotFoundException('Impossible de récupérer le type');
     }
   }
 
-  async update(id: string, dto: UpdateTypeDto): Promise<{ data: EventType }> {
+  async update(id: string, dto: UpdateTypeDto): Promise<EventType> {
     try {
-      const { data: type } = await this.findOne(id);
-      const data = await this.typeRepository.save({ ...type, ...dto });
-      return { data };
+      const type = await this.findOne(id);
+      return await this.typeRepository.save({ ...type, ...dto });
     } catch {
       throw new BadRequestException('Erreur survenue lors de la modification du type');
     }

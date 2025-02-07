@@ -6,33 +6,33 @@ import { Partner } from './entities/partner.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Authorization } from '../shared/decorators/rights.decorators';
+import { Auth } from '../shared/decorators/auth.decorators';
 import { RoleEnum } from '../shared/enums/roles.enum';
 
 @Controller('partners')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class PartnersController {
   constructor(private readonly partnersService: PartnersService) {}
 
   @Post()
-  create(@Body() dto: CreatePartnerDto): Promise<{ data: Partner }> {
+  create(@Body() dto: CreatePartnerDto): Promise<Partner> {
     return this.partnersService.create(dto);
   }
 
   @Get('find-grouped')
-  @Authorization(RoleEnum.Guest)
-  findGrouped(): Promise<{ data: Record<string, Partner[]> }> {
+  @Auth(RoleEnum.Guest)
+  findGrouped(): Promise<Record<string, Partner[]>> {
     return this.partnersService.findGrouped();
   }
 
   @Get()
-  findAll(): Promise<{ data: Partner[] }> {
+  findAll(): Promise<Partner[]> {
     return this.partnersService.findAll();
   }
 
   @Get(':id')
-  @Authorization(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<{ data: Partner }> {
+  @Auth(RoleEnum.Guest)
+  findOne(@Param('id') id: string): Promise<Partner> {
     return this.partnersService.findOne(id);
   }
 
@@ -47,12 +47,12 @@ export class PartnersController {
       })
     })
   )
-  addProfile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Partner }> {
+  addProfile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Partner> {
     return this.partnersService.addProfile(id, file);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePartnerDto): Promise<{ data: Partner }> {
+  update(@Param('id') id: string, @Body() dto: UpdatePartnerDto): Promise<Partner> {
     return this.partnersService.update(id, dto);
   }
 

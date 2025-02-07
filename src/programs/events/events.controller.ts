@@ -18,16 +18,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from './utils/query-params.type';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('events')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post('')
-  create(@Body() createProgramDto: CreateEventDto): Promise<{ data: Event }> {
+  create(@Body() createProgramDto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(createProgramDto);
   }
 
@@ -37,25 +37,25 @@ export class EventsController {
   }
 
   @Get('find-recent')
-  @Authorization(RoleEnum.Guest)
-  findRecent(): Promise<{ data: Event[] }> {
+  @Auth(RoleEnum.Guest)
+  findRecent(): Promise<Event[]> {
     return this.eventsService.findRecent();
   }
 
   @Get('find-published')
-  @Authorization(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<{ data: [Event[], number] }> {
+  @Auth(RoleEnum.Guest)
+  findPublished(@Query() queryParams: QueryParams): Promise<[Event[], number]> {
     return this.eventsService.findPublished(queryParams);
   }
 
   @Get(':id')
-  @Authorization(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<{ data: Event }> {
+  @Auth(RoleEnum.Guest)
+  findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOne(id);
   }
 
   @Post('publish/:id')
-  publish(@Param('id') id: string): Promise<{ data: Event }> {
+  publish(@Param('id') id: string): Promise<Event> {
     return this.eventsService.publish(id);
   }
 
@@ -70,12 +70,12 @@ export class EventsController {
       })
     })
   )
-  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Event }> {
+  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
     return this.eventsService.uploadImage(id, file);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateEventDto): Promise<{ data: Event }> {
+  update(@Param('id') id: string, @Body() updateProgramDto: UpdateEventDto): Promise<Event> {
     return this.eventsService.update(id, updateProgramDto);
   }
 

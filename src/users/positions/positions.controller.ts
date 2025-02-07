@@ -1,35 +1,35 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PositionsService } from './positions.service';
 import { Position } from './entities/position.entity';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 
 @Controller('positions')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class PositionsController {
   constructor(private readonly PostionsService: PositionsService) {}
 
   @Post()
-  create(@Body() createPostionDto: CreatePositionDto): Promise<{ data: Position }> {
+  create(@Body() createPostionDto: CreatePositionDto): Promise<Position> {
     return this.PostionsService.create(createPostionDto);
   }
 
   @Get()
-  @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Position[] }> {
+  @Auth(RoleEnum.Guest)
+  findAll(): Promise<Position[]> {
     return this.PostionsService.findAll();
   }
 
   @Get(':id')
-  @Authorization(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<{ data: Position }> {
+  @Auth(RoleEnum.Guest)
+  findOne(@Param('id') id: string): Promise<Position> {
     return this.PostionsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePositionDto): Promise<{ data: Position }> {
+  update(@Param('id') id: string, @Body() dto: UpdatePositionDto): Promise<Position> {
     return this.PostionsService.update(id, dto);
   }
 

@@ -2,33 +2,33 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CreatePartnershipDto } from './dto/create-partnership.dto';
 import { UpdatePartnershipDto } from './dto/update-partnership.dto';
 import { Partnership } from './entities/partnership.entity';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 import { PartnershipsService } from './partnerships.service';
 
 @Controller('partnerships')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class PartnershipsController {
   constructor(private readonly partnershipTypesService: PartnershipsService) {}
 
   @Post()
-  create(@Body() dto: CreatePartnershipDto): Promise<{ data: Partnership }> {
+  create(@Body() dto: CreatePartnershipDto): Promise<Partnership> {
     return this.partnershipTypesService.create(dto);
   }
 
   @Get()
-  @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Partnership[] }> {
+  @Auth(RoleEnum.Guest)
+  findAll(): Promise<Partnership[]> {
     return this.partnershipTypesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: Partnership }> {
+  findOne(@Param('id') id: string): Promise<Partnership> {
     return this.partnershipTypesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePartnershipDto): Promise<{ data: Partnership }> {
+  update(@Param('id') id: string, @Body() dto: UpdatePartnershipDto): Promise<Partnership> {
     return this.partnershipTypesService.update(id, dto);
   }
 

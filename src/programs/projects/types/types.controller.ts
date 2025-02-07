@@ -2,33 +2,33 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
-import { Authorization } from '../../../shared/decorators/rights.decorators';
+import { Auth } from '../../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../../shared/enums/roles.enum';
 import { Type } from './entities/type.entity';
 
 @Controller('project-types')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class TypesController {
   constructor(private readonly typesService: TypesService) {}
 
   @Post()
-  create(@Body() createTypeDto: CreateTypeDto): Promise<{ data: Type }> {
+  create(@Body() createTypeDto: CreateTypeDto): Promise<Type> {
     return this.typesService.create(createTypeDto);
   }
 
   @Get()
-  @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Type[] }> {
+  @Auth(RoleEnum.Guest)
+  findAll(): Promise<Type[]> {
     return this.typesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: Type }> {
+  findOne(@Param('id') id: string): Promise<Type> {
     return this.typesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTypeDto): Promise<{ data: Type }> {
+  update(@Param('id') id: string, @Body() dto: UpdateTypeDto): Promise<Type> {
     return this.typesService.update(id, dto);
   }
 

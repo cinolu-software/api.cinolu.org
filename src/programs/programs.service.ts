@@ -7,47 +7,42 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProgramsService {
-
   constructor(
     @InjectRepository(Program)
     private readonly programRepository: Repository<Program>
   ) {}
 
-  async create(dto: CreateProgramDto): Promise<{ data: Program }> {
+  async create(dto: CreateProgramDto): Promise<Program> {
     try {
-      const data = await this.programRepository.save({
+      return await this.programRepository.save({
         ...dto
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: Program[] }> {
-    const data = await this.programRepository.find();
-    return { data };
+  async findAll(): Promise<Program[]> {
+    return await this.programRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Program }> {
+  async findOne(id: string): Promise<Program> {
     try {
-      const data = await this.programRepository.findOneOrFail({
+      return await this.programRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async update(id: string, dto: UpdateProgramDto): Promise<{ data: Program }> {
+  async update(id: string, dto: UpdateProgramDto): Promise<Program> {
     try {
-      const { data: program } = await this.findOne(id);
-      const data = await this.programRepository.save({
+      const program = await this.findOne(id);
+      return await this.programRepository.save({
         ...program,
         ...dto
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }

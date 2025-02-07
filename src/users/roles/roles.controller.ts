@@ -3,31 +3,31 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('roles')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post('')
-  create(@Body() createRoleDto: CreateRoleDto): Promise<{ data: Role }> {
+  create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
     return this.rolesService.create(createRoleDto);
   }
 
   @Get('')
-  findAll(): Promise<{ data: Role[] }> {
+  findAll(): Promise<Role[]> {
     return this.rolesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: Role }> {
+  findOne(@Param('id') id: string): Promise<Role> {
     return this.rolesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto): Promise<{ data: Role }> {
+  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto): Promise<Role> {
     return this.rolesService.update(id, updateRoleDto);
   }
 

@@ -13,23 +13,22 @@ export class PartnersService {
     private partnerRepository: Repository<Partner>
   ) {}
 
-  async create(dto: CreatePartnerDto): Promise<{ data: Partner }> {
+  async create(dto: CreatePartnerDto): Promise<Partner> {
     try {
-      const data = await this.partnerRepository.save({
+      return await this.partnerRepository.save({
         ...dto,
         partnerships: dto.partnerships.map((id) => ({ id }))
       });
-      return { data };
     } catch {
-      throw new BadRequestException('Une erreur est survenu sur le serveur');
+      throw new BadRequestException();
     }
   }
 
-  async findGrouped(): Promise<{ data: Record<string, Partner[]> }> {
+  async findGrouped(): Promise<Record<string, Partner[]>> {
     const partners = await this.partnerRepository.find({
       relations: ['partnerships']
     });
-    const data = partners.reduce((acc, partner) => {
+    return partners.reduce((acc, partner) => {
       partner.partnerships.forEach(({ name }) => {
         acc[name] = acc[name] || [];
         if (!acc[name].includes(partner)) {
@@ -38,51 +37,45 @@ export class PartnersService {
       });
       return acc;
     }, {});
-
-    return { data };
   }
 
-  async findAll(): Promise<{ data: Partner[] }> {
-    const data = await this.partnerRepository.find({
+  async findAll(): Promise<Partner[]> {
+    return await this.partnerRepository.find({
       relations: ['partnerships']
     });
-    return { data };
   }
 
   async addProfile(id: string, file: Express.Multer.File) {
     try {
-      const { data: partner } = await this.findOne(id);
+      const partner = await this.findOne(id);
       if (partner.profile) await fs.unlink(`./uploads/partners/${partner.profile}`);
-      const data = await this.partnerRepository.save({ ...partner, profile: file.filename });
-      return { data };
+      return await this.partnerRepository.save({ ...partner, profile: file.filename });
     } catch {
-      throw new BadRequestException("Une erreur est survenue lors de l'ajout de l'image");
+      throw new BadRequestException();
     }
   }
 
-  async findOne(id: string): Promise<{ data: Partner }> {
+  async findOne(id: string): Promise<Partner> {
     try {
-      const data = await this.partnerRepository.findOneOrFail({
+      return await this.partnerRepository.findOneOrFail({
         where: { id },
         relations: ['partnerships']
       });
-      return { data };
     } catch {
-      throw new NotFoundException('Aucun partenaire trouver avec cet identifiant');
+      throw new NotFoundException();
     }
   }
 
-  async update(id: string, dto: UpdatePartnerDto): Promise<{ data: Partner }> {
+  async update(id: string, dto: UpdatePartnerDto): Promise<Partner> {
     try {
-      const { data: partner } = await this.findOne(id);
-      const data = await this.partnerRepository.save({
+      const partner = await this.findOne(id);
+      return await this.partnerRepository.save({
         ...partner,
         ...dto,
         partnerships: dto.partnerships.map((id) => ({ id })) || partner.partnerships
       });
-      return { data };
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
@@ -91,7 +84,7 @@ export class PartnersService {
       await this.findOne(id);
       await this.partnerRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Une erreur est surnue lors de la suppression');
+      throw new BadRequestException();
     }
   }
 }

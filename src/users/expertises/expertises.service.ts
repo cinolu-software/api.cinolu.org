@@ -12,36 +12,34 @@ export class ExpertisesService {
     private expertiseRepository: Repository<Expertise>
   ) {}
 
-  async create(dto: CreateExpertiseDto): Promise<{ data: Expertise }> {
+  async create(dto: CreateExpertiseDto): Promise<Expertise> {
     try {
-      const data = await this.expertiseRepository.save({ ...dto });
-      return { data };
+      const expertise = await this.expertiseRepository.save({ ...dto });
+      return expertise;
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
   }
 
-  async findAll(): Promise<{ data: Expertise[] }> {
-    const data = await this.expertiseRepository.find();
-    return { data };
+  async findAll(): Promise<Expertise[]> {
+    return await this.expertiseRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Expertise }> {
+  async findOne(id: string): Promise<Expertise> {
     try {
-      const data = await this.expertiseRepository.findOneOrFail({
+      const expertise = await this.expertiseRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
+      return expertise;
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
   }
 
-  async update(id: string, dto: UpdateExpertiseDto): Promise<{ data: Expertise }> {
+  async update(id: string, dto: UpdateExpertiseDto): Promise<Expertise> {
     try {
-      const { data: expertise } = await this.findOne(id);
-      const data = await this.expertiseRepository.save({ ...expertise, ...dto });
-      return { data };
+      const expertise = await this.findOne(id);
+      return await this.expertiseRepository.save({ ...expertise, ...dto });
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }

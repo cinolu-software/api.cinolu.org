@@ -23,222 +23,224 @@ export class UsersService {
     private eventEmitter: EventEmitter2
   ) {}
 
-  private async findWithRole(name: string): Promise<{ data: User[] }> {
+  private async findWithRole(name: string): Promise<User[]> {
     const data = await this.userRepository.find({
       select: ['id', 'name', 'email', 'profile', 'google_image', 'address', 'phone_number'],
       relations: ['roles', 'detail'],
       where: { roles: { name } }
     });
-    return { data };
+    return data;
   }
 
-  async findAll(): Promise<{ data: User[] }> {
+  async findAll(): Promise<User[]> {
     const data = await this.userRepository.find({
       relations: ['roles']
     });
-    return { data };
+    return data;
   }
 
-  async findCoachs(): Promise<{ data: User[] }> {
+  async findCoachs(): Promise<User[]> {
     return this.findWithRole('coach');
   }
 
-  async findStaff(): Promise<{ data: User[] }> {
+  async findStaff(): Promise<User[]> {
     return this.findWithRole('staff');
   }
 
-  async findUsers(): Promise<{ data: User[] }> {
+  async findUsers(): Promise<User[]> {
     return this.findWithRole('user');
   }
 
-  async findAdmins(): Promise<{ data: User[] }> {
+  async findAdmins(): Promise<User[]> {
     return this.findWithRole('admin');
   }
 
-  async create(dto: CreateUserDto): Promise<{ data: User; password: string }> {
+  async create(dto: CreateUserDto): Promise<User> {
     try {
       const password = Math.floor(100000 + Math.random() * 900000).toString();
-      const data: User = await this.userRepository.save({
+      const user = await this.userRepository.save({
         ...dto,
         password,
         verified_at: new Date(),
         roles: dto.roles?.map((id) => ({ id }))
       });
-      this.eventEmitter.emit('user.created', { user: data, password });
-      return { data, password };
+      this.eventEmitter.emit('user.created', { user, password });
+      return user;
     } catch {
-      throw new BadRequestException("Erreur lors de la création de l'utilisateur");
+      throw new BadRequestException();
     }
   }
 
-  async findByRole(id: string): Promise<{ data: User[] }> {
+  async findByRole(id: string): Promise<User[]> {
     try {
       const data = await this.userRepository.find({
         where: { roles: { id } }
       });
-      return { data };
+      return data;
     } catch {
-      throw new BadRequestException("Erreur lors de la création de l'utilisateur");
+      throw new BadRequestException();
     }
   }
 
-  async findByIds(ids: string[]): Promise<{ data: User[] }> {
+  async findByIds(ids: string[]): Promise<User[]> {
     const data = await this.userRepository.findBy({
       id: In(ids)
     });
-    return { data };
+    return data;
   }
 
-  async verifyEmail(email: string): Promise<{ data: User }> {
+  async verifyEmail(email: string): Promise<User> {
     try {
-      const { data: user } = await this.findByEmail(email);
-      delete user.password;
-      const data = await this.userRepository.save({
-        ...user,
+      const oldUser = await this.findByEmail(email);
+      delete oldUser.password;
+      const user = await this.userRepository.save({
+        ...oldUser,
         verified_at: new Date()
       });
-      return { data };
+      return user;
     } catch {
       throw new BadRequestException("Erreur lors de la vérification de l'email");
     }
   }
 
-  async getVerifiedUser(email: string): Promise<{ data: User }> {
+  async getVerifiedUser(email: string): Promise<User> {
     const data = await this.userRepository.findOneOrFail({
       where: { email, verified_at: Not(IsNull()) },
       relations: ['roles', 'detail', 'ventures']
     });
     const roles = data.roles.map((role) => role.name);
     const user = { ...data, roles } as unknown as User;
-    return { data: user };
+    return user;
   }
 
-  async signUp(dto: SignupDto): Promise<{ data: User }> {
+  async signUp(dto: SignupDto): Promise<User> {
     try {
-      const { data: userRole } = await this.rolesService.findByName('user');
+      const role = await this.rolesService.findByName('user');
       delete dto.password_confirm;
-      const data: User = await this.userRepository.save({
+      const user = await this.userRepository.save({
         ...dto,
-        roles: [userRole]
+        roles: [role]
       });
-      return { data };
+      return user;
     } catch {
       throw new BadRequestException('Cette adresse email est déjà utilisée');
     }
   }
 
-  async addDetail(currentUser: User, dto: CreateDetailDto): Promise<{ data: User }> {
+  async addDetail(currentUser: User, dto: CreateDetailDto): Promise<User> {
     try {
-      const { data: user } = await this.findOne(currentUser.id);
+      const user = await this.findOne(currentUser.id);
       delete user.password;
       const userDetail = { ...user.detail, ...dto };
-      const { data: detail } = await this.detailsService.create(userDetail);
+      const detail = await this.detailsService.create(userDetail);
       await this.userRepository.save({ ...user, detail });
-      const { data } = await this.getVerifiedUser(user.email);
-      return { data };
+      return await this.getVerifiedUser(user.email);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
   }
 
-  async findOne(id: string): Promise<{ data: User }> {
+  async findOne(id: string): Promise<User> {
     try {
-      const data: User = await this.userRepository.findOneOrFail({
+      const user = await this.userRepository.findOneOrFail({
         where: { id },
         relations: ['roles', 'detail']
       });
-      return { data };
+      return user;
     } catch {
-      throw new BadRequestException('Aucun utilisateur trouvé avec cet identifiant');
+      throw new BadRequestException();
     }
   }
 
-  async findByEmail(email: string): Promise<{ data: User }> {
+  async findByEmail(email: string): Promise<User> {
     try {
-      const data: User = await this.userRepository.findOneOrFail({ where: { email }, relations: ['roles'] });
-      return { data };
+      const user = await this.userRepository.findOneOrFail({
+        where: { email },
+        relations: ['roles']
+      });
+      return user;
     } catch {
-      throw new NotFoundException('Aucun utilisateur trouvé');
+      throw new NotFoundException();
     }
   }
 
-  async findOrCreate(dto: CreateWithGoogleDto): Promise<{ data: User }> {
+  async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
     try {
-      const { data: userRole } = await this.rolesService.findByName('user');
+      const role = await this.rolesService.findByName('user');
       const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });
       if (user) return await this.#updateExistingUser(user, dto);
-      return await this.#createNewUser(dto, userRole);
+      return await this.#createNewUser(dto, role);
     } catch {
       throw new BadRequestException("Erreur lors de la récupération de l'utilisateur");
     }
   }
 
-  async #updateExistingUser(user: User, dto: CreateWithGoogleDto): Promise<{ data: User }> {
-    if (!user.profile) {
-      user.google_image = dto.google_image;
-      user.verified_at = new Date();
-      await this.userRepository.save(user);
+  async #updateExistingUser(currentUser: User, dto: CreateWithGoogleDto): Promise<User> {
+    if (!currentUser.profile) {
+      currentUser.google_image = dto.google_image;
+      currentUser.verified_at = new Date();
+      await this.userRepository.save(currentUser);
     }
-    const { data } = await this.getVerifiedUser(user.email);
-    return { data };
+    const user = await this.getVerifiedUser(currentUser.email);
+    return user;
   }
 
-  async #createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<{ data: User }> {
+  async #createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<User> {
     const newUser = await this.userRepository.save({
       ...dto,
       verified_at: new Date(),
       roles: [userRole]
     });
-    const { data } = await this.getVerifiedUser(newUser.email);
-    return { data };
+    const user = await this.getVerifiedUser(newUser.email);
+    return user;
   }
 
-  async update(id: string, dto: UpdateUserDto): Promise<{ data: User }> {
+  async update(id: string, dto: UpdateUserDto): Promise<User> {
     try {
-      const { data: user } = await this.findOne(id);
-      const data: User = await this.userRepository.save({
-        ...user,
+      const oldUser = await this.findOne(id);
+      const user = await this.userRepository.save({
+        ...oldUser,
         ...dto,
-        roles: dto.roles?.map((id) => ({ id })) || user.roles
+        roles: dto.roles?.map((id) => ({ id })) || oldUser.roles
       });
-      return { data };
+      return user;
     } catch {
       throw new BadRequestException("Erreur lors de la modification de l'utilisateur");
     }
   }
 
-  async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<{ data: User }> {
+  async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
     try {
-      const { data: user } = await this.findOne(currentUser.id);
-      delete user.password;
-      await this.userRepository.save({ ...user, ...dto });
-      const { data } = await this.getVerifiedUser(user.email);
-      return { data };
+      const oldUser = await this.findOne(currentUser.id);
+      delete oldUser.password;
+      await this.userRepository.save({ ...oldUser, ...dto });
+      const user = await this.getVerifiedUser(oldUser.email);
+      return user;
     } catch {
       throw new BadRequestException('Erreur lors de la modification du profil');
     }
   }
 
-  async uploadImage(currenUser: User, file: Express.Multer.File): Promise<{ data: User }> {
+  async uploadImage(currenUser: User, file: Express.Multer.File): Promise<User> {
     try {
-      const { data: user } = await this.findOne(currenUser.id);
-      if (user.profile) await fs.unlink(`./uploads/profiles/${user.profile}`);
-      delete user.password;
-      await this.userRepository.save({ ...user, profile: file.filename });
-      const { data } = await this.getVerifiedUser(user.email);
-      return { data };
+      const oldUser = await this.findOne(currenUser.id);
+      if (oldUser.profile) await fs.unlink(`./uploads/profiles/${oldUser.profile}`);
+      delete oldUser.password;
+      await this.userRepository.save({ ...oldUser, profile: file.filename });
+      const user = await this.getVerifiedUser(oldUser.email);
+      return user;
     } catch {
       throw new BadRequestException("Erreur lors de la mise à jour de l'image");
     }
   }
 
-  async updatePassword(id: string, password: string): Promise<{ data: User }> {
+  async updatePassword(id: string, password: string): Promise<User> {
     try {
-      const { data } = await this.findOne(id);
-      await this.userRepository.update(data.id, { password });
-      return { data };
+      const user = await this.findOne(id);
+      await this.userRepository.update(user.id, { password });
+      return user;
     } catch {
       throw new BadRequestException('Erreur lors de la réinitialisation du mot de passe');
     }

@@ -13,54 +13,49 @@ export class ApplicationsService {
     private applicationRepository: Repository<Application>
   ) {}
 
-  async create(user: User, dto: CreateApplicationDto): Promise<{ data: Application }> {
+  async create(user: User, dto: CreateApplicationDto): Promise<Application> {
     try {
-      const data = await this.applicationRepository.save({
+      return await this.applicationRepository.save({
         ...dto,
         project: { id: dto.project },
         applicant: user
       });
-      return { data };
     } catch {
       throw new BadRequestException('Erreur survenue lors de la création du type');
     }
   }
 
-  async findAll(): Promise<{ data: Application[] }> {
-    const data = await this.applicationRepository.find();
-    return { data };
+  async findAll(): Promise<Application[]> {
+    return await this.applicationRepository.find();
   }
 
-  async findByProject(project: string): Promise<{ data: Application[] }> {
-    const data = await this.applicationRepository.find({
+  async findByProject(project: string): Promise<Application[]> {
+    return await this.applicationRepository.find({
       where: { project: { id: project } },
       relations: ['project', 'applicant']
     });
-    return { data };
   }
 
-  async findOne(id: string): Promise<{ data: Application }> {
+  async findOne(id: string): Promise<Application> {
     try {
-      const data = await this.applicationRepository.findOneOrFail({
+      return await this.applicationRepository.findOneOrFail({
         where: { id },
         relations: ['project', 'applicant']
       });
-      return { data };
     } catch {
-      throw new NotFoundException('Impossible de récupérer le type');
+      throw new NotFoundException();
     }
   }
 
-  async update(id: string, dto: UpdateApplicationDto): Promise<{ data: Application }> {
+  async update(id: string, dto: UpdateApplicationDto): Promise<Application> {
     try {
-      const { data: application } = await this.findOne(id);
-      const data = await this.applicationRepository.save({
+      const application = await this.findOne(id);
+      return await this.applicationRepository.save({
         ...application,
         ...dto,
         project: application.project,
         applicant: application.applicant
       });
-      return { data };
     } catch {
       throw new BadRequestException('Erreur survenue lors de la modification du type');
     }

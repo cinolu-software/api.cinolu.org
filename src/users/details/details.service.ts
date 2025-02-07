@@ -11,14 +11,13 @@ export class DetailsService {
     private readonly detailRepository: Repository<Detail>
   ) {}
 
-  async create(dto: CreateDetailDto): Promise<{ data: Detail }> {
+  async create(dto: CreateDetailDto): Promise<Detail> {
     try {
-      const data: Detail = await this.detailRepository.save({
+      return await this.detailRepository.save({
         ...dto,
         expertises: dto?.expertises?.map((id) => ({ id })),
         positions: dto?.positions?.map((id) => ({ id }))
       });
-      return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la création du rôle');
     }

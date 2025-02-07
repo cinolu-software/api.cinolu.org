@@ -12,36 +12,33 @@ export class PositionsService {
     private positionRepository: Repository<Position>
   ) {}
 
-  async create(dto: CreatePositionDto): Promise<{ data: Position }> {
+  async create(dto: CreatePositionDto): Promise<Position> {
     try {
-      const data = await this.positionRepository.save({ ...dto });
-      return { data };
+      return await this.positionRepository.save({ ...dto });
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: Position[] }> {
-    const data = await this.positionRepository.find();
-    return { data };
+  async findAll(): Promise<Position[]> {
+    return await this.positionRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Position }> {
+  async findOne(id: string): Promise<Position> {
     try {
-      const data = await this.positionRepository.findOneOrFail({
+      const position = await this.positionRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
+      return position;
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
-  async update(id: string, dto: UpdatePositionDto): Promise<{ data: Position }> {
+  async update(id: string, dto: UpdatePositionDto): Promise<Position> {
     try {
-      const { data: expertise } = await this.findOne(id);
-      const data = await this.positionRepository.save({ ...expertise, ...dto });
-      return { data };
+      const position = await this.findOne(id);
+      return await this.positionRepository.save({ ...position, ...dto });
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }

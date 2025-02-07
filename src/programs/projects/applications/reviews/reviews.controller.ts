@@ -2,14 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { Review } from './entities/review.entity';
-import { Authorization } from '../../../../shared/decorators/rights.decorators';
+import { Auth } from '../../../../shared/decorators/auth.decorators';
 import { CurrentUser } from '../../../../shared/decorators/user.decorator';
 import { RoleEnum } from '../../../../shared/enums/roles.enum';
 import { User } from '../../../../users/entities/user.entity';
 import { ReviewsService } from './reviews.service';
 
 @Controller('application-reviews')
-@Authorization(RoleEnum.Coach)
+@Auth(RoleEnum.Coach)
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 

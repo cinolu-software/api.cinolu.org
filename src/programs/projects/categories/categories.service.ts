@@ -12,36 +12,32 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>
   ) {}
 
-  async create(dto: CreateCategoryDto): Promise<{ data: Category }> {
+  async create(dto: CreateCategoryDto): Promise<Category> {
     try {
-      const data = await this.categoryRepository.save(dto);
-      return { data };
+      return await this.categoryRepository.save(dto);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: Category[] }> {
-    const data = await this.categoryRepository.find();
-    return { data };
+  async findAll(): Promise<Category[]> {
+    return await this.categoryRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Category }> {
+  async findOne(id: string): Promise<Category> {
     try {
-      const data = await this.categoryRepository.findOneOrFail({
+      return await this.categoryRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async update(id: string, dto: UpdateCategoryDto): Promise<{ data: Category }> {
+  async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
     try {
-      const { data: category } = await this.findOne(id);
-      const data = await this.categoryRepository.save({ ...category, ...dto });
-      return { data };
+      const category = await this.findOne(id);
+      return await this.categoryRepository.save({ ...category, ...dto });
     } catch {
       throw new BadRequestException();
     }

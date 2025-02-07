@@ -3,11 +3,11 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { BlogCategory } from './entities/category.entity';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
 @Controller('blog-categories')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

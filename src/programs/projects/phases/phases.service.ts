@@ -12,58 +12,52 @@ export class PhasesService {
     private phaseRepository: Repository<Phase>
   ) {}
 
-  async create(dto: CreatePhaseDto): Promise<{ data: Phase }> {
+  async create(dto: CreatePhaseDto): Promise<Phase> {
     try {
-      const data = await this.phaseRepository.save({
+      return await this.phaseRepository.save({
         ...dto,
         project: { id: dto.project }
       });
-      return { data };
     } catch {
       throw new BadRequestException('Erreur survenue lors de la soumission de la phase');
     }
   }
 
-  async findByProject(id: string): Promise<{ data: Phase[] }> {
+  async findByProject(id: string): Promise<Phase[]> {
     try {
-      const data = await this.phaseRepository.find({
+      return await this.phaseRepository.find({
         where: { project: { id } }
       });
-      return { data };
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: Phase[] }> {
-    const data = await this.phaseRepository.find();
-    return { data };
+  async findAll(): Promise<Phase[]> {
+    return await this.phaseRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Phase }> {
+  async findOne(id: string): Promise<Phase> {
     try {
-      const data = await this.phaseRepository.findOneOrFail({
+      return await this.phaseRepository.findOneOrFail({
         where: { id },
         relations: ['documents', 'project', 'requirements']
       });
-      return { data };
     } catch {
       throw new NotFoundException('Impossible de récupérer la phase');
     }
   }
 
-  async update(id: string, dto: UpdatePhaseDto): Promise<{ data: Phase }> {
+  async update(id: string, dto: UpdatePhaseDto): Promise<Phase> {
     try {
-      const { data: phase } = await this.findOne(id);
-      const data = await this.phaseRepository.save({
+      const phase = await this.findOne(id);
+      return await this.phaseRepository.save({
         ...phase,
         ...dto,
         project: phase.project
       });
-      return { data };
-    } catch (e) {
-      console.log(e);
-      throw new BadRequestException('Erreur survenue lors de la modification de la phase');
+    } catch {
+      throw new BadRequestException();
     }
   }
 

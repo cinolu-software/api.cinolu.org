@@ -16,7 +16,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Post as P } from './entities/post.entity';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
 import { User } from '../../users/entities/user.entity';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from './utils/query-params.type';
 
 @Controller('blog-posts')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

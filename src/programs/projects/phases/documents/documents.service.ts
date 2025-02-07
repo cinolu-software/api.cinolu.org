@@ -13,82 +13,52 @@ export class DocumentsService {
     private documentRepository: Repository<Document>
   ) {}
 
-  async findAll(): Promise<{ data: Document[] }> {
-    const data = await this.documentRepository.find();
-    return { data };
+  async findAll(): Promise<Document[]> {
+    return await this.documentRepository.find();
   }
 
-  async create(dto: CreateDocumentDto): Promise<{ data: Document }> {
+  async create(dto: CreateDocumentDto): Promise<Document> {
     try {
-      const data = await this.documentRepository.save({
+      return await this.documentRepository.save({
         ...dto,
         phase: { id: dto.phase }
       });
-      return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de l'ajout du document");
+      throw new BadRequestException();
     }
   }
 
   async findOne(id: string): Promise<Document> {
     try {
-      const document = await this.documentRepository.findOneOrFail({ where: { id } });
-      return document;
+      return await this.documentRepository.findOneOrFail({ where: { id } });
     } catch {
-      throw new BadRequestException('Erreur lors de la lecture du document');
+      throw new BadRequestException();
     }
   }
 
-  async update(id: string, dto: UpdateDocumentDto): Promise<{ data: Document }> {
+  async update(id: string, dto: UpdateDocumentDto): Promise<Document> {
     try {
       const document = await this.findOne(id);
-      const data = await this.documentRepository.save({
+      return await this.documentRepository.save({
         ...document,
         ...dto,
         phase: { id: dto?.phase ?? document.phase.id }
       });
-      return { data };
     } catch {
-      throw new BadRequestException('Erreur lors de la mise à jour du document');
+      throw new BadRequestException();
     }
   }
 
-  async addFile(id: string, file: Express.Multer.File): Promise<{ data: Document }> {
+  async addFile(id: string, file: Express.Multer.File): Promise<Document> {
     try {
       const document = await this.findOne(id);
       if (document.file_name) await fs.unlink(`./uploads/programs/documents/${document.file_name}`);
-      const data = await this.documentRepository.save({
+      return await this.documentRepository.save({
         ...document,
         file_name: file.filename
       });
-      return { data };
     } catch {
-      throw new BadRequestException("Erreur lors de l'ajout du fichier au document");
-    }
-  }
-
-  async removeFile(id: string): Promise<{ data: Document }> {
-    try {
-      const document = await this.findOne(id);
-      if (document.file_name) await fs.promises.unlink(`./uploads/programs/documents/${document.file_name}`);
-      const data = await this.documentRepository.save({
-        ...document,
-        file_name: null
-      });
-      return { data };
-    } catch {
-      throw new BadRequestException("Erreur lors de l'ajout du fichier au document");
-    }
-  }
-
-  async restore(id: string): Promise<{ data: Document }> {
-    try {
-      const res = await this.documentRepository.restore(id);
-      if (!res.affected) throw new BadRequestException();
-      const data = await this.findOne(id);
-      return { data };
-    } catch {
-      throw new BadRequestException('Erreur lors de la restauration du document');
+      throw new BadRequestException();
     }
   }
 

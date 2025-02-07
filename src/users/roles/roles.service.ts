@@ -12,46 +12,41 @@ export class RolesService {
     private readonly roleRepository: Repository<Role>
   ) {}
 
-  async create(dto: CreateRoleDto): Promise<{ data: Role }> {
+  async create(dto: CreateRoleDto): Promise<Role> {
     try {
-      const data: Role = await this.roleRepository.save(dto);
-      return { data };
+      return await this.roleRepository.save(dto);
     } catch {
       throw new ConflictException('Erreur lors de la création du rôle');
     }
   }
 
-  async findAll(): Promise<{ data: Role[] }> {
-    const data: Role[] = await this.roleRepository.find({
+  async findAll(): Promise<Role[]> {
+    return await this.roleRepository.find({
       order: { updated_at: 'DESC' }
     });
-    return { data };
   }
 
-  async findByName(name: string): Promise<{ data: Role }> {
+  async findByName(name: string): Promise<Role> {
     try {
-      const data: Role = await this.roleRepository.findOneOrFail({ where: { name } });
-      return { data };
+      return await this.roleRepository.findOneOrFail({ where: { name } });
     } catch {
       throw new BadRequestException('Erreur lors de la récupération du rôle');
     }
   }
 
-  async findOne(id: string): Promise<{ data: Role }> {
+  async findOne(id: string): Promise<Role> {
     try {
-      const data: Role = await this.roleRepository.findOneOrFail({ where: { id } });
-      return { data };
+      return await this.roleRepository.findOneOrFail({ where: { id } });
     } catch {
       throw new BadRequestException('Erreur lors de la récupération du rôle');
     }
   }
 
-  async update(id: string, dto: UpdateRoleDto): Promise<{ data: Role }> {
+  async update(id: string, dto: UpdateRoleDto): Promise<Role> {
     try {
-      const { data: role } = await this.findOne(id);
+      const role = await this.findOne(id);
       const updatedRole: Role & UpdateRoleDto = Object.assign(role, dto);
-      const data: Role = await this.roleRepository.save(updatedRole);
-      return { data };
+      return await this.roleRepository.save(updatedRole);
     } catch {
       throw new BadRequestException('Erreur lors de la mise à jour du rôle');
     }

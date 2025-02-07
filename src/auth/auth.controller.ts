@@ -7,30 +7,30 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { Authorization } from '../shared/decorators/rights.decorators';
+import { Auth } from '../shared/decorators/auth.decorators';
 import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RoleEnum } from '../shared/enums/roles.enum';
 import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
-@Authorization(RoleEnum.User)
+@Auth(RoleEnum.User)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('sign-in')
-  @Authorization(RoleEnum.Guest)
+  @Auth(RoleEnum.Guest)
   @UseGuards(LocalAuthGuard)
-  singIn(@Req() req: Request): Promise<{ data: Express.User }> {
+  singIn(@Req() req: Request): Promise<Express.User> {
     return this.authService.signIn(req);
   }
 
   @Get('sign-in')
-  @Authorization(RoleEnum.Guest)
+  @Auth(RoleEnum.Guest)
   @UseGuards(GoogleAuthGuard)
   signInWithGoogle(): void {}
 
   @Get('google/redirect')
-  @Authorization(RoleEnum.Guest)
+  @Auth(RoleEnum.Guest)
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Res() res: Response): Promise<void> {
     return this.authService.signInWithGoogle(res);
@@ -42,31 +42,31 @@ export class AuthController {
   }
 
   @Get('profile')
-  profile(@CurrentUser() user: User): Promise<{ data: User }> {
+  profile(@CurrentUser() user: User): Promise<User> {
     return this.authService.profile(user);
   }
 
   @Patch('profile')
-  @Authorization(RoleEnum.User)
-  updateProfile(@CurrentUser() currentUser: User, @Body() data: UpdateProfileDto): Promise<{ data: User }> {
-    return this.authService.updateProfile(currentUser, data);
+  @Auth(RoleEnum.User)
+  updateProfile(@CurrentUser() currentUser: User, @Body() dto: UpdateProfileDto): Promise<User> {
+    return this.authService.updateProfile(currentUser, dto);
   }
 
   @Patch('update-password')
-  @Authorization(RoleEnum.User)
-  updatePassword(@CurrentUser() user: User, @Body() dto: UpdatePasswordDto): Promise<{ data: User }> {
+  @Auth(RoleEnum.User)
+  updatePassword(@CurrentUser() user: User, @Body() dto: UpdatePasswordDto): Promise<User> {
     return this.authService.updatePassword(user, dto);
   }
 
   @Post('forgot-password')
-  @Authorization(RoleEnum.Guest)
+  @Auth(RoleEnum.Guest)
   forgotPassword(@Body() dto: forgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(dto);
   }
 
   @Post('reset-password')
-  @Authorization(RoleEnum.Guest)
-  resetPassword(@Body() dto: ResetPasswordDto): Promise<{ data: User }> {
+  @Auth(RoleEnum.Guest)
+  resetPassword(@Body() dto: ResetPasswordDto): Promise<User> {
     return this.authService.resetPassword(dto);
   }
 }

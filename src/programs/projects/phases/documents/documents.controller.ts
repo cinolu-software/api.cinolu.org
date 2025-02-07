@@ -3,25 +3,25 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { DocumentsService } from './documents.service';
-import { Authorization } from '../../../../shared/decorators/rights.decorators';
+import { Auth } from '../../../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../../../shared/enums/roles.enum';
 import { UpdateProjectDto } from '../../dto/update-project.dto';
 import { Document } from './entities/document.entity';
 import { CreateDocumentDto } from './dto/create-document.dto';
 
 @Controller('phase-documents')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Get('')
-  @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Document[] }> {
+  @Auth(RoleEnum.Guest)
+  findAll(): Promise<Document[]> {
     return this.documentsService.findAll();
   }
 
   @Post('')
-  create(@Body() createDocumentDto: CreateDocumentDto): Promise<{ data: Document }> {
+  create(@Body() createDocumentDto: CreateDocumentDto): Promise<Document> {
     return this.documentsService.create(createDocumentDto);
   }
 
@@ -36,23 +36,13 @@ export class DocumentsController {
       })
     })
   )
-  addFile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Document }> {
+  addFile(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Document> {
     return this.documentsService.addFile(id, file);
   }
 
-  @Delete('document/:id')
-  removeFile(@Param('id') id: string): Promise<{ data: Document }> {
-    return this.documentsService.removeFile(id);
-  }
-
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<{ data: Document }> {
+  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<Document> {
     return this.documentsService.update(id, dto);
-  }
-
-  @Post('restore/:id')
-  restore(@Param('id') id: string): Promise<{ data: Document }> {
-    return this.documentsService.restore(id);
   }
 
   @Delete(':id')

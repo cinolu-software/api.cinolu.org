@@ -12,37 +12,33 @@ export class SectorsService {
     private sectorRepository: Repository<Sector>
   ) {}
 
-  async create(dto: CreateSectorDto): Promise<{ data: Sector }> {
+  async create(dto: CreateSectorDto): Promise<Sector> {
     try {
-      const data = await this.sectorRepository.save(dto);
-      return { data };
+      return await this.sectorRepository.save(dto);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
   }
 
-  async findAll(): Promise<{ data: Sector[] }> {
-    const data = await this.sectorRepository.find();
-    return { data };
+  async findAll(): Promise<Sector[]> {
+    return await this.sectorRepository.find();
   }
 
-  async findOne(id: string): Promise<{ data: Sector }> {
+  async findOne(id: string): Promise<Sector> {
     try {
-      const data = await this.sectorRepository.findOneOrFail({
+      return await this.sectorRepository.findOneOrFail({
         where: { id }
       });
-      return { data };
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }
   }
 
-  async update(id: string, dto: UpdateSectorDto): Promise<{ data: Sector }> {
+  async update(id: string, dto: UpdateSectorDto): Promise<Sector> {
     try {
-      const { data: sector } = await this.findOne(id);
+      const sector = await this.findOne(id);
       await this.sectorRepository.save({ ...sector, ...dto });
-      const { data } = await this.findOne(id);
-      return { data };
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException('Une erreur est survenue sur le serveur');
     }

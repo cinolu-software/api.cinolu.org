@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { Authorization } from '../../../shared/decorators/rights.decorators';
+import { Auth } from '../../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../../shared/enums/roles.enum';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -7,28 +7,28 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 
 @Controller('project-categories')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto): Promise<{ data: Category }> {
+  create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
-  @Authorization(RoleEnum.Guest)
-  findAll(): Promise<{ data: Category[] }> {
+  @Auth(RoleEnum.Guest)
+  findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<{ data: Category }> {
+  findOne(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<{ data: Category }> {
+  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<Category> {
     return this.categoriesService.update(id, dto);
   }
 

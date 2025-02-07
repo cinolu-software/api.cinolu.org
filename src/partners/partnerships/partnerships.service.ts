@@ -12,40 +12,38 @@ export class PartnershipsService {
     private partnershipRepository: Repository<Partnership>
   ) {}
 
-  async create(dto: CreatePartnershipDto): Promise<{ data: Partnership }> {
+  async create(dto: CreatePartnershipDto): Promise<Partnership> {
     try {
-      const data = await this.partnershipRepository.save(dto);
-      return { data };
+      return await this.partnershipRepository.save(dto);
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
-  async findAll(): Promise<{ data: Partnership[] }> {
+  async findAll(): Promise<Partnership[]> {
     try {
-      const data = await this.partnershipRepository.find();
-      return { data };
+      return await this.partnershipRepository.find();
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
-  async findOne(id: string): Promise<{ data: Partnership }> {
+  async findOne(id: string): Promise<Partnership> {
     try {
-      const data = await this.partnershipRepository.findOneOrFail({ where: { id } });
-      return { data };
+      return await this.partnershipRepository.findOneOrFail({
+        where: { id }
+      });
     } catch {
-      throw new NotFoundException("Le type de partenariat n'existe pas");
+      throw new NotFoundException();
     }
   }
 
   async update(id: string, dto: UpdatePartnershipDto) {
     try {
-      const { data: Partnership } = await this.findOne(id);
-      const data = await this.partnershipRepository.save({ ...Partnership, ...dto });
-      return { data };
+      const Partnership = await this.findOne(id);
+      return await this.partnershipRepository.save({ ...Partnership, ...dto });
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
@@ -54,7 +52,7 @@ export class PartnershipsService {
       await this.findOne(id);
       await this.partnershipRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 }

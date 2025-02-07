@@ -12,14 +12,13 @@ export class RequirementsService {
     private requirementRepository: Repository<Requirement>
   ) {}
 
-  async findAll(): Promise<{ data: Requirement[] }> {
-    const data = await this.requirementRepository.find();
-    return { data };
+  async findAll(): Promise<Requirement[]> {
+    return await this.requirementRepository.find();
   }
 
-  async create(dto: CreateRequirementDto): Promise<{ data: Requirement[] }> {
+  async create(dto: CreateRequirementDto): Promise<Requirement[]> {
     try {
-      const data = await Promise.all(
+      return await Promise.all(
         dto.requirements.map(
           async (d) =>
             await this.requirementRepository.save({
@@ -28,7 +27,6 @@ export class RequirementsService {
             })
         )
       );
-      return { data };
     } catch {
       throw new BadRequestException("Erreur lors de l'ajout du prérecquis");
     }
@@ -43,26 +41,24 @@ export class RequirementsService {
     }
   }
 
-  async update(id: string, dto: UpdateRequirementDto): Promise<{ data: Requirement }> {
+  async update(id: string, dto: UpdateRequirementDto): Promise<Requirement> {
     try {
       const requirment = await this.findOne(id);
-      const data = await this.requirementRepository.save({
+      return await this.requirementRepository.save({
         ...requirment,
         ...dto,
         phase: requirment.phase
       });
-      return { data };
     } catch {
       throw new BadRequestException('Erreur lors de la mise à jour du prérecquis');
     }
   }
 
-  async restore(id: string): Promise<{ data: Requirement }> {
+  async restore(id: string): Promise<Requirement> {
     try {
       const res = await this.requirementRepository.restore(id);
       if (!res.affected) throw new BadRequestException();
-      const data = await this.findOne(id);
-      return { data };
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException('Erreur lors de la restauration du prérecquis');
     }

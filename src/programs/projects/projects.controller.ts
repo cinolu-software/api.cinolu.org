@@ -13,7 +13,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Authorization } from '../../shared/decorators/rights.decorators';
+import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -22,40 +22,40 @@ import { ProjectsService } from './projects.service';
 import { QueryParams } from './utils/query-params.type';
 
 @Controller('projects')
-@Authorization(RoleEnum.Staff)
+@Auth(RoleEnum.Staff)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post('')
-  create(@Body() dto: CreateProjectDto): Promise<{ data: Project }> {
+  create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
   }
 
   @Get('')
-  findAll(): Promise<{ data: Project[] }> {
+  findAll(): Promise<Project[]> {
     return this.projectsService.findAll();
   }
 
   @Get('find-recent')
-  @Authorization(RoleEnum.Guest)
-  findRecent(): Promise<{ data: Project[] }> {
+  @Auth(RoleEnum.Guest)
+  findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
   }
 
   @Get('find-published')
-  @Authorization(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<{ data: [Project[], number] }> {
+  @Auth(RoleEnum.Guest)
+  findPublished(@Query() queryParams: QueryParams): Promise<[Project[], number]> {
     return this.projectsService.findPublished(queryParams);
   }
 
   @Get(':id')
-  @Authorization(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<{ data: Project }> {
+  @Auth(RoleEnum.Guest)
+  findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
   }
 
   @Post('publish/:id')
-  publish(@Param('id') id: string): Promise<{ data: Project }> {
+  publish(@Param('id') id: string): Promise<Project> {
     return this.projectsService.publish(id);
   }
 
@@ -70,18 +70,13 @@ export class ProjectsController {
       })
     })
   )
-  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<{ data: Project }> {
+  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
     return this.projectsService.addImage(id, file);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<{ data: Project }> {
+  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<Project> {
     return this.projectsService.update(id, dto);
-  }
-
-  @Post('restore/:id')
-  restore(@Param('id') id: string): Promise<{ data: Project }> {
-    return this.projectsService.restore(id);
   }
 
   @Delete(':id')
