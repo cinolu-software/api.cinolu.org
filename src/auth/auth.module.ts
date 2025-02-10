@@ -13,6 +13,6 @@ import { UsersModule } from '../users/users.module';
   imports: [PassportModule, UsersModule, EmailModule],
   controllers: [AuthController],
   providers: [AuthService, RightsService, LocalStrategy, SessionSerializer, GoogleStrategy],
-  exports: [RightsService]
+  exports: [RightsService, AuthService]
 })
 export class AuthModule {}
