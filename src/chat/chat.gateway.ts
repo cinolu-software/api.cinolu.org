@@ -1,7 +1,13 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  SubscribeMessage,
+  OnGatewayConnection,
+  MessageBody
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UsersService } from '../users/users.service';
 import { ChatService } from './chat.service';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 @WebSocketGateway({
   cors: {
@@ -14,24 +20,27 @@ export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
-  constructor(
-    private userService: UsersService,
-    private chatService: ChatService
-  ) {}
+  constructor(private chatService: ChatService) {}
 
-  async handleConnection(client: Socket) {
-    const { userId } = client.handshake.query;
-    if (!userId) client.disconnect(true);
+  async handleConnection(client: Socket): Promise<void> {
+    const auth = client.handshake.headers?.authorization;
+    if (!auth) client.disconnect(true);
     try {
-      const user = await this.userService.findOne(userId as string);
-      const messages = await this.chatService.getMessages();
-      client.broadcast.emit('userJoined', user);
-      client.emit('loadMessages', messages);
+      await this.chatService.verifyToken(auth);
+      this.getMessages();
     } catch {
       client.disconnect(true);
     }
   }
 
-  @SubscribeMessage('message')
-  handleMessage() {}
+  async getMessages(): Promise<void> {
+    const messages = await this.chatService.findAll();
+    this.server.emit('loadMessages', messages);
+  }
+
+  @SubscribeMessage('send-message')
+  async sendMessage(@MessageBody() dto: CreateChatDto): Promise<void> {
+    const message = await this.chatService.create(dto);
+    this.server.emit('newMessage', message);
+  }
 }
