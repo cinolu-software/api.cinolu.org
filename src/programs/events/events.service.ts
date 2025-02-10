@@ -30,12 +30,11 @@ export class EventsService {
     }
   }
 
-  async findAll(): Promise<{ data: [Event[], number] }> {
-    const data = await this.eventRepository.findAndCount({
+  async findAll(): Promise<Event[]> {
+    return await this.eventRepository.find({
       relations: ['types', 'responsible'],
       order: { ended_at: 'DESC' }
     });
-    return { data };
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Event[], number]> {
