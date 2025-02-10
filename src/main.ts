@@ -3,28 +3,27 @@ import * as passport from 'passport';
 import * as session from 'express-session';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { SessionIoAdapter } from './chat/ws.session';
 
 const port = Number(process.env.PORT) as number;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const sessionConfig: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET,
-    resave: Boolean(process.env.SESSION_RESAVE),
-    saveUninitialized: Boolean(process.env.SESSION_SAVE_UNINITIALIZED),
-    cookie: { maxAge: 86400000, secure: false, sameSite: 'strict', httpOnly: true }
-  };
   app.enableCors({
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true
   });
-  app.use(session(sessionConfig));
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: Boolean(process.env.SESSION_RESAVE),
+      saveUninitialized: Boolean(process.env.SESSION_SAVE_UNINITIALIZED),
+      cookie: { maxAge: 86400000, secure: false, sameSite: 'strict', httpOnly: true }
+    })
+  );
   app.use(passport.initialize());
   app.use(passport.session());
   app.useGlobalPipes(new ValidationPipe());
-  app.useWebSocketAdapter(new SessionIoAdapter(sessionConfig, app));
   await app.listen(port);
 }
 bootstrap();
