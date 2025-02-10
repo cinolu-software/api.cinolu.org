@@ -26,7 +26,8 @@ export class ChatGateway implements OnGatewayConnection {
     const auth = client.handshake.headers?.authorization;
     if (!auth) client.disconnect(true);
     try {
-      await this.chatService.verifyToken(auth);
+      const user = await this.chatService.verifyToken(auth);
+      client.broadcast.emit('userJoined', user);
       this.getMessages();
     } catch {
       client.disconnect(true);
@@ -36,6 +37,11 @@ export class ChatGateway implements OnGatewayConnection {
   async getMessages(): Promise<void> {
     const messages = await this.chatService.findAll();
     this.server.emit('loadMessages', messages);
+  }
+
+  @SubscribeMessage('typing-message')
+  async handleTyping(@MessageBody('name') name: string): Promise<void> {
+    this.server.emit('userTyping', { name });
   }
 
   @SubscribeMessage('send-message')
