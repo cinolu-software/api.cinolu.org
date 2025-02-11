@@ -6,28 +6,24 @@ import UpdateProfileDto from './dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-  // private _jwtSecret = this.configService.get('JWT_SECRET');
-  // private _frontEndUrl = this.configService.get('FRONTEND_URI');
-
   constructor(
     private usersService: UsersService,
     private eventEmitter: EventEmitter2,
-    private jwtService: JwtService,
-    private configService: ConfigService
+    private jwtService: JwtService
   ) {}
 
   async validateUser(email: string, pass: string): Promise<User> {
     try {
       const user = await this.usersService.getVerifiedUser(email);
       await this.verifyPassword(pass, user.password);
-      return user;
+      const chat_token = await this.generateToken(user, '1d');
+      return { ...user, chat_token } as User;
     } catch {
       throw new NotFoundException('Les identifiants saisis sont invalides');
     }
@@ -37,10 +33,8 @@ export class AuthService {
     return res.redirect(process.env.FRONTEND_URI);
   }
 
-  async signIn(@Req() req: Request): Promise<[User, string]> {
-    const user = req.user as User;
-    const chat_token = await this.generateToken(user as User, '1d');
-    return [user, chat_token];
+  async signIn(@Req() req: Request): Promise<User> {
+    return req.user as User;
   }
 
   async signOut(@Req() request: Request): Promise<void> {
@@ -68,13 +62,8 @@ export class AuthService {
     return this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET, expiresIn });
   }
 
-  async profile(currentUser: User): Promise<User> {
-    try {
-      const user = await this.usersService.getVerifiedUser(currentUser.email);
-      return user;
-    } catch {
-      throw new BadRequestException();
-    }
+  async profile(user: User): Promise<User> {
+    return user;
   }
 
   async updateProfile(user: User, dto: UpdateProfileDto): Promise<User> {
@@ -95,7 +84,7 @@ export class AuthService {
     try {
       const user = await this.usersService.findByEmail(dto.email);
       const token = await this.generateToken(user, '15min');
-      const link = this.configService.get('FRONTEND_URI') + 'reset-password?token=' + token;
+      const link = process.env.FRONTEND_URI + 'reset-password?token=' + token;
       this.eventEmitter.emit('user.reset-password', { user, link });
     } catch {
       throw new BadRequestException();

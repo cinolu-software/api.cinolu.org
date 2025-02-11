@@ -20,7 +20,7 @@ export class AuthController {
   @Post('sign-in')
   @Auth(RoleEnum.Guest)
   @UseGuards(LocalAuthGuard)
-  singIn(@Req() req: Request): Promise<[User, string]> {
+  singIn(@Req() req: Request): Promise<User> {
     return this.authService.signIn(req);
   }
 
