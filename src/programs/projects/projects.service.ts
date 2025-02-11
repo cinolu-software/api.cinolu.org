@@ -82,10 +82,17 @@ export class ProjectsService {
 
   async findOne(id: string): Promise<Project> {
     try {
-      return await this.projectRepository.findOneOrFail({
-        where: { id },
-        relations: ['types', 'partners', 'program', 'categories', 'phases', 'phases.requirements']
-      });
+      return await this.projectRepository
+        .createQueryBuilder('p')
+        .where('p.id = :id', { id })
+        .leftJoinAndSelect('p.types', 'types')
+        .leftJoinAndSelect('p.partners', 'partners')
+        .leftJoinAndSelect('p.program', 'program')
+        .leftJoinAndSelect('p.categories', 'categories')
+        .leftJoinAndSelect('p.phases', 'phases')
+        .leftJoinAndSelect('phases.requirements', 'requirements')
+        .orderBy('phases.created_at', 'DESC')
+        .getOne();
     } catch {
       throw new BadRequestException();
     }
