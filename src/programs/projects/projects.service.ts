@@ -25,7 +25,7 @@ export class ProjectsService {
         partners: dto.partners.map((id) => ({ id }))
       });
     } catch {
-      throw new BadRequestException('Erreur lors de la création du projectme');
+      throw new BadRequestException();
     }
   }
 
@@ -33,7 +33,7 @@ export class ProjectsService {
     const project = await this.projectRepository.findOne({
       where: { name }
     });
-    if (project) throw new BadRequestException('Le projectme existe déjà');
+    if (project) throw new BadRequestException();
   }
 
   async findAll(): Promise<Project[]> {
@@ -66,7 +66,7 @@ export class ProjectsService {
         take: 5
       });
     } catch {
-      throw new BadRequestException('Erreur lors de la récupération du dernier événement');
+      throw new BadRequestException();
     }
   }
 
@@ -76,7 +76,7 @@ export class ProjectsService {
       if (project.image) await fs.unlink(`./uploads/projects/${project.image}`);
       return await this.projectRepository.save({ ...project, image: file.filename });
     } catch {
-      throw new BadRequestException("Erreur lors de la mise à jour de l'image");
+      throw new BadRequestException();
     }
   }
 
@@ -87,7 +87,7 @@ export class ProjectsService {
         relations: ['types', 'partners', 'program', 'categories', 'phases', 'phases.requirements']
       });
     } catch {
-      throw new BadRequestException('Erreur lors de la récupération du projectme');
+      throw new BadRequestException();
     }
   }
 
@@ -97,7 +97,7 @@ export class ProjectsService {
       await this.projectRepository.update(id, { is_published: !project.is_published });
       return project;
     } catch {
-      throw new BadRequestException("Erreur lors de la publication de l'événement");
+      throw new BadRequestException();
     }
   }
 
@@ -113,7 +113,7 @@ export class ProjectsService {
         partners: dto?.partners.map((id) => ({ id })) ?? project.partners
       });
     } catch {
-      throw new BadRequestException('Erreur lors de la modification du projectme');
+      throw new BadRequestException();
     }
   }
 
@@ -122,7 +122,7 @@ export class ProjectsService {
       await this.findOne(id);
       await this.projectRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Erreur lors de la suppression du projectme');
+      throw new BadRequestException();
     }
   }
 }
