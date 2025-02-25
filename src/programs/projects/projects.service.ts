@@ -46,15 +46,12 @@ export class ProjectsService {
     const { page = 1, type } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
-    const where = { is_published: true };
-    if (type) where['types'] = { name: type };
-    return await this.projectRepository.findAndCount({
-      where,
-      relations: ['types', 'categories'],
-      take,
-      skip,
-      order: { started_at: 'DESC' }
-    });
+    const query = this.projectRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.types', 'types')
+      .leftJoinAndSelect('p.categories', 'categories');
+    if (type) query.andWhere('types.id = :type', { type });
+    return query.take(take).skip(skip).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
   async findRecent(): Promise<Project[]> {
