@@ -49,6 +49,7 @@ export class PostsController {
   }
 
   @Get()
+  @Auth(RoleEnum.User)
   findAll(@Query() queryParams: QueryParams): Promise<[P[], number]> {
     return this.postsService.findAll(queryParams);
   }
