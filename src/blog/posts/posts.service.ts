@@ -31,15 +31,9 @@ export class PostsService {
     const { page = 1, category } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
-    const where = {};
-    if (category) where['category'] = { category };
-    return await this.postRepository.findAndCount({
-      where,
-      take,
-      skip,
-      relations: ['category'],
-      order: { created_at: 'DESC' }
-    });
+    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.category', 'category');
+    if (category) query.andWhere('category.id = :category', { category });
+    return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
   }
 
   async findOne(id: string): Promise<Post> {
