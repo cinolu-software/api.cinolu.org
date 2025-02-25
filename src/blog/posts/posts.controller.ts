@@ -33,7 +33,7 @@ export class PostsController {
     return this.postsService.create(user, dto);
   }
 
-  @Post('image-cover')
+  @Post('image-cover/:id')
   @UseInterceptors(
     FileInterceptor('thumb', {
       storage: diskStorage({
@@ -49,7 +49,7 @@ export class PostsController {
   }
 
   @Get()
-  @Auth(RoleEnum.User)
+  @Auth(RoleEnum.Guest)
   findAll(@Query() queryParams: QueryParams): Promise<[P[], number]> {
     return this.postsService.findAll(queryParams);
   }
