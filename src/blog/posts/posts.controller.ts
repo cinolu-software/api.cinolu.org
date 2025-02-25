@@ -55,6 +55,7 @@ export class PostsController {
   }
 
   @Get(':id')
+  @Auth(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<P> {
     return this.postsService.findOne(id);
   }
