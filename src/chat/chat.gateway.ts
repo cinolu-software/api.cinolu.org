@@ -28,6 +28,7 @@ export class ChatGateway implements OnGatewayConnection {
     try {
       const user = await this.chatService.verifyToken(auth);
       client.broadcast.emit('userJoined', user);
+      await this.getMessages();
     } catch {
       client.disconnect(true);
     }
