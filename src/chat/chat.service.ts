@@ -20,7 +20,8 @@ export class ChatService {
 
   async findAll(): Promise<Chat[]> {
     return await this.chatRepository.find({
-      order: { created_at: 'DESC' }
+      order: { created_at: 'DESC' },
+      relations: ['sender']
     });
   }
 
