@@ -118,7 +118,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@nestjs/core"
+      "@nestjs/core",
+      "bcrypt"
     ]
   }
 }
