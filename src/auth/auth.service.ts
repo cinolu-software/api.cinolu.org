@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { CreateWithGoogleDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -20,12 +21,22 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<User> {
     try {
-      const user = await this.usersService.getVerifiedUser(email);
+      const user = await this.usersService.findByEmail(email);
       await this.verifyPassword(pass, user.password);
       const chat_token = await this.generateToken(user, '1d');
       return { ...user, chat_token } as User;
     } catch {
       throw new NotFoundException('Les identifiants saisis sont invalides');
+    }
+  }
+
+  async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
+    try {
+      const user = await this.usersService.findOrCreate(dto);
+      const chat_token = await this.generateToken(user, '1d');
+      return { ...user, chat_token } as User;
+    } catch {
+      throw new NotFoundException();
     }
   }
 
@@ -44,8 +55,7 @@ export class AuthService {
   async verifyToken(token: string): Promise<User> {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: process.env.JWT_SECRET });
-      const user = await this.usersService.findOne(payload.sub);
-      return user;
+      return await this.usersService.findOne(payload.sub);
     } catch {
       throw new BadRequestException();
     }
@@ -73,7 +83,7 @@ export class AuthService {
   async updatePassword(currentUser: User, dto: UpdatePasswordDto): Promise<User> {
     try {
       await this.usersService.updatePassword(currentUser.id, dto.password);
-      const user = await this.usersService.getVerifiedUser(currentUser.email);
+      const user = await this.usersService.findByEmail(currentUser.email);
       return user;
     } catch {
       throw new BadRequestException();

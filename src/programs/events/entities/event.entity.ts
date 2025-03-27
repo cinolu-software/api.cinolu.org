@@ -1,8 +1,7 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { EventType } from '../types/entities/type.entity';
 import { AbstractEntity } from '../../../shared/utils/abstract.entity';
-import { User } from '../../../users/entities/user.entity';
 import { Program } from '../../entities/program.entity';
+import { Category } from '../categories/entities/category.entity';
 
 @Entity()
 export class Event extends AbstractEntity {
@@ -21,14 +20,11 @@ export class Event extends AbstractEntity {
   @Column({ type: 'date' })
   started_at: Date;
 
-  @Column({ type: 'bigint', default: 0 })
+  @Column({ type: 'bigint', nullable: true })
   attendees: number;
 
   @Column({ type: 'boolean', default: false })
   is_published: boolean;
-
-  @Column({ type: 'enum', enum: ['physical', 'online'], default: 'physical' })
-  event_type: 'physical' | 'online';
 
   @Column({ nullable: true })
   online_link: string;
@@ -37,14 +33,10 @@ export class Event extends AbstractEntity {
   ended_at: Date;
 
   @ManyToOne(() => Program, (p) => p.events)
-  @JoinColumn({ name: 'programId' })
+  @JoinColumn()
   program: Program;
 
-  @ManyToOne(() => User, (user) => user.events)
-  @JoinColumn({ name: 'responsibleId' })
-  responsible: User;
-
-  @ManyToMany(() => EventType, (type) => type.events)
-  @JoinTable({ name: 'event_types' })
-  types: EventType[];
+  @ManyToMany(() => Category, (category) => category.event)
+  @JoinTable()
+  categories: Category[];
 }

@@ -1,11 +1,9 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../../shared/utils/abstract.entity';
-import { Partner } from '../../../partners/entities/partner.entity';
 import { Application } from '../applications/entities/application.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
 import { Program } from '../../entities/program.entity';
-import { Type } from '../types/entities/type.entity';
 
 @Entity()
 export class Project extends AbstractEntity {
@@ -49,18 +47,10 @@ export class Project extends AbstractEntity {
   applications: Application[];
 
   @ManyToOne(() => Program, (p) => p.projects)
-  @JoinColumn({ name: 'programId' })
+  @JoinColumn()
   program: Program;
 
-  @ManyToMany(() => Type, (type) => type.projects)
-  @JoinTable({ name: 'project_types' })
-  types: Type[];
-
   @ManyToMany(() => Category, (category) => category.projects)
-  @JoinTable({ name: 'project_categories' })
+  @JoinTable()
   categories: Category[];
-
-  @ManyToMany(() => Partner, (partner) => partner.projects)
-  @JoinTable({ name: 'project_partners' })
-  partners: Partner[];
 }

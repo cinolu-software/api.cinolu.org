@@ -20,9 +20,7 @@ export class ProjectsService {
       return await this.projectRepository.save({
         ...dto,
         program: { id: dto.program },
-        categories: dto.categories.map((category) => ({ id: category })),
-        types: dto.types.map((type) => ({ id: type })),
-        partners: dto.partners.map((id) => ({ id }))
+        categories: dto.categories.map((category) => ({ id: category }))
       });
     } catch {
       throw new BadRequestException();
@@ -38,19 +36,16 @@ export class ProjectsService {
 
   async findAll(): Promise<Project[]> {
     return await this.projectRepository.find({
-      relations: ['types', 'partners', 'categories', 'program']
+      relations: ['categories', 'program']
     });
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Project[], number]> {
-    const { page = 1, type } = queryParams;
+    const { page = 1, category } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
-    const query = this.projectRepository
-      .createQueryBuilder('p')
-      .leftJoinAndSelect('p.types', 'types')
-      .leftJoinAndSelect('p.categories', 'categories');
-    if (type) query.andWhere('types.id = :type', { type });
+    const query = this.projectRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'c');
+    if (category) query.andWhere('c.id = :category', { category });
     return query.take(take).skip(skip).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
@@ -58,7 +53,6 @@ export class ProjectsService {
     try {
       return await this.projectRepository.find({
         order: { ended_at: 'DESC' },
-        relations: ['types'],
         where: { is_published: true },
         take: 5
       });
@@ -79,17 +73,10 @@ export class ProjectsService {
 
   async findOne(id: string): Promise<Project> {
     try {
-      return await this.projectRepository
-        .createQueryBuilder('p')
-        .where('p.id = :id', { id })
-        .leftJoinAndSelect('p.types', 'types')
-        .leftJoinAndSelect('p.partners', 'partners')
-        .leftJoinAndSelect('p.program', 'program')
-        .leftJoinAndSelect('p.categories', 'categories')
-        .leftJoinAndSelect('p.phases', 'phases')
-        .leftJoinAndSelect('phases.requirements', 'requirements')
-        .orderBy('phases.created_at', 'DESC')
-        .getOne();
+      return await this.projectRepository.findOneOrFail({
+        where: { id },
+        relations: ['program', 'categories', 'phases', 'phases.requirements']
+      });
     } catch {
       throw new BadRequestException();
     }
@@ -111,10 +98,8 @@ export class ProjectsService {
       return await this.projectRepository.save({
         id,
         ...dto,
-        program: { id: dto?.program ?? project.program.id },
-        categories: dto.categories.map((category) => ({ id: category })) ?? project.categories,
-        types: dto?.types.map((type) => ({ id: type })) ?? project.types,
-        partners: dto?.partners.map((id) => ({ id })) ?? project.partners
+        program: { id: dto.program || project.program.id },
+        categories: dto.categories.map((category) => ({ id: category })) ?? project.categories
       });
     } catch {
       throw new BadRequestException();

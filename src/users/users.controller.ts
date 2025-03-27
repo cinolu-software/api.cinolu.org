@@ -9,7 +9,6 @@ import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RoleEnum } from '../shared/enums/roles.enum';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
-import { CreateDetailDto } from './details/dto/create-detail.dto';
 
 @Controller('users')
 @Auth(RoleEnum.Staff)
@@ -27,32 +26,10 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Post('add-details')
-  @Auth(RoleEnum.User)
-  addDetail(@CurrentUser() user: User, @Body() dto: CreateDetailDto): Promise<User> {
-    return this.userService.addDetail(user, dto);
-  }
-
-  @Get('coachs')
+  @Get('roles/:name')
   @Auth(RoleEnum.Guest)
-  findCoachs(): Promise<User[]> {
-    return this.userService.findCoachs();
-  }
-
-  @Get('staff')
-  @Auth(RoleEnum.Guest)
-  findStaff(): Promise<User[]> {
-    return this.userService.findStaff();
-  }
-
-  @Get('admins')
-  findAdmins(): Promise<User[]> {
-    return this.userService.findAdmins();
-  }
-
-  @Get('users')
-  findUsers(): Promise<User[]> {
-    return this.userService.findUsers();
+  findWithRole(@Param('name') name: string): Promise<User[]> {
+    return this.userService.findWithRole(name);
   }
 
   @Get(':id')

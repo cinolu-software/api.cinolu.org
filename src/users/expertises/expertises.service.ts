@@ -17,7 +17,7 @@ export class ExpertisesService {
       const expertise = await this.expertiseRepository.save({ ...dto });
       return expertise;
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
@@ -32,16 +32,16 @@ export class ExpertisesService {
       });
       return expertise;
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
   async update(id: string, dto: UpdateExpertiseDto): Promise<Expertise> {
     try {
-      const expertise = await this.findOne(id);
-      return await this.expertiseRepository.save({ ...expertise, ...dto });
+      await this.expertiseRepository.update(id, dto);
+      return await this.findOne(id);
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 
@@ -50,7 +50,7 @@ export class ExpertisesService {
       await this.findOne(id);
       await this.expertiseRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Une erreur est survenue sur le serveur');
+      throw new BadRequestException();
     }
   }
 }

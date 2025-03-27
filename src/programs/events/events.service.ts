@@ -22,8 +22,7 @@ export class EventsService {
       return await this.eventRepository.save({
         ...dto,
         program: { id: dto.program },
-        responsible: { id: dto.responsible },
-        types: dto.types.map((type) => ({ id: type }))
+        categories: dto.categories.map((type) => ({ id: type }))
       });
     } catch {
       throw new BadRequestException();
@@ -32,20 +31,20 @@ export class EventsService {
 
   async findAll(): Promise<Event[]> {
     return await this.eventRepository.find({
-      relations: ['types', 'responsible'],
+      relations: ['categories'],
       order: { ended_at: 'DESC' }
     });
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Event[], number]> {
-    const { page = 1, type } = queryParams;
+    const { page = 1, category } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
     const query = this.eventRepository
       .createQueryBuilder('e')
-      .leftJoinAndSelect('e.types', 'types')
+      .leftJoinAndSelect('e.categories', 'categories')
       .andWhere('e.is_published = :is_published', { is_published: true });
-    if (type) query.andWhere('types.id', { type });
+    if (category) query.andWhere('categories.id', { category });
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
@@ -62,12 +61,12 @@ export class EventsService {
     try {
       return await this.eventRepository.find({
         order: { ended_at: 'DESC' },
-        relations: ['types'],
+        relations: ['categories'],
         where: { is_published: true },
         take: 5
       });
     } catch {
-      throw new BadRequestException('Erreur lors de la récupération du dernier événement');
+      throw new BadRequestException();
     }
   }
 
@@ -85,10 +84,10 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['types']
+        relations: ['categories']
       });
     } catch {
-      throw new BadRequestException("Erreur lors de la récupération de l'événement");
+      throw new BadRequestException();
     }
   }
 
@@ -99,8 +98,7 @@ export class EventsService {
         id,
         ...dto,
         program: { id: dto.program },
-        responsible: { id: dto.responsible },
-        types: dto?.types.map((type) => ({ id: type })) || event.types
+        categories: dto?.categories.map((type) => ({ id: type })) || event.categories
       });
     } catch {
       throw new BadRequestException();
@@ -116,7 +114,7 @@ export class EventsService {
       await this.findOne(id);
       await this.eventRepository.softDelete(id);
     } catch {
-      throw new BadRequestException("Erreur lors de la suppression de l'événement");
+      throw new BadRequestException();
     }
   }
 }

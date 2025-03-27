@@ -1,18 +1,27 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 
 export default class CreateUserDto {
-  @IsEmail({}, { message: "L'email doit être une adresse email valide" })
+  @IsEmail()
   email: string;
 
-  @IsNotEmpty({ message: "Le nom d'utilisateur est obligatoire" })
+  @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty({ message: 'Le numéro de télephone est obligatoire' })
+  @IsNotEmpty()
   phone_number: string;
 
-  @IsNotEmpty({ message: "L'adresse est obligatoire" })
+  @IsNotEmpty()
   address: string;
 
-  @IsNotEmpty({ message: 'Le rôle est obligatoire' })
+  @IsNotEmpty()
+  biography: string;
+
+  @IsOptional()
+  positions: string[];
+
+  @IsOptional()
+  expertises: string[];
+
+  @IsNotEmpty()
   roles: string[];
 }

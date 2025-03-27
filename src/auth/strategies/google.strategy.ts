@@ -1,20 +1,16 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CreateWithGoogleDto } from '../dto';
-import { UsersService } from '../../users/users.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(
-    private userService: UsersService,
-    configService: ConfigService
-  ) {
+  constructor(private authService: AuthService) {
     super({
-      clientID: configService.get('GOOGLE_CLIENT_ID'),
-      clientSecret: configService.get('GOOGLE_SECRET'),
-      callbackURL: configService.get('GOOGLE_REDIRECT_URI'),
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI,
       scope: ['email', 'profile']
     });
   }
@@ -26,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       name: `${name.givenName} ${name.familyName}`,
       google_image: photos[0].value
     };
-    const user = await this.userService.findOrCreate(userDto);
+    const user = await this.authService.findOrCreate(userDto);
     done(null, user);
   }
 }

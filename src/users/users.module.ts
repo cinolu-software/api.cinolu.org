@@ -7,18 +7,10 @@ import { UsersService } from './users.service';
 import { ExpertisesModule } from './expertises/expertises.module';
 import { PositionsModule } from './positions/positions.module';
 import { RolesModule } from './roles/roles.module';
-import { DetailsModule } from './details/details.module';
 import { UserSubscriber } from './subscribers/user.subscriber';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    EmailModule,
-    ExpertisesModule,
-    PositionsModule,
-    RolesModule,
-    DetailsModule
-  ],
+  imports: [TypeOrmModule.forFeature([User]), EmailModule, ExpertisesModule, PositionsModule, RolesModule],
   controllers: [UsersController],
   providers: [UsersService, UserSubscriber],
   exports: [UsersService]

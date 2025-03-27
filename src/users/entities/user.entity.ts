@@ -1,12 +1,10 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
-import { Detail } from '../details/entities/detail.entity';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../shared/utils/abstract.entity';
 import { Role } from '../roles/entities/role.entity';
-import { Venture } from '../../ventures/entities/venture.entity';
-import { Event } from '../../programs/events/entities/event.entity';
 import { Project } from '../../programs/projects/entities/project.entity';
 import { Post } from '../../blog/posts/entities/post.entity';
-import { Comment } from '../../blog/comments/entities/comment.entity';
+import { Position } from '../positions/entities/position.entity';
+import { Expertise } from '../expertises/entities/expertise.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -18,6 +16,9 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: true })
   password: string;
+
+  @Column({ type: 'text', nullable: true })
+  biography: string;
 
   @Column({ nullable: true })
   phone_number: string;
@@ -31,30 +32,22 @@ export class User extends AbstractEntity {
   @Column({ nullable: true })
   profile: string;
 
-  @Column({ type: 'datetime', nullable: true, default: null })
-  verified_at: Date;
-
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 
-  @OneToMany(() => Comment, (comment) => comment.by)
-  comments: Comment[];
-
-  @ManyToMany(() => Role, (role) => role.users)
-  @JoinTable({ name: 'user_roles' })
+  @ManyToMany(() => Role)
+  @JoinTable()
   roles: Role[];
 
   @ManyToMany(() => Project)
-  @JoinTable({ name: 'user_enrolled_projects' })
-  enrolled_projects: Project[];
+  @JoinTable()
+  projects: Project[];
 
-  @OneToOne(() => Detail, (detail) => detail.user)
-  @JoinColumn()
-  detail: Detail;
+  @ManyToMany(() => Position)
+  @JoinTable()
+  postions: Position[];
 
-  @OneToMany(() => Event, (event) => event.responsible)
-  events: Event[];
-
-  @OneToMany(() => Venture, (venture) => venture.user)
-  ventures: Venture[];
+  @ManyToMany(() => Expertise)
+  @JoinTable()
+  expertises: Expertise[];
 }

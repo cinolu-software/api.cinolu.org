@@ -21,7 +21,7 @@ export class ApplicationsService {
         applicant: user
       });
     } catch {
-      throw new BadRequestException('Erreur survenue lors de la création du type');
+      throw new BadRequestException();
     }
   }
 
@@ -57,7 +57,7 @@ export class ApplicationsService {
         applicant: application.applicant
       });
     } catch {
-      throw new BadRequestException('Erreur survenue lors de la modification du type');
+      throw new BadRequestException();
     }
   }
 
@@ -66,7 +66,7 @@ export class ApplicationsService {
       await this.findOne(id);
       await this.applicationRepository.softDelete(id);
     } catch {
-      throw new BadRequestException('Impossible de supprimer le type');
+      throw new BadRequestException();
     }
   }
 }

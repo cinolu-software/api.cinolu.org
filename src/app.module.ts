@@ -10,15 +10,13 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './email/email.module';
 import { EventsModule } from './programs/events/events.module';
-import { PartnersModule } from './partners/partners.module';
 import { ProjectsModule } from './programs/projects/projects.module';
 import { UsersModule } from './users/users.module';
-import { VenturesModule } from './ventures/ventures.module';
 import { ProgramsModule } from './programs/programs.module';
 import { ApplicationsModule } from './programs/projects/applications/applications.module';
 import { BlogModule } from './blog/blog.module';
-import { ChatModule } from './chat/chat.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
+import { EcosystemModule } from './ecosystem/ecosystem.module';
 
 @Module({
   imports: [
@@ -43,13 +41,11 @@ import { TransformInterceptor } from './shared/interceptors/transform.intercepto
     EmailModule,
     DatabaseModule,
     ProjectsModule,
-    PartnersModule,
     EventsModule,
-    VenturesModule,
     ProgramsModule,
     ApplicationsModule,
     BlogModule,
-    ChatModule
+    EcosystemModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

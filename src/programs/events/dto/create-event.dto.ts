@@ -1,38 +1,33 @@
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
-import { EventType } from '../utils/event-type.enum';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEventDto {
-  @IsNotEmpty({ message: "'Le nom de l'évémement est obligatoire'" })
+  @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty({ message: "La description de l'évémement est obligatoire" })
+  @IsNotEmpty()
   description: string;
 
-  @IsNotEmpty({ message: 'Le nombre des participants est obligatoire' })
+  @IsNotEmpty()
   attendees: number;
 
-  @IsEnum(EventType)
-  event_type: EventType;
-
-  @ValidateIf((e) => e.eventType === 'physical')
   @IsString()
   location: string;
 
   @IsOptional()
   online_link: string;
 
-  @IsNotEmpty({ message: "'La date de début de l'évémement est obligatoire'" })
+  @IsNotEmpty()
   started_at: Date;
 
-  @IsNotEmpty({ message: "La date de fin de l'évémement est obligatoire'" })
+  @IsNotEmpty()
   ended_at: Date;
 
-  @IsNotEmpty({ message: 'Le responsable est obligatoire' })
+  @IsNotEmpty()
   responsible: string;
 
-  @IsNotEmpty({ message: 'Le programme est obligatoire' })
+  @IsNotEmpty()
   program: string;
 
-  @IsArray({ message: 'Le type est obligatoire' })
-  types: string[];
+  @IsNotEmpty()
+  categories: string[];
 }
