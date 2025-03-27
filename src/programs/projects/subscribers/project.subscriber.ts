@@ -1,14 +1,14 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
 import slugify from 'slugify';
-import { BlogCategory } from '../entities/category.entity';
+import { Project } from '../entities/project.entity';
 
 @EventSubscriber()
-export class CategorySubscriber implements EntitySubscriberInterface<BlogCategory> {
+export class ProjectSubscriber implements EntitySubscriberInterface<Project> {
   listenTo() {
-    return BlogCategory;
+    return Project;
   }
 
-  async beforeInsert(event: InsertEvent<BlogCategory>): Promise<void> {
+  async beforeInsert(event: InsertEvent<Project>): Promise<void> {
     const { name } = event.entity;
     event.entity.slug = slugify(name, { lower: true });
   }

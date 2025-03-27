@@ -71,6 +71,17 @@ export class ProjectsService {
     }
   }
 
+  async findBySlug(slug: string): Promise<Project> {
+    try {
+      return await this.projectRepository.findOneOrFail({
+        where: { slug },
+        relations: ['program', 'categories', 'phases', 'phases.requirements']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findOne(id: string): Promise<Project> {
     try {
       return await this.projectRepository.findOneOrFail({

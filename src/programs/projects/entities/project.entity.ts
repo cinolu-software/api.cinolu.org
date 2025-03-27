@@ -10,6 +10,9 @@ export class Project extends AbstractEntity {
   @Column()
   name: string;
 
+  @Column()
+  slug: string;
+
   @Column({ nullable: true })
   image: string;
 
@@ -22,15 +25,6 @@ export class Project extends AbstractEntity {
   @Column({ type: 'date' })
   ended_at: Date;
 
-  @Column({ type: 'text' })
-  targeted_audience: string;
-
-  @Column({ type: 'text', nullable: true })
-  aim: string;
-
-  @Column({ type: 'text', nullable: true })
-  prize: string;
-
   @Column({ type: 'json', nullable: true })
   report: JSON;
 
@@ -38,7 +32,7 @@ export class Project extends AbstractEntity {
   is_published: boolean;
 
   @Column({ nullable: true })
-  town: string;
+  place: string;
 
   @OneToMany(() => Phase, (phase) => phase.project)
   phases: Phase[];

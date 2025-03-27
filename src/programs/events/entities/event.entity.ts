@@ -8,6 +8,9 @@ export class Event extends AbstractEntity {
   @Column()
   name: string;
 
+  @Column()
+  slug: string;
+
   @Column({ nullable: true })
   image: string;
 
@@ -19,9 +22,6 @@ export class Event extends AbstractEntity {
 
   @Column({ type: 'date' })
   started_at: Date;
-
-  @Column({ type: 'bigint', nullable: true })
-  attendees: number;
 
   @Column({ type: 'boolean', default: false })
   is_published: boolean;

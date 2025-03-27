@@ -2,17 +2,17 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Repository } from 'typeorm';
-import { BlogCategory } from './entities/category.entity';
+import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectRepository(BlogCategory)
-    private readonly categoryRepository: Repository<BlogCategory>
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>
   ) {}
 
-  async create(dto: CreateCategoryDto): Promise<BlogCategory> {
+  async create(dto: CreateCategoryDto): Promise<Category> {
     try {
       return await this.categoryRepository.save(dto);
     } catch {
@@ -20,11 +20,11 @@ export class CategoriesService {
     }
   }
 
-  async findAll(): Promise<BlogCategory[]> {
+  async findAll(): Promise<Category[]> {
     return await this.categoryRepository.find();
   }
 
-  async findOne(id: string): Promise<BlogCategory> {
+  async findOne(id: string): Promise<Category> {
     try {
       return await this.categoryRepository.findOneOrFail({
         where: { id }
@@ -34,7 +34,7 @@ export class CategoriesService {
     }
   }
 
-  async update(id: string, dto: UpdateCategoryDto): Promise<BlogCategory> {
+  async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
     try {
       const category = await this.findOne(id);
       return await this.categoryRepository.save({ ...category, ...dto });

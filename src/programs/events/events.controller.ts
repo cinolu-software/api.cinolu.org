@@ -48,6 +48,12 @@ export class EventsController {
     return this.eventsService.findPublished(queryParams);
   }
 
+  @Get('slug/:id')
+  @Auth(RoleEnum.Guest)
+  findBySlug(@Param('slug') slug: string): Promise<Event> {
+    return this.eventsService.findBySlug(slug);
+  }
+
   @Get(':id')
   @Auth(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<Event> {

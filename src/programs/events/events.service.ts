@@ -80,6 +80,17 @@ export class EventsService {
     }
   }
 
+  async findBySlug(slug: string): Promise<Event> {
+    try {
+      return await this.eventRepository.findOneOrFail({
+        where: { slug },
+        relations: ['categories']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findOne(id: string): Promise<Event> {
     try {
       return await this.eventRepository.findOneOrFail({

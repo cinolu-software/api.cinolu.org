@@ -47,6 +47,17 @@ export class PostsService {
     }
   }
 
+  async findBySlug(slug: string): Promise<Post> {
+    try {
+      return await this.postRepository.findOneOrFail({
+        where: { slug },
+        relations: ['comments', 'author', 'category']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async uploadImage(id: string, file: Express.Multer.File): Promise<Post> {
     try {
       const post = await this.findOne(id);

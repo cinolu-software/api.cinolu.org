@@ -54,10 +54,10 @@ export class PostsController {
     return this.postsService.findAll(queryParams);
   }
 
-  @Get(':id')
+  @Get('slug/:slug')
   @Auth(RoleEnum.Guest)
-  findOne(@Param('id') id: string): Promise<P> {
-    return this.postsService.findOne(id);
+  findBySlug(@Param('slug') slug: string): Promise<P> {
+    return this.postsService.findBySlug(slug);
   }
 
   @Patch(':id')

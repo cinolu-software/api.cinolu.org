@@ -7,9 +7,6 @@ export class CreateEventDto {
   @IsNotEmpty()
   description: string;
 
-  @IsNotEmpty()
-  attendees: number;
-
   @IsString()
   location: string;
 

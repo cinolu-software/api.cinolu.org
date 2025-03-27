@@ -17,16 +17,7 @@ export class CreateProjectDto {
   ended_at: Date;
 
   @IsNotEmpty()
-  targeted_audience: string;
-
-  @IsNotEmpty()
-  aim: string;
-
-  @IsNotEmpty()
-  prize: string;
-
-  @IsNotEmpty()
-  town: string;
+  place: string;
 
   @IsNotEmpty()
   program: string;

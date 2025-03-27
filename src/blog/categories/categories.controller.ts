@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { BlogCategory } from './entities/category.entity';
+import { Category } from './entities/category.entity';
 import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
@@ -12,23 +12,23 @@ export class CategoriesController {
 
   @Post()
   @Auth(RoleEnum.Staff)
-  create(@Body() dto: CreateCategoryDto): Promise<BlogCategory> {
+  create(@Body() dto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.create(dto);
   }
 
   @Get()
-  findAll(): Promise<BlogCategory[]> {
+  findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<BlogCategory> {
+  findOne(@Param('id') id: string): Promise<Category> {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
   @Auth(RoleEnum.Staff)
-  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<BlogCategory> {
+  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<Category> {
     return this.categoriesService.update(id, dto);
   }
 
