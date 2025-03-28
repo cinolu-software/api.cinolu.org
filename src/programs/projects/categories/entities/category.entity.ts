@@ -2,7 +2,7 @@ import { Column, Entity, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../../../../shared/utils/abstract.entity';
 import { Project } from '../../entities/project.entity';
 
-@Entity()
+@Entity('projectsCategory')
 export class Category extends AbstractEntity {
   @Column()
   name: string;

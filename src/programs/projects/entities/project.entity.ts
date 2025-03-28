@@ -26,6 +26,9 @@ export class Project extends AbstractEntity {
   ended_at: Date;
 
   @Column({ type: 'json', nullable: true })
+  form: JSON;
+
+  @Column({ type: 'json', nullable: true })
   report: JSON;
 
   @Column({ type: 'boolean', default: false })

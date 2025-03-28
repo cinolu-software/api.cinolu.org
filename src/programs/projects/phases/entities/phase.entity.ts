@@ -18,9 +18,6 @@ export class Phase extends AbstractEntity {
   @Column({ type: 'datetime' })
   ended_at: Date;
 
-  @Column({ type: 'json', nullable: true })
-  form: JSON;
-
   @OneToMany(() => Requirement, (requirement) => requirement.phase)
   requirements: Requirement[];
 

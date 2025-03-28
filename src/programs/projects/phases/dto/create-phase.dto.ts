@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreatePhaseDto {
   @IsNotEmpty()
@@ -18,7 +18,4 @@ export class CreatePhaseDto {
 
   @IsNotEmpty()
   project: string;
-
-  @IsOptional()
-  form: JSON;
 }

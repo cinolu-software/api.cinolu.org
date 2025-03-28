@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Init1743088117076 implements MigrationInterface {
-  name = 'Init1743088117076';
+export class Init1743153741446 implements MigrationInterface {
+  name = 'Init1743153741446';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -14,7 +14,7 @@ export class Init1743088117076 implements MigrationInterface {
       `CREATE TABLE \`application\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`answers\` json NOT NULL, \`projectId\` varchar(36) NULL, \`userId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`category\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`projectsCategory\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`requirement\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`phaseId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
@@ -23,19 +23,19 @@ export class Init1743088117076 implements MigrationInterface {
       `CREATE TABLE \`document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`title\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`file_name\` varchar(255) NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`phase\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`started_at\` datetime NOT NULL, \`ended_at\` datetime NOT NULL, \`form\` json NULL, \`projectId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`phase\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`started_at\` datetime NOT NULL, \`ended_at\` datetime NOT NULL, \`projectId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`eventsCategory\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`event\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`slug\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`location\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`started_at\` date NOT NULL, \`is_published\` tinyint NOT NULL DEFAULT 0, \`online_link\` varchar(255) NULL, \`ended_at\` date NOT NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`event\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`slug\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`place\` varchar(255) NOT NULL, \`description\` text NOT NULL, \`started_at\` date NOT NULL, \`is_published\` tinyint NOT NULL DEFAULT 0, \`link\` varchar(255) NULL, \`ended_at\` date NOT NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`program\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`description\` text NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`project\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`slug\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`description\` text NOT NULL, \`started_at\` date NOT NULL, \`ended_at\` date NOT NULL, \`report\` json NULL, \`is_published\` tinyint NOT NULL DEFAULT 0, \`place\` varchar(255) NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`project\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`slug\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`description\` text NOT NULL, \`started_at\` date NOT NULL, \`ended_at\` date NOT NULL, \`form\` json NULL, \`report\` json NULL, \`is_published\` tinyint NOT NULL DEFAULT 0, \`place\` varchar(255) NULL, \`programId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`postsCategory\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`
@@ -65,7 +65,7 @@ export class Init1743088117076 implements MigrationInterface {
       `CREATE TABLE \`event_categories_events_category\` (\`eventId\` varchar(36) NOT NULL, \`eventsCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_6c52da2816227595d9458d8b54\` (\`eventId\`), INDEX \`IDX_df2d69aad4d88d1a426e01be1f\` (\`eventsCategoryId\`), PRIMARY KEY (\`eventId\`, \`eventsCategoryId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
-      `CREATE TABLE \`project_categories_category\` (\`projectId\` varchar(36) NOT NULL, \`categoryId\` varchar(36) NOT NULL, INDEX \`IDX_c69602ecc23990f6c11b1ed470\` (\`projectId\`), INDEX \`IDX_9b47f8b749484ae8bcb6b2550b\` (\`categoryId\`), PRIMARY KEY (\`projectId\`, \`categoryId\`)) ENGINE=InnoDB`
+      `CREATE TABLE \`project_categories_projects_category\` (\`projectId\` varchar(36) NOT NULL, \`projectsCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_bbf00d20e490cc867974ad59c2\` (\`projectId\`), INDEX \`IDX_74f532443feb087c1f72b5e5cd\` (\`projectsCategoryId\`), PRIMARY KEY (\`projectId\`, \`projectsCategoryId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `CREATE TABLE \`user_roles_role\` (\`userId\` varchar(36) NOT NULL, \`roleId\` varchar(36) NOT NULL, INDEX \`IDX_5f9286e6c25594c6b88c108db7\` (\`userId\`), INDEX \`IDX_4be2f7adf862634f5f803d246b\` (\`roleId\`), PRIMARY KEY (\`userId\`, \`roleId\`)) ENGINE=InnoDB`
@@ -78,6 +78,9 @@ export class Init1743088117076 implements MigrationInterface {
     );
     await queryRunner.query(
       `CREATE TABLE \`user_expertises_expertise\` (\`userId\` varchar(36) NOT NULL, \`expertiseId\` varchar(36) NOT NULL, INDEX \`IDX_968b205a0347113d422a40e48a\` (\`userId\`), INDEX \`IDX_44686bc8b33bab05ad204eac17\` (\`expertiseId\`), PRIMARY KEY (\`userId\`, \`expertiseId\`)) ENGINE=InnoDB`
+    );
+    await queryRunner.query(
+      `CREATE TABLE \`member_categories_members_category\` (\`memberId\` varchar(36) NOT NULL, \`membersCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_c2b75898caabe9347b4d141ea8\` (\`memberId\`), INDEX \`IDX_c93e05a0ca989039081ec11051\` (\`membersCategoryId\`), PRIMARY KEY (\`memberId\`, \`membersCategoryId\`)) ENGINE=InnoDB`
     );
     await queryRunner.query(
       `ALTER TABLE \`review\` ADD CONSTRAINT \`FK_8d5525f4acba6e2149fb5da4a8c\` FOREIGN KEY (\`applicationId\`) REFERENCES \`application\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
@@ -125,10 +128,10 @@ export class Init1743088117076 implements MigrationInterface {
       `ALTER TABLE \`event_categories_events_category\` ADD CONSTRAINT \`FK_df2d69aad4d88d1a426e01be1ff\` FOREIGN KEY (\`eventsCategoryId\`) REFERENCES \`eventsCategory\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE \`project_categories_category\` ADD CONSTRAINT \`FK_c69602ecc23990f6c11b1ed4700\` FOREIGN KEY (\`projectId\`) REFERENCES \`project\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
+      `ALTER TABLE \`project_categories_projects_category\` ADD CONSTRAINT \`FK_bbf00d20e490cc867974ad59c2a\` FOREIGN KEY (\`projectId\`) REFERENCES \`project\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE \`project_categories_category\` ADD CONSTRAINT \`FK_9b47f8b749484ae8bcb6b2550b7\` FOREIGN KEY (\`categoryId\`) REFERENCES \`category\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE \`project_categories_projects_category\` ADD CONSTRAINT \`FK_74f532443feb087c1f72b5e5cdd\` FOREIGN KEY (\`projectsCategoryId\`) REFERENCES \`projectsCategory\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE \`user_roles_role\` ADD CONSTRAINT \`FK_5f9286e6c25594c6b88c108db77\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
@@ -154,9 +157,21 @@ export class Init1743088117076 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE \`user_expertises_expertise\` ADD CONSTRAINT \`FK_44686bc8b33bab05ad204eac17e\` FOREIGN KEY (\`expertiseId\`) REFERENCES \`expertise\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
     );
+    await queryRunner.query(
+      `ALTER TABLE \`member_categories_members_category\` ADD CONSTRAINT \`FK_c2b75898caabe9347b4d141ea82\` FOREIGN KEY (\`memberId\`) REFERENCES \`member\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`member_categories_members_category\` ADD CONSTRAINT \`FK_c93e05a0ca989039081ec110513\` FOREIGN KEY (\`membersCategoryId\`) REFERENCES \`membersCategory\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`member_categories_members_category\` DROP FOREIGN KEY \`FK_c93e05a0ca989039081ec110513\``
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`member_categories_members_category\` DROP FOREIGN KEY \`FK_c2b75898caabe9347b4d141ea82\``
+    );
     await queryRunner.query(
       `ALTER TABLE \`user_expertises_expertise\` DROP FOREIGN KEY \`FK_44686bc8b33bab05ad204eac17e\``
     );
@@ -178,10 +193,10 @@ export class Init1743088117076 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE \`user_roles_role\` DROP FOREIGN KEY \`FK_4be2f7adf862634f5f803d246b8\``);
     await queryRunner.query(`ALTER TABLE \`user_roles_role\` DROP FOREIGN KEY \`FK_5f9286e6c25594c6b88c108db77\``);
     await queryRunner.query(
-      `ALTER TABLE \`project_categories_category\` DROP FOREIGN KEY \`FK_9b47f8b749484ae8bcb6b2550b7\``
+      `ALTER TABLE \`project_categories_projects_category\` DROP FOREIGN KEY \`FK_74f532443feb087c1f72b5e5cdd\``
     );
     await queryRunner.query(
-      `ALTER TABLE \`project_categories_category\` DROP FOREIGN KEY \`FK_c69602ecc23990f6c11b1ed4700\``
+      `ALTER TABLE \`project_categories_projects_category\` DROP FOREIGN KEY \`FK_bbf00d20e490cc867974ad59c2a\``
     );
     await queryRunner.query(
       `ALTER TABLE \`event_categories_events_category\` DROP FOREIGN KEY \`FK_df2d69aad4d88d1a426e01be1ff\``
@@ -202,6 +217,9 @@ export class Init1743088117076 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE \`application\` DROP FOREIGN KEY \`FK_e69389177ac594d36dea539f276\``);
     await queryRunner.query(`ALTER TABLE \`review\` DROP FOREIGN KEY \`FK_bea8f7bc6860508ea240f4725ab\``);
     await queryRunner.query(`ALTER TABLE \`review\` DROP FOREIGN KEY \`FK_8d5525f4acba6e2149fb5da4a8c\``);
+    await queryRunner.query(`DROP INDEX \`IDX_c93e05a0ca989039081ec11051\` ON \`member_categories_members_category\``);
+    await queryRunner.query(`DROP INDEX \`IDX_c2b75898caabe9347b4d141ea8\` ON \`member_categories_members_category\``);
+    await queryRunner.query(`DROP TABLE \`member_categories_members_category\``);
     await queryRunner.query(`DROP INDEX \`IDX_44686bc8b33bab05ad204eac17\` ON \`user_expertises_expertise\``);
     await queryRunner.query(`DROP INDEX \`IDX_968b205a0347113d422a40e48a\` ON \`user_expertises_expertise\``);
     await queryRunner.query(`DROP TABLE \`user_expertises_expertise\``);
@@ -214,9 +232,13 @@ export class Init1743088117076 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX \`IDX_4be2f7adf862634f5f803d246b\` ON \`user_roles_role\``);
     await queryRunner.query(`DROP INDEX \`IDX_5f9286e6c25594c6b88c108db7\` ON \`user_roles_role\``);
     await queryRunner.query(`DROP TABLE \`user_roles_role\``);
-    await queryRunner.query(`DROP INDEX \`IDX_9b47f8b749484ae8bcb6b2550b\` ON \`project_categories_category\``);
-    await queryRunner.query(`DROP INDEX \`IDX_c69602ecc23990f6c11b1ed470\` ON \`project_categories_category\``);
-    await queryRunner.query(`DROP TABLE \`project_categories_category\``);
+    await queryRunner.query(
+      `DROP INDEX \`IDX_74f532443feb087c1f72b5e5cd\` ON \`project_categories_projects_category\``
+    );
+    await queryRunner.query(
+      `DROP INDEX \`IDX_bbf00d20e490cc867974ad59c2\` ON \`project_categories_projects_category\``
+    );
+    await queryRunner.query(`DROP TABLE \`project_categories_projects_category\``);
     await queryRunner.query(`DROP INDEX \`IDX_df2d69aad4d88d1a426e01be1f\` ON \`event_categories_events_category\``);
     await queryRunner.query(`DROP INDEX \`IDX_6c52da2816227595d9458d8b54\` ON \`event_categories_events_category\``);
     await queryRunner.query(`DROP TABLE \`event_categories_events_category\``);
@@ -236,7 +258,7 @@ export class Init1743088117076 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE \`phase\``);
     await queryRunner.query(`DROP TABLE \`document\``);
     await queryRunner.query(`DROP TABLE \`requirement\``);
-    await queryRunner.query(`DROP TABLE \`category\``);
+    await queryRunner.query(`DROP TABLE \`projectsCategory\``);
     await queryRunner.query(`DROP TABLE \`application\``);
     await queryRunner.query(`DROP TABLE \`review\``);
     await queryRunner.query(`DROP INDEX \`IDX_ae4578dcaed5adff96595e6166\` ON \`role\``);

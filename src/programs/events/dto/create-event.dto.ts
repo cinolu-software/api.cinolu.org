@@ -11,7 +11,7 @@ export class CreateEventDto {
   location: string;
 
   @IsOptional()
-  online_link: string;
+  link: string;
 
   @IsNotEmpty()
   started_at: Date;

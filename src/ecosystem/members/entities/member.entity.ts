@@ -1,6 +1,6 @@
 import { Category } from 'src/ecosystem/categories/entities/category.entity';
 import { AbstractEntity } from 'src/shared/utils/abstract.entity';
-import { Column, Entity, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Member extends AbstractEntity {
@@ -17,5 +17,6 @@ export class Member extends AbstractEntity {
   logo: string;
 
   @ManyToMany(() => Category)
+  @JoinTable()
   categories: Category[];
 }

@@ -15,7 +15,7 @@ export class Event extends AbstractEntity {
   image: string;
 
   @Column()
-  location: string;
+  place: string;
 
   @Column({ type: 'text' })
   description: string;
@@ -27,7 +27,7 @@ export class Event extends AbstractEntity {
   is_published: boolean;
 
   @Column({ nullable: true })
-  online_link: string;
+  link: string;
 
   @Column({ type: 'date' })
   ended_at: Date;
