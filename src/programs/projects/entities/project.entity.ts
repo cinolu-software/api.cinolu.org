@@ -19,6 +19,9 @@ export class Project extends AbstractEntity {
   @Column({ type: 'text' })
   description: string;
 
+  @Column({ type: 'json', nullable: true })
+  requirements: JSON;
+
   @Column({ type: 'date' })
   started_at: Date;
 

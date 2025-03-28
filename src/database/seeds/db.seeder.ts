@@ -105,11 +105,21 @@ export default class DbSeeder implements Seeder {
             ended_at: faker.date.future(),
             is_published: faker.helpers.arrayElement([true, false]),
             place: faker.location.city(),
+            requirements: generateRequirements() as unknown as JSON,
             categories: await createProjectCategories(faker.number.int({ min: 1, max: 5 })),
             form: generateJSONForm(faker.number.int({ min: 1, max: 5 })) as unknown as JSON
           });
         })
       );
+    };
+
+    const generateRequirements = () => {
+      return Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => {
+        return {
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription()
+        };
+      });
     };
 
     const createEvents = async (count: number) => {

@@ -18,4 +18,7 @@ export class CreatePhaseDto {
 
   @IsNotEmpty()
   project: string;
+
+  @IsNotEmpty()
+  requirements: JSON;
 }

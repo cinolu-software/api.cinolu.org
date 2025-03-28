@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../../../../shared/utils/abstract.entity';
 import { Project } from '../../entities/project.entity';
-import { Requirement } from '../requirements/entities/requirement.entity';
 import { Document } from '../documents/entities/document.entity';
 
 @Entity()
@@ -18,8 +17,8 @@ export class Phase extends AbstractEntity {
   @Column({ type: 'datetime' })
   ended_at: Date;
 
-  @OneToMany(() => Requirement, (requirement) => requirement.phase)
-  requirements: Requirement[];
+  @Column({ type: 'json', nullable: true })
+  requirements: JSON;
 
   @OneToMany(() => Document, (document) => document.phase)
   documents: Document[];
