@@ -46,10 +46,10 @@ export class ProjectsService {
     const skip = (page - 1) * take;
     const query = this.projectRepository
       .createQueryBuilder('p')
-      .andWhere('p.is_published =: is_published', { is_published: true })
-      .leftJoinAndSelect('p.categories', 'c');
-    if (category) query.andWhere('c.id = :category', { category });
-    return query.take(take).skip(skip).orderBy('p.started_at', 'DESC').getManyAndCount();
+      .leftJoinAndSelect('p.categories', 'categories')
+      .andWhere('p.is_published = :is_published', { is_published: true });
+    if (category) query.andWhere('categories.id', { category });
+    return await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
   async findRecent(): Promise<Project[]> {
