@@ -44,7 +44,10 @@ export class ProjectsService {
     const { page = 1, category } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
-    const query = this.projectRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'c');
+    const query = this.projectRepository
+      .createQueryBuilder('p')
+      .andWhere('p.is_published =: is_published', { is_published: true })
+      .leftJoinAndSelect('p.categories', 'c');
     if (category) query.andWhere('c.id = :category', { category });
     return query.take(take).skip(skip).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
@@ -75,7 +78,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['program', 'categories', 'phases', 'phases.requirements']
+        relations: ['categories', 'phases']
       });
     } catch {
       throw new BadRequestException();
@@ -86,7 +89,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'categories', 'phases', 'phases.requirements']
+        relations: ['program', 'categories', 'phases']
       });
     } catch {
       throw new BadRequestException();

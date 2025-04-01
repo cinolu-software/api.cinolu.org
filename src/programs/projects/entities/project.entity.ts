@@ -32,7 +32,7 @@ export class Project extends AbstractEntity {
   form: JSON;
 
   @Column({ type: 'json', nullable: true })
-  report: JSON;
+  review_form: JSON;
 
   @Column({ type: 'boolean', default: false })
   is_published: boolean;

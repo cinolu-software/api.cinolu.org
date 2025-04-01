@@ -1,6 +1,6 @@
 export enum ReviewStatus {
   PENDING = 'pending',
-  SHORTLISTED = 'shortlisted',
-  ACCEPTED = 'accepted',
-  REJECTED = 'rejected'
+  CARTOGRAPHY = 'cartography',
+  EXPLORATION = 'exploration',
+  EXPERIMENTATION = 'experimentation'
 }

@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateProjectDto {
   @IsNotEmpty()
@@ -7,6 +7,12 @@ export class CreateProjectDto {
 
   @IsNotEmpty()
   description: string;
+
+  @IsOptional()
+  review_form: JSON;
+
+  @IsOptional()
+  form: JSON;
 
   @IsNotEmpty()
   @Transform(({ value }) => new Date(value))

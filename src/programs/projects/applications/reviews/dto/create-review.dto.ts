@@ -1,15 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { ReviewStatus } from '../../../utils/review-status.enum';
 
 export class CreateReviewDto {
-  @IsNotEmpty()
+  @IsEnum(ReviewStatus)
   status: ReviewStatus;
 
   @IsNotEmpty()
-  note: number;
-
-  @IsNotEmpty()
-  comment: string;
+  data: JSON;
 
   @IsNotEmpty()
   application: string;

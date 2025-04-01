@@ -9,17 +9,14 @@ export class Review extends AbstractEntity {
   @Column({ type: 'enum', enum: ReviewStatus, default: ReviewStatus.PENDING })
   status: ReviewStatus;
 
-  @Column({ type: 'float' })
-  note: number;
-
-  @Column({ type: 'text' })
-  comment: string;
+  @Column({ type: 'json' })
+  data: JSON;
 
   @ManyToOne(() => Application, (app) => app.reviews)
-  @JoinColumn({ name: 'applicationId' })
+  @JoinColumn()
   application: Application;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'reviwerId' })
+  @JoinColumn()
   reviewer: User;
 }

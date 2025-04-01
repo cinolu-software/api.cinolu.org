@@ -17,6 +17,7 @@ import { Position } from 'src/users/positions/entities/position.entity';
 import { Member } from 'src/ecosystem/members/entities/member.entity';
 import { Category as MemberCategory } from 'src/ecosystem/categories/entities/category.entity';
 import slugify from 'slugify';
+import { Phase } from 'src/programs/projects/phases/entities/phase.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -37,6 +38,7 @@ export default class DbSeeder implements Seeder {
     const positionRepository = dataSource.getRepository(Position);
     const memberRepository = dataSource.getRepository(Member);
     const memberCategoryRepository = dataSource.getRepository(MemberCategory);
+    const phaseRepository = dataSource.getRepository(Phase);
 
     const createPrograms = async (count: number) => {
       return Promise.all(
@@ -92,10 +94,24 @@ export default class DbSeeder implements Seeder {
       );
     };
 
-    const createProjects = async (count: number) => {
+    const createPhases = async (count: number) => {
       return Promise.all(
         Array.from({ length: count }, async () => {
-          const name = faker.commerce.productName();
+          return await phaseRepository.save({
+            name: faker.commerce.productName(),
+            description: faker.commerce.productDescription(),
+            started_at: faker.date.past(),
+            ended_at: faker.date.future(),
+            requirements: generateRequirements() as unknown as JSON
+          });
+        })
+      );
+    };
+
+    const createProjects = async (count: number) => {
+      return Promise.all(
+        Array.from({ length: count }, async (_: unknown, i: number) => {
+          const name = `${faker.commerce.productName()} ${i}`;
           const slug = slugify(name, { lower: true });
           return await projectRepository.save({
             name,
@@ -107,6 +123,7 @@ export default class DbSeeder implements Seeder {
             place: faker.location.city(),
             requirements: generateRequirements() as unknown as JSON,
             categories: await createProjectCategories(faker.number.int({ min: 1, max: 5 })),
+            phases: await createPhases(faker.number.int({ min: 1, max: 5 })),
             form: generateJSONForm(faker.number.int({ min: 1, max: 5 })) as unknown as JSON
           });
         })
@@ -124,8 +141,8 @@ export default class DbSeeder implements Seeder {
 
     const createEvents = async (count: number) => {
       return Promise.all(
-        Array.from({ length: count }, async () => {
-          const name = faker.commerce.productName();
+        Array.from({ length: count }, async (_: unknown, i: number) => {
+          const name = `${faker.commerce.productName()} ${i}`;
           const slug = slugify(name, { lower: true });
           return await eventRepository.save({
             name,

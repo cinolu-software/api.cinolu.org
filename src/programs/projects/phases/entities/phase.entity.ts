@@ -24,6 +24,6 @@ export class Phase extends AbstractEntity {
   documents: Document[];
 
   @ManyToOne(() => Project, (project) => project.phases)
-  @JoinColumn({ name: 'projectId' })
+  @JoinColumn()
   project: Project;
 }
