@@ -3,8 +3,11 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
+import { Auth } from 'src/shared/decorators/auth.decorators';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
 
 @Controller('ecosystem-categories')
+@Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -14,6 +17,7 @@ export class CategoriesController {
   }
 
   @Get()
+  @Auth(RoleEnum.Guest)
   findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }
