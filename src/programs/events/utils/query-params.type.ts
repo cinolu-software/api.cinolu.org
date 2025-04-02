@@ -1,4 +1,4 @@
 export interface QueryParams {
   page: number | null;
-  categories: string[];
+  categories: string | null;
 }

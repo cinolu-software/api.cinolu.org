@@ -48,7 +48,7 @@ export class ProjectsController {
     return this.projectsService.findPublished(queryParams);
   }
 
-  @Get('slug/:id')
+  @Get('slug/:slug')
   @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Project> {
     return this.projectsService.findBySlug(slug);

@@ -44,7 +44,10 @@ export class EventsService {
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .andWhere('e.is_published = :is_published', { is_published: true });
-    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
+    if (categories) {
+      const categoriesArray = categories.split(',');
+      query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
+    }
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
