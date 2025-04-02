@@ -120,7 +120,6 @@ export default class DbSeeder implements Seeder {
             started_at: faker.date.past(),
             ended_at: faker.date.future(),
             is_published: faker.helpers.arrayElement([true, false]),
-            place: faker.location.city(),
             requirements: generateRequirements() as unknown as JSON,
             categories: await createProjectCategories(faker.number.int({ min: 1, max: 5 })),
             phases: await createPhases(faker.number.int({ min: 1, max: 5 })),

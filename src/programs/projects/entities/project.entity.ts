@@ -10,7 +10,7 @@ export class Project extends AbstractEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   slug: string;
 
   @Column({ nullable: true })
@@ -36,9 +36,6 @@ export class Project extends AbstractEntity {
 
   @Column({ type: 'boolean', default: false })
   is_published: boolean;
-
-  @Column({ nullable: true })
-  place: string;
 
   @OneToMany(() => Phase, (phase) => phase.project)
   phases: Phase[];

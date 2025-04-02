@@ -23,9 +23,6 @@ export class CreateProjectDto {
   ended_at: Date;
 
   @IsNotEmpty()
-  place: string;
-
-  @IsNotEmpty()
   program: string;
 
   @IsArray()
