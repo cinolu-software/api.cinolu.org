@@ -37,14 +37,14 @@ export class EventsService {
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Event[], number]> {
-    const { page = 1, category } = queryParams;
+    const { page = 1, categories } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
     const query = this.eventRepository
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .andWhere('e.is_published = :is_published', { is_published: true });
-    if (category) query.andWhere('categories.id = :category', { category });
+    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 

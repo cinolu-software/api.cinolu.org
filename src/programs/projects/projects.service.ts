@@ -41,14 +41,15 @@ export class ProjectsService {
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Project[], number]> {
-    const { page = 1, category } = queryParams;
+    const { page = 1, categories } = queryParams;
     const take = 9;
     const skip = (page - 1) * take;
+    console.log(categories);
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .andWhere('p.is_published = :is_published', { is_published: true });
-    if (category) query.andWhere('categories.id = :category', { category });
+    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
