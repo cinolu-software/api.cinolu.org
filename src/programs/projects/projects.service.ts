@@ -48,7 +48,7 @@ export class ProjectsService {
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .andWhere('p.is_published = :is_published', { is_published: true });
-    if (category) query.andWhere('categories.id', { category });
+    if (category) query.andWhere('categories.id = :category', { category });
     return await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
