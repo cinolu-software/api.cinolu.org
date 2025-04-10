@@ -349,6 +349,6 @@ export default class DbSeeder implements Seeder {
     const staffs = await createStaffs(10);
     await createCoaches(20);
     await createPosts(200, staffs);
-    await createMembers(40);
+    await createMembers(25);
   }
 }
