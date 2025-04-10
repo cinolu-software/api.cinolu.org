@@ -58,11 +58,12 @@ export default class DbSeeder implements Seeder {
         Array.from({ length: count }, async () => {
           const title = faker.commerce.productName();
           const slug = slugify(title, { lower: true });
+          const categories = await postCategoryRepository.find();
           return await postRepository.save({
             title,
             slug,
             content: faker.commerce.productDescription(),
-            categories: await createPostCategories(faker.number.int({ min: 1, max: 5 })),
+            categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             comments: await createComments(faker.number.int({ min: 20, max: 30 }), users),
             author: faker.helpers.arrayElement(users)
           });
@@ -71,13 +72,14 @@ export default class DbSeeder implements Seeder {
     };
 
     const createMembers = async (count: number) => {
+      const categories = await memberCategoryRepository.find();
       return Promise.all(
         Array.from({ length: count }, async () => {
           return await memberRepository.save({
             name: faker.company.name(),
             website: faker.internet.url(),
             description: faker.commerce.productDescription(),
-            categories: await createMemberCategory(faker.number.int({ min: 1, max: 5 }))
+            categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 })
           });
         })
       );
@@ -113,6 +115,7 @@ export default class DbSeeder implements Seeder {
         Array.from({ length: count }, async (_: unknown, i: number) => {
           const name = `${faker.commerce.productName()} ${i}`;
           const slug = slugify(name, { lower: true });
+          const categories = await projectCategoryRepository.find();
           return await projectRepository.save({
             name,
             slug,
@@ -121,7 +124,7 @@ export default class DbSeeder implements Seeder {
             ended_at: faker.date.future(),
             is_published: faker.helpers.arrayElement([true, false]),
             requirements: generateRequirements() as unknown as JSON,
-            categories: await createProjectCategories(faker.number.int({ min: 1, max: 5 })),
+            categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             phases: await createPhases(faker.number.int({ min: 1, max: 5 })),
             form: generateJSONForm(faker.number.int({ min: 1, max: 5 })) as unknown as JSON
           });
@@ -143,6 +146,7 @@ export default class DbSeeder implements Seeder {
         Array.from({ length: count }, async (_: unknown, i: number) => {
           const name = `${faker.commerce.productName()} ${i}`;
           const slug = slugify(name, { lower: true });
+          const categories = await eventCategoryRepository.find();
           return await eventRepository.save({
             name,
             slug,
@@ -151,7 +155,7 @@ export default class DbSeeder implements Seeder {
             ended_at: faker.date.future(),
             is_published: faker.helpers.arrayElement([true, false]),
             place: faker.location.city(),
-            categories: await createEventCategories(faker.number.int({ min: 1, max: 5 })),
+            categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             link: faker.helpers.arrayElement([faker.internet.url(), null])
           });
         })
@@ -212,7 +216,7 @@ export default class DbSeeder implements Seeder {
       return Promise.all(
         Array.from({ length: count }, async () => {
           return await expertisesRepository.save({
-            name: faker.person.jobArea()
+            name: faker.person.jobTitle()
           });
         })
       );
@@ -222,60 +226,92 @@ export default class DbSeeder implements Seeder {
       return Promise.all(
         Array.from({ length: count }, async () => {
           return await positionRepository.save({
-            name: faker.person.jobTitle()
+            name: faker.person.jobType()
           });
         })
       );
     };
 
-    const createProjectCategories = async (count: number) => {
+    const createProjectCategories = async () => {
       return Promise.all(
-        Array.from({ length: count }, async () => {
-          return await projectCategoryRepository.save({
-            name: faker.commerce.productName()
-          });
-        })
+        [
+          'Startup Acceleration',
+          'Entrepreneurship Training',
+          'Digital Skills Development',
+          'Women Empowerment',
+          'Youth Innovation',
+          'Green Tech & Sustainability',
+          'Agritech Solutions',
+          'Fintech & Digital Finance',
+          'Creative Industries',
+          'Social Impact Projects'
+        ].map(
+          async (category) =>
+            await projectCategoryRepository.save({
+              name: category
+            })
+        )
       );
     };
 
-    const createPostCategories = async (count: number) => {
+    const createPostCategories = async () => {
       return Promise.all(
-        Array.from({ length: count }, async () => {
-          return await postCategoryRepository.save({
-            name: faker.commerce.productName()
-          });
-        })
+        [
+          'Entrepreneur Tips',
+          'Startup Stories',
+          'Tech Trends',
+          'Funding & Investment',
+          'Policy & Regulation',
+          'Innovation Spotlight',
+          'Market Insights',
+          'Founder Interviews',
+          'Productivity & Tools',
+          'Learning Resources'
+        ].map(
+          async (category) =>
+            await postCategoryRepository.save({
+              name: category
+            })
+        )
       );
     };
 
-    const createMemberCategory = async (count: number) => {
-      const categories = [
-        'Startups',
-        'SAEI & ESOs',
-        'Corporates',
-        'Investors',
-        'Public Sector',
-        'Academia',
-        'Media',
-        'Associations',
-        'Others'
-      ];
+    const createMemberCategory = async () => {
       return Promise.all(
-        Array.from({ length: count }, async () => {
-          return await memberCategoryRepository.save({
-            name: faker.helpers.arrayElement(categories)
-          });
-        })
+        [
+          'Startups',
+          'SAEI & ESOs',
+          'Corporates',
+          'Investors',
+          'Public Sector',
+          'Academia',
+          'Media',
+          'Associations',
+          'Partners',
+          'Others'
+        ].map(async (category) => await memberCategoryRepository.save({ name: category }))
       );
     };
 
-    const createEventCategories = async (count: number) => {
+    const createEventCategories = async () => {
       return Promise.all(
-        Array.from({ length: count }, async () => {
-          return await eventCategoryRepository.save({
-            name: faker.commerce.productName()
-          });
-        })
+        [
+          'Networking',
+          'Workshops',
+          'Conferences',
+          'Webinars',
+          'Pitch Competitions',
+          'Mentorship Sessions',
+          'Hackathons',
+          'Fireside Chats',
+          'Panel Discussions',
+          'Roundtable Discussions'
+        ].map(
+          async (category) =>
+            await eventCategoryRepository.save({
+              name: category
+            })
+        )
       );
     };
 
@@ -312,6 +348,10 @@ export default class DbSeeder implements Seeder {
       return form;
     };
 
+    await createProjectCategories();
+    await createPostCategories();
+    await createEventCategories();
+    await createMemberCategory();
     await createPrograms(10);
     await createUsers(100);
     const staffs = await createStaffs(10);
