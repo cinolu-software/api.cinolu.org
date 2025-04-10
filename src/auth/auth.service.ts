@@ -23,8 +23,7 @@ export class AuthService {
     try {
       const user = await this.usersService.findByEmail(email);
       await this.verifyPassword(pass, user.password);
-      const chat_token = await this.generateToken(user, '1d');
-      return { ...user, chat_token } as User;
+      return user;
     } catch {
       throw new NotFoundException('Les identifiants saisis sont invalides');
     }
@@ -32,9 +31,7 @@ export class AuthService {
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
     try {
-      const user = await this.usersService.findOrCreate(dto);
-      const chat_token = await this.generateToken(user, '1d');
-      return { ...user, chat_token } as User;
+      return await this.usersService.findOrCreate(dto);
     } catch {
       throw new NotFoundException();
     }
@@ -106,8 +103,7 @@ export class AuthService {
     try {
       await this.verifyToken(token);
       const payload = await this.jwtService.verifyAsync(token, { secret: process.env.JWT_SECRET });
-      const user = await this.usersService.updatePassword(payload.sub, password);
-      return user;
+      return await this.usersService.updatePassword(payload.sub, password);
     } catch {
       throw new BadRequestException();
     }
