@@ -10,6 +10,9 @@ export class Member extends AbstractEntity {
   @Column()
   website: string;
 
+  @Column()
+  location: string;
+
   @Column({ type: 'text', nullable: true })
   description: string;
 

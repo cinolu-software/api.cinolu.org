@@ -78,6 +78,7 @@ export default class DbSeeder implements Seeder {
           return await memberRepository.save({
             name: faker.company.name(),
             website: faker.internet.url(),
+            location: faker.location.city(),
             description: faker.commerce.productDescription(),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 })
           });
@@ -278,18 +279,9 @@ export default class DbSeeder implements Seeder {
 
     const createMemberCategory = async () => {
       return Promise.all(
-        [
-          'Startups',
-          'SAEI & ESOs',
-          'Corporates',
-          'Investors',
-          'Public Sector',
-          'Academia',
-          'Media',
-          'Associations',
-          'Partners',
-          'Others'
-        ].map(async (category) => await memberCategoryRepository.save({ name: category }))
+        ['Startups', 'SAEI & ESOs', 'Corporates', 'Institutions', 'Partners'].map(
+          async (category) => await memberCategoryRepository.save({ name: category })
+        )
       );
     };
 
