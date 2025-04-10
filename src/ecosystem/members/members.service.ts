@@ -25,6 +25,18 @@ export class MembersService {
     return await this.memberRepository.find();
   }
 
+  async findByCategory(category: string): Promise<Member[]> {
+    try {
+      return await this.memberRepository.find({
+        where: {
+          categories: { name: category }
+        }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findOne(id: string): Promise<Member> {
     try {
       return await this.memberRepository.findOneOrFail({
