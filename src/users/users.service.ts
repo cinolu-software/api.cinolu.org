@@ -45,40 +45,36 @@ export class UsersService {
   }
 
   async findWithRole(name: string): Promise<User[]> {
-    const data = await this.userRepository.find({
+    return await this.userRepository.find({
       relations: ['roles'],
       where: { roles: { name } }
     });
-    return data;
   }
 
   async findByRole(id: string): Promise<User[]> {
     try {
-      const data = await this.userRepository.find({
+      return await this.userRepository.find({
         where: { roles: { id } }
       });
-      return data;
     } catch {
       throw new BadRequestException();
     }
   }
 
   async findByIds(ids: string[]): Promise<User[]> {
-    const data = await this.userRepository.findBy({
+    return await this.userRepository.findBy({
       id: In(ids)
     });
-    return data;
   }
 
   async signUp(dto: SignupDto): Promise<User> {
     try {
       const role = await this.rolesService.findByName('user');
       delete dto.password_confirm;
-      const user = await this.userRepository.save({
+      return await this.userRepository.save({
         ...dto,
         roles: [role]
       });
-      return user;
     } catch {
       throw new BadRequestException();
     }
@@ -128,21 +124,22 @@ export class UsersService {
       ...dto,
       roles: [userRole]
     });
-    const user = await this.findOne(newUser.id);
-    return user;
+    return await this.findOne(newUser.id);
   }
 
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     try {
-      const oldUser = await this.findOne(id);
-      const user = await this.userRepository.save({
+      const oldUser = await this.userRepository.findOneOrFail({
+        where: { id },
+        relations: ['roles']
+      });
+      return await this.userRepository.save({
         ...oldUser,
         ...dto,
         positions: dto.positions?.map((id) => ({ id })),
         expertises: dto.expertises?.map((id) => ({ id })),
         roles: dto.roles?.map((id) => ({ id })) || oldUser.roles
       });
-      return user;
     } catch {
       throw new BadRequestException();
     }
@@ -150,24 +147,28 @@ export class UsersService {
 
   async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
     try {
-      const oldUser = await this.findOne(currentUser.id);
+      const oldUser = await this.userRepository.findOneOrFail({
+        where: { id: currentUser.id },
+        relations: ['roles']
+      });
       delete oldUser.password;
       await this.userRepository.save({ ...oldUser, ...dto });
-      const user = await this.findOne(oldUser.id);
-      return user;
+      return await this.findOne(oldUser.id);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async uploadImage(currenUser: User, file: Express.Multer.File): Promise<User> {
+  async uploadImage(currentUser: User, file: Express.Multer.File): Promise<User> {
     try {
-      const oldUser = await this.findOne(currenUser.id);
+      const oldUser = await this.userRepository.findOneOrFail({
+        where: { id: currentUser.id },
+        relations: ['roles']
+      });
       if (oldUser.profile) await fs.unlink(`./uploads/profiles/${oldUser.profile}`);
       delete oldUser.password;
       await this.userRepository.save({ ...oldUser, profile: file.filename });
-      const user = await this.findOne(oldUser.id);
-      return user;
+      return await this.findOne(oldUser.id);
     } catch {
       throw new BadRequestException();
     }
@@ -177,7 +178,7 @@ export class UsersService {
     try {
       const user = await this.findOne(id);
       await this.userRepository.update(user.id, { password });
-      return user;
+      return await this.findOne(user.id);
     } catch {
       throw new BadRequestException();
     }
