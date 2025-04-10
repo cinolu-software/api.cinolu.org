@@ -22,7 +22,9 @@ export class MembersService {
   }
 
   async findAll(): Promise<Member[]> {
-    return await this.memberRepository.find();
+    return await this.memberRepository.find({
+      relations: ['categories']
+    });
   }
 
   async findByCategory(category: string): Promise<Member[]> {
@@ -30,7 +32,8 @@ export class MembersService {
       return await this.memberRepository.find({
         where: {
           categories: { name: category }
-        }
+        },
+        relations: ['categories']
       });
     } catch {
       throw new BadRequestException();
