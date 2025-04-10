@@ -7,6 +7,9 @@ export class CreateMemberDto {
   @IsNotEmpty()
   website: string;
 
+  @IsNotEmpty()
+  location: string;
+
   @IsOptional()
   description: string;
 }
