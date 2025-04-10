@@ -6,8 +6,11 @@ import { Member } from './entities/member.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
+import { Auth } from 'src/shared/decorators/auth.decorators';
 
 @Controller('members')
+@Auth(RoleEnum.Staff)
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
@@ -17,8 +20,15 @@ export class MembersController {
   }
 
   @Get()
+  @Auth(RoleEnum.Guest)
   findAll(): Promise<Member[]> {
     return this.membersService.findAll();
+  }
+
+  @Get('category/:category')
+  @Auth(RoleEnum.Guest)
+  findByCategory(@Param('category') category: string): Promise<Member[]> {
+    return this.membersService.findByCategory(category);
   }
 
   @Get(':id')
