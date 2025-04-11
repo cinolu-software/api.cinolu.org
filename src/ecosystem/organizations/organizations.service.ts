@@ -49,7 +49,7 @@ export class OrganizationsService {
     }
   }
 
-  async getCategoryCountsOnly() {
+  async getCategoryCountsOnly(): Promise<{ total: number; [key: string]: number }> {
     const query = this.organizationRepository
       .createQueryBuilder('org')
       .leftJoin('org.categories', 'cat')
