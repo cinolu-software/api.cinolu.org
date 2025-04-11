@@ -14,7 +14,7 @@ import { Comment } from 'src/blog/comments/entities/comment.entity';
 import { Category as PostCategory } from 'src/blog/categories/entities/category.entity';
 import { Expertise } from 'src/users/expertises/entities/expertise.entity';
 import { Position } from 'src/users/positions/entities/position.entity';
-import { Member } from 'src/ecosystem/members/entities/member.entity';
+import { Organization } from 'src/ecosystem/organizations/entities/organization.entity';
 import { Category as MemberCategory } from 'src/ecosystem/categories/entities/category.entity';
 import slugify from 'slugify';
 import { Phase } from 'src/programs/projects/phases/entities/phase.entity';
@@ -36,8 +36,8 @@ export default class DbSeeder implements Seeder {
     const postCategoryRepository = dataSource.getRepository(PostCategory);
     const expertisesRepository = dataSource.getRepository(Expertise);
     const positionRepository = dataSource.getRepository(Position);
-    const memberRepository = dataSource.getRepository(Member);
-    const memberCategoryRepository = dataSource.getRepository(MemberCategory);
+    const organizationRepository = dataSource.getRepository(Organization);
+    const organizationCategoryRepository = dataSource.getRepository(MemberCategory);
     const phaseRepository = dataSource.getRepository(Phase);
 
     const createPrograms = async (count: number) => {
@@ -72,11 +72,11 @@ export default class DbSeeder implements Seeder {
       );
     };
 
-    const createMembers = async (count: number) => {
-      const categories = await memberCategoryRepository.find();
+    const createOrganizations = async (count: number) => {
+      const categories = await organizationCategoryRepository.find();
       return Promise.all(
         Array.from({ length: count }, async () => {
-          return await memberRepository.save({
+          return await organizationRepository.save({
             name: faker.company.name(),
             website: faker.internet.url(),
             location: faker.location.city(),
@@ -278,10 +278,10 @@ export default class DbSeeder implements Seeder {
       );
     };
 
-    const createMemberCategory = async () => {
+    const createOrganizationCategory = async () => {
       return Promise.all(
         ['Startups', 'SAEI & ESOs', 'Corporates', 'Institutions', 'Partners'].map(
-          async (category) => await memberCategoryRepository.save({ name: category })
+          async (category) => await organizationCategoryRepository.save({ name: category })
         )
       );
     };
@@ -312,15 +312,6 @@ export default class DbSeeder implements Seeder {
       await roleRepository.save({ name: role });
     });
 
-    await userRepository.save({
-      name: faker.person.firstName(),
-      address: faker.location.streetAddress(),
-      phone_number: faker.phone.number({ style: 'human' }),
-      email: 'admin@admin.com',
-      password: await bcrypt.hash('admin1234', 10),
-      roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
-    });
-
     const generateJSONForm = (count: number) => {
       const form = [];
       const types = ['text', 'number', 'email', 'textarea', 'select'];
@@ -344,12 +335,20 @@ export default class DbSeeder implements Seeder {
     await createProjectCategories();
     await createPostCategories();
     await createEventCategories();
-    await createMemberCategory();
+    await createOrganizationCategory();
     await createPrograms(10);
-    await createUsers(100);
     const staffs = await createStaffs(10);
     await createCoaches(20);
     await createPosts(200, staffs);
-    await createMembers(25);
+    await createOrganizations(25);
+    await createUsers(100);
+    await userRepository.save({
+      name: faker.person.firstName(),
+      address: faker.location.streetAddress(),
+      phone_number: faker.phone.number({ style: 'human' }),
+      email: 'admin@admin.com',
+      password: await bcrypt.hash('admin1234', 10),
+      roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
+    });
   }
 }

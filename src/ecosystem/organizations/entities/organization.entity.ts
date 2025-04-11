@@ -3,7 +3,7 @@ import { AbstractEntity } from 'src/shared/utils/abstract.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()
-export class Member extends AbstractEntity {
+export class Organization extends AbstractEntity {
   @Column()
   name: string;
 
