@@ -12,6 +12,9 @@ export class Post extends AbstractEntity {
   @Column()
   slug: string;
 
+  @Column()
+  views: number;
+
   @Column({ type: 'text' })
   content: string;
 

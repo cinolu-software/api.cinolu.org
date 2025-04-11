@@ -62,6 +62,7 @@ export default class DbSeeder implements Seeder {
           return await postRepository.save({
             title,
             slug,
+            views: faker.number.int({ min: 0, max: 1000 }),
             content: faker.commerce.productDescription(),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             comments: await createComments(faker.number.int({ min: 20, max: 30 }), users),
