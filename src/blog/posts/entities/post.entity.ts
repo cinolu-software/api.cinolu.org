@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
 import { User } from '../../../users/entities/user.entity';
 import { AbstractEntity } from '../../../shared/utils/abstract.entity';
@@ -12,7 +12,7 @@ export class Post extends AbstractEntity {
   @Column()
   slug: string;
 
-  @Column()
+  @Column({ default: 0 })
   views: number;
 
   @Column({ type: 'text' })
@@ -24,9 +24,9 @@ export class Post extends AbstractEntity {
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @ManyToOne(() => Category, (category) => category.posts)
-  @JoinColumn()
-  category: Category;
+  @ManyToMany(() => Category, (category) => category.posts)
+  @JoinTable()
+  categories: Category[];
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn()

@@ -8,5 +8,5 @@ export class CreatePostDto {
   content: string;
 
   @IsNotEmpty()
-  category: string;
+  categories: string[];
 }

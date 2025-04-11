@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../../../shared/utils/abstract.entity';
 import { Post } from '../../posts/entities/post.entity';
 
@@ -7,6 +7,6 @@ export class Category extends AbstractEntity {
   @Column()
   name: string;
 
-  @OneToMany(() => Post, (post) => post.category)
+  @ManyToMany(() => Post, (post) => post.categories)
   posts: Post[];
 }

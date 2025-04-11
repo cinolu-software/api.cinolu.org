@@ -20,7 +20,7 @@ export class PostsService {
       return await this.postRepository.save({
         ...dto,
         author: { id: user.id },
-        category: { id: dto.category }
+        categories: dto.categories.map((category) => ({ id: category }))
       });
     } catch {
       throw new BadRequestException();
@@ -29,18 +29,21 @@ export class PostsService {
 
   async getRecentPosts(): Promise<Post[]> {
     return await this.postRepository.find({
-      relations: ['author', 'category'],
+      relations: ['author', 'categories'],
       order: { created_at: 'DESC' },
       take: 3
     });
   }
 
   async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
-    const { page = 1, category, views, search } = queryParams;
+    const { page = 1, categories, views, search } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
-    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.category', 'category');
-    if (category) query.andWhere('category.id = :category', { category });
+    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'categories');
+    if (categories) {
+      const categoriesArray = categories.split(',');
+      query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
+    }
     if (views) query.orderBy('p.views', 'DESC');
     if (search) query.andWhere('p.title LIKE :search OR p.content LIKE :search ', { search: `%${search}%` });
     return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
@@ -50,7 +53,7 @@ export class PostsService {
     try {
       return await this.postRepository.findOneOrFail({
         where: { id },
-        relations: ['comments', 'author', 'category']
+        relations: ['comments', 'author', 'categories']
       });
     } catch {
       throw new BadRequestException();
@@ -84,7 +87,7 @@ export class PostsService {
       return await this.postRepository.save({
         ...dto,
         author: { id: post.author.id },
-        category: { id: dto?.category ?? post.category.id }
+        categories: dto?.categories?.map((category) => ({ id: category })) || post.categories
       });
     } catch {
       throw new BadRequestException();
