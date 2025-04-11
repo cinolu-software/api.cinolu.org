@@ -53,6 +53,7 @@ export class OrganizationsService {
     const raw = await this.organizationRepository
       .createQueryBuilder('org')
       .leftJoin('org.categories', 'cat')
+      .where('org.is_approved = true')
       .select('cat.name', 'category')
       .addSelect('COUNT(org.id)', 'count')
       .groupBy('cat.name')
