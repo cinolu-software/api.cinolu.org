@@ -1,4 +1,4 @@
-import { Organization } from 'src/ecosystem/organizations/entities/organization.entity';
+import { Organization } from 'src/organizations/entities/organization.entity';
 import { AbstractEntity } from 'src/shared/utils/abstract.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
 

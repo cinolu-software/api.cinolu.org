@@ -14,10 +14,10 @@ import { Comment } from 'src/blog/comments/entities/comment.entity';
 import { Category as PostCategory } from 'src/blog/categories/entities/category.entity';
 import { Expertise } from 'src/users/expertises/entities/expertise.entity';
 import { Position } from 'src/users/positions/entities/position.entity';
-import { Organization } from 'src/ecosystem/organizations/entities/organization.entity';
-import { Category as MemberCategory } from 'src/ecosystem/categories/entities/category.entity';
+import { Category as MemberCategory } from 'src/organizations/categories/entities/category.entity';
 import slugify from 'slugify';
 import { Phase } from 'src/programs/projects/phases/entities/phase.entity';
+import { Organization } from 'src/organizations/entities/organization.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
