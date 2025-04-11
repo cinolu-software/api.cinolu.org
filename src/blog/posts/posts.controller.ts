@@ -54,6 +54,12 @@ export class PostsController {
     return this.postsService.findAll(queryParams);
   }
 
+  @Get('recent')
+  @Auth(RoleEnum.Guest)
+  getRecentPosts(): Promise<P[]> {
+    return this.postsService.getRecentPosts();
+  }
+
   @Get('slug/:slug')
   @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<P> {

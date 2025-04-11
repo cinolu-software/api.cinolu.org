@@ -27,12 +27,22 @@ export class PostsService {
     }
   }
 
+  async getRecentPosts(): Promise<Post[]> {
+    return await this.postRepository.find({
+      relations: ['author', 'category'],
+      order: { created_at: 'DESC' },
+      take: 3
+    });
+  }
+
   async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
-    const { page = 1, category } = queryParams;
+    const { page = 1, category, views, search } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
     const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.category', 'category');
     if (category) query.andWhere('category.id = :category', { category });
+    if (views) query.orderBy('p.views', 'DESC');
+    if (search) query.andWhere('p.title LIKE :search OR p.content LIKE :search ', { search: `%${search}%` });
     return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
   }
 
