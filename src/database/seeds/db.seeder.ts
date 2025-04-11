@@ -79,6 +79,7 @@ export default class DbSeeder implements Seeder {
           return await organizationRepository.save({
             name: faker.company.name(),
             website: faker.internet.url(),
+            is_approved: true,
             location: faker.location.city(),
             description: faker.commerce.productDescription(),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 })

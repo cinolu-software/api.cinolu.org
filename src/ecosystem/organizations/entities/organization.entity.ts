@@ -10,6 +10,9 @@ export class Organization extends AbstractEntity {
   @Column()
   website: string;
 
+  @Column({ default: false })
+  is_approved: boolean;
+
   @Column()
   location: string;
 

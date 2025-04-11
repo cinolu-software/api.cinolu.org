@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1744381082378 implements MigrationInterface {
-    name = 'Init1744381082378'
+export class Init1744381707523 implements MigrationInterface {
+    name = 'Init1744381707523'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`role\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_ae4578dcaed5adff96595e6166\` (\`name\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
@@ -20,8 +20,8 @@ export class Init1744381082378 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE \`position\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`expertise\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`user\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`email\` varchar(255) NOT NULL, \`name\` varchar(255) NOT NULL, \`password\` varchar(255) NULL, \`biography\` text NULL, \`phone_number\` varchar(255) NULL, \`address\` varchar(255) NULL, \`google_image\` varchar(255) NULL, \`profile\` varchar(255) NULL, UNIQUE INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`CREATE TABLE \`organization\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`website\` varchar(255) NOT NULL, \`is_approved\` tinyint NOT NULL DEFAULT 0, \`location\` varchar(255) NOT NULL, \`description\` text NULL, \`logo\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`membersCategory\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`CREATE TABLE \`organization\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`name\` varchar(255) NOT NULL, \`website\` varchar(255) NOT NULL, \`location\` varchar(255) NOT NULL, \`description\` text NULL, \`logo\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`event_categories_events_category\` (\`eventId\` varchar(36) NOT NULL, \`eventsCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_6c52da2816227595d9458d8b54\` (\`eventId\`), INDEX \`IDX_df2d69aad4d88d1a426e01be1f\` (\`eventsCategoryId\`), PRIMARY KEY (\`eventId\`, \`eventsCategoryId\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`project_categories_projects_category\` (\`projectId\` varchar(36) NOT NULL, \`projectsCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_bbf00d20e490cc867974ad59c2\` (\`projectId\`), INDEX \`IDX_74f532443feb087c1f72b5e5cd\` (\`projectsCategoryId\`), PRIMARY KEY (\`projectId\`, \`projectsCategoryId\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`post_categories_posts_category\` (\`postId\` varchar(36) NOT NULL, \`postsCategoryId\` varchar(36) NOT NULL, INDEX \`IDX_b25754e2379fc92edd8f6dc1bc\` (\`postId\`), INDEX \`IDX_970b972ade63e4f03e79ef3af4\` (\`postsCategoryId\`), PRIMARY KEY (\`postId\`, \`postsCategoryId\`)) ENGINE=InnoDB`);
@@ -111,8 +111,8 @@ export class Init1744381082378 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX \`IDX_df2d69aad4d88d1a426e01be1f\` ON \`event_categories_events_category\``);
         await queryRunner.query(`DROP INDEX \`IDX_6c52da2816227595d9458d8b54\` ON \`event_categories_events_category\``);
         await queryRunner.query(`DROP TABLE \`event_categories_events_category\``);
-        await queryRunner.query(`DROP TABLE \`organization\``);
         await queryRunner.query(`DROP TABLE \`membersCategory\``);
+        await queryRunner.query(`DROP TABLE \`organization\``);
         await queryRunner.query(`DROP INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` ON \`user\``);
         await queryRunner.query(`DROP TABLE \`user\``);
         await queryRunner.query(`DROP TABLE \`expertise\``);
