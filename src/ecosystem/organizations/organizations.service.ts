@@ -27,6 +27,28 @@ export class OrganizationsService {
     });
   }
 
+  async approve(id: string): Promise<Organization> {
+    try {
+      const organization = await this.organizationRepository.findOneOrFail({
+        where: { id }
+      });
+      return await this.organizationRepository.save({ ...organization, approved: true });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async reject(id: string): Promise<Organization> {
+    try {
+      const organization = await this.organizationRepository.findOneOrFail({
+        where: { id }
+      });
+      return await this.organizationRepository.save({ ...organization, approved: false });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async getCategoryCountsOnly() {
     const raw = await this.organizationRepository
       .createQueryBuilder('org')

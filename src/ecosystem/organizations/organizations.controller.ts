@@ -26,6 +26,18 @@ export class OrganizationsController {
     return this.organizationsService.getCategoryCountsOnly();
   }
 
+  @Get('approve/:id')
+  @Auth(RoleEnum.Staff)
+  approve(@Param('id') id: string): Promise<Organization> {
+    return this.organizationsService.approve(id);
+  }
+
+  @Get('reject/:id')
+  @Auth(RoleEnum.Staff)
+  reject(@Param('id') id: string): Promise<Organization> {
+    return this.organizationsService.reject(id);
+  }
+
   @Get()
   @Auth(RoleEnum.Guest)
   findAll(): Promise<Organization[]> {
