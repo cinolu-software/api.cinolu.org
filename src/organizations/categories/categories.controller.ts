@@ -6,7 +6,7 @@ import { Category } from './entities/category.entity';
 import { Auth } from 'src/shared/decorators/auth.decorators';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
 
-@Controller('ecosystem-categories')
+@Controller('organization-categories')
 @Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

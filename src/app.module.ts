@@ -16,7 +16,7 @@ import { ProgramsModule } from './programs/programs.module';
 import { ApplicationsModule } from './programs/projects/applications/applications.module';
 import { BlogModule } from './blog/blog.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
-import { EcosystemModule } from './ecosystem/ecosystem.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 
 @Module({
   imports: [
@@ -45,7 +45,7 @@ import { EcosystemModule } from './ecosystem/ecosystem.module';
     ProgramsModule,
     ApplicationsModule,
     BlogModule,
-    EcosystemModule
+    OrganizationsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
