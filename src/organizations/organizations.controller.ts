@@ -20,22 +20,20 @@ export class OrganizationsController {
     return this.organizationsService.create(dto);
   }
 
-  @Get('category-counts')
-  @Auth(RoleEnum.Guest)
-  getCategoryCountsOnly(): Promise<{ total: number; [key: string]: number }> {
-    return this.organizationsService.getCategoryCountsOnly();
-  }
-
   @Get('approve/:id')
-  @Auth(RoleEnum.Staff)
   approve(@Param('id') id: string): Promise<Organization> {
     return this.organizationsService.approve(id);
   }
 
   @Get('reject/:id')
-  @Auth(RoleEnum.Staff)
   reject(@Param('id') id: string): Promise<Organization> {
     return this.organizationsService.reject(id);
+  }
+
+  @Get('category-counts')
+  @Auth(RoleEnum.Guest)
+  getCategoryCountsOnly(): Promise<{ category: string; count: number }[]> {
+    return this.organizationsService.getCategoryCounts();
   }
 
   @Get()

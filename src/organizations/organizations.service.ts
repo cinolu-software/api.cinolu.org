@@ -49,21 +49,21 @@ export class OrganizationsService {
     }
   }
 
-  async getCategoryCountsOnly(): Promise<{ total: number; [key: string]: number }> {
+  async getCategoryCounts(): Promise<{ category: string; count: number }[]> {
     const query = this.organizationRepository
       .createQueryBuilder('org')
       .leftJoin('org.categories', 'cat')
       .where('org.is_approved = true')
       .select('cat.name', 'category')
-      .addSelect('COUNT(org.id)', 'count');
+      .addSelect('COUNT(org.id)', 'count')
+      .orderBy('count', 'DESC');
     const total = await query.getCount();
-    const raw = await query.groupBy('cat.name').getRawMany();
-    const result = {};
-    raw.forEach((row) => {
-      const count = parseInt(row.count, 10);
-      result[row.category] = count;
-    });
-    return { total, ...result };
+    const results = await query.groupBy('cat.name').getRawMany();
+    results.unshift({ category: 'Total', count: total });
+    return results.map((result) => ({
+      category: result.category,
+      count: parseInt(result.count, 0)
+    }));
   }
 
   async findByCategory(category: string): Promise<Organization[]> {
