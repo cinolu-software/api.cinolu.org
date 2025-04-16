@@ -18,7 +18,7 @@ export class CommentsController {
     return this.commentsService.create(user, dto);
   }
 
-  @Get(':id')
+  @Get(':slug')
   @Auth(RoleEnum.Guest)
   findAll(@Param('slug') slug: string, @Query('page') page: number): Promise<[Comment[], number]> {
     return this.commentsService.findAll(slug, page);

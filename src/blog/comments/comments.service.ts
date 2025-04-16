@@ -36,18 +36,19 @@ export class CommentsService {
     }
   }
 
-  // Get comment by post id and load more functionality
-  async findAll(slug: string, page: number): Promise<[Comment[], number]> {
+  async findAll(slug: string, page: number = 1): Promise<[Comment[], number]> {
     const take = 10;
     const skip = (page - 1) * take;
     try {
-      return await this.commentRepository.findAndCount({
-        where: { post: { slug } },
-        relations: ['by'],
-        take,
-        skip,
-        order: { created_at: 'DESC' }
-      });
+      const query = this.commentRepository
+        .createQueryBuilder('c')
+        .leftJoinAndSelect('c.by', 'by')
+        .leftJoin('c.post', 'p')
+        .where('p.slug = :slug', { slug })
+        .orderBy('c.created_at', 'DESC')
+        .skip(skip)
+        .take(take);
+      return await query.getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
