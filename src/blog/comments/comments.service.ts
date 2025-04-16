@@ -36,6 +36,23 @@ export class CommentsService {
     }
   }
 
+  // Get comment by post id and load more functionality
+  async findAll(postId: string, page: number): Promise<[Comment[], number]> {
+    const take = 10;
+    const skip = (page - 1) * take;
+    try {
+      return await this.commentRepository.findAndCount({
+        where: { post: { id: postId } },
+        relations: ['by'],
+        take,
+        skip,
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.findOne(id);

@@ -64,7 +64,7 @@ export class PostsService {
     try {
       return await this.postRepository.findOneOrFail({
         where: { slug },
-        relations: ['comments', 'comments.by', 'author', 'categories']
+        relations: ['author', 'categories']
       });
     } catch {
       throw new BadRequestException();
