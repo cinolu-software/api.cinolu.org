@@ -36,13 +36,13 @@ export class PostsService {
   }
 
   async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
-    const { page = 1, categories, views, search } = queryParams;
+    const { page = 1, category, views, search } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
-    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'categories');
-    if (categories) {
-      const categoriesArray = categories.split(',');
-      query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
+    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'cat');
+    if (category) {
+      const categoriesArray = [category];
+      query.andWhere('cat.name IN (:categoriesArray)', { categoriesArray });
     }
     if (views) query.orderBy('p.views', 'DESC');
     if (search) query.andWhere('p.title LIKE :search OR p.content LIKE :search ', { search: `%${search}%` });
