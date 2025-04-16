@@ -37,12 +37,12 @@ export class CommentsService {
   }
 
   // Get comment by post id and load more functionality
-  async findAll(postId: string, page: number): Promise<[Comment[], number]> {
+  async findAll(slug: string, page: number): Promise<[Comment[], number]> {
     const take = 10;
     const skip = (page - 1) * take;
     try {
       return await this.commentRepository.findAndCount({
-        where: { post: { id: postId } },
+        where: { post: { slug } },
         relations: ['by'],
         take,
         skip,
