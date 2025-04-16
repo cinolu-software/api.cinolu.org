@@ -54,6 +54,46 @@ export class CommentsService {
     }
   }
 
+  async like(commentId: string): Promise<Comment> {
+    try {
+      const comment = await this.findOne(commentId);
+      comment.likes += 1;
+      return await this.commentRepository.save(comment);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async dislike(commentId: string): Promise<Comment> {
+    try {
+      const comment = await this.findOne(commentId);
+      comment.dislikes += 1;
+      return await this.commentRepository.save(comment);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async undislike(commentId: string): Promise<Comment> {
+    try {
+      const comment = await this.findOne(commentId);
+      comment.dislikes -= 1;
+      return await this.commentRepository.save(comment);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async unlike(commentId: string): Promise<Comment> {
+    try {
+      const comment = await this.findOne(commentId);
+      comment.likes -= 1;
+      return await this.commentRepository.save(comment);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.findOne(id);
