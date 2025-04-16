@@ -5,8 +5,11 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CurrentUser } from '../../shared/decorators/user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
+import { Auth } from 'src/shared/decorators/auth.decorators';
 
 @Controller('post-comments')
+@Auth(RoleEnum.User)
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
@@ -16,6 +19,7 @@ export class CommentsController {
   }
 
   @Get(':id')
+  @Auth(RoleEnum.Guest)
   findAll(@Param('postId') postId: string, @Query('page') page: number): Promise<[Comment[], number]> {
     return this.commentsService.findAll(postId, page);
   }
