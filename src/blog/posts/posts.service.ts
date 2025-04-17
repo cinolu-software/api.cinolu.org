@@ -46,7 +46,11 @@ export class PostsService {
     const { page = 1, category, views } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
-    const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'cat');
+    const query = this.postRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.likes', 'l')
+      .leftJoinAndSelect('p.views', 'v')
+      .leftJoinAndSelect('p.categories', 'cat');
     if (category) {
       const categoriesArray = [category];
       query.andWhere('cat.name IN (:categoriesArray)', { categoriesArray });
@@ -104,7 +108,7 @@ export class PostsService {
     try {
       return await this.postRepository.findOneOrFail({
         where: { id },
-        relations: ['comments', 'author', 'categories']
+        relations: ['comments', 'author', 'views', 'likes']
       });
     } catch {
       throw new BadRequestException();
@@ -115,7 +119,7 @@ export class PostsService {
     try {
       return await this.postRepository.findOneOrFail({
         where: { slug },
-        relations: ['author', 'categories']
+        relations: ['comments', 'author', 'views', 'likes']
       });
     } catch {
       throw new BadRequestException();
