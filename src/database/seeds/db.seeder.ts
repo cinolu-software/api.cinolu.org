@@ -68,7 +68,7 @@ export default class DbSeeder implements Seeder {
             slug,
             likes: await createLikes(faker.number.int({ min: 20, max: 30 }), users),
             views: await createViews(faker.number.int({ min: 20, max: 30 })),
-            content: faker.lorem.paragraphs(faker.number.int({ min: 2, max: 4 })),
+            content: faker.lorem.paragraphs(faker.number.int({ min: 20, max: 60 })),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             comments: await createComments(faker.number.int({ min: 20, max: 30 }), users),
             author: faker.helpers.arrayElement(users)
