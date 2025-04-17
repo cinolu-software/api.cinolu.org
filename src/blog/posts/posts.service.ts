@@ -55,38 +55,49 @@ export class PostsService {
     return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
   }
 
-  async likePost(postId: string, userId: string) {
-    const existing = await this.likeRepository.findOne({
-      where: {
-        post: { id: postId },
-        user: { id: userId }
-      }
-    });
-    if (existing) throw new ConflictException();
-    const like = this.likeRepository.create({ post: { id: postId }, user: { id: userId } });
-    return this.likeRepository.save(like);
+  async like(postId: string, userId: string): Promise<Post> {
+    try {
+      const existing = await this.likeRepository.findOne({
+        where: {
+          post: { id: postId },
+          user: { id: userId }
+        }
+      });
+      if (existing) throw new ConflictException();
+      await this.likeRepository.save({ post: { id: postId }, user: { id: userId } });
+      return await this.findOne(postId);
+    } catch {
+      throw new ConflictException();
+    }
   }
 
-  async unlikePost(postId: string, userId: string) {
-    const existing = await this.likeRepository.findOne({
-      where: {
-        post: { id: postId },
-        user: { id: userId }
-      }
-    });
-    if (!existing) throw new ConflictException();
-    return this.likeRepository.delete(existing);
+  async unlike(postId: string, userId: string): Promise<Post> {
+    try {
+      const existing = await this.likeRepository.findOne({
+        where: {
+          post: { id: postId },
+          user: { id: userId }
+        }
+      });
+      if (!existing) throw new ConflictException();
+      await this.likeRepository.delete(existing);
+      return await this.findOne(postId);
+    } catch {
+      throw new ConflictException();
+    }
   }
 
-  async viewPost(postId: string, @Req() req: Request) {
-    const ip = req.ip;
-    const existing = await this.viewRepository.findOne({
-      where: {
-        post: { id: postId },
-        ip
-      }
-    });
-    if (!existing) await this.viewRepository.save({ post: { id: postId }, ip });
+  async view(postId: string, @Req() req: Request): Promise<Post> {
+    try {
+      const ip = req.ip;
+      const existing = await this.viewRepository.findOne({
+        where: { post: { id: postId }, ip }
+      });
+      if (!existing) await this.viewRepository.save({ post: { id: postId }, ip });
+      return await this.findOne(postId);
+    } catch {
+      throw new ConflictException();
+    }
   }
 
   async findOne(id: string): Promise<Post> {

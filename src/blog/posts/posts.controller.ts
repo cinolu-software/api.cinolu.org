@@ -8,7 +8,8 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
-  Query
+  Query,
+  Req
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,6 +23,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from './utils/query-params.type';
+import { Request } from 'express';
 
 @Controller('blog-posts')
 @Auth(RoleEnum.Staff)
@@ -31,6 +33,24 @@ export class PostsController {
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreatePostDto): Promise<P> {
     return this.postsService.create(user, dto);
+  }
+
+  @Post('like/:id')
+  @Auth(RoleEnum.User)
+  likePost(@Param('id') id: string, @CurrentUser() user: User): Promise<P> {
+    return this.postsService.like(id, user.id);
+  }
+
+  @Post('dislike/:id')
+  @Auth(RoleEnum.User)
+  dislikePost(@Param('id') id: string, @CurrentUser() user: User): Promise<P> {
+    return this.postsService.unlike(id, user.id);
+  }
+
+  @Post('view/:id')
+  @Auth(RoleEnum.User)
+  viewPost(@Param('id') id: string, @Req() req: Request): Promise<P> {
+    return this.postsService.view(id, req);
   }
 
   @Post('image-cover/:id')
