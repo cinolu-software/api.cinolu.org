@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, Req } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,12 +7,19 @@ import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import * as fs from 'fs-extra';
 import { QueryParams } from './utils/query-params.type';
+import { Like } from './entities/like.entity';
+import { View } from './entities/view.entity';
+import { Request } from 'express';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectRepository(Post)
-    private postRepository: Repository<Post>
+    private postRepository: Repository<Post>,
+    @InjectRepository(Like)
+    private likeRepository: Repository<Like>,
+    @InjectRepository(View)
+    private viewRepository: Repository<View>
   ) {}
 
   async create(user: User, dto: CreatePostDto): Promise<Post> {
@@ -36,7 +43,7 @@ export class PostsService {
   }
 
   async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
-    const { page = 1, category, views, search } = queryParams;
+    const { page = 1, category, views } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
     const query = this.postRepository.createQueryBuilder('p').leftJoinAndSelect('p.categories', 'cat');
@@ -45,8 +52,41 @@ export class PostsService {
       query.andWhere('cat.name IN (:categoriesArray)', { categoriesArray });
     }
     if (views) query.orderBy('p.views', 'DESC');
-    if (search) query.andWhere('p.title LIKE :search OR p.content LIKE :search ', { search: `%${search}%` });
     return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
+  }
+
+  async likePost(postId: string, userId: string) {
+    const existing = await this.likeRepository.findOne({
+      where: {
+        post: { id: postId },
+        user: { id: userId }
+      }
+    });
+    if (existing) throw new ConflictException();
+    const like = this.likeRepository.create({ post: { id: postId }, user: { id: userId } });
+    return this.likeRepository.save(like);
+  }
+
+  async unlikePost(postId: string, userId: string) {
+    const existing = await this.likeRepository.findOne({
+      where: {
+        post: { id: postId },
+        user: { id: userId }
+      }
+    });
+    if (!existing) throw new ConflictException();
+    return this.likeRepository.delete(existing);
+  }
+
+  async viewPost(postId: string, @Req() req: Request) {
+    const ip = req.ip;
+    const existing = await this.viewRepository.findOne({
+      where: {
+        post: { id: postId },
+        ip
+      }
+    });
+    if (!existing) await this.viewRepository.save({ post: { id: postId }, ip });
   }
 
   async findOne(id: string): Promise<Post> {

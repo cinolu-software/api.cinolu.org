@@ -24,30 +24,6 @@ export class CommentsController {
     return this.commentsService.findAll(slug, page);
   }
 
-  @Post(':id/like')
-  @Auth(RoleEnum.User)
-  like(@Param('id') id: string): Promise<Comment> {
-    return this.commentsService.like(id);
-  }
-
-  @Post(':id/unlike')
-  @Auth(RoleEnum.User)
-  unlike(@Param('id') id: string): Promise<Comment> {
-    return this.commentsService.unlike(id);
-  }
-
-  @Post(':id/dislike')
-  @Auth(RoleEnum.User)
-  dislike(@Param('id') id: string): Promise<Comment> {
-    return this.commentsService.dislike(id);
-  }
-
-  @Post(':id/undislike')
-  @Auth(RoleEnum.User)
-  undislike(@Param('id') id: string): Promise<Comment> {
-    return this.commentsService.unlike(id);
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateCommentDto): Promise<Comment> {
     return this.commentsService.update(id, dto);

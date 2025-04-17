@@ -18,6 +18,8 @@ import { Category as MemberCategory } from 'src/organizations/categories/entitie
 import slugify from 'slugify';
 import { Phase } from 'src/programs/projects/phases/entities/phase.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
+import { Like } from 'src/blog/posts/entities/like.entity';
+import { View } from 'src/blog/posts/entities/view.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -39,6 +41,8 @@ export default class DbSeeder implements Seeder {
     const organizationRepository = dataSource.getRepository(Organization);
     const organizationCategoryRepository = dataSource.getRepository(MemberCategory);
     const phaseRepository = dataSource.getRepository(Phase);
+    const likeRepository = dataSource.getRepository(Like);
+    const viewRepository = dataSource.getRepository(View);
 
     const createPrograms = async (count: number) => {
       return Promise.all(
@@ -62,13 +66,32 @@ export default class DbSeeder implements Seeder {
           return await postRepository.save({
             title,
             slug,
-            views: faker.number.int({ min: 0, max: 1000 }),
+            likes: await createLikes(faker.number.int({ min: 20, max: 30 }), users),
+            views: await createViews(faker.number.int({ min: 20, max: 30 })),
             content: faker.lorem.paragraphs(faker.number.int({ min: 2, max: 4 })),
-            likes: faker.number.int({ min: 20, max: 100 }),
-            dislikes: faker.number.int({ min: 30, max: 100 }),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             comments: await createComments(faker.number.int({ min: 20, max: 30 }), users),
             author: faker.helpers.arrayElement(users)
+          });
+        })
+      );
+    };
+
+    async function createViews(count: number) {
+      return Promise.all(
+        Array.from({ length: count }, async () => {
+          return await viewRepository.save({
+            ip: faker.internet.ipv4()
+          });
+        })
+      );
+    }
+
+    const createLikes = async (count: number, users: User[]) => {
+      return Promise.all(
+        Array.from({ length: count }, async () => {
+          return await likeRepository.save({
+            user: faker.helpers.arrayElement(users)
           });
         })
       );
@@ -94,7 +117,7 @@ export default class DbSeeder implements Seeder {
       return Promise.all(
         Array.from({ length: count }, async () => {
           return await commentRepository.save({
-            content: faker.commerce.productDescription(),
+            content: faker.lorem.lines(faker.number.int({ min: 1, max: 3 })),
             by: faker.helpers.arrayElement(users)
           });
         })
