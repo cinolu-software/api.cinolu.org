@@ -70,7 +70,7 @@ export class PostsController {
 
   @Get()
   @Auth(RoleEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<[P[], number]> {
+  findAll(@Query() queryParams: QueryParams): Promise<[P[], count: number]> {
     return this.postsService.findAll(queryParams);
   }
 

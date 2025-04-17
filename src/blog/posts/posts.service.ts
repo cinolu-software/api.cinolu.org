@@ -42,21 +42,20 @@ export class PostsService {
     });
   }
 
-  async findAll(queryParams: QueryParams): Promise<[Post[], number]> {
+  async findAll(queryParams: QueryParams): Promise<[Post[], count: number]> {
     const { page = 1, category, views } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;
     const query = this.postRepository
       .createQueryBuilder('p')
-      .leftJoinAndSelect('p.likes', 'l')
-      .leftJoinAndSelect('p.views', 'v')
-      .leftJoinAndSelect('p.categories', 'cat');
-    if (category) {
-      const categoriesArray = [category];
-      query.andWhere('cat.name IN (:categoriesArray)', { categoriesArray });
-    }
+      .loadRelationCountAndMap('p.likesCount', 'p.likes')
+      .loadRelationCountAndMap('p.commentsCount', 'p.comments')
+      .loadRelationCountAndMap('p.viewsCount', 'p.views')
+      .leftJoin('p.categories', 'cat');
+    if (category) query.andWhere('cat.name IN (:...categoriesArray)', { categoriesArray: [category] });
     if (views) query.orderBy('p.views', 'DESC');
-    return await query.take(take).skip(skip).orderBy('p.created_at', 'DESC').getManyAndCount();
+    else query.orderBy('p.created_at', 'DESC');
+    return await query.take(take).skip(skip).getManyAndCount();
   }
 
   async like(postId: string, userId: string): Promise<Post> {
