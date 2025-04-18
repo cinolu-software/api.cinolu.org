@@ -9,7 +9,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Query,
-  Req
+  Ip
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -23,7 +23,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { QueryParams } from './utils/query-params.type';
-import { Request } from 'express';
 
 @Controller('blog-posts')
 @Auth(RoleEnum.Staff)
@@ -35,22 +34,22 @@ export class PostsController {
     return this.postsService.create(user, dto);
   }
 
-  @Post('like/:id')
+  @Post('like/:slug')
   @Auth(RoleEnum.User)
-  likePost(@Param('id') id: string, @CurrentUser() user: User): Promise<P> {
-    return this.postsService.like(id, user.id);
+  likePost(@Param('slug') slug: string, @CurrentUser() user: User): Promise<P> {
+    return this.postsService.like(slug, user);
   }
 
-  @Post('dislike/:id')
+  @Post('dislike/:slug')
   @Auth(RoleEnum.User)
-  dislikePost(@Param('id') id: string, @CurrentUser() user: User): Promise<P> {
-    return this.postsService.unlike(id, user.id);
+  dislikePost(@Param('slug') slug: string, @CurrentUser() user: User): Promise<P> {
+    return this.postsService.unlike(slug, user.id);
   }
 
-  @Post('view/:id')
-  @Auth(RoleEnum.User)
-  viewPost(@Param('id') id: string, @Req() req: Request): Promise<P> {
-    return this.postsService.view(id, req);
+  @Post('view/:slug')
+  @Auth(RoleEnum.Guest)
+  viewPost(@Param('slug') slug: string, @Ip() ip: string): Promise<P> {
+    return this.postsService.view(slug, ip);
   }
 
   @Post('image-cover/:id')

@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, Req } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,7 +9,6 @@ import * as fs from 'fs-extra';
 import { QueryParams } from './utils/query-params.type';
 import { Like } from './entities/like.entity';
 import { View } from './entities/view.entity';
-import { Request } from 'express';
 
 @Injectable()
 export class PostsService {
@@ -58,46 +57,54 @@ export class PostsService {
     return await query.take(take).skip(skip).getManyAndCount();
   }
 
-  async like(postId: string, userId: string): Promise<Post> {
+  async like(slug: string, user: User): Promise<Post> {
     try {
+      const post = await this.postRepository.findOneOrFail({ where: { slug } });
       const existing = await this.likeRepository.findOne({
         where: {
-          post: { id: postId },
-          user: { id: userId }
+          post: { id: post.id },
+          user: { id: user.id }
         }
       });
       if (existing) throw new ConflictException();
-      await this.likeRepository.save({ post: { id: postId }, user: { id: userId } });
-      return await this.findOne(postId);
+      const like = this.likeRepository.create({ post, user });
+      await this.likeRepository.save(like);
+      return await this.findBySlug(slug);
     } catch {
       throw new ConflictException();
     }
   }
 
-  async unlike(postId: string, userId: string): Promise<Post> {
+  async unlike(slug: string, userId: string): Promise<Post> {
     try {
+      const post = await this.postRepository.findOneOrFail({
+        where: { slug }
+      });
       const existing = await this.likeRepository.findOne({
         where: {
-          post: { id: postId },
+          post: { id: post.id },
           user: { id: userId }
-        }
+        },
+        relations: ['post', 'user']
       });
       if (!existing) throw new ConflictException();
       await this.likeRepository.delete(existing);
-      return await this.findOne(postId);
+      return await this.findBySlug(slug);
     } catch {
       throw new ConflictException();
     }
   }
 
-  async view(postId: string, @Req() req: Request): Promise<Post> {
+  async view(slug: string, ip: string): Promise<Post> {
     try {
-      const ip = req.ip;
-      const existing = await this.viewRepository.findOne({
-        where: { post: { id: postId }, ip }
+      const post = await this.postRepository.findOne({
+        where: { slug },
+        relations: ['views']
       });
-      if (!existing) await this.viewRepository.save({ post: { id: postId }, ip });
-      return await this.findOne(postId);
+      if (!post) throw new NotFoundException();
+      const alreadyViewed = post.views.some((view) => view.ip === ip);
+      if (!alreadyViewed) await this.viewRepository.save({ ip, post });
+      return await this.findBySlug(slug);
     } catch {
       throw new ConflictException();
     }
