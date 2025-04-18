@@ -18,7 +18,6 @@ import { Category as MemberCategory } from 'src/organizations/categories/entitie
 import slugify from 'slugify';
 import { Phase } from 'src/programs/projects/phases/entities/phase.entity';
 import { Organization } from 'src/organizations/entities/organization.entity';
-import { Like } from 'src/blog/posts/entities/like.entity';
 import { View } from 'src/blog/posts/entities/view.entity';
 
 export default class DbSeeder implements Seeder {
@@ -41,7 +40,6 @@ export default class DbSeeder implements Seeder {
     const organizationRepository = dataSource.getRepository(Organization);
     const organizationCategoryRepository = dataSource.getRepository(MemberCategory);
     const phaseRepository = dataSource.getRepository(Phase);
-    const likeRepository = dataSource.getRepository(Like);
     const viewRepository = dataSource.getRepository(View);
 
     const createPrograms = async (count: number) => {
@@ -66,7 +64,6 @@ export default class DbSeeder implements Seeder {
           return await postRepository.save({
             title,
             slug,
-            likes: await createLikes(faker.number.int({ min: 20, max: 30 }), users),
             views: await createViews(faker.number.int({ min: 20, max: 30 })),
             content: faker.lorem.paragraphs(faker.number.int({ min: 8, max: 10 })),
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
@@ -86,16 +83,6 @@ export default class DbSeeder implements Seeder {
         })
       );
     }
-
-    const createLikes = async (count: number, users: User[]) => {
-      return Promise.all(
-        Array.from({ length: count }, async () => {
-          return await likeRepository.save({
-            user: faker.helpers.arrayElement(users)
-          });
-        })
-      );
-    };
 
     const createOrganizations = async (count: number) => {
       const categories = await organizationCategoryRepository.find();

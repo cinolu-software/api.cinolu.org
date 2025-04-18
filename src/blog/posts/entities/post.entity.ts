@@ -3,7 +3,6 @@ import { Category } from '../../categories/entities/category.entity';
 import { User } from '../../../users/entities/user.entity';
 import { AbstractEntity } from '../../../shared/utils/abstract.entity';
 import { Comment } from '../../comments/entities/comment.entity';
-import { Like } from './like.entity';
 import { View } from './view.entity';
 
 @Entity()
@@ -19,9 +18,6 @@ export class Post extends AbstractEntity {
 
   @Column({ nullable: true })
   image: string;
-
-  @OneToMany(() => Like, (like) => like.post)
-  likes: Like[];
 
   @OneToMany(() => View, (view) => view.post)
   views: View[];

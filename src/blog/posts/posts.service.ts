@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import * as fs from 'fs-extra';
 import { QueryParams } from './utils/query-params.type';
-import { Like } from './entities/like.entity';
 import { View } from './entities/view.entity';
 
 @Injectable()
@@ -15,8 +14,6 @@ export class PostsService {
   constructor(
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
-    @InjectRepository(Like)
-    private likeRepository: Repository<Like>,
     @InjectRepository(View)
     private viewRepository: Repository<View>
   ) {}
@@ -47,7 +44,6 @@ export class PostsService {
     const skip = (page - 1) * take;
     const query = this.postRepository
       .createQueryBuilder('p')
-      .loadRelationCountAndMap('p.likesCount', 'p.likes')
       .loadRelationCountAndMap('p.commentsCount', 'p.comments')
       .loadRelationCountAndMap('p.viewsCount', 'p.views')
       .leftJoin('p.categories', 'cat');
@@ -55,44 +51,6 @@ export class PostsService {
     if (views) query.orderBy('p.views', 'DESC');
     else query.orderBy('p.created_at', 'DESC');
     return await query.take(take).skip(skip).getManyAndCount();
-  }
-
-  async like(slug: string, user: User): Promise<Post> {
-    try {
-      const post = await this.postRepository.findOneOrFail({ where: { slug } });
-      const existing = await this.likeRepository.findOne({
-        where: {
-          post: { id: post.id },
-          user: { id: user.id }
-        }
-      });
-      if (existing) throw new ConflictException();
-      const like = this.likeRepository.create({ post, user });
-      await this.likeRepository.save(like);
-      return await this.findBySlug(slug);
-    } catch {
-      throw new ConflictException();
-    }
-  }
-
-  async unlike(slug: string, userId: string): Promise<Post> {
-    try {
-      const post = await this.postRepository.findOneOrFail({
-        where: { slug }
-      });
-      const existing = await this.likeRepository.findOne({
-        where: {
-          post: { id: post.id },
-          user: { id: userId }
-        },
-        relations: ['post', 'user']
-      });
-      if (!existing) throw new ConflictException();
-      await this.likeRepository.delete(existing);
-      return await this.findBySlug(slug);
-    } catch {
-      throw new ConflictException();
-    }
   }
 
   async view(slug: string, ip: string): Promise<Post> {
@@ -114,7 +72,7 @@ export class PostsService {
     try {
       return await this.postRepository.findOneOrFail({
         where: { id },
-        relations: ['comments', 'author', 'views', 'likes']
+        relations: ['comments', 'author', 'views']
       });
     } catch {
       throw new BadRequestException();
@@ -125,7 +83,6 @@ export class PostsService {
     try {
       return await this.postRepository
         .createQueryBuilder('p')
-        .loadRelationCountAndMap('p.likesCount', 'p.likes')
         .loadRelationCountAndMap('p.commentsCount', 'p.comments')
         .loadRelationCountAndMap('p.viewsCount', 'p.views')
         .leftJoinAndSelect('p.categories', 'cat')

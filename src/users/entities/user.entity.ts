@@ -5,7 +5,6 @@ import { Project } from '../../programs/projects/entities/project.entity';
 import { Post } from '../../blog/posts/entities/post.entity';
 import { Position } from '../positions/entities/position.entity';
 import { Expertise } from '../expertises/entities/expertise.entity';
-import { Like } from 'src/blog/posts/entities/like.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -51,7 +50,4 @@ export class User extends AbstractEntity {
   @ManyToMany(() => Expertise)
   @JoinTable()
   expertises: Expertise[];
-
-  @OneToMany(() => Like, (like) => like.user)
-  likes: Like[];
 }

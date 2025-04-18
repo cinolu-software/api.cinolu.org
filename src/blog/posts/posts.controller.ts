@@ -34,18 +34,6 @@ export class PostsController {
     return this.postsService.create(user, dto);
   }
 
-  @Post('like/:slug')
-  @Auth(RoleEnum.User)
-  likePost(@Param('slug') slug: string, @CurrentUser() user: User): Promise<P> {
-    return this.postsService.like(slug, user);
-  }
-
-  @Post('dislike/:slug')
-  @Auth(RoleEnum.User)
-  dislikePost(@Param('slug') slug: string, @CurrentUser() user: User): Promise<P> {
-    return this.postsService.unlike(slug, user.id);
-  }
-
   @Post('view/:slug')
   @Auth(RoleEnum.Guest)
   viewPost(@Param('slug') slug: string, @Ip() ip: string): Promise<P> {
