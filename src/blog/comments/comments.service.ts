@@ -36,7 +36,7 @@ export class CommentsService {
     }
   }
 
-  async findAll(slug: string, loadMore: boolean): Promise<[Comment[], number]> {
+  async findAll(slug: string, loadMore: boolean = false): Promise<[Comment[], number]> {
     const take = 10;
     try {
       const query = this.commentRepository
