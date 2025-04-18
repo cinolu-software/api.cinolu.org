@@ -121,7 +121,7 @@ export class PostsService {
         .loadRelationCountAndMap('p.likesCount', 'p.likes')
         .loadRelationCountAndMap('p.commentsCount', 'p.comments')
         .loadRelationCountAndMap('p.viewsCount', 'p.views')
-        .leftJoin('p.categories', 'cat')
+        .leftJoinAndSelect('p.categories', 'cat')
         .leftJoinAndSelect('p.author', 'author')
         .where('p.slug = :slug', { slug })
         .getOne();
