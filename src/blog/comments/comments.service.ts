@@ -36,18 +36,16 @@ export class CommentsService {
     }
   }
 
-  async findAll(slug: string, page: number = 1): Promise<[Comment[], number]> {
+  async findAll(slug: string, loadMore: boolean): Promise<[Comment[], number]> {
     const take = 10;
-    const skip = (page - 1) * take;
     try {
       const query = this.commentRepository
         .createQueryBuilder('c')
         .leftJoinAndSelect('c.by', 'by')
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
-        .orderBy('c.created_at', 'DESC')
-        .skip(skip)
-        .take(take);
+        .orderBy('c.created_at', 'DESC');
+      if (!loadMore) query.take(take);
       return await query.getManyAndCount();
     } catch {
       throw new BadRequestException();

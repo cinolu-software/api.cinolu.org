@@ -20,8 +20,8 @@ export class CommentsController {
 
   @Get(':slug')
   @Auth(RoleEnum.Guest)
-  findAll(@Param('slug') slug: string, @Query('page') page: number): Promise<[Comment[], number]> {
-    return this.commentsService.findAll(slug, page);
+  findAll(@Param('slug') slug: string, @Query('loadMore') loadMore: boolean): Promise<[Comment[], number]> {
+    return this.commentsService.findAll(slug, loadMore);
   }
 
   @Patch(':id')
