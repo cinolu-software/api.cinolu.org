@@ -116,10 +116,15 @@ export class PostsService {
 
   async findBySlug(slug: string): Promise<Post> {
     try {
-      return await this.postRepository.findOneOrFail({
-        where: { slug },
-        relations: ['comments', 'author', 'views', 'likes']
-      });
+      return await this.postRepository
+        .createQueryBuilder('p')
+        .loadRelationCountAndMap('p.likesCount', 'p.likes')
+        .loadRelationCountAndMap('p.commentsCount', 'p.comments')
+        .loadRelationCountAndMap('p.viewsCount', 'p.views')
+        .leftJoin('p.categories', 'cat')
+        .leftJoinAndSelect('p.author', 'author')
+        .where('p.slug = :slug', { slug })
+        .getOne();
     } catch {
       throw new BadRequestException();
     }
