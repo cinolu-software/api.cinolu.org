@@ -36,8 +36,7 @@ export class CommentsService {
     }
   }
 
-  async findAll(slug: string, loadMore: boolean = false): Promise<[Comment[], number]> {
-    const take = 10;
+  async findAll(slug: string): Promise<Comment[]> {
     try {
       const query = this.commentRepository
         .createQueryBuilder('c')
@@ -45,8 +44,7 @@ export class CommentsService {
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
         .orderBy('c.created_at', 'DESC');
-      if (!loadMore) query.take(take);
-      return await query.getManyAndCount();
+      return await query.getMany();
     } catch {
       throw new BadRequestException();
     }

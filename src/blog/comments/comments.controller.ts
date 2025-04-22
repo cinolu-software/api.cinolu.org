@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete, Query, Get } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, Get } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -20,8 +20,8 @@ export class CommentsController {
 
   @Get(':slug')
   @Auth(RoleEnum.Guest)
-  findAll(@Param('slug') slug: string, @Query('loadMore') loadMore: boolean): Promise<[Comment[], number]> {
-    return this.commentsService.findAll(slug, loadMore);
+  findAll(@Param('slug') slug: string): Promise<Comment[]> {
+    return this.commentsService.findAll(slug);
   }
 
   @Patch(':id')
