@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, Get, Query } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -7,6 +7,7 @@ import { User } from '../../users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { Auth } from 'src/shared/decorators/auth.decorators';
+import { QueryParams } from './utils/query-params.type';
 
 @Controller('post-comments')
 @Auth(RoleEnum.User)
@@ -20,8 +21,8 @@ export class CommentsController {
 
   @Get(':slug')
   @Auth(RoleEnum.Guest)
-  findAll(@Param('slug') slug: string): Promise<Comment[]> {
-    return this.commentsService.findAll(slug);
+  findAll(@Param('slug') slug: string, @Query() querParams: QueryParams): Promise<[Comment[], number]> {
+    return this.commentsService.findAll(slug, querParams);
   }
 
   @Patch(':id')

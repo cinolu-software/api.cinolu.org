@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
 export class CommentsService {
@@ -36,15 +37,18 @@ export class CommentsService {
     }
   }
 
-  async findAll(slug: string): Promise<Comment[]> {
+  async findAll(slug: string, querParams: QueryParams): Promise<[Comment[], number]> {
     try {
+      const { page = 1 } = querParams;
       const query = this.commentRepository
         .createQueryBuilder('c')
         .leftJoinAndSelect('c.by', 'by')
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
-        .orderBy('c.created_at', 'DESC');
-      return await query.getMany();
+        .orderBy('c.created_at', 'DESC')
+        .take(10)
+        .skip((page - 1) * 10);
+      return await query.getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
