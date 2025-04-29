@@ -16,11 +16,12 @@ export class CommentsService {
 
   async create(user: User, dto: CreateCommentDto): Promise<Comment> {
     try {
-      return await this.commentRepository.save({
+      const comment = await this.commentRepository.save({
         ...dto,
         by: { id: user.id },
         post: { id: dto.post }
       });
+      return await this.findOne(comment.id);
     } catch {
       throw new BadRequestException();
     }
