@@ -46,6 +46,7 @@ export class CommentsService {
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
         .orderBy('c.created_at', 'DESC')
+        .skip((page - 1) * 10)
         .take(page * 10);
       return await query.getManyAndCount();
     } catch {
