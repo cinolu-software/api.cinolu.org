@@ -30,7 +30,7 @@ export class CommentsService {
     try {
       return await this.commentRepository.findOneOrFail({
         where: { id },
-        relations: ['by', 'post']
+        relations: ['by']
       });
     } catch {
       throw new BadRequestException();
