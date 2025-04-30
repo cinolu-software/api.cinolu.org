@@ -41,15 +41,15 @@ export class CommentsService {
   async findAll(slug: string, querParams: QueryParams): Promise<[Comment[], number]> {
     try {
       const { page = 1 } = querParams;
-      const query = this.commentRepository
+      return await this.commentRepository
         .createQueryBuilder('c')
         .leftJoinAndSelect('c.by', 'by')
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
         .orderBy('c.created_at', 'DESC')
         .skip((page - 1) * 10)
-        .take(page * 10);
-      return await query.getManyAndCount();
+        .take(page * 10)
+        .getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
@@ -58,10 +58,8 @@ export class CommentsService {
   async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.findOne(id);
-      return await this.commentRepository.save({
-        ...dto,
-        post: { id: comment.post.id }
-      });
+      await this.commentRepository.update(id, { ...dto, ...comment });
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
