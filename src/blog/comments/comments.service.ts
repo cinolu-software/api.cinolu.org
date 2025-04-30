@@ -62,8 +62,7 @@ export class CommentsService {
         ...dto,
         post: { id: comment.post.id }
       });
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException();
     }
   }
