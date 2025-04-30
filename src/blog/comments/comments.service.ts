@@ -31,7 +31,7 @@ export class CommentsService {
     try {
       return await this.commentRepository.findOneOrFail({
         where: { id },
-        relations: ['by']
+        relations: ['by', 'post']
       });
     } catch {
       throw new BadRequestException();
@@ -62,7 +62,8 @@ export class CommentsService {
         ...dto,
         post: { id: comment.post.id }
       });
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException();
     }
   }
