@@ -46,7 +46,7 @@ export class CommentsService {
         .leftJoinAndSelect('c.by', 'by')
         .leftJoin('c.post', 'p')
         .where('p.slug = :slug', { slug })
-        .orderBy('c.created_at', 'DESC')
+        .orderBy('c.updated_at', 'DESC')
         .skip((page - 1) * 10)
         .take(page * 10)
         .getManyAndCount();
@@ -58,8 +58,12 @@ export class CommentsService {
   async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.findOne(id);
-      await this.commentRepository.update(id, { ...dto, ...comment });
-      return await this.findOne(id);
+      return await this.commentRepository.save({
+        ...comment,
+        ...dto,
+        by: { id: comment.by.id },
+        post: { id: comment.post.id }
+      });
     } catch {
       throw new BadRequestException();
     }
