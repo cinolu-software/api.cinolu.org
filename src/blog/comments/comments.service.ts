@@ -58,12 +58,9 @@ export class CommentsService {
   async update(id: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.findOne(id);
-      return await this.commentRepository.save({
-        ...comment,
-        ...dto,
-        by: { id: comment.by.id },
-        post: { id: comment.post.id }
-      });
+      const updatedComment = Object.assign(comment, dto);
+      await this.commentRepository.update(id, updatedComment);
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
@@ -72,7 +69,7 @@ export class CommentsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.commentRepository.softDelete(id);
+      await this.commentRepository.delete(id);
     } catch {
       throw new BadRequestException();
     }
