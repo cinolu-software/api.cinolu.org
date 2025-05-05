@@ -43,12 +43,16 @@ export default class DbSeeder implements Seeder {
     const viewRepository = dataSource.getRepository(View);
 
     const createPrograms = async (count: number) => {
+      const partners = await createOrganizations(25);
       return Promise.all(
         Array.from({ length: count }, async () => {
           return await programRepository.save({
             name: faker.commerce.productName(),
             description: faker.commerce.productDescription(),
-            projects: await createProjects(faker.number.int({ min: 3, max: 10 })),
+            projects: await createProjects(
+              faker.number.int({ min: 3, max: 10 }),
+              faker.helpers.arrayElements(partners, { min: 4, max: 8 })
+            ),
             events: await createEvents(faker.number.int({ min: 3, max: 10 }))
           });
         })
@@ -125,7 +129,7 @@ export default class DbSeeder implements Seeder {
       );
     };
 
-    const createProjects = async (count: number) => {
+    const createProjects = async (count: number, partners: Organization[]) => {
       return Promise.all(
         Array.from({ length: count }, async (_: unknown, i: number) => {
           const name = `${faker.commerce.productName()} ${i}`;
@@ -141,6 +145,7 @@ export default class DbSeeder implements Seeder {
             requirements: generateRequirements() as unknown as JSON,
             categories: faker.helpers.arrayElements(categories, { min: 1, max: 3 }),
             phases: await createPhases(faker.number.int({ min: 1, max: 5 })),
+            partners,
             form: generateJSONForm(faker.number.int({ min: 1, max: 5 })) as unknown as JSON
           });
         })
@@ -353,7 +358,6 @@ export default class DbSeeder implements Seeder {
     const staffs = await createStaffs(10);
     await createCoaches(20);
     await createPosts(200, staffs);
-    await createOrganizations(25);
     await createUsers(100);
     await userRepository.save({
       name: faker.person.firstName(),
