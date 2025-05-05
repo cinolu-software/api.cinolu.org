@@ -27,6 +27,6 @@ export class Organization extends AbstractEntity {
   @JoinTable()
   categories: Category[];
 
-  @ManyToMany(() => Project, (project) => project.organizations)
+  @ManyToMany(() => Project, (project) => project.partners)
   projects: Project[];
 }
