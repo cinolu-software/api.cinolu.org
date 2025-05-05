@@ -1,6 +1,7 @@
 import { AbstractEntity } from 'src/shared/utils/abstract.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Category } from '../categories/entities/category.entity';
+import { Project } from 'src/programs/projects/entities/project.entity';
 
 @Entity()
 export class Organization extends AbstractEntity {
@@ -25,4 +26,7 @@ export class Organization extends AbstractEntity {
   @ManyToMany(() => Category)
   @JoinTable()
   categories: Category[];
+
+  @ManyToMany(() => Project, (project) => project.organizations)
+  projects: Project[];
 }

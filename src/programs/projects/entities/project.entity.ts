@@ -4,6 +4,7 @@ import { Application } from '../applications/entities/application.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
 import { Program } from '../../entities/program.entity';
+import { Organization } from 'src/organizations/entities/organization.entity';
 
 @Entity()
 export class Project extends AbstractEntity {
@@ -50,4 +51,8 @@ export class Project extends AbstractEntity {
   @ManyToMany(() => Category, (category) => category.projects)
   @JoinTable()
   categories: Category[];
+
+  @ManyToMany(() => Organization, (organization) => organization.projects)
+  @JoinTable()
+  partners: Organization[];
 }

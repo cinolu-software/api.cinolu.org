@@ -27,4 +27,7 @@ export class CreateProjectDto {
 
   @IsArray()
   categories: string[];
+
+  @IsArray()
+  partners: string[];
 }
