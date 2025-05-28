@@ -18,6 +18,5 @@ export const typeOrmOptions: DataSourceOptions & SeederOptions = {
   entities: ['dist/**/*.entity.js'],
   seeds: ['dist/src/database/seeds/**.js']
 };
-
 export const dataSource = new DataSource(typeOrmOptions);
 dataSource.initialize();
