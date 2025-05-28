@@ -13,7 +13,7 @@ export default class CreateUserDto {
   @IsNotEmpty()
   address: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   biography: string;
 
   @IsOptional()
