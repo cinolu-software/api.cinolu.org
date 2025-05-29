@@ -21,7 +21,7 @@ export class ProjectsService {
         ...dto,
         program: { id: dto.program },
         categories: dto.categories.map((category) => ({ id: category })),
-        partners: dto.partners.map((partner) => ({ id: partner }))
+        partners: dto?.partners?.length && dto.partners.map((partner) => ({ id: partner }))
       });
     } catch {
       throw new BadRequestException();
@@ -118,7 +118,7 @@ export class ProjectsService {
         ...dto,
         program: { id: dto.program || project.program.id },
         categories: dto.categories.map((category) => ({ id: category })) ?? project.categories,
-        partners: dto.partners.map((partner) => ({ id: partner })) ?? project.partners
+        partners: dto?.partners?.map((partner) => ({ id: partner })) ?? project.partners
       });
     } catch {
       throw new BadRequestException();

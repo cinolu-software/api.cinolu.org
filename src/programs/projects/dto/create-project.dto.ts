@@ -28,6 +28,6 @@ export class CreateProjectDto {
   @IsArray()
   categories: string[];
 
-  @IsArray()
+  @IsOptional()
   partners: string[];
 }
