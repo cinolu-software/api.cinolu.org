@@ -21,8 +21,7 @@ export class EventsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException();
     }
   }
