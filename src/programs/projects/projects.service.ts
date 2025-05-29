@@ -93,7 +93,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'categories', 'phases']
+        relations: ['program', 'categories', 'phases', 'partners']
       });
     } catch {
       throw new BadRequestException();
