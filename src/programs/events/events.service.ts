@@ -16,15 +16,13 @@ export class EventsService {
 
   async create(dto: CreateEventDto): Promise<Event> {
     try {
-      await this.eventRepository.findOneOrFail({
-        where: { name: dto.name }
-      });
       return await this.eventRepository.save({
         ...dto,
         program: { id: dto.program },
-        categories: dto.categories.map((type) => ({ id: type }))
+        categories: dto.categories.map((id) => ({ id }))
       });
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException();
     }
   }
