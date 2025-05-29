@@ -8,7 +8,7 @@ export class CreateEventDto {
   description: string;
 
   @IsString()
-  location: string;
+  place: string;
 
   @IsOptional()
   link: string;
@@ -18,9 +18,6 @@ export class CreateEventDto {
 
   @IsNotEmpty()
   ended_at: Date;
-
-  @IsNotEmpty()
-  responsible: string;
 
   @IsNotEmpty()
   program: string;
