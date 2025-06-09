@@ -93,7 +93,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'categories', 'phases', 'partners']
+        relations: ['program', 'categories', 'phases']
       });
     } catch {
       throw new BadRequestException();
@@ -117,8 +117,7 @@ export class ProjectsService {
         id,
         ...dto,
         program: { id: dto.program || project.program.id },
-        categories: dto.categories.map((category) => ({ id: category })) ?? project.categories,
-        partners: dto?.partners?.map((partner) => ({ id: partner })) ?? project.partners
+        categories: dto.categories.map((category) => ({ id: category })) ?? project.categories
       });
     } catch {
       throw new BadRequestException();

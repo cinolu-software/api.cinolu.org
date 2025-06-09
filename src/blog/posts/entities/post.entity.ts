@@ -1,12 +1,12 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
-import { Category } from '../../categories/entities/category.entity';
 import { User } from '../../../users/entities/user.entity';
-import { AbstractEntity } from '../../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../../shared/utils/abstract.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { View } from './view.entity';
+import { PostCategory } from '../categories/entities/category.entity';
 
 @Entity()
-export class Post extends AbstractEntity {
+export class Post extends BaseEntity {
   @Column()
   title: string;
 
@@ -25,9 +25,9 @@ export class Post extends AbstractEntity {
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
-  @ManyToMany(() => Category, (category) => category.posts)
+  @ManyToMany(() => PostCategory, (category) => category.posts)
   @JoinTable()
-  categories: Category[];
+  categories: PostCategory[];
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn()

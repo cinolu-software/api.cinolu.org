@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { AbstractEntity } from '../../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../../shared/utils/abstract.entity';
 import { Program } from '../../entities/program.entity';
-import { Category } from '../categories/entities/category.entity';
+import { EventCategory } from '../categories/entities/category.entity';
 
 @Entity()
-export class Event extends AbstractEntity {
+export class Event extends BaseEntity {
   @Column()
   name: string;
 
@@ -27,7 +27,7 @@ export class Event extends AbstractEntity {
   is_published: boolean;
 
   @Column({ nullable: true })
-  link: string;
+  form_link: string;
 
   @Column({ type: 'date' })
   ended_at: Date;
@@ -36,7 +36,7 @@ export class Event extends AbstractEntity {
   @JoinColumn()
   program: Program;
 
-  @ManyToMany(() => Category, (category) => category.event)
+  @ManyToMany(() => EventCategory, (category) => category.event)
   @JoinTable()
-  categories: Category[];
+  categories: EventCategory[];
 }

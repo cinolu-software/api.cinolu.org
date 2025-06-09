@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm';
-import { AbstractEntity } from '../../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../../shared/utils/abstract.entity';
 
 @Entity()
-export class Position extends AbstractEntity {
+export class Position extends BaseEntity {
   @Column()
   name: string;
 }

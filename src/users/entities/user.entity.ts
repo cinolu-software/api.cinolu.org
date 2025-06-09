@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { AbstractEntity } from '../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../shared/utils/abstract.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Project } from '../../programs/projects/entities/project.entity';
 import { Post } from '../../blog/posts/entities/post.entity';
@@ -7,7 +7,7 @@ import { Position } from '../positions/entities/position.entity';
 import { Expertise } from '../expertises/entities/expertise.entity';
 
 @Entity()
-export class User extends AbstractEntity {
+export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 

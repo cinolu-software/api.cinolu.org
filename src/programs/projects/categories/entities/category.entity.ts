@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToMany } from 'typeorm';
-import { AbstractEntity } from '../../../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../../../shared/utils/abstract.entity';
 import { Project } from '../../entities/project.entity';
 
-@Entity('projectsCategory')
-export class Category extends AbstractEntity {
+@Entity()
+export class ProjectCategory extends BaseEntity {
   @Column()
   name: string;
 

@@ -4,7 +4,7 @@ import { RoleEnum } from '../../../shared/enums/roles.enum';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
+import { EventCategory } from './entities/category.entity';
 
 @Controller('event-categories')
 @Auth(RoleEnum.Staff)
@@ -12,23 +12,23 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
+  create(@Body() createCategoryDto: CreateCategoryDto): Promise<EventCategory> {
     return this.categoriesService.create(createCategoryDto);
   }
 
   @Get()
   @Auth(RoleEnum.Guest)
-  findAll(): Promise<Category[]> {
+  findAll(): Promise<EventCategory[]> {
     return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Category> {
+  findOne(@Param('id') id: string): Promise<EventCategory> {
     return this.categoriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<Category> {
+  update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<EventCategory> {
     return this.categoriesService.update(id, dto);
   }
 

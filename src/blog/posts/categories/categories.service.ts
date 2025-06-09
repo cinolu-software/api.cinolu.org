@@ -1,18 +1,18 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { EventCategory } from './entities/category.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Repository } from 'typeorm';
+import { PostCategory } from './entities/category.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectRepository(EventCategory)
-    private categoryRepository: Repository<EventCategory>
+    @InjectRepository(PostCategory)
+    private readonly categoryRepository: Repository<PostCategory>
   ) {}
 
-  async create(dto: CreateCategoryDto): Promise<EventCategory> {
+  async create(dto: CreateCategoryDto): Promise<PostCategory> {
     try {
       return await this.categoryRepository.save(dto);
     } catch {
@@ -20,21 +20,21 @@ export class CategoriesService {
     }
   }
 
-  async findAll(): Promise<EventCategory[]> {
+  async findAll(): Promise<PostCategory[]> {
     return await this.categoryRepository.find();
   }
 
-  async findOne(id: string): Promise<EventCategory> {
+  async findOne(id: string): Promise<PostCategory> {
     try {
       return await this.categoryRepository.findOneOrFail({
         where: { id }
       });
     } catch {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
   }
 
-  async update(id: string, dto: UpdateCategoryDto): Promise<EventCategory> {
+  async update(id: string, dto: UpdateCategoryDto): Promise<PostCategory> {
     try {
       const category = await this.findOne(id);
       return await this.categoryRepository.save({ ...category, ...dto });

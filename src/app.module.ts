@@ -13,10 +13,9 @@ import { EventsModule } from './programs/events/events.module';
 import { ProjectsModule } from './programs/projects/projects.module';
 import { UsersModule } from './users/users.module';
 import { ProgramsModule } from './programs/programs.module';
-import { ApplicationsModule } from './programs/projects/applications/applications.module';
 import { BlogModule } from './blog/blog.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
-import { OrganizationsModule } from './organizations/organizations.module';
+import { EnterprisesModule } from './enterprises/enterprises.module';
 
 @Module({
   imports: [
@@ -43,9 +42,8 @@ import { OrganizationsModule } from './organizations/organizations.module';
     ProjectsModule,
     EventsModule,
     ProgramsModule,
-    ApplicationsModule,
     BlogModule,
-    OrganizationsModule
+    EnterprisesModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
