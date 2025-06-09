@@ -3,13 +3,7 @@ import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
-import { Role } from '../../users/roles/entities/role.entity';
-import { Program } from 'src/programs/entities/program.entity';
-import { Event } from 'src/programs/events/entities/event.entity';
-import slugify from 'slugify';
-import { Project } from 'src/programs/projects/entities/project.entity';
-import { EventCategory } from 'src/programs/events/categories/entities/category.entity';
-import { ProjectCategory } from 'src/programs/projects/categories/entities/category.entity';
+import { Role } from 'src/users/roles/entities/role.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -18,7 +12,7 @@ export default class DbSeeder implements Seeder {
 
     const userRepository = dataSource.getRepository(User);
     const roleRepository = dataSource.getRepository(Role);
-    const programRepository = dataSource.getRepository(Program);
+    /* const programRepository = dataSource.getRepository(Program);
     const eventRepository = dataSource.getRepository(Event);
     const projectRepository = dataSource.getRepository(Project);
     const eventCategoryRepository = dataSource.getRepository(EventCategory);
@@ -92,8 +86,9 @@ export default class DbSeeder implements Seeder {
             name: faker.commerce.department()
           });
         })
-      );
-    };
+      ); 
+    }; 
+    */
 
     ['admin', 'user', 'staff', 'coach'].map(async (role) => {
       await roleRepository.save({ name: role });
@@ -107,7 +102,5 @@ export default class DbSeeder implements Seeder {
       password: await bcrypt.hash('admin1234', 10),
       roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
     });
-
-    await createProgram(60);
   }
 }
