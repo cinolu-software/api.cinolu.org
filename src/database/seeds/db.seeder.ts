@@ -5,6 +5,14 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
 import { Role } from 'src/users/roles/entities/role.entity';
 
+/* import slugify from 'slugify';
+import { Program } from 'src/programs/entities/program.entity';
+import { EventCategory } from 'src/programs/events/categories/entities/category.entity';
+import { ProjectCategory } from 'src/programs/projects/categories/entities/category.entity';
+import { Project } from 'src/programs/projects/entities/project.entity';
+import { Event } from 'src/programs/events/entities/event.entity';
+*/
+
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
     await dataSource.dropDatabase();
@@ -12,7 +20,8 @@ export default class DbSeeder implements Seeder {
 
     const userRepository = dataSource.getRepository(User);
     const roleRepository = dataSource.getRepository(Role);
-    /* const programRepository = dataSource.getRepository(Program);
+    /*
+    const programRepository = dataSource.getRepository(Program);
     const eventRepository = dataSource.getRepository(Event);
     const projectRepository = dataSource.getRepository(Project);
     const eventCategoryRepository = dataSource.getRepository(EventCategory);
@@ -32,6 +41,7 @@ export default class DbSeeder implements Seeder {
     };
 
     const createEvents = async (count: number) => {
+      const categories = await eventCategoryRepository.find();
       return Promise.all(
         Array.from({ length: count }).map(async () => {
           const name = `${faker.commerce.productName()} - ${faker.number.int({ min: 1, max: 1000 })}`;
@@ -45,13 +55,14 @@ export default class DbSeeder implements Seeder {
             is_published: true,
             form_link: faker.internet.url(),
             ended_at: faker.date.future(),
-            categories: await createEventCategories(faker.number.int({ min: 1, max: 3 }))
+            categories: faker.helpers.arrayElements(categories, { min: 2, max: 4 })
           });
         })
       );
     };
 
     const createProject = async (count: number): Promise<Project[]> => {
+      const categories = await projectCategoryRepository.find();
       return Promise.all(
         Array.from({ length: count }).map(async () => {
           const name = `${faker.commerce.productName()} - ${faker.number.int({ min: 1, max: 1000 })}`;
@@ -63,7 +74,7 @@ export default class DbSeeder implements Seeder {
             started_at: faker.helpers.arrayElement([faker.date.past(), faker.date.recent()]),
             ended_at: faker.date.future(),
             form_link: faker.internet.url(),
-            categories: await createProductCategories(faker.number.int({ min: 1, max: 3 }))
+            categories: faker.helpers.arrayElements(categories, { min: 2, max: 4 })
           });
         })
       );
@@ -86,8 +97,8 @@ export default class DbSeeder implements Seeder {
             name: faker.commerce.department()
           });
         })
-      ); 
-    }; 
+      );
+    };
     */
 
     ['admin', 'user', 'staff', 'coach'].map(async (role) => {
@@ -102,5 +113,8 @@ export default class DbSeeder implements Seeder {
       password: await bcrypt.hash('admin1234', 10),
       roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
     });
+    /*  await createProductCategories(10);
+    await createEventCategories(10);
+    await createProgram(60); */
   }
 }
