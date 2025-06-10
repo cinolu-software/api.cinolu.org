@@ -65,9 +65,9 @@ export class EventsController {
     return this.eventsService.publish(id);
   }
 
-  @Post('image/:id')
+  @Post('cover/:id')
   @UseInterceptors(
-    FileInterceptor('thumb', {
+    FileInterceptor('cover', {
       storage: diskStorage({
         destination: './uploads/events',
         filename: function (_req, file, cb) {
@@ -76,8 +76,13 @@ export class EventsController {
       })
     })
   )
-  uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
-    return this.eventsService.uploadImage(id, file);
+  addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
+    return this.eventsService.addCover(id, file);
+  }
+
+  @Post('cover/remove/:id')
+  removeCover(@Param('id') id: string): Promise<Event> {
+    return this.eventsService.removeCover(id);
   }
 
   @Patch(':id')

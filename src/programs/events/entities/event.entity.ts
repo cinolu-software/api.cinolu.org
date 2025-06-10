@@ -12,7 +12,10 @@ export class Event extends BaseEntity {
   slug: string;
 
   @Column({ nullable: true })
-  image: string;
+  cover: string;
+
+  @Column({ type: 'json', nullable: true })
+  report: JSON;
 
   @Column()
   place: string;

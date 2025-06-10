@@ -65,9 +65,9 @@ export class ProjectsController {
     return this.projectsService.publish(id);
   }
 
-  @Post('image/:id')
+  @Post('cover/:id')
   @UseInterceptors(
-    FileInterceptor('thumb', {
+    FileInterceptor('cover', {
       storage: diskStorage({
         destination: './uploads/projects',
         filename: function (_req, file, cb) {
@@ -76,8 +76,13 @@ export class ProjectsController {
       })
     })
   )
-  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
-    return this.projectsService.addImage(id, file);
+  addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
+    return this.projectsService.addCover(id, file);
+  }
+
+  @Post('cover/remove/:id')
+  removeCover(@Param('id') id: string): Promise<Project> {
+    return this.projectsService.removeCover(id);
   }
 
   @Patch(':id')

@@ -68,11 +68,22 @@ export class ProjectsService {
     }
   }
 
-  async addImage(id: string, file: Express.Multer.File): Promise<Project> {
+  async addCover(id: string, file: Express.Multer.File): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      if (project.image) await fs.unlink(`./uploads/projects/${project.image}`);
-      return await this.projectRepository.save({ ...project, image: file.filename });
+      if (project.cover) await fs.unlink(`./uploads/projects/${project.cover}`);
+      return await this.projectRepository.save({ ...project, cover: file.filename });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeCover(id: string): Promise<Project> {
+    try {
+      const project = await this.findOne(id);
+      if (!project.cover) return project;
+      await fs.unlink(`./uploads/projects/${project.cover}`);
+      return await this.projectRepository.save({ ...project, cover: null });
     } catch {
       throw new BadRequestException();
     }

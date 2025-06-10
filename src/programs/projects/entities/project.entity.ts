@@ -12,7 +12,10 @@ export class Project extends BaseEntity {
   slug: string;
 
   @Column({ nullable: true })
-  image: string;
+  cover: string;
+
+  @Column({ type: 'json', nullable: true })
+  report: JSON;
 
   @Column({ type: 'text' })
   description: string;

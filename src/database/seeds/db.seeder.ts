@@ -5,7 +5,8 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
 import { Role } from 'src/users/roles/entities/role.entity';
 
-/* import slugify from 'slugify';
+/*
+import slugify from 'slugify';
 import { Program } from 'src/programs/entities/program.entity';
 import { EventCategory } from 'src/programs/events/categories/entities/category.entity';
 import { ProjectCategory } from 'src/programs/projects/categories/entities/category.entity';
@@ -113,8 +114,10 @@ export default class DbSeeder implements Seeder {
       password: await bcrypt.hash('admin1234', 10),
       roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
     });
-    /*  await createProductCategories(10);
+    /*
+    await createProductCategories(10);
     await createEventCategories(10);
-    await createProgram(60); */
+    await createProgram(60);
+    */
   }
 }
