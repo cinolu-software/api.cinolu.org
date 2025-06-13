@@ -11,7 +11,7 @@ export class CreateEventDto {
   place: string;
 
   @IsOptional()
-  link: string;
+  form_link: string;
 
   @IsNotEmpty()
   started_at: Date;
