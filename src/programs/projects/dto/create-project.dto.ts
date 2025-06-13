@@ -9,10 +9,7 @@ export class CreateProjectDto {
   description: string;
 
   @IsOptional()
-  review_form: JSON;
-
-  @IsOptional()
-  form: JSON;
+  form_link: string;
 
   @IsNotEmpty()
   @Transform(({ value }) => new Date(value))
