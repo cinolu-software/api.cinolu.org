@@ -24,7 +24,7 @@ import { RoleEnum } from '../../shared/enums/roles.enum';
 @Controller('events')
 @Auth(RoleEnum.Staff)
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private eventsService: EventsService) {}
 
   @Post('')
   create(@Body() createProgramDto: CreateEventDto): Promise<Event> {

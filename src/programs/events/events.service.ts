@@ -72,9 +72,9 @@ export class EventsService {
 
   async addCover(id: string, file: Express.Multer.File): Promise<Event> {
     try {
-      const program = await this.findOne(id);
-      if (program.cover) await fs.promises.unlink(`./uploads/events/${program.cover}`);
-      return await this.eventRepository.save({ ...program, cover: file.filename });
+      const event = await this.findOne(id);
+      if (event.cover) await fs.promises.unlink(`./uploads/events/${event.cover}`);
+      return await this.eventRepository.save({ ...event, cover: file.filename });
     } catch {
       throw new BadRequestException();
     }
@@ -83,8 +83,7 @@ export class EventsService {
   async removeCover(id: string): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      if (!event.cover) return event;
-      await fs.promises.unlink(`./uploads/events/${event.cover}`);
+      if (event.cover) await fs.promises.unlink(`./uploads/events/${event.cover}`);
       return await this.eventRepository.save({ ...event, cover: null });
     } catch {
       throw new BadRequestException();
