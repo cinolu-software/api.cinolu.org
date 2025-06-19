@@ -20,10 +20,10 @@ export class Project extends BaseEntity {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'date' })
   started_at: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'date' })
   ended_at: Date;
 
   @Column({ nullable: true })
