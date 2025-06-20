@@ -20,7 +20,7 @@ export class Event extends BaseEntity {
   @Column()
   place: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'longtext' })
   description: string;
 
   @Column({ type: 'date' })

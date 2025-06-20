@@ -17,7 +17,7 @@ export class Project extends BaseEntity {
   @Column({ type: 'json', nullable: true })
   report: JSON;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'longtext' })
   description: string;
 
   @Column({ type: 'date' })
