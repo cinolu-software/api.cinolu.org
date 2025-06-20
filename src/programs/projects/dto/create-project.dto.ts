@@ -11,12 +11,12 @@ export class CreateProjectDto {
   @IsOptional()
   form_link: string;
 
-  @Type(() => Date)
   @IsDate()
+  @Type(() => Date)
   started_at: Date;
 
-  @Type(() => Date)
   @IsDate()
+  @Type(() => Date)
   ended_at: Date;
 
   @IsNotEmpty()
