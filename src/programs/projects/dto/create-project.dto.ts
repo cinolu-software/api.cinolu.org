@@ -1,5 +1,6 @@
 import { IsArray, IsDate, IsNotEmpty, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
+import { parseDate } from 'src/shared/utils/parse-date.fn';
 
 export class CreateProjectDto {
   @IsNotEmpty()
@@ -11,13 +12,13 @@ export class CreateProjectDto {
   @IsOptional()
   form_link: string;
 
+  @Transform(({ value }) => parseDate(value))
   @IsDate()
-  @Type(() => Date)
-  started_at: string;
+  started_at: Date;
 
+  @Transform(({ value }) => parseDate(value))
   @IsDate()
-  @Type(() => Date)
-  ended_at: string;
+  ended_at: Date;
 
   @IsNotEmpty()
   program: string;

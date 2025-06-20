@@ -8,6 +8,11 @@ const port = Number(process.env.PORT) as number;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true
+    })
+  );
   app.enableCors({
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -23,7 +28,6 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  app.useGlobalPipes(new ValidationPipe());
   await app.listen(port);
 }
 bootstrap();

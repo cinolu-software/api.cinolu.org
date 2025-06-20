@@ -1,5 +1,6 @@
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { parseDate } from 'src/shared/utils/parse-date.fn';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -14,12 +15,12 @@ export class CreateEventDto {
   @IsOptional()
   form_link: string;
 
+  @Transform(({ value }) => parseDate(value))
   @IsDate()
-  @Type(() => Date)
   started_at: Date;
 
+  @Transform(({ value }) => parseDate(value))
   @IsDate()
-  @Type(() => Date)
   ended_at: Date;
 
   @IsNotEmpty()
