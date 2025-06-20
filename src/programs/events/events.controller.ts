@@ -48,7 +48,7 @@ export class EventsController {
     return this.eventsService.findPublished(queryParams);
   }
 
-  @Get('slug/:id')
+  @Get('slug/:slug')
   @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Event> {
     return this.eventsService.findBySlug(slug);
