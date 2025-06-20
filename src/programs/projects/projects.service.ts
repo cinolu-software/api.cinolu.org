@@ -16,14 +16,15 @@ export class ProjectsService {
 
   async create(dto: CreateProjectDto): Promise<Project> {
     try {
+      console.log('Creating project with DTO:', dto);
+      return;
       await this.throwIfExist(dto.name);
       return await this.projectRepository.save({
         ...dto,
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-    } catch (e) {
-      console.error(e);
+    } catch {
       throw new BadRequestException();
     }
   }
