@@ -22,7 +22,8 @@ export class ProjectsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       throw new BadRequestException();
     }
   }
