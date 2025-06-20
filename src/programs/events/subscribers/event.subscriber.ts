@@ -1,4 +1,4 @@
-import { EntitySubscriberInterface, EventSubscriber as Subscriber, InsertEvent } from 'typeorm';
+import { EntitySubscriberInterface, EventSubscriber as Subscriber, InsertEvent, UpdateEvent } from 'typeorm';
 import slugify from 'slugify';
 import { Event } from '../entities/event.entity';
 
@@ -11,5 +11,10 @@ export class EventSubscriber implements EntitySubscriberInterface<Event> {
   async beforeInsert(event: InsertEvent<Event>): Promise<void> {
     const { name } = event.entity;
     event.entity.slug = slugify(name, { lower: true });
+  }
+
+  async beforeUpdate(event: UpdateEvent<Event>): Promise<void> {
+    const { name } = event.entity;
+    if (name) event.entity.slug = slugify(name, { lower: true });
   }
 }
