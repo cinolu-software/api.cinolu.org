@@ -19,8 +19,6 @@ export class ProjectsService {
       await this.throwIfExist(dto.name);
       return await this.projectRepository.save({
         ...dto,
-        started_at: new Date(dto.started_at),
-        ended_at: new Date(dto.ended_at),
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });

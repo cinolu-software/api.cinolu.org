@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -13,10 +14,12 @@ export class CreateEventDto {
   @IsOptional()
   form_link: string;
 
-  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
   started_at: Date;
 
-  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
   ended_at: Date;
 
   @IsNotEmpty()
