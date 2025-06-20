@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsDate, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateProjectDto {
   @IsNotEmpty()
@@ -11,12 +10,10 @@ export class CreateProjectDto {
   @IsOptional()
   form_link: string;
 
-  @IsDate()
-  @Type(() => Date)
+  @IsNotEmpty()
   started_at: Date;
 
-  @IsDate()
-  @Type(() => Date)
+  @IsNotEmpty()
   ended_at: Date;
 
   @IsNotEmpty()
