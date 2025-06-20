@@ -20,7 +20,7 @@ export class ProjectsService {
       return await this.projectRepository.save({
         ...dto,
         program: { id: dto.program },
-        categories: dto.categories.map((category) => ({ id: category }))
+        categories: dto.categories.map((id) => ({ id }))
       });
     } catch {
       throw new BadRequestException();
