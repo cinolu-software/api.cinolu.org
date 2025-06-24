@@ -55,6 +55,18 @@ export class ProjectsService {
     return await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
+  async findUnpaginatedPublished(): Promise<Project[]> {
+    try {
+      return await this.projectRepository.find({
+        where: { is_published: true },
+        order: { started_at: 'DESC' },
+        relations: ['categories', 'program']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findRecent(): Promise<Project[]> {
     try {
       return await this.projectRepository.find({

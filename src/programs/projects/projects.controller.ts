@@ -42,6 +42,12 @@ export class ProjectsController {
     return this.projectsService.findRecent();
   }
 
+  @Get('find-unpaginated-published')
+  @Auth(RoleEnum.Guest)
+  findUnpaginatedPublished(): Promise<Project[]> {
+    return this.projectsService.findUnpaginatedPublished();
+  }
+
   @Get('find-published')
   @Auth(RoleEnum.Guest)
   findPublished(@Query() queryParams: QueryParams): Promise<[Project[], number]> {
