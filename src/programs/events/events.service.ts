@@ -48,6 +48,18 @@ export class EventsService {
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
+  async findUnpaginatedPublished(): Promise<Event[]> {
+    try {
+      return await this.eventRepository.find({
+        where: { is_published: true },
+        order: { started_at: 'DESC' },
+        relations: ['categories']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async publish(id: string): Promise<Event> {
     try {
       await this.eventRepository.update(id, { is_published: true });

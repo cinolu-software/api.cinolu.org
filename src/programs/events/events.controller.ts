@@ -48,6 +48,12 @@ export class EventsController {
     return this.eventsService.findPublished(queryParams);
   }
 
+  @Get('find-unpaginated-published')
+  @Auth(RoleEnum.Guest)
+  findUnpaginatedPublished(): Promise<Event[]> {
+    return this.eventsService.findUnpaginatedPublished();
+  }
+
   @Get('slug/:slug')
   @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Event> {
