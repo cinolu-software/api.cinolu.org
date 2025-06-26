@@ -62,8 +62,9 @@ export class EventsService {
 
   async publish(id: string): Promise<Event> {
     try {
-      await this.eventRepository.update(id, { is_published: true });
-      return await this.findOne(id);
+      const event = await this.findOne(id);
+      await this.eventRepository.update(id, { is_published: !event.is_published });
+      return event;
     } catch {
       throw new BadRequestException();
     }
