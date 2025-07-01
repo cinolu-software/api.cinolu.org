@@ -44,7 +44,6 @@ export class EnterprisesService {
 
   async findByUser(page: number, user: User): Promise<[Enterprise[], number]> {
     try {
-      console.log(`Fetching enterprises for user: ${user.name}, page: ${page}`);
       return await this.enterpriseRepository.findAndCount({
         where: {
           owner: { id: user.id }
