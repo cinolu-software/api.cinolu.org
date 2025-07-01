@@ -42,8 +42,9 @@ export class EnterprisesService {
     }
   }
 
-  async findByUser(page: number = 1, user: User): Promise<[Enterprise[], number]> {
+  async findByUser(page: number, user: User): Promise<[Enterprise[], number]> {
     try {
+      console.log(`Fetching enterprises for user: ${user.name}, page: ${page}`);
       return await this.enterpriseRepository.findAndCount({
         where: {
           owner: { id: user.id }
@@ -53,7 +54,8 @@ export class EnterprisesService {
         order: { created_at: 'DESC' },
         relations: ['products']
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       throw new NotFoundException();
     }
   }

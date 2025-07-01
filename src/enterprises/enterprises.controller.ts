@@ -25,7 +25,7 @@ export class EnterprisesController {
 
   @Get('by-user')
   findByUser(@Param('page') page: string, @CurrentUser() user: User): Promise<[Enterprise[], number]> {
-    return this.enterprisesService.findByUser(+page, user);
+    return this.enterprisesService.findByUser(+page || 1, user);
   }
 
   @Post('add-logo/:id')
