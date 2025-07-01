@@ -43,12 +43,15 @@ export class EnterprisesService {
     }
   }
 
-  async findByUser(user: User): Promise<Enterprise[]> {
+  async findByUser(page: number = 1, user: User): Promise<[Enterprise[], number]> {
     try {
-      return await this.enterpriseRepository.find({
+      return await this.enterpriseRepository.findAndCount({
         where: {
           owner: { id: user.id }
         },
+        skip: (page - 1) * 10,
+        take: 10,
+        order: { created_at: 'DESC' },
         relations: ['products']
       });
     } catch {
