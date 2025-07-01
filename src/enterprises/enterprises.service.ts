@@ -18,8 +18,7 @@ export class EnterprisesService {
     try {
       return await this.enterpriseRepository.save({
         ...dto,
-        owner: { id: user.id },
-        products: dto.products.map((id) => ({ id }))
+        owner: { id: user.id }
       });
     } catch {
       throw new BadRequestException();
@@ -75,8 +74,7 @@ export class EnterprisesService {
       const enterprise = await this.findBySlug(slug);
       return await this.enterpriseRepository.save({
         ...enterprise,
-        ...dto,
-        products: dto?.products?.map((id) => ({ id })) || enterprise.products
+        ...dto
       });
     } catch {
       throw new BadRequestException();

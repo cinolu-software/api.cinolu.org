@@ -38,7 +38,4 @@ export class CreateEnterpriseDto {
 
   @IsNotEmpty()
   stage: string;
-
-  @IsNotEmpty()
-  products: string[];
 }
