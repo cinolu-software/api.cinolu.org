@@ -53,8 +53,7 @@ export class EnterprisesService {
         order: { created_at: 'DESC' },
         relations: ['products']
       });
-    } catch (e) {
-      console.error(e);
+    } catch {
       throw new NotFoundException();
     }
   }
