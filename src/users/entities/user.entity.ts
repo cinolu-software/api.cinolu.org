@@ -5,6 +5,7 @@ import { Project } from '../../programs/projects/entities/project.entity';
 import { Post } from '../../blog/posts/entities/post.entity';
 import { Position } from '../positions/entities/position.entity';
 import { Expertise } from '../expertises/entities/expertise.entity';
+import { Enterprise } from 'src/enterprises/entities/enterprise.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -34,6 +35,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
+
+  @OneToMany(() => Enterprise, (enterprise) => enterprise.owner)
+  enterprises: Enterprise[];
 
   @ManyToMany(() => Role)
   @JoinTable()

@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/shared/utils/abstract.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Enterprise extends BaseEntity {
@@ -51,4 +52,8 @@ export class Enterprise extends BaseEntity {
 
   @OneToMany(() => Product, (product) => product.enterprise)
   products: Product[];
+
+  @ManyToOne(() => User, (user) => user.enterprises)
+  @JoinColumn()
+  owner: User;
 }

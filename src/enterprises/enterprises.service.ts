@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Enterprise } from './entities/enterprise.entity';
 import * as fs from 'fs-extra';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class EnterprisesService {
@@ -13,10 +14,11 @@ export class EnterprisesService {
     private enterpriseRepository: Repository<Enterprise>
   ) {}
 
-  async create(dto: CreateEnterpriseDto): Promise<Enterprise> {
+  async create(user: User, dto: CreateEnterpriseDto): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.save({
         ...dto,
+        owner: { id: user.id },
         products: dto.products.map((id) => ({ id }))
       });
     } catch {
@@ -30,6 +32,30 @@ export class EnterprisesService {
     });
   }
 
+  async findBySlug(slug: string): Promise<Enterprise> {
+    try {
+      return await this.enterpriseRepository.findOneOrFail({
+        where: { slug },
+        relations: ['products']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
+  async findByUser(user: User): Promise<Enterprise[]> {
+    try {
+      return await this.enterpriseRepository.find({
+        where: {
+          owner: { id: user.id }
+        },
+        relations: ['products']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async findOne(id: string): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.findOneOrFail({
@@ -41,9 +67,9 @@ export class EnterprisesService {
     }
   }
 
-  async update(id: string, dto: UpdateEnterpriseDto): Promise<Enterprise> {
+  async update(slug: string, dto: UpdateEnterpriseDto): Promise<Enterprise> {
     try {
-      const enterprise = await this.findOne(id);
+      const enterprise = await this.findBySlug(slug);
       return await this.enterpriseRepository.save({
         ...enterprise,
         ...dto,

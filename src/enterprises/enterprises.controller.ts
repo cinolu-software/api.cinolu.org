@@ -6,14 +6,26 @@ import { Enterprise } from './entities/enterprise.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { CurrentUser } from 'src/shared/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('enterprises')
 export class EnterprisesController {
   constructor(private enterprisesService: EnterprisesService) {}
 
   @Post()
-  create(@Body() dto: CreateEnterpriseDto): Promise<Enterprise> {
-    return this.enterprisesService.create(dto);
+  create(@CurrentUser() user: User, @Body() dto: CreateEnterpriseDto): Promise<Enterprise> {
+    return this.enterprisesService.create(user, dto);
+  }
+
+  @Get('by-slug/:slug')
+  findBySlug(@Param('slug') slug: string): Promise<Enterprise> {
+    return this.enterprisesService.findBySlug(slug);
+  }
+
+  @Get('by-user')
+  findByUser(@CurrentUser() user: User): Promise<Enterprise[]> {
+    return this.enterprisesService.findByUser(user);
   }
 
   @Post('add-logo/:id')
