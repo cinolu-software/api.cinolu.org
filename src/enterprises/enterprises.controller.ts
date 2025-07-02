@@ -68,9 +68,9 @@ export class EnterprisesController {
     return this.enterprisesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateEnterpriseDto): Promise<Enterprise> {
-    return this.enterprisesService.update(id, dto);
+  @Patch(':slug')
+  update(@Param('slug') slug: string, @Body() dto: UpdateEnterpriseDto): Promise<Enterprise> {
+    return this.enterprisesService.update(slug, dto);
   }
 
   @Delete('logo/:id')
