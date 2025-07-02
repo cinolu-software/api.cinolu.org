@@ -15,6 +15,7 @@ export class ProjectSubscriber implements EntitySubscriberInterface<Project> {
 
   async beforeUpdate(event: UpdateEvent<Project>): Promise<void> {
     const { name } = event.entity;
-    if (name) event.entity.slug = slugify(name, { lower: true });
+    if (!name) return;
+    event.entity.slug = slugify(name, { lower: true });
   }
 }
