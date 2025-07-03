@@ -1,37 +1,37 @@
 import { Module } from '@nestjs/common';
-import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { ConfigService } from '@nestjs/config';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { config } from 'dotenv';
+import { EmailService } from './email.service';
+
+config({
+  path: '.env'
+});
 
 @Module({
   imports: [
-    MailerModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        transport: {
-          secure: true,
-          host: config.get('MAIL_HOST'),
-          port: Number(config.get('MAIL_PORT')),
-          auth: {
-            user: config.get('MAIL_USERNAME'),
-            pass: config.get('MAIL_PASSWORD')
-          }
-        },
-        defaults: {
-          from: `Support CINOLU <${config.get('MAIL_USERNAME')}>`
-        },
-        template: {
-          dir: process.cwd() + '/templates/',
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true
-          }
+    MailerModule.forRoot({
+      transport: {
+        secure: true,
+        host: process.env.MAIL_HOST,
+        port: +process.env.MAIL_PORT,
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD
         }
-      })
+      },
+      defaults: {
+        from: `Support CINOLU <${process.env.MAIL_USERNAME}>`
+      },
+      template: {
+        dir: process.cwd() + '/templates/',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true
+        }
+      }
     })
   ],
-  providers: [EmailService],
-  exports: [EmailService]
+  providers: [EmailService]
 })
 export class EmailModule {}
