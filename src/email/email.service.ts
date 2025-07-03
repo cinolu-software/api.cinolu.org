@@ -16,22 +16,23 @@ export class EmailService {
         template: 'reset-password',
         context: { user, link }
       });
-    } catch {
-      throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
+    } catch (e) {
+      console.error('Error sending email:', e);
+      throw new BadRequestException();
     }
   }
 
-  @OnEvent('user.created')
-  async createdEmail({ user, password }: { user: User; password: string }): Promise<void> {
+  @OnEvent('user.added')
+  async createUser({ user, password }: { user: User; password: string }): Promise<void> {
     try {
       await this.mailerSerive.sendMail({
         to: user.email,
-        subject: 'Bienvenue sur cinolu.org',
-        template: 'welcome',
+        subject: 'Bienvenue sur la plateforme Cinolu !',
+        template: 'sign-up',
         context: { user, password }
       });
     } catch {
-      throw new BadRequestException("Une erreur est survenenue lors de l'envoie d'email");
+      throw new BadRequestException();
     }
   }
 }
