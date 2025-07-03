@@ -16,8 +16,7 @@ export class EmailService {
         template: 'reset-password',
         context: { user, link }
       });
-    } catch (e) {
-      console.error('Error sending email:', e);
+    } catch {
       throw new BadRequestException();
     }
   }
