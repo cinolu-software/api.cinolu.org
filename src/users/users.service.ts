@@ -3,13 +3,14 @@ import * as fs from 'fs-extra';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { SignupDto, CreateWithGoogleDto } from '../auth/dto';
+import { CreateWithGoogleDto, SignUpDto } from '../auth/dto';
 import UpdateProfileDto from '../auth/dto/update-profile.dto';
 import CreateUserDto from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './roles/entities/role.entity';
 import { User } from './entities/user.entity';
 import { RolesService } from './roles/roles.service';
+import { generateRandomPassword } from 'src/shared/utils/generate-password.fn';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +23,7 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<User> {
     try {
-      const password = Math.floor(100000 + Math.random() * 900000).toString();
+      const password = generateRandomPassword();
       const user = await this.userRepository.save({
         ...dto,
         password,
@@ -30,7 +31,7 @@ export class UsersService {
         expertises: dto.expertises?.map((id) => ({ id })),
         roles: dto.roles?.map((id) => ({ id }))
       });
-      this.eventEmitter.emit('user.created', { user, password });
+      this.eventEmitter.emit('user.added', { user, password });
       return user;
     } catch {
       throw new BadRequestException();
@@ -67,14 +68,17 @@ export class UsersService {
     });
   }
 
-  async signUp(dto: SignupDto): Promise<User> {
+  async signUp(dto: SignUpDto): Promise<User> {
     try {
       const role = await this.rolesService.findByName('user');
-      delete dto.password_confirm;
-      return await this.userRepository.save({
+      const password = generateRandomPassword();
+      const user = await this.userRepository.save({
         ...dto,
+        password,
         roles: [role]
       });
+      this.eventEmitter.emit('user.added', { user, password });
+      return user;
     } catch {
       throw new BadRequestException();
     }

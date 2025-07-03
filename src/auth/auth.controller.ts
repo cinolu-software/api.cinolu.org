@@ -11,11 +11,18 @@ import { Auth } from '../shared/decorators/auth.decorators';
 import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RoleEnum } from '../shared/enums/roles.enum';
 import { User } from '../users/entities/user.entity';
+import { SignUpDto } from './dto';
 
 @Controller('auth')
 @Auth(RoleEnum.User)
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Post('sign-up')
+  @Auth(RoleEnum.Guest)
+  signUp(@Body() dto: SignUpDto): Promise<User> {
+    return this.authService.signUp(dto);
+  }
 
   @Post('sign-in')
   @Auth(RoleEnum.Guest)

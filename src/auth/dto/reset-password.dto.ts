@@ -2,12 +2,12 @@ import { IsNotEmpty, MinLength } from 'class-validator';
 import { Match } from '../../shared/decorators/match.decorator';
 
 export class ResetPasswordDto {
-  @IsNotEmpty({ message: 'Le code ne peut pas être vide' })
+  @IsNotEmpty()
   token: string;
 
-  @MinLength(6, { message: 'Le mot de passe doit contenir au moins 6 caractères' })
+  @MinLength(6)
   password: string;
 
-  @Match('password', { message: 'Les mots de passe ne correspondent pas' })
+  @Match('password')
   password_confirm: string;
 }

@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { CreateWithGoogleDto } from './dto';
+import { CreateWithGoogleDto, SignUpDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -45,6 +45,13 @@ export class AuthService {
     return req.user as User;
   }
 
+  async signUp(dto: SignUpDto): Promise<User> {
+    try {
+      return await this.usersService.signUp(dto);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
   async signOut(@Req() request: Request): Promise<void> {
     request.session.destroy(() => {});
   }
