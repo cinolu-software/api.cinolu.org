@@ -83,9 +83,7 @@ export class EnterprisesService {
 
   async addLogo(id: string, file: Express.Multer.File): Promise<Enterprise> {
     try {
-      const enterprise = await this.enterpriseRepository.findOneOrFail({
-        where: { id }
-      });
+      const enterprise = await this.findOne(id);
       if (enterprise.logo) await fs.unlink(`./uploads/enterprises/logos/${enterprise.logo}`);
       return await this.enterpriseRepository.save({ ...enterprise, logo: file.filename });
     } catch {
@@ -95,15 +93,14 @@ export class EnterprisesService {
 
   async addCover(id: string, file: Express.Multer.File): Promise<Enterprise> {
     try {
-      const enterprise = await this.enterpriseRepository.findOneOrFail({
-        where: { id }
-      });
+      const enterprise = await this.findOne(id);
       if (enterprise.cover) await fs.unlink(`./uploads/enterprises/covers/${enterprise.cover}`);
       return await this.enterpriseRepository.save({ ...enterprise, cover: file.filename });
     } catch {
       throw new BadRequestException();
     }
   }
+
   async removeLogo(id: string): Promise<void> {
     try {
       const enterprise = await this.findOne(id);
