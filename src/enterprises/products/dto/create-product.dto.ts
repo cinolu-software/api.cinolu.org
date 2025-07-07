@@ -12,7 +12,4 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   enterpriseId: string;
-
-  @IsNotEmpty()
-  categories: string[];
 }

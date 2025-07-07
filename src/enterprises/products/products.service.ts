@@ -17,8 +17,7 @@ export class ProductsService {
     try {
       return await this.productRepository.save({
         ...dto,
-        enterprise: { id: dto.enterpriseId },
-        categories: dto.categories.map((id) => ({ id }))
+        enterprise: { id: dto.enterpriseId }
       });
     } catch {
       throw new BadRequestException();
@@ -48,8 +47,7 @@ export class ProductsService {
       return await this.productRepository.save({
         ...product,
         ...dto,
-        enterprise: { id: dto?.enterpriseId || product.enterprise.id },
-        categories: dto?.categories?.map((id) => ({ id })) || product.categories
+        enterprise: { id: dto?.enterpriseId || product.enterprise.id }
       });
     } catch {
       throw new BadRequestException();

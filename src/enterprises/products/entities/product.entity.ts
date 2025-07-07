@@ -1,6 +1,5 @@
 import { BaseEntity } from 'src/shared/utils/abstract.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
-import { ProductCategory } from '../categories/entities/category.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Enterprise } from 'src/enterprises/entities/enterprise.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 
@@ -27,8 +26,4 @@ export class Product extends BaseEntity {
   @ManyToOne(() => Enterprise, (enterprise) => enterprise.products)
   @JoinColumn()
   enterprise: Enterprise;
-
-  @ManyToMany(() => ProductCategory, (category) => category.products)
-  @JoinTable()
-  categories: ProductCategory[];
 }
