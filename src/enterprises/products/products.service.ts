@@ -24,17 +24,20 @@ export class ProductsService {
     }
   }
 
-  async findAll(): Promise<Product[]> {
+  async findByEnterprise(enterpriseId: string): Promise<Product[]> {
     return await this.productRepository.find({
-      relations: ['categories']
+      where: { enterprise: { id: enterpriseId } }
     });
+  }
+
+  async findAll(): Promise<Product[]> {
+    return await this.productRepository.find();
   }
 
   async findOne(id: string): Promise<Product> {
     try {
       return await this.productRepository.findOneOrFail({
-        where: { id },
-        relations: ['categories']
+        where: { id }
       });
     } catch {
       throw new NotFoundException();

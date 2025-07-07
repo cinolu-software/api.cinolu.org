@@ -24,6 +24,11 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
+  @Get('enterprise/:id')
+  findByEnterprise(@Param('id') id: string): Promise<Product[]> {
+    return this.productsService.findByEnterprise(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Product> {
     return this.productsService.findOne(id);
