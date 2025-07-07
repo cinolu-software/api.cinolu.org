@@ -3,8 +3,11 @@ import { ProgramsService } from './programs.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { Program } from './entities/program.entity';
+import { Auth } from 'src/shared/decorators/auth.decorators';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
 
 @Controller('programs')
+@Auth(RoleEnum.Staff)
 export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
@@ -14,6 +17,7 @@ export class ProgramsController {
   }
 
   @Get()
+  @Auth(RoleEnum.Guest)
   findAll(): Promise<Program[]> {
     return this.programsService.findAll();
   }

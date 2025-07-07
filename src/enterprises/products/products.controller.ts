@@ -6,8 +6,11 @@ import { Product } from './entities/product.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { Auth } from 'src/shared/decorators/auth.decorators';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
 
 @Controller('products')
+@Auth(RoleEnum.User)
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 

@@ -8,8 +8,11 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { Auth } from 'src/shared/decorators/auth.decorators';
+import { RoleEnum } from 'src/shared/enums/roles.enum';
 
 @Controller('enterprises')
+@Auth(RoleEnum.User)
 export class EnterprisesController {
   constructor(private enterprisesService: EnterprisesService) {}
 
@@ -19,6 +22,7 @@ export class EnterprisesController {
   }
 
   @Get('by-slug/:slug')
+  @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Enterprise> {
     return this.enterprisesService.findBySlug(slug);
   }
@@ -59,6 +63,7 @@ export class EnterprisesController {
   }
 
   @Get()
+  @Auth(RoleEnum.Guest)
   findAll(): Promise<Enterprise[]> {
     return this.enterprisesService.findAll();
   }
