@@ -20,13 +20,13 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(): Promise<Product[]> {
-    return this.productsService.findAll();
+  findAll(@Param('page') page: string): Promise<Product[]> {
+    return this.productsService.findAll(+page);
   }
 
   @Get('enterprise/:id')
-  findByEnterprise(@Param('id') id: string): Promise<Product[]> {
-    return this.productsService.findByEnterprise(id);
+  findByEnterprise(@Param('id') id: string, @Param('page') page: string): Promise<Product[]> {
+    return this.productsService.findByEnterprise(+page, id);
   }
 
   @Get(':id')

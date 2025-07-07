@@ -24,14 +24,23 @@ export class ProductsService {
     }
   }
 
-  async findByEnterprise(enterpriseId: string): Promise<Product[]> {
+  async findByEnterprise(page: number, enterpriseId: string): Promise<Product[]> {
     return await this.productRepository.find({
-      where: { enterprise: { id: enterpriseId } }
+      where: {
+        enterprise: { id: enterpriseId }
+      },
+      skip: (page - 1) * 10,
+      take: 10,
+      order: { created_at: 'DESC' }
     });
   }
 
-  async findAll(): Promise<Product[]> {
-    return await this.productRepository.find();
+  async findAll(page: number): Promise<Product[]> {
+    return await this.productRepository.find({
+      skip: (page - 1) * 12,
+      take: 12,
+      order: { created_at: 'DESC' }
+    });
   }
 
   async findOne(id: string): Promise<Product> {
