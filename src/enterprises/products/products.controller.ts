@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UploadedFile,
+  UseInterceptors,
+  Query
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -25,8 +36,8 @@ export class ProductsController {
   }
 
   @Get('enterprise/:id')
-  findByEnterprise(@Param('id') id: string, @Param('page') page: string): Promise<Product[]> {
-    return this.productsService.findByEnterprise(+page, id);
+  findByEnterprise(@Query('page') page: string, @Param('id') id: string): Promise<Product[]> {
+    return this.productsService.findByEnterprise(+page || 1, id);
   }
 
   @Get(':id')

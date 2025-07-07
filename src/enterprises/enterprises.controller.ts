@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UploadedFile,
+  UseInterceptors,
+  Query
+} from '@nestjs/common';
 import { EnterprisesService } from './enterprises.service';
 import { CreateEnterpriseDto } from './dto/create-enterprise.dto';
 import { UpdateEnterpriseDto } from './dto/update-enterprise.dto';
@@ -28,7 +39,7 @@ export class EnterprisesController {
   }
 
   @Get('by-user')
-  findByUser(@Param('page') page: string, @CurrentUser() user: User): Promise<[Enterprise[], number]> {
+  findByUser(@Query('page') page: string, @CurrentUser() user: User): Promise<[Enterprise[], number]> {
     return this.enterprisesService.findByUser(+page || 1, user);
   }
 
