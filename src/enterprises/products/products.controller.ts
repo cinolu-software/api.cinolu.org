@@ -31,12 +31,12 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Param('page') page: string): Promise<Product[]> {
+  findAll(@Param('page') page: string): Promise<[Product[], number]> {
     return this.productsService.findAll(+page);
   }
 
   @Get('enterprise/:id')
-  findByEnterprise(@Query('page') page: string, @Param('id') id: string): Promise<Product[]> {
+  findByEnterprise(@Query('page') page: string, @Param('id') id: string): Promise<[Product[], number]> {
     return this.productsService.findByEnterprise(+page || 1, id);
   }
 

@@ -24,8 +24,8 @@ export class ProductsService {
     }
   }
 
-  async findByEnterprise(page: number, enterpriseId: string): Promise<Product[]> {
-    return await this.productRepository.find({
+  async findByEnterprise(page: number, enterpriseId: string): Promise<[Product[], number]> {
+    return await this.productRepository.findAndCount({
       where: {
         enterprise: { id: enterpriseId }
       },
@@ -35,8 +35,8 @@ export class ProductsService {
     });
   }
 
-  async findAll(page: number): Promise<Product[]> {
-    return await this.productRepository.find({
+  async findAll(page: number): Promise<[Product[], number]> {
+    return await this.productRepository.findAndCount({
       skip: (page - 1) * 12,
       take: 12,
       order: { created_at: 'DESC' }
