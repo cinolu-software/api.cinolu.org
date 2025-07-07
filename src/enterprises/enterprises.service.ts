@@ -26,16 +26,13 @@ export class EnterprisesService {
   }
 
   async findAll(): Promise<Enterprise[]> {
-    return await this.enterpriseRepository.find({
-      relations: ['products']
-    });
+    return await this.enterpriseRepository.find();
   }
 
   async findBySlug(slug: string): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.findOneOrFail({
-        where: { slug },
-        relations: ['products']
+        where: { slug }
       });
     } catch {
       throw new NotFoundException();
@@ -50,8 +47,7 @@ export class EnterprisesService {
         },
         skip: (page - 1) * 10,
         take: 10,
-        order: { created_at: 'DESC' },
-        relations: ['products']
+        order: { created_at: 'DESC' }
       });
     } catch {
       throw new NotFoundException();
@@ -61,8 +57,7 @@ export class EnterprisesService {
   async findOne(id: string): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.findOneOrFail({
-        where: { id },
-        relations: ['products']
+        where: { id }
       });
     } catch {
       throw new NotFoundException();
