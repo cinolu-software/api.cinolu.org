@@ -32,7 +32,8 @@ export class EnterprisesService {
   async findBySlug(slug: string): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.findOneOrFail({
-        where: { slug }
+        where: { slug },
+        relations: ['products']
       });
     } catch {
       throw new NotFoundException();
