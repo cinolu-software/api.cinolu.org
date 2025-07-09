@@ -55,12 +55,8 @@ export class ProductsService {
 
   async update(id: string, dto: UpdateProductDto): Promise<Product> {
     try {
-      const product = await this.findOne(id);
-      return await this.productRepository.save({
-        ...product,
-        ...dto,
-        enterprise: { id: dto?.enterpriseId || product.enterprise.id }
-      });
+      await this.productRepository.update(id, dto);
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
