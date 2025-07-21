@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { Auth } from '../../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../../shared/enums/roles.enum';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { EventCategory } from './entities/category.entity';
+import { QueryParams } from './utils/query-params.type';
 
 @Controller('event-categories')
 @Auth(RoleEnum.Staff)
@@ -20,6 +21,11 @@ export class CategoriesController {
   @Auth(RoleEnum.Guest)
   findAll(): Promise<EventCategory[]> {
     return this.categoriesService.findAll();
+  }
+
+  @Get('paginated')
+  findAllPaginated(@Query() query: QueryParams): Promise<[EventCategory[], number]> {
+    return this.categoriesService.findAllPaginated(query);
   }
 
   @Get(':id')

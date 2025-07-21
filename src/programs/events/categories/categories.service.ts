@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
 export class CategoriesService {
@@ -22,6 +23,16 @@ export class CategoriesService {
 
   async findAll(): Promise<EventCategory[]> {
     return await this.categoryRepository.find();
+  }
+
+  async findAllPaginated(queryParams: QueryParams): Promise<[EventCategory[], number]> {
+    const { page = 1, q } = queryParams;
+    const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
+    if (q) query.where('c.name LIKE :q', { q: `%${q}%` });
+    return await query
+      .skip((+page - 1) * 40)
+      .take(40)
+      .getManyAndCount();
   }
 
   async findOne(id: string): Promise<EventCategory> {
