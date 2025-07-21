@@ -11,6 +11,7 @@ import { Role } from './roles/entities/role.entity';
 import { User } from './entities/user.entity';
 import { RolesService } from './roles/roles.service';
 import { generateRandomPassword } from 'src/shared/utils/generate-password.fn';
+import { QueryParams } from './utils/types/query-params.type';
 
 @Injectable()
 export class UsersService {
@@ -38,11 +39,13 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<User[]> {
-    const data = await this.userRepository.find({
-      relations: ['roles']
-    });
-    return data;
+  async findAll(queryParams: QueryParams): Promise<[User[], number]> {
+    const { page = 1, q } = queryParams;
+    const take = 40;
+    const skip = (+page - 1) * take;
+    const query = this.userRepository.createQueryBuilder('user').leftJoinAndSelect('user.roles', 'roles');
+    if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
+    return await query.orderBy('user.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
   }
 
   async findWithRole(name: string): Promise<User[]> {
