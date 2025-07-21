@@ -32,20 +32,14 @@ export class ProjectsController {
   }
 
   @Get('')
-  findAll(): Promise<Project[]> {
-    return this.projectsService.findAll();
+  findAll(@Query() queryParams: QueryParams): Promise<[Project[], number]> {
+    return this.projectsService.findAll(queryParams);
   }
 
   @Get('find-recent')
   @Auth(RoleEnum.Guest)
   findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
-  }
-
-  @Get('find-unpaginated-published')
-  @Auth(RoleEnum.Guest)
-  findUnpaginatedPublished(): Promise<Project[]> {
-    return this.projectsService.findUnpaginatedPublished();
   }
 
   @Get('find-published')
@@ -67,8 +61,8 @@ export class ProjectsController {
   }
 
   @Post('publish/:id')
-  publish(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.publish(id);
+  togglePublish(@Param('id') id: string): Promise<Project> {
+    return this.projectsService.togglePublish(id);
   }
 
   @Post('cover/:id')

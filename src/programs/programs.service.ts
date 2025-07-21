@@ -4,6 +4,7 @@ import { UpdateProgramDto } from './dto/update-program.dto';
 import { Repository } from 'typeorm';
 import { Program } from './entities/program.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryParams } from './utils/types/query-params.type';
 
 @Injectable()
 export class ProgramsService {
@@ -22,8 +23,14 @@ export class ProgramsService {
     }
   }
 
-  async findAll(): Promise<Program[]> {
-    return await this.programRepository.find();
+  async findAll(queryParams: QueryParams): Promise<[Program[], number]> {
+    const { page = 1, q } = queryParams;
+    const query = this.programRepository.createQueryBuilder('p').orderBy('p.updated_at', 'DESC');
+    if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
+    return await query
+      .skip((+page - 1) * 40)
+      .take(40)
+      .getManyAndCount();
   }
 
   async findOne(id: string): Promise<Program> {

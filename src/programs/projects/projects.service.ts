@@ -34,16 +34,25 @@ export class ProjectsService {
     if (project) throw new BadRequestException();
   }
 
-  async findAll(): Promise<Project[]> {
-    return await this.projectRepository.find({
-      relations: ['categories', 'program']
-    });
+  async findAll(queryParams: QueryParams): Promise<[Project[], number]> {
+    const { page = 1, categories } = queryParams;
+    const take = 40;
+    const skip = (+page - 1) * take;
+    const query = this.projectRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.categories', 'categories')
+      .orderBy('p.updated_at', 'DESC');
+    if (categories) {
+      const categoriesArray = categories.split(',');
+      query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
+    }
+    return await query.skip(skip).take(take).getManyAndCount();
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Project[], number]> {
     const { page = 1, categories } = queryParams;
     const take = 9;
-    const skip = (page - 1) * take;
+    const skip = (+page - 1) * take;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
@@ -53,18 +62,6 @@ export class ProjectsService {
       query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
     }
     return await query.skip(skip).take(take).orderBy('p.started_at', 'DESC').getManyAndCount();
-  }
-
-  async findUnpaginatedPublished(): Promise<Project[]> {
-    try {
-      return await this.projectRepository.find({
-        where: { is_published: true },
-        order: { started_at: 'DESC' },
-        relations: ['categories', 'program']
-      });
-    } catch {
-      throw new BadRequestException();
-    }
   }
 
   async findRecent(): Promise<Project[]> {
@@ -122,7 +119,7 @@ export class ProjectsService {
     }
   }
 
-  async publish(id: string): Promise<Project> {
+  async togglePublish(id: string): Promise<Project> {
     try {
       const project = await this.findOne(id);
       await this.projectRepository.update(id, { is_published: !project.is_published });

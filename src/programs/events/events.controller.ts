@@ -27,13 +27,13 @@ export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Post('')
-  create(@Body() createProgramDto: CreateEventDto): Promise<Event> {
-    return this.eventsService.create(createProgramDto);
+  create(@Body() dto: CreateEventDto): Promise<Event> {
+    return this.eventsService.create(dto);
   }
 
   @Get('')
-  findAll(): Promise<Event[]> {
-    return this.eventsService.findAll();
+  findAll(@Query() queryParams: QueryParams): Promise<[Event[], number]> {
+    return this.eventsService.findAll(queryParams);
   }
 
   @Get('find-recent')
@@ -46,12 +46,6 @@ export class EventsController {
   @Auth(RoleEnum.Guest)
   findPublished(@Query() queryParams: QueryParams): Promise<[Event[], number]> {
     return this.eventsService.findPublished(queryParams);
-  }
-
-  @Get('find-unpaginated-published')
-  @Auth(RoleEnum.Guest)
-  findUnpaginatedPublished(): Promise<Event[]> {
-    return this.eventsService.findUnpaginatedPublished();
   }
 
   @Get('slug/:slug')
@@ -67,8 +61,8 @@ export class EventsController {
   }
 
   @Post('publish/:id')
-  publish(@Param('id') id: string): Promise<Event> {
-    return this.eventsService.publish(id);
+  togglePublish(@Param('id') id: string): Promise<Event> {
+    return this.eventsService.togglePublish(id);
   }
 
   @Post('cover/:id')
@@ -92,8 +86,8 @@ export class EventsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateEventDto): Promise<Event> {
-    return this.eventsService.update(id, updateProgramDto);
+  update(@Param('id') id: string, @Body() dto: UpdateEventDto): Promise<Event> {
+    return this.eventsService.update(id, dto);
   }
 
   @Delete('restore/:id')

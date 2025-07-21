@@ -26,17 +26,25 @@ export class EventsService {
     }
   }
 
-  async findAll(): Promise<Event[]> {
-    return await this.eventRepository.find({
-      relations: ['categories'],
-      order: { ended_at: 'DESC' }
-    });
+  async findAll(queryParams: QueryParams): Promise<[Event[], number]> {
+    const { page = 1, categories } = queryParams;
+    const take = 40;
+    const skip = (+page - 1) * take;
+    const query = this.eventRepository
+      .createQueryBuilder('e')
+      .leftJoinAndSelect('e.categories', 'categories')
+      .orderBy('e.ended_at', 'DESC');
+    if (categories) {
+      const categoriesArray = categories.split(',');
+      query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
+    }
+    return await query.skip(skip).take(take).getManyAndCount();
   }
 
   async findPublished(queryParams: QueryParams): Promise<[Event[], number]> {
     const { page = 1, categories } = queryParams;
     const take = 9;
-    const skip = (page - 1) * take;
+    const skip = (+page - 1) * take;
     const query = this.eventRepository
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
@@ -48,19 +56,7 @@ export class EventsService {
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
-  async findUnpaginatedPublished(): Promise<Event[]> {
-    try {
-      return await this.eventRepository.find({
-        where: { is_published: true },
-        order: { started_at: 'DESC' },
-        relations: ['categories']
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async publish(id: string): Promise<Event> {
+  async togglePublish(id: string): Promise<Event> {
     try {
       const event = await this.findOne(id);
       await this.eventRepository.update(id, { is_published: !event.is_published });
