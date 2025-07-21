@@ -4,6 +4,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
 export class RolesService {
@@ -18,6 +19,16 @@ export class RolesService {
     } catch {
       throw new ConflictException('Erreur lors de la création du rôle');
     }
+  }
+
+  async findAllPaginated(queryParams: QueryParams): Promise<[Role[], number]> {
+    const { page = 1, q } = queryParams;
+    const query = this.roleRepository.createQueryBuilder('role').orderBy('role.updated_at', 'DESC');
+    if (q) query.where('role.name LIKE :name', { name: `%${q}%` });
+    return await query
+      .skip((+page - 1) * 40)
+      .take(40)
+      .getManyAndCount();
   }
 
   async findAll(): Promise<Role[]> {

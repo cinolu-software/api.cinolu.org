@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
+import { QueryParams } from './utils/query-params.type';
 
 @Controller('roles')
 @Auth(RoleEnum.Staff)
@@ -14,6 +15,11 @@ export class RolesController {
   @Post('')
   create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
     return this.rolesService.create(createRoleDto);
+  }
+
+  @Get('paginated')
+  findAllPaginated(@Query() queryParams: QueryParams): Promise<[Role[], number]> {
+    return this.rolesService.findAllPaginated(queryParams);
   }
 
   @Get('')
