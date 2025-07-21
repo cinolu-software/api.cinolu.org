@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs-extra';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateWithGoogleDto, SignUpDto } from '../auth/dto';
@@ -12,6 +12,8 @@ import { User } from './entities/user.entity';
 import { RolesService } from './roles/roles.service';
 import { generateRandomPassword } from 'src/shared/utils/generate-password.fn';
 import { QueryParams } from './utils/types/query-params.type';
+import { format } from 'fast-csv';
+import { Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +23,26 @@ export class UsersService {
     private rolesService: RolesService,
     private eventEmitter: EventEmitter2
   ) {}
+
+  async exportAllToCSV(queryParams: QueryParams, res: Response): Promise<void> {
+    try {
+      const { q } = queryParams;
+      const query = this.userRepository
+        .createQueryBuilder('user')
+        .select(['user.name', 'user.email', 'user.phone_number'])
+        .orderBy('user.updated_at', 'DESC');
+      if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
+      const users = await query.getMany();
+      const csvStream = format({ headers: ['Name', 'Email', 'Phone Number'] });
+      csvStream.pipe(res);
+      users.forEach((user) => {
+        csvStream.write({ Name: user.name, Email: user.email, 'Phone Number': user.phone_number });
+      });
+      csvStream.end();
+    } catch {
+      throw new BadRequestException();
+    }
+  }
 
   async create(dto: CreateUserDto): Promise<User> {
     try {
@@ -46,29 +68,6 @@ export class UsersService {
     const query = this.userRepository.createQueryBuilder('user').leftJoinAndSelect('user.roles', 'roles');
     if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
     return await query.orderBy('user.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
-  }
-
-  async findWithRole(name: string): Promise<User[]> {
-    return await this.userRepository.find({
-      relations: ['roles'],
-      where: { roles: { name } }
-    });
-  }
-
-  async findByRole(id: string): Promise<User[]> {
-    try {
-      return await this.userRepository.find({
-        where: { roles: { id } }
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async findByIds(ids: string[]): Promise<User[]> {
-    return await this.userRepository.findBy({
-      id: In(ids)
-    });
   }
 
   async signUp(dto: SignUpDto): Promise<User> {

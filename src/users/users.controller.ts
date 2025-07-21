@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Res,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,37 +21,38 @@ import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RoleEnum } from '../shared/enums/roles.enum';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
+import { QueryParams } from './utils/types/query-params.type';
+import { Response } from 'express';
 
 @Controller('users')
 @Auth(RoleEnum.Staff)
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private usersService: UsersService) {}
+
+  @Get('export/csv')
+  async exportAllToCSV(@Query() queryParams: QueryParams, @Res() res: Response): Promise<void> {
+    await this.usersService.exportAllToCSV(queryParams, res);
+  }
 
   @Post('')
   @Auth(RoleEnum.Staff)
   create(@Body() dto: CreateUserDto): Promise<User> {
-    return this.userService.create(dto);
+    return this.usersService.create(dto);
   }
 
   @Get('')
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
-  }
-
-  @Get('roles/:name')
-  @Auth(RoleEnum.Guest)
-  findWithRole(@Param('name') name: string): Promise<User[]> {
-    return this.userService.findWithRole(name);
+  findAll(@Query() queryParams: QueryParams): Promise<[User[], number]> {
+    return this.usersService.findAll(queryParams);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
-    return this.userService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Post('image-profile')
@@ -55,12 +68,12 @@ export class UsersController {
     })
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<User> {
-    return this.userService.uploadImage(user, file);
+    return this.usersService.uploadImage(user, file);
   }
 
   @Delete(':id')
   @Auth(RoleEnum.Admin)
   remove(@Param('id') id: string): Promise<void> {
-    return this.userService.remove(id);
+    return this.usersService.remove(id);
   }
 }
