@@ -25,10 +25,6 @@ export class EnterprisesService {
     }
   }
 
-  async findAll(): Promise<Enterprise[]> {
-    return await this.enterpriseRepository.find();
-  }
-
   async findBySlug(slug: string): Promise<Enterprise> {
     try {
       return await this.enterpriseRepository.findOneOrFail({
@@ -40,13 +36,13 @@ export class EnterprisesService {
     }
   }
 
-  async findByUser(page: number, user: User): Promise<[Enterprise[], number]> {
+  async findByUser(page: string, user: User): Promise<[Enterprise[], number]> {
     try {
       return await this.enterpriseRepository.findAndCount({
         where: {
           owner: { id: user.id }
         },
-        skip: (page - 1) * 10,
+        skip: (Number(page || 1) - 1) * 10,
         take: 10,
         order: { created_at: 'DESC' }
       });
@@ -92,26 +88,6 @@ export class EnterprisesService {
       const enterprise = await this.findOne(id);
       if (enterprise.cover) await fs.unlink(`./uploads/enterprises/covers/${enterprise.cover}`);
       return await this.enterpriseRepository.save({ ...enterprise, cover: file.filename });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async removeLogo(id: string): Promise<void> {
-    try {
-      const enterprise = await this.findOne(id);
-      if (enterprise.logo) await fs.unlink(`./uploads/enterprises/covers/${enterprise.logo}`);
-      await this.enterpriseRepository.update(id, { cover: null });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async removeCover(id: string): Promise<void> {
-    try {
-      const enterprise = await this.findOne(id);
-      if (enterprise.cover) await fs.unlink(`./uploads/enterprises/covers/${enterprise.cover}`);
-      await this.enterpriseRepository.update(id, { cover: null });
     } catch {
       throw new BadRequestException();
     }

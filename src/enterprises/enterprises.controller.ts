@@ -40,7 +40,7 @@ export class EnterprisesController {
 
   @Get('by-user')
   findByUser(@Query('page') page: string, @CurrentUser() user: User): Promise<[Enterprise[], number]> {
-    return this.enterprisesService.findByUser(+page || 1, user);
+    return this.enterprisesService.findByUser(page, user);
   }
 
   @Post('add-logo/:id')
@@ -73,12 +73,6 @@ export class EnterprisesController {
     return this.enterprisesService.addCover(id, file);
   }
 
-  @Get()
-  @Auth(RoleEnum.Guest)
-  findAll(): Promise<Enterprise[]> {
-    return this.enterprisesService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Enterprise> {
     return this.enterprisesService.findOne(id);
@@ -87,16 +81,6 @@ export class EnterprisesController {
   @Patch(':slug')
   update(@Param('slug') slug: string, @Body() dto: UpdateEnterpriseDto): Promise<Enterprise> {
     return this.enterprisesService.update(slug, dto);
-  }
-
-  @Delete('logo/:id')
-  removeLogo(@Param('id') id: string): Promise<void> {
-    return this.enterprisesService.removeLogo(id);
-  }
-
-  @Delete('cover/:id')
-  removeCover(@Param('id') id: string): Promise<void> {
-    return this.enterprisesService.removeCover(id);
   }
 
   @Delete(':id')
