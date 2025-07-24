@@ -13,7 +13,6 @@ import { ProjectCategory } from 'src/programs/projects/categories/entities/categ
 import { Project } from 'src/programs/projects/entities/project.entity';
 import { Event } from 'src/programs/events/entities/event.entity';
 */
-
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
     await dataSource.dropDatabase();
@@ -106,6 +105,24 @@ export default class DbSeeder implements Seeder {
       await roleRepository.save({ name: role });
     });
 
+    /*
+    const createUsers = async (count: number, roleName: string): Promise<User[]> => {
+      const role = await roleRepository.findOneByOrFail({ name: roleName });
+      return Promise.all(
+        Array.from({ length: count }).map(async () => {
+          return await userRepository.save({
+            name: faker.person.firstName(),
+            address: faker.location.streetAddress(),
+            phone_number: faker.phone.number({ style: 'human' }),
+            email: faker.internet.email(),
+            password: await bcrypt.hash('password1234', 10),
+            roles: [role]
+          });
+        })
+      );
+    };
+    */
+
     await userRepository.save({
       name: faker.person.firstName(),
       address: faker.location.streetAddress(),
@@ -115,6 +132,10 @@ export default class DbSeeder implements Seeder {
       roles: [await roleRepository.findOneByOrFail({ name: 'admin' })]
     });
     /*
+    await createUsers(8, 'admin');
+    await createUsers(1000, 'user');
+    await createUsers(10, 'staff');
+    await createUsers(50, 'coach');
     await createProductCategories(10);
     await createEventCategories(10);
     await createProgram(60);

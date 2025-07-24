@@ -45,9 +45,9 @@ export class UsersController {
     return this.usersService.findAll(queryParams);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(id);
+  @Get(':email')
+  findOne(@Param('email') email: string): Promise<User> {
+    return this.usersService.findByEmail(email);
   }
 
   @Patch(':id')
