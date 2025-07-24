@@ -112,6 +112,17 @@ export class UsersService {
     }
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      return await this.userRepository.findOneOrFail({
+        where: { email },
+        relations: ['roles']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
