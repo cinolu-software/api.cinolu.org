@@ -23,7 +23,13 @@ export class ProgramsService {
     }
   }
 
-  async findAll(queryParams: QueryParams): Promise<[Program[], number]> {
+  async findAll(): Promise<Program[]> {
+    return await this.programRepository.find({
+      order: { updated_at: 'DESC' }
+    });
+  }
+
+  async findAllPaginated(queryParams: QueryParams): Promise<[Program[], number]> {
     const { page = 1, q } = queryParams;
     const query = this.programRepository.createQueryBuilder('p').orderBy('p.updated_at', 'DESC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });

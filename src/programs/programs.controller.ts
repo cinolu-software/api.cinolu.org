@@ -17,10 +17,15 @@ export class ProgramsController {
     return this.programsService.create(dto);
   }
 
-  @Get()
+  @Get('')
   @Auth(RoleEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<[Program[], number]> {
-    return this.programsService.findAll(queryParams);
+  findAll(): Promise<Program[]> {
+    return this.programsService.findAll();
+  }
+
+  @Get('paginated')
+  findAllPaginated(@Query() queryParams: QueryParams): Promise<[Program[], number]> {
+    return this.programsService.findAllPaginated(queryParams);
   }
 
   @Get(':id')

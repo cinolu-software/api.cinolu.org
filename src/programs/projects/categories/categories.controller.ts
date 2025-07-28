@@ -16,6 +16,7 @@ export class CategoriesController {
   create(@Body() dto: CreateCategoryDto): Promise<Category> {
     return this.categoriesService.create(dto);
   }
+
   @Get()
   @Auth(RoleEnum.Guest)
   findAll(): Promise<Category[]> {
