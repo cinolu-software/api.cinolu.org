@@ -61,8 +61,10 @@ export class EventsService {
   async togglePublish(id: string): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      await this.eventRepository.update(id, { is_published: !event.is_published });
-      return event;
+      return await this.eventRepository.save({
+        ...event,
+        is_published: !event.is_published
+      });
     } catch {
       throw new BadRequestException();
     }
