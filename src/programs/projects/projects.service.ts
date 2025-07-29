@@ -122,8 +122,7 @@ export class ProjectsService {
   async togglePublish(id: string): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      await this.projectRepository.update(id, { is_published: !project.is_published });
-      return project;
+      return await this.projectRepository.save({ ...project, is_published: !project.is_published });
     } catch {
       throw new BadRequestException();
     }
