@@ -4,7 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { Repository } from 'typeorm';
-import { QueryParams } from './utils/query-params.type';
+import { FilterEventsDto } from './dto/filter-events.dto';
 import * as fs from 'fs-extra';
 
 @Injectable()
@@ -26,14 +26,15 @@ export class EventsService {
     }
   }
 
-  async findAll(queryParams: QueryParams): Promise<[Event[], number]> {
-    const { page = 1, categories } = queryParams;
+  async findAll(queryParams: FilterEventsDto): Promise<[Event[], number]> {
+    const { page = 1, q, categories } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
     const query = this.eventRepository
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .orderBy('e.ended_at', 'DESC');
+    if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
     if (categories) {
       const categoriesArray = categories.split(',');
       query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
@@ -41,14 +42,15 @@ export class EventsService {
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
-  async findPublished(queryParams: QueryParams): Promise<[Event[], number]> {
-    const { page = 1, categories } = queryParams;
+  async findPublished(queryParams: FilterEventsDto): Promise<[Event[], number]> {
+    const { page = 1, q, categories } = queryParams;
     const take = 9;
     const skip = (+page - 1) * take;
     const query = this.eventRepository
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .andWhere('e.is_published = :is_published', { is_published: true });
+    if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
     if (categories) {
       const categoriesArray = categories.split(',');
       query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });

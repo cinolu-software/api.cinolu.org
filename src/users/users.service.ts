@@ -11,7 +11,7 @@ import { Role } from './roles/entities/role.entity';
 import { User } from './entities/user.entity';
 import { RolesService } from './roles/roles.service';
 import { generateRandomPassword } from 'src/shared/utils/generate-password.fn';
-import { QueryParams } from './utils/types/query-params.type';
+import { FilterUsersDto } from './dto/filter-users.dto';
 import { format } from 'fast-csv';
 import { Response } from 'express';
 
@@ -24,7 +24,7 @@ export class UsersService {
     private eventEmitter: EventEmitter2
   ) {}
 
-  async exportAllToCSV(queryParams: QueryParams, res: Response): Promise<void> {
+  async exportAllToCSV(queryParams: FilterUsersDto, res: Response): Promise<void> {
     try {
       const { q } = queryParams;
       const query = this.userRepository
@@ -61,7 +61,7 @@ export class UsersService {
     }
   }
 
-  async findAll(queryParams: QueryParams): Promise<[User[], number]> {
+  async findAll(queryParams: FilterUsersDto): Promise<[User[], number]> {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;

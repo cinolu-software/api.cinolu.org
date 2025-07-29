@@ -5,7 +5,7 @@ import { UpdateProgramDto } from './dto/update-program.dto';
 import { Program } from './entities/program.entity';
 import { Auth } from 'src/shared/decorators/auth.decorators';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
-import { QueryParams } from './utils/types/query-params.type';
+import { FilterProgramsDto } from './dto/filter-programs.dto';
 
 @Controller('programs')
 @Auth(RoleEnum.Staff)
@@ -24,7 +24,7 @@ export class ProgramsController {
   }
 
   @Get('paginated')
-  findAllPaginated(@Query() queryParams: QueryParams): Promise<[Program[], number]> {
+  findAllPaginated(@Query() queryParams: FilterProgramsDto): Promise<[Program[], number]> {
     return this.programsService.findAllPaginated(queryParams);
   }
 

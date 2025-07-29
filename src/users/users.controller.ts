@@ -21,7 +21,7 @@ import { CurrentUser } from '../shared/decorators/user.decorator';
 import { RoleEnum } from '../shared/enums/roles.enum';
 import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
-import { QueryParams } from './utils/types/query-params.type';
+import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
 
 @Controller('users')
@@ -30,7 +30,7 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('export/csv')
-  async exportAllToCSV(@Query() queryParams: QueryParams, @Res() res: Response): Promise<void> {
+  async exportAllToCSV(@Query() queryParams: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersService.exportAllToCSV(queryParams, res);
   }
 
@@ -41,7 +41,7 @@ export class UsersController {
   }
 
   @Get('')
-  findAll(@Query() queryParams: QueryParams): Promise<[User[], number]> {
+  findAll(@Query() queryParams: FilterUsersDto): Promise<[User[], number]> {
     return this.usersService.findAll(queryParams);
   }
 

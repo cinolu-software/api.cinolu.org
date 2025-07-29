@@ -7,7 +7,7 @@ import { User } from '../../users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { Auth } from 'src/shared/decorators/auth.decorators';
-import { QueryParams } from './utils/query-params.type';
+import { FilterCommentsDto } from './dto/filter-comments.dto';
 
 @Controller('post-comments')
 @Auth(RoleEnum.User)
@@ -21,7 +21,7 @@ export class CommentsController {
 
   @Get(':slug')
   @Auth(RoleEnum.Guest)
-  findAll(@Param('slug') slug: string, @Query() querParams: QueryParams): Promise<[Comment[], number]> {
+  findAll(@Param('slug') slug: string, @Query() querParams: FilterCommentsDto): Promise<[Comment[], number]> {
     return this.commentsService.findAll(slug, querParams);
   }
 

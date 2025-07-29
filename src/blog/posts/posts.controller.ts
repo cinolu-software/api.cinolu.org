@@ -22,7 +22,7 @@ import { RoleEnum } from '../../shared/enums/roles.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { QueryParams } from './utils/query-params.type';
+import { FilterPostsDto } from './dto/filter-posts.dto';
 
 @Controller('blog-posts')
 @Auth(RoleEnum.Staff)
@@ -57,7 +57,7 @@ export class PostsController {
 
   @Get()
   @Auth(RoleEnum.Guest)
-  findAll(@Query() queryParams: QueryParams): Promise<[P[], count: number]> {
+  findAll(@Query() queryParams: FilterPostsDto): Promise<[P[], count: number]> {
     return this.postsService.findAll(queryParams);
   }
 

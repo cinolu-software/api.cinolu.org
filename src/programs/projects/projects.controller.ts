@@ -19,7 +19,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
-import { QueryParams } from './utils/query-params.type';
+import { FilterProjectsDto } from './dto/filter-projects.dto';
 
 @Controller('projects')
 @Auth(RoleEnum.Staff)
@@ -32,7 +32,7 @@ export class ProjectsController {
   }
 
   @Get('')
-  findAll(@Query() queryParams: QueryParams): Promise<[Project[], number]> {
+  findAll(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findAll(queryParams);
   }
 
@@ -44,7 +44,7 @@ export class ProjectsController {
 
   @Get('find-published')
   @Auth(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<[Project[], number]> {
+  findPublished(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findPublished(queryParams);
   }
 

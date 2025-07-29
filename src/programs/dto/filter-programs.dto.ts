@@ -1,4 +1,4 @@
-export interface QueryParams {
+export interface FilterProgramsDto {
   page: string | null;
   q: string | null;
 }

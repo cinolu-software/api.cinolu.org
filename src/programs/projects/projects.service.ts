@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
-import { QueryParams } from './utils/query-params.type';
+import { FilterProjectsDto } from './dto/filter-projects.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -34,14 +34,15 @@ export class ProjectsService {
     if (project) throw new BadRequestException();
   }
 
-  async findAll(queryParams: QueryParams): Promise<[Project[], number]> {
-    const { page = 1, categories } = queryParams;
+  async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
+    const { page = 1, categories, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .orderBy('p.updated_at', 'DESC');
+    if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) {
       const categoriesArray = categories.split(',');
       query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });
@@ -49,14 +50,15 @@ export class ProjectsService {
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
-  async findPublished(queryParams: QueryParams): Promise<[Project[], number]> {
-    const { page = 1, categories } = queryParams;
+  async findPublished(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
+    const { page = 1, categories, q } = queryParams;
     const take = 9;
     const skip = (+page - 1) * take;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .andWhere('p.is_published = :is_published', { is_published: true });
+    if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) {
       const categoriesArray = categories.split(',');
       query.andWhere('categories.id IN (:categoriesArray)', { categoriesArray });

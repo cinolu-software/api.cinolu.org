@@ -5,7 +5,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
-import { QueryParams } from './utils/query-params.type';
+import { FilterRolesDto } from './dto/filter-roles.dto';
 
 @Controller('roles')
 @Auth(RoleEnum.Staff)
@@ -18,7 +18,7 @@ export class RolesController {
   }
 
   @Get('paginated')
-  findAllPaginated(@Query() queryParams: QueryParams): Promise<[Role[], number]> {
+  findAllPaginated(@Query() queryParams: FilterRolesDto): Promise<[Role[], number]> {
     return this.rolesService.findAllPaginated(queryParams);
   }
 

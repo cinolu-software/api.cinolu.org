@@ -17,7 +17,7 @@ import { Event } from './entities/event.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { QueryParams } from './utils/query-params.type';
+import { FilterEventsDto } from './dto/filter-events.dto';
 import { Auth } from '../../shared/decorators/auth.decorators';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 
@@ -32,7 +32,7 @@ export class EventsController {
   }
 
   @Get('')
-  findAll(@Query() queryParams: QueryParams): Promise<[Event[], number]> {
+  findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(queryParams);
   }
 
@@ -44,7 +44,7 @@ export class EventsController {
 
   @Get('find-published')
   @Auth(RoleEnum.Guest)
-  findPublished(@Query() queryParams: QueryParams): Promise<[Event[], number]> {
+  findPublished(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findPublished(queryParams);
   }
 

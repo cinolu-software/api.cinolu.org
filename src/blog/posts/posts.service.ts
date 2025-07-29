@@ -6,7 +6,7 @@ import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import * as fs from 'fs-extra';
-import { QueryParams } from './utils/query-params.type';
+import { FilterPostsDto } from './dto/filter-posts.dto';
 import { View } from './entities/view.entity';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class PostsService {
     });
   }
 
-  async findAll(queryParams: QueryParams): Promise<[Post[], count: number]> {
+  async findAll(queryParams: FilterPostsDto): Promise<[Post[], count: number]> {
     const { page = 1, category, views } = queryParams;
     const take = 12;
     const skip = (page - 1) * take;

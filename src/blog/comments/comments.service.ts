@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { QueryParams } from './utils/query-params.type';
+import { FilterCommentsDto } from './dto/filter-comments.dto';
 
 @Injectable()
 export class CommentsService {
@@ -38,7 +38,7 @@ export class CommentsService {
     }
   }
 
-  async findAll(slug: string, querParams: QueryParams): Promise<[Comment[], number]> {
+  async findAll(slug: string, querParams: FilterCommentsDto): Promise<[Comment[], number]> {
     try {
       const { page = 1 } = querParams;
       return await this.commentRepository

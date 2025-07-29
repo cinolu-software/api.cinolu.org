@@ -4,7 +4,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryParams } from './utils/query-params.type';
+import { FilterRolesDto } from './dto/filter-roles.dto';
 
 @Injectable()
 export class RolesService {
@@ -21,7 +21,7 @@ export class RolesService {
     }
   }
 
-  async findAllPaginated(queryParams: QueryParams): Promise<[Role[], number]> {
+  async findAllPaginated(queryParams: FilterRolesDto): Promise<[Role[], number]> {
     const { page = 1, q } = queryParams;
     const query = this.roleRepository.createQueryBuilder('role').orderBy('role.updated_at', 'DESC');
     if (q) query.where('role.name LIKE :name', { name: `%${q}%` });
