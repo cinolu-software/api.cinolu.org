@@ -5,17 +5,14 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/guards/auth.guard';
-import { DatabaseModule } from './database/database.module';
-import { EmailModule } from './email/email.module';
-import { EventsModule } from './programs/events/events.module';
-import { ProjectsModule } from './programs/projects/projects.module';
-import { UsersModule } from './users/users.module';
-import { ProgramsModule } from './programs/programs.module';
-import { BlogModule } from './blog/blog.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthGuard } from './modules/auth/guards/auth.guard';
+import { DatabaseModule } from './modules/database/database.module';
+import { EmailModule } from './modules/email/email.module';
+import { ProgramsModule } from './modules/programs/programs.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
-import { EnterprisesModule } from './enterprises/enterprises.module';
+import { VenturesModule } from './modules/ventures/ventures.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -39,11 +36,9 @@ import { EnterprisesModule } from './enterprises/enterprises.module';
     UsersModule,
     EmailModule,
     DatabaseModule,
-    ProjectsModule,
-    EventsModule,
+
     ProgramsModule,
-    BlogModule,
-    EnterprisesModule
+    VenturesModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
