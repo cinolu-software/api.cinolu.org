@@ -58,7 +58,12 @@ export default class DbSeeder implements Seeder {
       // 2. Create Admin User
       const admin = await userRepository.save({
         name: generateUniqueName(usedUserNames, () => faker.person.fullName()),
-        address: faker.location.streetAddress(),
+        city: faker.location.city(),
+        country: faker.location.country(),
+        biography: faker.lorem.paragraph(),
+        reason: faker.lorem.sentence(),
+        gender: faker.person.sex(),
+        birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
         phone_number: faker.phone.number({ style: 'human' }),
         email: 'admin@admin.com',
         password: await bcrypt.hash('admin1234', 10),
@@ -75,6 +80,7 @@ export default class DbSeeder implements Seeder {
             country: faker.location.country(),
             biography: faker.lorem.paragraph(),
             reason: faker.lorem.sentence(),
+            gender: faker.person.sex(),
             birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
             phone_number: faker.phone.number({ style: 'human' }),
             email: faker.internet.email(),
