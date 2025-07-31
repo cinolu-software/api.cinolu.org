@@ -56,8 +56,8 @@ export default class DbSeeder implements Seeder {
       const findRole = (name: string) => roles.find((r) => r.name === name);
 
       // 2. Create Admin User
-      await userRepository.save({
-        name: generateUniqueName(usedUserNames, () => faker.person.firstName()),
+      const admin = await userRepository.save({
+        name: generateUniqueName(usedUserNames, () => faker.person.fullName()),
         address: faker.location.streetAddress(),
         phone_number: faker.phone.number({ style: 'human' }),
         email: 'admin@admin.com',
@@ -75,6 +75,7 @@ export default class DbSeeder implements Seeder {
             country: faker.location.country(),
             biography: faker.lorem.paragraph(),
             reason: faker.lorem.sentence(),
+            birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
             phone_number: faker.phone.number({ style: 'human' }),
             email: faker.internet.email(),
             password: bcrypt.hashSync('password1234', 10),
@@ -188,7 +189,7 @@ export default class DbSeeder implements Seeder {
 
         await ventureRepository.save(ventures);
       };
-      await createVentures(users);
+      await createVentures([...users, admin]);
     };
     await seed();
   }
