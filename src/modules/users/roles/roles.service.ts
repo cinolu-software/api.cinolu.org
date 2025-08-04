@@ -24,7 +24,7 @@ export class RolesService {
   async signUpRoles(): Promise<Role[]> {
     try {
       return await this.roleRepository.find({
-        where: { name: Not(In(['user', 'staff'])) }
+        where: { name: Not(In(['admin', 'staff'])) }
       });
     } catch {
       throw new BadRequestException('Erreur lors de la récupération des rôles');

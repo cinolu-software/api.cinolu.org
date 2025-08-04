@@ -13,7 +13,7 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @Get('sign-up')
-  @Auth(RoleEnum.User)
+  @Auth(RoleEnum.Guest)
   signUpRoles(): Promise<Role[]> {
     return this.rolesService.signUpRoles();
   }
