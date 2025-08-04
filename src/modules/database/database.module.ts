@@ -14,7 +14,6 @@ import { ConfigService } from '@nestjs/config';
         subscribers: ['dist/**/*.subscriber.js'],
         password: configServie.get('DB_PASSWORD'),
         database: configServie.get('DB_NAME'),
-        charset: 'utf8mb4',
         synchronize: false,
         autoLoadEntities: true
       })
