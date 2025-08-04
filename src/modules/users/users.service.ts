@@ -154,7 +154,11 @@ export class UsersService {
         relations: ['roles']
       });
       delete oldUser.password;
-      await this.userRepository.save({ ...oldUser, ...dto });
+      await this.userRepository.save({
+        ...oldUser,
+        ...dto,
+        roles: dto.roles?.map((id) => ({ id })) || oldUser.roles
+      });
       return await this.findOne(oldUser.id);
     } catch {
       throw new BadRequestException();
