@@ -12,6 +12,12 @@ import { Auth } from 'src/shared/decorators/auth.decorator';
 export class RolesController {
   constructor(private rolesService: RolesService) {}
 
+  @Get('sign-up')
+  @Auth(RoleEnum.User)
+  signUpRoles(): Promise<Role[]> {
+    return this.rolesService.signUpRoles();
+  }
+
   @Post('')
   create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
     return this.rolesService.create(createRoleDto);
