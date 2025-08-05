@@ -55,16 +55,6 @@ export class RolesService {
     }
   }
 
-  async findByNames(names: string[]): Promise<Role[]> {
-    try {
-      return await this.roleRepository.findBy({
-        name: In(names)
-      });
-    } catch {
-      throw new BadRequestException('Erreur lors de la récupération des rôles');
-    }
-  }
-
   async findOne(id: string): Promise<Role> {
     try {
       return await this.roleRepository.findOneOrFail({ where: { id } });

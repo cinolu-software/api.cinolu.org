@@ -66,8 +66,10 @@ export class UsersService {
 
   async signUp(dto: SignUpDto): Promise<User> {
     try {
-      const roles = await this.rolesService.findByNames(dto.roles);
-      return await this.userRepository.save({ ...dto, roles });
+      return await this.userRepository.save({
+        ...dto,
+        roles: dto.roles.map((id) => ({ id }))
+      });
     } catch {
       throw new BadRequestException();
     }
