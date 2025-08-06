@@ -13,13 +13,16 @@ import { format } from 'fast-csv';
 import { Response } from 'express';
 import { SignUpDto } from 'src/modules/auth/dto/sign-up.dto';
 import { CreateWithGoogleDto } from 'src/modules/auth/dto/sign-up-with-google.dto';
+import { ContactSupportDto } from './dto/contact-support.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async exportCSV(queryParams: FilterUsersDto, res: Response): Promise<void> {
@@ -37,6 +40,14 @@ export class UsersService {
         csvStream.write({ Name: user.name, Email: user.email, 'Phone Number': user.phone_number });
       });
       csvStream.end();
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async contactUs(dto: ContactSupportDto): Promise<void> {
+    try {
+      this.eventEmitter.emit('contact.support', dto);
     } catch {
       throw new BadRequestException();
     }

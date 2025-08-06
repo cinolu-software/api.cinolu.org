@@ -5,12 +5,13 @@ import { Repository } from 'typeorm';
 import { Program } from './entities/program.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private readonly programRepository: Repository<Program>
+    private programRepository: Repository<Program>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
@@ -27,6 +28,17 @@ export class ProgramsService {
     return await this.programRepository.find({
       order: { updated_at: 'DESC' }
     });
+  }
+
+  async findBySlug(slug: string): Promise<Program> {
+    try {
+      return await this.programRepository.findOneOrFail({
+        where: { slug },
+        relations: ['projects', 'events']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
   async findAllPaginated(queryParams: FilterProgramsDto): Promise<[Program[], number]> {
@@ -46,6 +58,16 @@ export class ProgramsService {
       });
     } catch {
       throw new NotFoundException();
+    }
+  }
+
+  async addLogo(id: string, file: Express.Multer.File): Promise<Program> {
+    try {
+      const program = await this.findOne(id);
+      if (program.logo) await fs.unlink(`./uploads/programs/${program.logo}`);
+      return await this.programRepository.save({ ...program, logo: file.filename });
+    } catch {
+      throw new BadRequestException();
     }
   }
 

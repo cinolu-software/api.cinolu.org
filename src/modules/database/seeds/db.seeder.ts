@@ -30,6 +30,21 @@ export default class DbSeeder implements Seeder {
       // Track used names
       const usedUserNames = new Set<string>();
       const usedVentureNames = new Set<string>();
+      const usedEmails = new Set<string>();
+
+      // Helper to generate unique emails
+      const generateUniqueEmail = (usedEmails: Set<string>, generatorFn: () => string): string => {
+        let email: string;
+        let attempts = 0;
+
+        do {
+          email = generatorFn();
+          attempts++;
+        } while (usedEmails.has(email) && attempts < 10);
+
+        usedEmails.add(email);
+        return email;
+      };
 
       // Helper to generate unique names
       const generateUniqueName = (usedNames: Set<string>, generatorFn: () => string): string => {
@@ -75,7 +90,7 @@ export default class DbSeeder implements Seeder {
         const role = findRole(roleName);
         const users = Array.from({ length: count }).map(() =>
           userRepository.create({
-            name: generateUniqueName(usedUserNames, () => faker.person.firstName()),
+            name: generateUniqueName(usedUserNames, () => faker.person.fullName()),
             city: faker.location.city(),
             country: faker.location.country(),
             biography: faker.lorem.paragraph(),
@@ -83,7 +98,7 @@ export default class DbSeeder implements Seeder {
             gender: faker.person.sex(),
             birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
             phone_number: faker.phone.number({ style: 'human' }),
-            email: faker.internet.email(),
+            email: generateUniqueEmail(usedEmails, () => faker.internet.email()),
             password: bcrypt.hashSync('password1234', 10),
             roles: [role]
           })
@@ -148,9 +163,14 @@ export default class DbSeeder implements Seeder {
           const projects = createProjects(faker.number.int({ min: 3, max: 6 }));
           const savedEvents = await eventRepository.save(events);
           const savedProjects = await projectRepository.save(projects);
+          const name = generateUniqueName(
+            usedUserNames,
+            () => `${faker.commerce.department()} - ${faker.number.int({ min: 1, max: 1000 })}`
+          );
           const program = programRepository.create({
-            name: faker.commerce.department(),
-            description: faker.lorem.paragraphs(2),
+            name,
+            slug: slugify(name, { lower: true }),
+            description: faker.lorem.paragraph(),
             events: savedEvents,
             projects: savedProjects
           });
@@ -158,7 +178,7 @@ export default class DbSeeder implements Seeder {
         }
         return programRepository.save(programs);
       };
-      await createPrograms(60);
+      await createPrograms(5);
 
       // 8. Create Ventures for Users
       const createVentures = async (owners: User[]) => {

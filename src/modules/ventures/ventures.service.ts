@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Venture } from './entities/venture.entity';
 import * as fs from 'fs-extra';
 import { User } from '../users/entities/user.entity';
+import { FilterVenturesDto } from './dto/filter-ventures.dto';
 
 @Injectable()
 export class VenturesService {
@@ -52,6 +53,15 @@ export class VenturesService {
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  async findAll(queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
+    const { page = 1, q } = queryParams;
+    const take = 40;
+    const skip = (+page - 1) * take;
+    const query = this.ventureRepository.createQueryBuilder('venture');
+    if (q) query.where('venture.name LIKE :q OR venture.description LIKE :q', { q: `%${q}%` });
+    return await query.orderBy('venture.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
   }
 
   async findOne(id: string): Promise<Venture> {

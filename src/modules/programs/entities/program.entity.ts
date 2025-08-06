@@ -8,6 +8,12 @@ export class Program extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ unique: true })
+  slug: string;
+
+  @Column({ nullable: true })
+  logo: string;
+
   @Column({ type: 'text' })
   description: string;
 

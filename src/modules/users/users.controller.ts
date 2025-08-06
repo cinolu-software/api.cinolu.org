@@ -23,6 +23,7 @@ import { Response } from 'express';
 import { Auth } from 'src/shared/decorators/auth.decorator';
 import { CurrentUser } from 'src/shared/decorators/user.decorator';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
+import { ContactSupportDto } from './dto/contact-support.dto';
 
 @Controller('users')
 @Auth(RoleEnum.Staff)
@@ -32,6 +33,11 @@ export class UsersController {
   @Get('export/csv')
   async exportCSV(@Query() params: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersService.exportCSV(params, res);
+  }
+
+  @Post('contact-us')
+  async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
+    await this.usersService.contactUs(dto);
   }
 
   @Post('')

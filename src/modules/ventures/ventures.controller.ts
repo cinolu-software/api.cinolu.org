@@ -21,6 +21,7 @@ import { CurrentUser } from 'src/shared/decorators/user.decorator';
 import { Auth } from 'src/shared/decorators/auth.decorator';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { User } from '../users/entities/user.entity';
+import { FilterVenturesDto } from './dto/filter-ventures.dto';
 
 @Controller('ventures')
 @Auth(RoleEnum.User)
@@ -30,6 +31,11 @@ export class VenturesController {
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateVentureDto): Promise<Venture> {
     return this.venturesService.create(user, dto);
+  }
+
+  @Get()
+  findAll(@Query() queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
+    return this.venturesService.findAll(queryParams);
   }
 
   @Get('by-slug/:slug')
