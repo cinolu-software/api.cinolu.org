@@ -3,6 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
 import { User } from '../users/entities/user.entity';
 import { ContactSupportDto } from '../users/dto/contact-support.dto';
+import { ConfigService } from '@nestjs/config';
 
 interface ResetPasswordDto {
   user: User;
@@ -11,7 +12,10 @@ interface ResetPasswordDto {
 
 @Injectable()
 export class EmailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    private config: ConfigService
+  ) {}
 
   @OnEvent('user.reset-password')
   async resetEmail(dto: ResetPasswordDto): Promise<void> {
@@ -31,11 +35,11 @@ export class EmailService {
   @OnEvent('contact.support')
   async contactSupport(dto: ContactSupportDto): Promise<void> {
     try {
-      const { name } = dto;
       await this.mailerService.sendMail({
         to: process.env.SUPPORT_EMAIL,
-        subject: `One Stop Contact from ${name}`,
-        text: `Email: ${dto.email}\nName: ${name}\nCountry: ${dto.country}\nPhone: ${dto.phone}\nMessage: ${dto.message}`
+        subject: `One Stop Contact from ${dto.name}`,
+        template: 'contact-us',
+        context: { dto }
       });
     } catch {
       throw new BadRequestException();

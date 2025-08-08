@@ -36,6 +36,7 @@ export class UsersController {
   }
 
   @Post('contact-us')
+  @Auth(RoleEnum.Guest)
   async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
     await this.usersService.contactUs(dto);
   }
