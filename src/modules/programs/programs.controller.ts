@@ -24,11 +24,16 @@ import { v4 as uuidv4 } from 'uuid';
 @Controller('programs')
 @Auth(RoleEnum.Staff)
 export class ProgramsController {
-  constructor(private readonly programsService: ProgramsService) {}
+  constructor(private programsService: ProgramsService) {}
 
   @Post()
   create(@Body() dto: CreateProgramDto): Promise<Program> {
     return this.programsService.create(dto);
+  }
+
+  @Post('publish/:id')
+  togglePublish(@Param('id') id: string): Promise<Program> {
+    return this.programsService.togglePublish(id);
   }
 
   @Post('logo/:id')

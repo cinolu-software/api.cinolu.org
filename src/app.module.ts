@@ -13,6 +13,7 @@ import { ProgramsModule } from './modules/programs/programs.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { UsersModule } from './modules/users/users.module';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { UsersModule } from './modules/users/users.module';
     DatabaseModule,
 
     ProgramsModule,
-    VenturesModule
+    VenturesModule,
+    BlogModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

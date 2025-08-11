@@ -26,6 +26,7 @@ export class ProgramsService {
 
   async findAll(): Promise<Program[]> {
     return await this.programRepository.find({
+      where: { is_published: true },
       order: { updated_at: 'DESC' }
     });
   }
@@ -38,6 +39,18 @@ export class ProgramsService {
       });
     } catch {
       throw new NotFoundException();
+    }
+  }
+
+  async togglePublish(id: string): Promise<Program> {
+    try {
+      const program = await this.findOne(id);
+      return await this.programRepository.save({
+        ...program,
+        is_published: !program.is_published
+      });
+    } catch {
+      throw new BadRequestException();
     }
   }
 

@@ -17,6 +17,9 @@ export class Program extends BaseEntity {
   @Column({ type: 'text' })
   description: string;
 
+  @Column({ type: 'boolean', default: false })
+  is_published: boolean;
+
   @OneToMany(() => Project, (p) => p.program)
   projects: Project[];
 

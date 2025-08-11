@@ -3,6 +3,8 @@ import { Role } from '../roles/entities/role.entity';
 import { Project } from '../../programs/projects/entities/project.entity';
 import { Venture } from 'src/modules/ventures/entities/venture.entity';
 import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { Article } from 'src/modules/blog/articles/entities/article.entity';
+import { Comment } from 'src/modules/blog/comments/entities/comment.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -52,4 +54,10 @@ export class User extends BaseEntity {
   @ManyToMany(() => Project)
   @JoinTable()
   projects: Project[];
+
+  @OneToMany(() => Article, (article) => article.author)
+  articles: Article[];
+
+  @OneToMany(() => Comment, (comment) => comment.author)
+  comments: Comment[];
 }

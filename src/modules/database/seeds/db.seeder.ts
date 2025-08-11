@@ -11,6 +11,9 @@ import { Project } from 'src/modules/programs/projects/entities/project.entity';
 import { Event } from 'src/modules/programs/events/entities/event.entity';
 import { Venture } from 'src/modules/ventures/entities/venture.entity';
 import { Role } from 'src/modules/users/roles/entities/role.entity';
+import { Article } from 'src/modules/blog/articles/entities/article.entity';
+import { Tag } from 'src/modules/blog/tags/entities/tag.entity';
+import { Comment } from 'src/modules/blog/comments/entities/comment.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -25,6 +28,9 @@ export default class DbSeeder implements Seeder {
     const eventCategoryRepository = dataSource.getRepository(EventCategory);
     const projectCategoryRepository = dataSource.getRepository(ProjectCategory);
     const ventureRepository = dataSource.getRepository(Venture);
+    const articleRepository = dataSource.getRepository(Article);
+    const tagRepository = dataSource.getRepository(Tag);
+    const commentRepository = dataSource.getRepository(Comment);
 
     const seed = async () => {
       // Track used names
@@ -169,6 +175,7 @@ export default class DbSeeder implements Seeder {
           );
           const program = programRepository.create({
             name,
+            is_published: true,
             slug: slugify(name, { lower: true }),
             description: faker.lorem.paragraph(),
             events: savedEvents,
@@ -183,14 +190,12 @@ export default class DbSeeder implements Seeder {
       // 8. Create Ventures for Users
       const createVentures = async (owners: User[]) => {
         const ventures: Venture[] = [];
-
         for (const owner of owners) {
           for (let i = 0; i < 30; i++) {
             const name = generateUniqueName(
               usedVentureNames,
               () => `${faker.commerce.productName()} - ${faker.number.int({ min: 1, max: 1000 })}`
             );
-
             ventures.push(
               ventureRepository.create({
                 name,
@@ -212,9 +217,45 @@ export default class DbSeeder implements Seeder {
             );
           }
         }
-
         await ventureRepository.save(ventures);
       };
+
+      const createTags = async (count: number): Promise<Tag[]> => {
+        const tags = Array.from({ length: count }).map((_, i) => {
+          const name = `${faker.commerce.productAdjective()} ${i}`;
+          return tagRepository.create({ name });
+        });
+        return tagRepository.save(tags);
+      };
+
+      const createComments = async (count: number): Promise<Comment[]> => {
+        const authors = await userRepository.find();
+        const comments = Array.from({ length: count }).map(() => {
+          return commentRepository.create({
+            content: faker.lorem.paragraph(),
+            author: faker.helpers.arrayElement(authors)
+          });
+        });
+        return commentRepository.save(comments);
+      };
+
+      const createArticles = async (count: number): Promise<Article[]> => {
+        const tags = await createTags(20);
+        const articles = Array.from({ length: count }).map(async (_, i) => {
+          const title = `${faker.lorem.sentence()} ${i}`;
+          return articleRepository.create({
+            title,
+            slug: slugify(title, { lower: true }),
+            content: faker.lorem.paragraphs(2),
+            published_at: faker.helpers.arrayElement([faker.date.past(), faker.date.recent(), faker.date.future()]),
+            comments: await createComments(faker.number.int({ min: 50, max: 100 })),
+            author: faker.helpers.arrayElement(users),
+            tags: faker.helpers.arrayElements(tags, { min: 1, max: 3 })
+          });
+        });
+        return Promise.all(articles);
+      };
+      await createArticles(300);
       await createVentures([...users, admin]);
     };
     await seed();
