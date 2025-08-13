@@ -232,7 +232,7 @@ export default class DbSeeder implements Seeder {
         const authors = await userRepository.find();
         const comments = Array.from({ length: count }).map(() => {
           return commentRepository.create({
-            content: faker.lorem.paragraph(),
+            content: faker.lorem.sentence(),
             author: faker.helpers.arrayElement(authors)
           });
         });
@@ -240,17 +240,17 @@ export default class DbSeeder implements Seeder {
       };
 
       const createArticles = async (count: number): Promise<Article[]> => {
-        const tags = await createTags(20);
+        await createTags(20);
         const articles = Array.from({ length: count }).map(async (_, i) => {
           const title = `${faker.lorem.sentence()} ${i}`;
-          return articleRepository.create({
+          return articleRepository.save({
             title,
             slug: slugify(title, { lower: true }),
             content: faker.lorem.paragraphs(2),
             published_at: faker.helpers.arrayElement([faker.date.past(), faker.date.recent(), faker.date.future()]),
             comments: await createComments(faker.number.int({ min: 50, max: 100 })),
             author: faker.helpers.arrayElement(users),
-            tags: faker.helpers.arrayElements(tags, { min: 1, max: 3 })
+            tags: faker.helpers.arrayElements(await tagRepository.find(), { min: 1, max: 3 })
           });
         });
         return Promise.all(articles);
