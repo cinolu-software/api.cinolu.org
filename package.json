@@ -1,8 +1,8 @@
 {
   "name": "api.cinolu.org",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "API to power angular app",
+  "author": "Wilfried M",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -43,7 +43,7 @@
     "fs-extra": "^11.3.0",
     "handlebars": "^4.7.8",
     "meilisearch": "^0.50.0",
-    "multer": "2.0.0",
+    "multer": "2.0.2",
     "mysql2": "^3.14.1",
     "nodemailer": "7.0.3",
     "passport": "^0.7.0",
