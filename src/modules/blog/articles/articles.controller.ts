@@ -40,9 +40,9 @@ export class ArticlesController {
 
   @Post('cover/:id')
   @UseInterceptors(
-    FileInterceptor('img', {
+    FileInterceptor('article', {
       storage: diskStorage({
-        destination: './uploads/image',
+        destination: './uploads/articles',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
@@ -53,7 +53,8 @@ export class ArticlesController {
     return this.articlesService.addImage(id, file);
   }
 
-  @Get('published')
+  @Get('find-published')
+  @Auth(RoleEnum.Guest)
   findPublished(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
     return this.articlesService.findPublished(dto);
   }
