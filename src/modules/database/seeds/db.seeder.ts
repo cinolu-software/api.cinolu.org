@@ -246,6 +246,7 @@ export default class DbSeeder implements Seeder {
           return articleRepository.save({
             title,
             slug: slugify(title, { lower: true }),
+            summary: faker.lorem.paragraph(),
             content: faker.lorem.paragraphs(2),
             published_at: faker.helpers.arrayElement([faker.date.past(), faker.date.recent(), faker.date.future()]),
             comments: await createComments(faker.number.int({ min: 50, max: 100 })),
