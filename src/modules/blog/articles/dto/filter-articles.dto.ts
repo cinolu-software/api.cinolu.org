@@ -1,5 +1,5 @@
 export interface FilterArticlesDto {
   page: string | null;
-  tags: string[];
+  tags: string | null;
   q: string | null;
 }
