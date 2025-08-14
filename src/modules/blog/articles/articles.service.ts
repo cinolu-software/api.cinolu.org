@@ -19,6 +19,7 @@ export class ArticlesService {
     try {
       const article = this.articlesRepository.create({
         ...dto,
+        published_at: dto.published_at ? new Date(dto.published_at) : new Date(),
         tags: dto.tags.map((id) => ({ id })),
         author: user
       });
