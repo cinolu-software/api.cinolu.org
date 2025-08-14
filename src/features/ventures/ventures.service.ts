@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Venture } from './entities/venture.entity';
 import * as fs from 'fs-extra';
-import { User } from '../users/entities/user.entity';
+import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 
 @Injectable()

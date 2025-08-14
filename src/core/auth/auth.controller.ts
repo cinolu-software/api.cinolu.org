@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { Auth } from '../../shared/decorators/auth.decorator';
-import { CurrentUser } from '../../shared/decorators/user.decorator';
+import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { RoleEnum } from '../../shared/enums/roles.enum';
 import { User } from '../users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';

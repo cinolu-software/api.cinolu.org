@@ -5,15 +5,15 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AuthModule } from './modules/auth/auth.module';
-import { AuthGuard } from './modules/auth/guards/auth.guard';
-import { DatabaseModule } from './modules/database/database.module';
-import { EmailModule } from './modules/email/email.module';
-import { ProgramsModule } from './modules/programs/programs.module';
+import { AuthModule } from './core/auth/auth.module';
+import { AuthGuard } from './core/auth/guards/auth.guard';
+import { DatabaseModule } from './core/database/database.module';
+import { EmailModule } from './core/email/email.module';
+import { ProgramsModule } from './features/programs/programs.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
-import { VenturesModule } from './modules/ventures/ventures.module';
-import { UsersModule } from './modules/users/users.module';
-import { BlogModule } from './modules/blog/blog.module';
+import { VenturesModule } from './features/ventures/ventures.module';
+import { UsersModule } from './core/users/users.module';
+import { BlogModule } from './features/blog/blog.module';
 
 @Module({
   imports: [

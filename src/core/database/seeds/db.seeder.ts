@@ -4,16 +4,16 @@ import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
 import slugify from 'slugify';
-import { Program } from 'src/modules/programs/entities/program.entity';
-import { EventCategory } from 'src/modules/programs/events/categories/entities/category.entity';
-import { ProjectCategory } from 'src/modules/programs/projects/categories/entities/category.entity';
-import { Project } from 'src/modules/programs/projects/entities/project.entity';
-import { Event } from 'src/modules/programs/events/entities/event.entity';
-import { Venture } from 'src/modules/ventures/entities/venture.entity';
-import { Role } from 'src/modules/users/roles/entities/role.entity';
-import { Article } from 'src/modules/blog/articles/entities/article.entity';
-import { Tag } from 'src/modules/blog/tags/entities/tag.entity';
-import { Comment } from 'src/modules/blog/comments/entities/comment.entity';
+import { Program } from 'src/features/programs/entities/program.entity';
+import { EventCategory } from 'src/features/programs/events/categories/entities/category.entity';
+import { ProjectCategory } from 'src/features/programs/projects/categories/entities/category.entity';
+import { Project } from 'src/features/programs/projects/entities/project.entity';
+import { Event } from 'src/features/programs/events/entities/event.entity';
+import { Venture } from 'src/features/ventures/entities/venture.entity';
+import { Role } from 'src/core/users/roles/entities/role.entity';
+import { Article } from 'src/features/blog/articles/entities/article.entity';
+import { Tag } from 'src/features/blog/tags/entities/tag.entity';
+import { Comment } from 'src/features/blog/comments/entities/comment.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {

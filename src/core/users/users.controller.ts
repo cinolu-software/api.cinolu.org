@@ -21,7 +21,7 @@ import CreateUserDto from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
 import { Auth } from 'src/shared/decorators/auth.decorator';
-import { CurrentUser } from 'src/shared/decorators/user.decorator';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { ContactSupportDto } from './dto/contact-support.dto';
 

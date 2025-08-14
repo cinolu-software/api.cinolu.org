@@ -11,8 +11,8 @@ import { RolesService } from './roles/roles.service';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { format } from 'fast-csv';
 import { Response } from 'express';
-import { SignUpDto } from 'src/modules/auth/dto/sign-up.dto';
-import { CreateWithGoogleDto } from 'src/modules/auth/dto/sign-up-with-google.dto';
+import { SignUpDto } from 'src/core/auth/dto/sign-up.dto';
+import { CreateWithGoogleDto } from 'src/core/auth/dto/sign-up-with-google.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -55,12 +55,11 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<User> {
     try {
-      const user = await this.userRepository.save({
+      return  await this.userRepository.save({
         ...dto,
         password: 'user1234',
         roles: dto.roles?.map((id) => ({ id }))
       });
-      return user;
     } catch {
       throw new BadRequestException();
     }

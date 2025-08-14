@@ -3,8 +3,8 @@ import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
-import { User } from 'src/modules/users/entities/user.entity';
-import { CurrentUser } from 'src/shared/decorators/user.decorator';
+import { User } from 'src/core/users/entities/user.entity';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
 
 @Controller('comments')
