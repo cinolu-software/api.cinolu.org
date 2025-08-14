@@ -46,13 +46,13 @@ export class ArticlesService {
         .leftJoinAndSelect('a.tags', 'tags')
         .leftJoinAndSelect('a.comments', 'comments')
         .leftJoinAndSelect('a.author', 'author');
-      if (q) query.andWhere('a.title ILIKE :search OR a.content ILIKE :search', { search: `%${q}%` });
+      if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       if (page) query.skip((+page - 1) * 30).take(30);
       if (tags && tags.length > 0) {
         const arrTags = tags.split(',');
         query.andWhere('tags.id IN (:...arrTags)', { arrTags });
       }
-      return await query.getManyAndCount();
+      return await query.orderBy('a.created_at', 'DESC').getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
