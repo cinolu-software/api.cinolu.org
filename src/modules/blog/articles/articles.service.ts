@@ -53,7 +53,7 @@ export class ArticlesService {
       .leftJoinAndSelect('a.author', 'author')
       .where('a.published_at > NOW()');
     if (q) query.andWhere('a.title ILIKE :search OR a.content ILIKE :search', { search: `%${q}%` });
-    if (page) query.skip((+page - 1) * 10).take(10);
+    if (page) query.skip((+page - 1) * 12).take(12);
     if (tags && tags.length > 0) query.andWhere('tags.id IN (:...tags)', { tags });
     return await query.getManyAndCount();
   }
