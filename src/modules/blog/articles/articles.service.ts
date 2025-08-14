@@ -47,7 +47,7 @@ export class ArticlesService {
         .leftJoinAndSelect('a.comments', 'comments')
         .leftJoinAndSelect('a.author', 'author');
       if (q) query.andWhere('a.title ILIKE :search OR a.content ILIKE :search', { search: `%${q}%` });
-      if (page) query.skip((+page - 1) * 12).take(12);
+      if (page) query.skip((+page - 1) * 30).take(30);
       if (tags && tags.length > 0) {
         const arrTags = tags.split(',');
         query.andWhere('tags.id IN (:...arrTags)', { arrTags });
