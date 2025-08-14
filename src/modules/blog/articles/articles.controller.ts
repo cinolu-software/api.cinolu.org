@@ -34,8 +34,8 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll(): Promise<Article[]> {
-    return this.articlesService.findAll();
+  findAll(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
+    return this.articlesService.findAll(dto);
   }
 
   @Post('cover/:id')
