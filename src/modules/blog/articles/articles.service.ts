@@ -56,9 +56,7 @@ export class ArticlesService {
     } catch {
       throw new BadRequestException();
     }
-
   }
-
 
   async findPublished(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
