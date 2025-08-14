@@ -88,8 +88,7 @@ export class AuthService {
   async updatePassword(currentUser: User, dto: UpdatePasswordDto): Promise<User> {
     try {
       await this.usersService.updatePassword(currentUser.id, dto.password);
-      const user = await this.usersService.findByEmail(currentUser.email);
-      return user;
+      return await this.usersService.findByEmail(currentUser.email);
     } catch {
       throw new BadRequestException();
     }

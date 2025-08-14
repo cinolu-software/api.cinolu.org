@@ -3,7 +3,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
 import { User } from '../users/entities/user.entity';
 import { ContactSupportDto } from '../users/dto/contact-support.dto';
-import { ConfigService } from '@nestjs/config';
 
 interface ResetPasswordDto {
   user: User;
@@ -14,7 +13,6 @@ interface ResetPasswordDto {
 export class EmailService {
   constructor(
     private mailerService: MailerService,
-    private config: ConfigService
   ) {}
 
   @OnEvent('user.reset-password')
