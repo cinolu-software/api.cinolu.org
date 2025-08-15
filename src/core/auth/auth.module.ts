@@ -6,13 +6,12 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './session.serializer';
 import { EmailModule } from '../email/email.module';
-import { RightsService } from './rights.service';
 import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [PassportModule, UsersModule, EmailModule],
   controllers: [AuthController],
-  providers: [AuthService, RightsService, LocalStrategy, SessionSerializer, GoogleStrategy],
-  exports: [RightsService, AuthService]
+  providers: [AuthService, LocalStrategy, SessionSerializer, GoogleStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}

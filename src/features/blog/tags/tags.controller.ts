@@ -4,11 +4,8 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { FilterTagsDto } from './dto/filter-tags.dto';
 import { Tag } from './entities/tag.entity';
-import { RoleEnum } from '../../../shared/enums/roles.enum';
-import { Auth } from '../../../shared/decorators/auth.decorator';
 
 @Controller('tags')
-@Auth(RoleEnum.Staff)
 export class TagsController {
   constructor(private tagsService: TagsService) {}
 
@@ -23,7 +20,6 @@ export class TagsController {
   }
 
   @Get()
-  @Auth(RoleEnum.Guest)
   findAll(): Promise<Tag[]> {
     return this.tagsService.findAll();
   }

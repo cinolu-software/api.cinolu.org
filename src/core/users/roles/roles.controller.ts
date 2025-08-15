@@ -4,16 +4,12 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { FilterRolesDto } from './dto/filter-roles.dto';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
-import { Auth } from 'src/shared/decorators/auth.decorator';
 
 @Controller('roles')
-@Auth(RoleEnum.Staff)
 export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @Get('sign-up')
-  @Auth(RoleEnum.Guest)
   signUpRoles(): Promise<Role[]> {
     return this.rolesService.signUpRoles();
   }

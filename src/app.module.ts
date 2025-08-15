@@ -6,7 +6,6 @@ import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthModule } from './core/auth/auth.module';
-import { AuthGuard } from './core/auth/guards/auth.guard';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
 import { ProgramsModule } from './features/programs/programs.module';
@@ -14,6 +13,8 @@ import { TransformInterceptor } from './shared/interceptors/transform.intercepto
 import { VenturesModule } from './features/ventures/ventures.module';
 import { UsersModule } from './core/users/users.module';
 import { BlogModule } from './features/blog/blog.module';
+import { CaslModule } from './core/casl/casl.module';
+import { PoliciesGuard } from './core/auth/guards/policies.guard';
 
 @Module({
   imports: [
@@ -37,13 +38,13 @@ import { BlogModule } from './features/blog/blog.module';
     UsersModule,
     EmailModule,
     DatabaseModule,
-
     ProgramsModule,
     VenturesModule,
-    BlogModule
+    BlogModule,
+    CaslModule
   ],
   providers: [
-    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: PoliciesGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]
 })

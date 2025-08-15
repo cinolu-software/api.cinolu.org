@@ -1,6 +1,4 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { Auth } from '../../../../shared/decorators/auth.decorator';
-import { RoleEnum } from '../../../../shared/enums/roles.enum';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -8,7 +6,6 @@ import { ProjectCategory as Category } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
 
 @Controller('project-categories')
-@Auth(RoleEnum.Staff)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -18,7 +15,6 @@ export class CategoriesController {
   }
 
   @Get()
-  @Auth(RoleEnum.Guest)
   findAll(): Promise<Category[]> {
     return this.categoriesService.findAll();
   }

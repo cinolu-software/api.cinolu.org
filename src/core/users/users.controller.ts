@@ -20,13 +20,14 @@ import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
-import { Auth } from 'src/shared/decorators/auth.decorator';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { ContactSupportDto } from './dto/contact-support.dto';
+import { CheckPolicies } from '../../shared/decorators/check-policy.decorator';
+import { Action, AppAbility } from '../casl/casl-ability.factory';
+import { Public } from '../../shared/decorators/public.decorator';
 
 @Controller('users')
-@Auth(RoleEnum.Staff)
+@CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, User))
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -36,13 +37,12 @@ export class UsersController {
   }
 
   @Post('contact-us')
-  @Auth(RoleEnum.Guest)
+  @Public()
   async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
     await this.usersService.contactUs(dto);
   }
 
   @Post('')
-  @Auth(RoleEnum.Staff)
   create(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }
@@ -63,7 +63,7 @@ export class UsersController {
   }
 
   @Post('image-profile')
-  @Auth(RoleEnum.User)
+
   @UseInterceptors(
     FileInterceptor('profile', {
       storage: diskStorage({
@@ -79,7 +79,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.Admin)
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);
   }

@@ -18,11 +18,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { FilterEventsDto } from './dto/filter-events.dto';
-import { Auth } from '../../../shared/decorators/auth.decorator';
-import { RoleEnum } from '../../../shared/enums/roles.enum';
 
 @Controller('events')
-@Auth(RoleEnum.Staff)
 export class EventsController {
   constructor(private eventsService: EventsService) {}
 
@@ -37,25 +34,21 @@ export class EventsController {
   }
 
   @Get('find-recent')
-  @Auth(RoleEnum.Guest)
   findRecent(): Promise<Event[]> {
     return this.eventsService.findRecent();
   }
 
   @Get('find-published')
-  @Auth(RoleEnum.Guest)
   findPublished(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findPublished(queryParams);
   }
 
   @Get('slug/:slug')
-  @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Event> {
     return this.eventsService.findBySlug(slug);
   }
 
   @Get(':id')
-  @Auth(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOne(id);
   }

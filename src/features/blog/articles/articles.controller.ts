@@ -15,8 +15,6 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { FilterArticlesDto } from './dto/filter-articles.dto';
-import { Auth } from 'src/shared/decorators/auth.decorator';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { User } from 'src/core/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -24,7 +22,6 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 @Controller('articles')
-@Auth(RoleEnum.Staff)
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
@@ -54,7 +51,6 @@ export class ArticlesController {
   }
 
   @Get('find-published')
-  @Auth(RoleEnum.Guest)
   findPublished(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
     return this.articlesService.findPublished(dto);
   }

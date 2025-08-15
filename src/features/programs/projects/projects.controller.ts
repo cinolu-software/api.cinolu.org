@@ -13,8 +13,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Auth } from '../../../shared/decorators/auth.decorator';
-import { RoleEnum } from '../../../shared/enums/roles.enum';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
@@ -22,7 +20,6 @@ import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 
 @Controller('projects')
-@Auth(RoleEnum.Staff)
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
@@ -37,25 +34,21 @@ export class ProjectsController {
   }
 
   @Get('find-recent')
-  @Auth(RoleEnum.Guest)
   findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
   }
 
   @Get('find-published')
-  @Auth(RoleEnum.Guest)
   findPublished(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findPublished(queryParams);
   }
 
   @Get('slug/:slug')
-  @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Project> {
     return this.projectsService.findBySlug(slug);
   }
 
   @Get(':id')
-  @Auth(RoleEnum.Guest)
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
   }

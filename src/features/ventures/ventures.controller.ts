@@ -18,13 +18,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
-import { Auth } from 'src/shared/decorators/auth.decorator';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 
 @Controller('ventures')
-@Auth(RoleEnum.User)
 export class VenturesController {
   constructor(private venturesService: VenturesService) {}
 
@@ -39,7 +36,6 @@ export class VenturesController {
   }
 
   @Get('by-slug/:slug')
-  @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.findBySlug(slug);
   }
