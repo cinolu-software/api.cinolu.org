@@ -20,6 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('ventures')
 export class VenturesController {
@@ -31,6 +32,11 @@ export class VenturesController {
   }
 
   @Get()
+  @UseRoles({
+    resource: 'ventures',
+    action: 'read',
+    possession: 'any'
+  })
   findAll(@Query() queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
     return this.venturesService.findAll(queryParams);
   }
@@ -41,6 +47,11 @@ export class VenturesController {
   }
 
   @Patch('toggle-publish/:slug')
+  @UseRoles({
+    resource: 'publishVenture',
+    action: 'update',
+    possession: 'any'
+  })
   togglePublish(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.togglePublish(slug);
   }
@@ -51,6 +62,11 @@ export class VenturesController {
   }
 
   @Post('add-logo/:id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -66,6 +82,11 @@ export class VenturesController {
   }
 
   @Post('add-cover/:id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   @UseInterceptors(
     FileInterceptor('cover', {
       storage: diskStorage({
@@ -86,11 +107,21 @@ export class VenturesController {
   }
 
   @Patch(':slug')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   update(@Param('slug') slug: string, @Body() dto: UpdateVentureDto): Promise<Venture> {
     return this.venturesService.update(slug, dto);
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'delete',
+    possession: 'own'
+  })
   remove(@Param('id') id: string): Promise<void> {
     return this.venturesService.remove(id);
   }

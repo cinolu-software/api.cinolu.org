@@ -52,8 +52,8 @@ export class AuthController {
   }
 
   @Patch('profile')
-  updateProfile(@CurrentUser() currentUser: User, @Body() dto: UpdateProfileDto): Promise<User> {
-    return this.authService.updateProfile(currentUser, dto);
+  updateProfile(@CurrentUser() user: User, @Body() dto: UpdateProfileDto): Promise<User> {
+    return this.authService.updateProfile(user, dto);
   }
 
   @Patch('update-password')

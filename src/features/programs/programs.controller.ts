@@ -18,22 +18,36 @@ import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { Public } from '../../shared/decorators/public.decorator';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('programs')
 export class ProgramsController {
   constructor(private programsService: ProgramsService) {}
 
   @Post()
+  @UseRoles({
+    resource: 'programs',
+    action: 'create'
+  })
   create(@Body() dto: CreateProgramDto): Promise<Program> {
     return this.programsService.create(dto);
   }
 
   @Post('publish/:id')
+  @UseRoles({
+    resource: 'programs',
+    action: 'update'
+  })
   togglePublish(@Param('id') id: string): Promise<Program> {
     return this.programsService.togglePublish(id);
   }
 
   @Post('logo/:id')
+  @UseRoles({
+    resource: 'programs',
+    action: 'update'
+  })
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -49,31 +63,49 @@ export class ProgramsController {
   }
 
   @Get('slug/:slug')
+  @Public()
   findBySlug(@Param('slug') slug: string): Promise<Program> {
     return this.programsService.findBySlug(slug);
   }
 
   @Get('')
+  @Public()
   findAll(): Promise<Program[]> {
     return this.programsService.findAll();
   }
 
   @Get('paginated')
+  @UseRoles({
+    resource: 'programs',
+    action: 'read'
+  })
   findAllPaginated(@Query() queryParams: FilterProgramsDto): Promise<[Program[], number]> {
     return this.programsService.findAllPaginated(queryParams);
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'programs',
+    action: 'update'
+  })
   findOne(@Param('id') id: string): Promise<Program> {
     return this.programsService.findOne(id);
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'programs',
+    action: 'update'
+  })
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<Program> {
     return this.programsService.update(id, updateProgramDto);
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'programs',
+    action: 'delete'
+  })
   remove(@Param('id') id: string): Promise<void> {
     return this.programsService.remove(id);
   }

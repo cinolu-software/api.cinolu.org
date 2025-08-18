@@ -18,47 +18,72 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
+import { Public } from '../../../shared/decorators/public.decorator';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post('')
+  @UseRoles({
+    resource: 'projects',
+    action: 'create'
+  })
   create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
   }
 
   @Get('')
+  @UseRoles({
+    resource: 'projects',
+    action: 'read'
+  })
   findAll(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findAll(queryParams);
   }
 
   @Get('find-recent')
+  @Public()
   findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
   }
 
   @Get('find-published')
+  @Public()
   findPublished(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findPublished(queryParams);
   }
 
   @Get('slug/:slug')
+  @Public()
   findBySlug(@Param('slug') slug: string): Promise<Project> {
     return this.projectsService.findBySlug(slug);
   }
 
   @Get(':id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'read'
+  })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
   }
 
   @Post('publish/:id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'update'
+  })
   togglePublish(@Param('id') id: string): Promise<Project> {
     return this.projectsService.togglePublish(id);
   }
 
   @Post('cover/:id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'update'
+  })
   @UseInterceptors(
     FileInterceptor('cover', {
       storage: diskStorage({
@@ -74,16 +99,28 @@ export class ProjectsController {
   }
 
   @Post('cover/remove/:id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'update'
+  })
   removeCover(@Param('id') id: string): Promise<Project> {
     return this.projectsService.removeCover(id);
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'update'
+  })
   update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<Project> {
     return this.projectsService.update(id, dto);
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'projects',
+    action: 'delete'
+  })
   remove(@Param('id') id: string): Promise<void> {
     return this.projectsService.remove(id);
   }

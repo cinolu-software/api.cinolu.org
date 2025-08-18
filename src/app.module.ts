@@ -13,12 +13,14 @@ import { TransformInterceptor } from './shared/interceptors/transform.intercepto
 import { VenturesModule } from './features/ventures/ventures.module';
 import { UsersModule } from './core/users/users.module';
 import { BlogModule } from './features/blog/blog.module';
-import { CaslModule } from './core/casl/casl.module';
-import { PoliciesGuard } from './core/auth/guards/policies.guard';
+import { AuthGuard } from './core/auth/guards/auth.guard';
+import { AccessControlModule, ACGuard } from 'nest-access-control';
+import { RBAC_POLICY } from './core/auth/guards/rbac-policy';
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
+    AccessControlModule.forRoles(RBAC_POLICY),
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, '../../'),
       renderPath: '/uploads'
@@ -40,11 +42,11 @@ import { PoliciesGuard } from './core/auth/guards/policies.guard';
     DatabaseModule,
     ProgramsModule,
     VenturesModule,
-    BlogModule,
-    CaslModule
+    BlogModule
   ],
   providers: [
-    { provide: APP_GUARD, useClass: PoliciesGuard },
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: ACGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]
 })

@@ -44,9 +44,6 @@ export class ArticlesService {
       const { q, page, tags } = dto;
       const query = this.articlesRepository
         .createQueryBuilder('a')
-        .leftJoinAndSelect('a.tags', 'tags')
-        .leftJoinAndSelect('a.comments', 'comments')
-        .leftJoinAndSelect('a.author', 'author');
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       if (page) query.skip((+page - 1) * 30).take(30);
       if (tags && tags.length > 0) {
@@ -65,8 +62,6 @@ export class ArticlesService {
       const query = this.articlesRepository
         .createQueryBuilder('a')
         .leftJoinAndSelect('a.tags', 'tags')
-        .leftJoinAndSelect('a.comments', 'comments')
-        .leftJoinAndSelect('a.author', 'author')
         .where('a.published_at > NOW()');
       if (page) query.skip((+page - 1) * 12).take(12);
       if (tags && tags.length > 0) {
