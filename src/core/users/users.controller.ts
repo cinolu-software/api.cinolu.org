@@ -20,50 +20,67 @@ import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
-import { Auth } from 'src/shared/decorators/auth.decorator';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { ContactSupportDto } from './dto/contact-support.dto';
+import { Public } from '../../shared/decorators/public.decorator';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('users')
-@Auth(RoleEnum.Staff)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get('export/csv')
+  @UseRoles({
+    resource: 'exportUsersCSV',
+    action: 'read'
+  })
   async exportCSV(@Query() params: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersService.exportCSV(params, res);
   }
 
   @Post('contact-us')
-  @Auth(RoleEnum.Guest)
+  @Public()
   async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
     await this.usersService.contactUs(dto);
   }
 
   @Post('')
-  @Auth(RoleEnum.Staff)
+  @UseRoles({
+    resource: 'users',
+    action: 'create'
+  })
   create(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }
 
   @Get('')
+  @UseRoles({
+    resource: 'users',
+    action: 'read'
+  })
   findAll(@Query() params: FilterUsersDto): Promise<[User[], number]> {
     return this.usersService.findAll(params);
   }
 
   @Get(':email')
+  @UseRoles({
+    resource: 'users',
+    action: 'read'
+  })
   findOneByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findOneByEmail(email);
   }
 
   @Patch(':id')
+  @UseRoles({
+    resource: 'users',
+    action: 'update'
+  })
   update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
     return this.usersService.update(id, dto);
   }
 
   @Post('image-profile')
-  @Auth(RoleEnum.User)
   @UseInterceptors(
     FileInterceptor('profile', {
       storage: diskStorage({
@@ -79,7 +96,10 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Auth(RoleEnum.Admin)
+  @UseRoles({
+    resource: 'users',
+    action: 'delete'
+  })
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);
   }

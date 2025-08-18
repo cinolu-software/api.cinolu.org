@@ -44,7 +44,6 @@ export class ArticlesService {
       const { q, page, tags } = dto;
       const query = this.articlesRepository
         .createQueryBuilder('a')
-        .leftJoinAndSelect('a.tags', 'tags')
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       if (page) query.skip((+page - 1) * 30).take(30);
       if (tags && tags.length > 0) {

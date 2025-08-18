@@ -1,23 +1,16 @@
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { RightsService } from '../rights.service';
-import { RIGHTS_POLICY } from '../../../shared/decorators/auth.decorator';
-import { RoleEnum } from '../../../shared/enums/roles.enum';
+import { IS_PUBLIC_KEY } from '../../../shared/decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private rightsService: RightsService
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const requiredRole = this.reflector.getAllAndOverride<RoleEnum>(RIGHTS_POLICY, [ctx.getHandler(), ctx.getClass()]);
-    if (!requiredRole) return true;
+    const isPublic =
+      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [ctx.getHandler(), ctx.getClass()]) || false;
+    if (isPublic) return true;
     const req = ctx.switchToHttp().getRequest();
-    const user = req.user;
-    const isAuthorized = this.rightsService.isAuthorized({ currentRoles: user?.roles, requiredRole });
-    if (isAuthorized) return true;
-    else throw new UnauthorizedException("Vous n'avez pas le droit.");
+    return req.isAuthenticated();
   }
 }

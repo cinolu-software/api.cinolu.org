@@ -18,13 +18,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
-import { Auth } from 'src/shared/decorators/auth.decorator';
-import { RoleEnum } from 'src/shared/enums/roles.enum';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
+import { UseRoles } from 'nest-access-control';
 
 @Controller('ventures')
-@Auth(RoleEnum.User)
 export class VenturesController {
   constructor(private venturesService: VenturesService) {}
 
@@ -34,17 +32,26 @@ export class VenturesController {
   }
 
   @Get()
+  @UseRoles({
+    resource: 'ventures',
+    action: 'read',
+    possession: 'any'
+  })
   findAll(@Query() queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
     return this.venturesService.findAll(queryParams);
   }
 
   @Get('by-slug/:slug')
-  @Auth(RoleEnum.Guest)
   findBySlug(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.findBySlug(slug);
   }
 
   @Patch('toggle-publish/:slug')
+  @UseRoles({
+    resource: 'publishVenture',
+    action: 'update',
+    possession: 'any'
+  })
   togglePublish(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.togglePublish(slug);
   }
@@ -55,6 +62,11 @@ export class VenturesController {
   }
 
   @Post('add-logo/:id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -70,6 +82,11 @@ export class VenturesController {
   }
 
   @Post('add-cover/:id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   @UseInterceptors(
     FileInterceptor('cover', {
       storage: diskStorage({
@@ -90,11 +107,21 @@ export class VenturesController {
   }
 
   @Patch(':slug')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'update',
+    possession: 'own'
+  })
   update(@Param('slug') slug: string, @Body() dto: UpdateVentureDto): Promise<Venture> {
     return this.venturesService.update(slug, dto);
   }
 
   @Delete(':id')
+  @UseRoles({
+    resource: 'ventures',
+    action: 'delete',
+    possession: 'own'
+  })
   remove(@Param('id') id: string): Promise<void> {
     return this.venturesService.remove(id);
   }

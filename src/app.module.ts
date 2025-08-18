@@ -6,7 +6,6 @@ import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthModule } from './core/auth/auth.module';
-import { AuthGuard } from './core/auth/guards/auth.guard';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
 import { ProgramsModule } from './features/programs/programs.module';
@@ -14,10 +13,14 @@ import { TransformInterceptor } from './shared/interceptors/transform.intercepto
 import { VenturesModule } from './features/ventures/ventures.module';
 import { UsersModule } from './core/users/users.module';
 import { BlogModule } from './features/blog/blog.module';
+import { AuthGuard } from './core/auth/guards/auth.guard';
+import { AccessControlModule, ACGuard } from 'nest-access-control';
+import { RBAC_POLICY } from './core/auth/guards/rbac-policy';
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
+    AccessControlModule.forRoles(RBAC_POLICY),
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, '../../'),
       renderPath: '/uploads'
@@ -37,13 +40,13 @@ import { BlogModule } from './features/blog/blog.module';
     UsersModule,
     EmailModule,
     DatabaseModule,
-
     ProgramsModule,
     VenturesModule,
     BlogModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: ACGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]
 })
