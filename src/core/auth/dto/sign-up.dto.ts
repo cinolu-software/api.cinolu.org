@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { MinLength } from 'class-validator';
 import CreateUserDto from 'src/core/users/dto/create-user.dto';
 import { Match } from 'src/shared/decorators/match.decorator';

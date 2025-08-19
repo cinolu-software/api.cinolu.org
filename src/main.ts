@@ -3,6 +3,7 @@ import * as passport from 'passport';
 import * as session from 'express-session';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const port = Number(process.env.PORT) as number;
 
@@ -28,6 +29,12 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  const config = new DocumentBuilder().setTitle('API DOCS').build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  // await SwaggerModule.loadPluginMetadata(metadata);
+  SwaggerModule.setup('docs', app, documentFactory);
+
   await app.listen(port);
 }
-bootstrap();
+bootstrap().then();
