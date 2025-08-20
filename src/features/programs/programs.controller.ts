@@ -34,6 +34,12 @@ export class ProgramsController {
     return this.programsService.create(dto);
   }
 
+  @Get('find-recent')
+  @Public()
+  findRecent(): Promise<Program[]> {
+    return this.programsService.findRecent();
+  }
+
   @Post('publish/:id')
   @UseRoles({
     resource: 'programs',

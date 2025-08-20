@@ -24,6 +24,14 @@ export class ProgramsService {
     }
   }
 
+  async findRecent(): Promise<Program[]> {
+    return await this.programRepository.find({
+      where: { is_published: true },
+      order: { updated_at: 'DESC' },
+      take: 5
+    });
+  }
+
   async findAll(): Promise<Program[]> {
     return await this.programRepository.find({
       where: { is_published: true },
@@ -35,7 +43,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { slug },
-        relations: ['projects', 'events']
+        relations: ['subprograms']
       });
     } catch {
       throw new NotFoundException();
