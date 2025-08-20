@@ -1,7 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../shared/utils/abstract.entity';
-import { Project } from '../projects/entities/project.entity';
-import { Event } from '../events/entities/event.entity';
+import { Subprogram } from '../subprograms/entities/subprogram.entity';
 
 @Entity()
 export class Program extends BaseEntity {
@@ -20,9 +19,6 @@ export class Program extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   is_published: boolean;
 
-  @OneToMany(() => Project, (p) => p.program)
-  projects: Project[];
-
-  @OneToMany(() => Event, (e) => e.program)
-  events: Event[];
+  @OneToMany(() => Subprogram, (sp) => sp.program)
+  subprograms: Subprogram[];
 }

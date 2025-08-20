@@ -5,15 +5,16 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../users/entities/user.entity';
 import slugify from 'slugify';
 import { Program } from 'src/features/programs/entities/program.entity';
-import { EventCategory } from 'src/features/programs/events/categories/entities/category.entity';
-import { ProjectCategory } from 'src/features/programs/projects/categories/entities/category.entity';
-import { Project } from 'src/features/programs/projects/entities/project.entity';
-import { Event } from 'src/features/programs/events/entities/event.entity';
 import { Venture } from 'src/features/ventures/entities/venture.entity';
 import { Role } from 'src/core/users/roles/entities/role.entity';
 import { Article } from 'src/features/blog/articles/entities/article.entity';
 import { Tag } from 'src/features/blog/tags/entities/tag.entity';
 import { Comment } from 'src/features/blog/comments/entities/comment.entity';
+import { Project } from '../../../features/programs/subprograms/projects/entities/project.entity';
+import { EventCategory } from '../../../features/programs/subprograms/events/categories/entities/category.entity';
+import { ProjectCategory } from '../../../features/programs/subprograms/projects/categories/entities/category.entity';
+import { Subprogram } from '../../../features/programs/subprograms/entities/subprogram.entity';
+import { Event } from '../../../features/programs/subprograms/events/entities/event.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -23,6 +24,7 @@ export default class DbSeeder implements Seeder {
     const userRepository = dataSource.getRepository(User);
     const roleRepository = dataSource.getRepository(Role);
     const programRepository = dataSource.getRepository(Program);
+    const subprogramRepository = dataSource.getRepository(Subprogram); // Assuming subprograms are also stored in Program
     const eventRepository = dataSource.getRepository(Event);
     const projectRepository = dataSource.getRepository(Project);
     const eventCategoryRepository = dataSource.getRepository(EventCategory);
@@ -162,24 +164,43 @@ export default class DbSeeder implements Seeder {
       };
 
       // 7. Create Programs
-      const createPrograms = async (count: number): Promise<Program[]> => {
-        const programs: Program[] = [];
+      const createSubprograms = async (count: number): Promise<Subprogram[]> => {
+        const subprograms: Subprogram[] = [];
         for (let i = 0; i < count; i++) {
-          const events = createEvents(faker.number.int({ min: 3, max: 5 }));
-          const projects = createProjects(faker.number.int({ min: 3, max: 6 }));
+          const events = createEvents(faker.number.int({ min: 20, max: 30 }));
+          const projects = createProjects(faker.number.int({ min: 20, max: 30 }));
           const savedEvents = await eventRepository.save(events);
           const savedProjects = await projectRepository.save(projects);
           const name = generateUniqueName(
             usedUserNames,
             () => `${faker.commerce.department()} - ${faker.number.int({ min: 1, max: 1000 })}`
           );
-          const program = programRepository.create({
+          const subprogram = subprogramRepository.create({
             name,
             is_published: true,
             slug: slugify(name, { lower: true }),
             description: faker.lorem.paragraph(),
             events: savedEvents,
             projects: savedProjects
+          });
+          subprograms.push(subprogram);
+        }
+        return subprogramRepository.save(subprograms);
+      };
+
+      const createPrograms = async (count: number): Promise<Program[]> => {
+        const programs: Program[] = [];
+        for (let i = 0; i < count; i++) {
+          const subprograms = await createSubprograms(faker.number.int({ min: 5, max: 10 }));
+          const name = generateUniqueName(
+            usedUserNames,
+            () => `${faker.commerce.department()} - ${faker.number.int({ min: 1, max: 1000 })}`
+          );
+          const program = programRepository.create({
+            name,
+            subprograms,
+            slug: slugify(name, { lower: true }),
+            description: faker.lorem.paragraph()
           });
           programs.push(program);
         }

@@ -1,5 +1,5 @@
 import { RolesBuilder } from 'nest-access-control';
-import { Role } from '../enums/roles.enum';
+import { Role } from './enums/roles.enum';
 
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 
@@ -10,6 +10,7 @@ RBAC_POLICY.grant(Role.USER)
   .readAny([
     'users',
     'programs',
+    'subprograms',
     'roles',
     'comments',
     'events',
@@ -28,6 +29,7 @@ RBAC_POLICY.grant(Role.USER)
     'events',
     'roles',
     'tags',
+    'subprograms',
     'eventCategories',
     'projectCategories',
     'projects',
@@ -36,6 +38,7 @@ RBAC_POLICY.grant(Role.USER)
   .updateAny([
     'users',
     'programs',
+    'subprograms',
     'events',
     'comments',
     'eventCategories',
@@ -50,6 +53,7 @@ RBAC_POLICY.grant(Role.USER)
   .deleteAny([
     'users',
     'programs',
+    'subprograms',
     'events',
     'roles',
     'comments',
