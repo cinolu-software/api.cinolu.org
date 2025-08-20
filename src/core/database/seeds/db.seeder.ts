@@ -198,6 +198,7 @@ export default class DbSeeder implements Seeder {
           );
           const program = programRepository.create({
             name,
+            is_published: true,
             subprograms,
             slug: slugify(name, { lower: true }),
             description: faker.lorem.paragraph()
