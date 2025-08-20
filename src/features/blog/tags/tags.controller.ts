@@ -5,6 +5,7 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 import { FilterTagsDto } from './dto/filter-tags.dto';
 import { Tag } from './entities/tag.entity';
 import { UseRoles } from 'nest-access-control';
+import { Public } from '../../../shared/decorators/public.decorator';
 
 @Controller('tags')
 export class TagsController {
@@ -29,10 +30,7 @@ export class TagsController {
   }
 
   @Get()
-  @UseRoles({
-    resource: 'tags',
-    action: 'read'
-  })
+  @Public()
   findAll(): Promise<Tag[]> {
     return this.tagsService.findAll();
   }

@@ -51,7 +51,7 @@ export class ArticlesController {
     action: 'update'
   })
   @UseInterceptors(
-    FileInterceptor('article/:id', {
+    FileInterceptor('article', {
       storage: diskStorage({
         destination: './uploads/articles',
         filename: function (_req, file, cb) {
