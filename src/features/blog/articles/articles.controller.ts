@@ -36,6 +36,12 @@ export class ArticlesController {
     return this.articlesService.create(dto, user);
   }
 
+  @Get('find-recent')
+  @Public()
+  findRecent(): Promise<Article[]> {
+    return this.articlesService.findRecent();
+  }
+
   @Get()
   @UseRoles({
     resource: 'blogs',
