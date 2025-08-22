@@ -57,7 +57,10 @@ export class SubprogramsService {
 
   async findAllPaginated(queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
     const { page = 1, q } = queryParams;
-    const query = this.subprogramRepository.createQueryBuilder('p').orderBy('p.updated_at', 'DESC');
+    const query = this.subprogramRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.program', 'program')
+      .orderBy('p.updated_at', 'DESC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     return await query
       .skip((+page - 1) * 40)
