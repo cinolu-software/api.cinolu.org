@@ -29,7 +29,7 @@ export class TagsService {
   async findFiltered(dto: FilterTagsDto): Promise<[Tag[], number]> {
     const { q, page } = dto;
     const query = this.tagRepository.createQueryBuilder('t');
-    if (q) query.andWhere('t.name ILIKE :search', { search: `%${q}%` });
+    if (q) query.andWhere('t.name LIKE :search', { search: `%${q}%` });
     if (page) query.skip((+page - 1) * 10).take(10);
     return await query.getManyAndCount();
   }

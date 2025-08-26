@@ -36,6 +36,12 @@ export class ArticlesController {
     return this.articlesService.create(dto, user);
   }
 
+  @Get('find-recent')
+  @Public()
+  findRecent(): Promise<Article[]> {
+    return this.articlesService.findRecent();
+  }
+
   @Get()
   @UseRoles({
     resource: 'blogs',
@@ -51,7 +57,7 @@ export class ArticlesController {
     action: 'update'
   })
   @UseInterceptors(
-    FileInterceptor('article/:id', {
+    FileInterceptor('article', {
       storage: diskStorage({
         destination: './uploads/articles',
         filename: function (_req, file, cb) {

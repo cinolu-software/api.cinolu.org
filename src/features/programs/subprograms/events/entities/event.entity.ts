@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { BaseEntity } from '../../../../shared/utils/abstract.entity';
-import { Program } from '../../entities/program.entity';
+import { BaseEntity } from '../../../../../shared/utils/abstract.entity';
+import { Subprogram } from '../../entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
 
 @Entity()
@@ -35,9 +35,9 @@ export class Event extends BaseEntity {
   @Column({ type: 'date' })
   ended_at: Date;
 
-  @ManyToOne(() => Program, (p) => p.events)
+  @ManyToOne(() => Subprogram, (p) => p.events)
   @JoinColumn()
-  program: Program;
+  program: Subprogram;
 
   @ManyToMany(() => EventCategory, (category) => category.event)
   @JoinTable()

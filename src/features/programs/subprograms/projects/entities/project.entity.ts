@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { BaseEntity } from '../../../../shared/utils/abstract.entity';
+import { BaseEntity } from '../../../../../shared/utils/abstract.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
-import { Program } from '../../entities/program.entity';
+import { Subprogram } from '../../entities/subprogram.entity';
 
 @Entity()
 export class Project extends BaseEntity {
@@ -32,9 +32,9 @@ export class Project extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   is_published: boolean;
 
-  @ManyToOne(() => Program, (p) => p.projects)
+  @ManyToOne(() => Subprogram, (p) => p.projects)
   @JoinColumn()
-  program: Program;
+  program: Subprogram;
 
   @ManyToMany(() => ProjectCategory, (category) => category.projects)
   @JoinTable()

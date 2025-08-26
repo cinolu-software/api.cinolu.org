@@ -1,9 +1,9 @@
-import { IsEmail, MinLength } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class SignInDto {
-  @IsEmail({}, { message: "L'email saisi est invalide" })
+  @IsNotEmpty()
   email: string;
 
-  @MinLength(4, { message: 'Le mot de passe doit contenir au-moins 4 caractères' })
+  @IsNotEmpty()
   password: string;
 }

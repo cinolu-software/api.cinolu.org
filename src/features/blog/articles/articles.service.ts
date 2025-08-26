@@ -39,6 +39,18 @@ export class ArticlesService {
     }
   }
 
+  async findRecent(): Promise<Article[]> {
+    try {
+      return await this.articlesRepository.find({
+        order: { created_at: 'DESC' },
+        take: 5,
+        relations: ['tags', 'author']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findAll(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
       const { q, page, tags } = dto;
