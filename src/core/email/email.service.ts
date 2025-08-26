@@ -11,9 +11,7 @@ interface ResetPasswordDto {
 
 @Injectable()
 export class EmailService {
-  constructor(
-    private mailerService: MailerService,
-  ) {}
+  constructor(private mailerService: MailerService) {}
 
   @OnEvent('user.reset-password')
   async resetEmail(dto: ResetPasswordDto): Promise<void> {

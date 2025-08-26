@@ -28,10 +28,7 @@ export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
   @Post()
-  @UseRoles({
-    resource: 'blogs',
-    action: 'create'
-  })
+  @UseRoles({ resource: 'blogs', action: 'create' })
   create(@CurrentUser() user: User, @Body() dto: CreateArticleDto): Promise<Article> {
     return this.articlesService.create(dto, user);
   }
@@ -43,19 +40,13 @@ export class ArticlesController {
   }
 
   @Get()
-  @UseRoles({
-    resource: 'blogs',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'blogs', action: 'read' })
   findAll(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
     return this.articlesService.findAll(dto);
   }
 
   @Post('cover/:id')
-  @UseRoles({
-    resource: 'blogs',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(
     FileInterceptor('article', {
       storage: diskStorage({
@@ -77,10 +68,7 @@ export class ArticlesController {
   }
 
   @Post('toggle-published/:id')
-  @UseRoles({
-    resource: 'blogs',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'blogs', action: 'update' })
   togglePublished(@Param('id') id: string): Promise<Article> {
     return this.articlesService.togglePublished(id);
   }
@@ -92,28 +80,25 @@ export class ArticlesController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'blogs',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'blogs', action: 'read' })
   findOne(@Param('id') id: string): Promise<Article> {
     return this.articlesService.findOne(id);
   }
 
+  @Patch('highlight/:id')
+  @UseRoles({ resource: 'blogs', action: 'update' })
+  highlight(@Param('id') id: string): Promise<Article> {
+    return this.articlesService.highlight(id);
+  }
+
   @Patch(':id')
-  @UseRoles({
-    resource: 'blogs',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'blogs', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateArticleDto): Promise<Article> {
     return this.articlesService.update(id, dto);
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'blogs',
-    action: 'delete'
-  })
+  @UseRoles({ resource: 'blogs', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.articlesService.remove(id);
   }

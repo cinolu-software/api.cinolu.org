@@ -50,6 +50,18 @@ export class ProgramsService {
     }
   }
 
+  async highlight(id: string): Promise<Program> {
+    try {
+      const program = await this.findOne(id);
+      return await this.programRepository.save({
+        ...program,
+        is_highlighted: !program.is_highlighted
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async togglePublish(id: string): Promise<Program> {
     try {
       const program = await this.findOne(id);

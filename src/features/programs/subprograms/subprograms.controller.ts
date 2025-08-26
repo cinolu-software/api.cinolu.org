@@ -26,28 +26,19 @@ export class SubprogramsController {
   constructor(private subprogramsService: SubprogramsService) {}
 
   @Post()
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'create'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'create' })
   create(@Body() dto: CreateSubprogramDto): Promise<Subprogram> {
     return this.subprogramsService.create(dto);
   }
 
   @Post('publish/:id')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'update' })
   togglePublish(@Param('id') id: string): Promise<Subprogram> {
     return this.subprogramsService.togglePublish(id);
   }
 
   @Post('logo/:id')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'update' })
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
@@ -75,37 +66,31 @@ export class SubprogramsController {
   }
 
   @Get('paginated')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'read' })
   findAllPaginated(@Query() queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
     return this.subprogramsService.findAllPaginated(queryParams);
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'update' })
   findOne(@Param('id') id: string): Promise<Subprogram> {
     return this.subprogramsService.findOne(id);
   }
 
+  @Patch('highlight/:id')
+  @UseRoles({ resource: 'subprograms', action: 'update' })
+  toggleHighlight(@Param('id') id: string): Promise<Subprogram> {
+    return this.subprogramsService.highlight(id);
+  }
+
   @Patch(':id')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'update' })
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateSubprogramDto): Promise<Subprogram> {
     return this.subprogramsService.update(id, updateProgramDto);
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'subprograms',
-    action: 'delete'
-  })
+  @UseRoles({ resource: 'subprograms', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.subprogramsService.remove(id);
   }

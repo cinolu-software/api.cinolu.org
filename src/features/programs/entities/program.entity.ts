@@ -10,6 +10,9 @@ export class Program extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 
+  @Column({ type: 'boolean' , nullable: true , default: false })
+  is_highlighted: boolean;
+
   @Column({ nullable: true })
   logo: string;
 

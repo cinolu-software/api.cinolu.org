@@ -7,7 +7,7 @@ config({
   path: '.env'
 });
 
-export const typeOrmOptions: DataSourceOptions & { seeds: string[] }  = {
+export const typeOrmOptions: DataSourceOptions & { seeds: string[] } = {
   type: 'mysql',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,

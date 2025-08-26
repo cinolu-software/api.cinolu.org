@@ -15,6 +15,9 @@ export class Article extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
+  @Column({ type: 'boolean' , nullable: true , default: false })
+  is_highlighted: boolean;
+
   @Column()
   summary: string;
 

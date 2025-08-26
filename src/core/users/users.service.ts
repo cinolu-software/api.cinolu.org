@@ -55,7 +55,7 @@ export class UsersService {
 
   async create(dto: CreateUserDto): Promise<User> {
     try {
-      return  await this.userRepository.save({
+      return await this.userRepository.save({
         ...dto,
         password: 'user1234',
         roles: dto.roles?.map((id) => ({ id }))
