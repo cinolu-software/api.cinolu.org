@@ -29,11 +29,14 @@ import { UseRoles } from 'nest-access-control';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Post('')
+  @UseRoles({ resource: 'users', action: 'create' })
+  create(@Body() dto: CreateUserDto): Promise<User> {
+    return this.usersService.create(dto);
+  }
+
   @Get('export/csv')
-  @UseRoles({
-    resource: 'exportUsersCSV',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'exportUsersCSV', action: 'read' })
   async exportCSV(@Query() params: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersService.exportCSV(params, res);
   }
@@ -44,38 +47,20 @@ export class UsersController {
     await this.usersService.contactUs(dto);
   }
 
-  @Post('')
-  @UseRoles({
-    resource: 'users',
-    action: 'create'
-  })
-  create(@Body() dto: CreateUserDto): Promise<User> {
-    return this.usersService.create(dto);
-  }
-
   @Get('')
-  @UseRoles({
-    resource: 'users',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'users', action: 'read' })
   findAll(@Query() params: FilterUsersDto): Promise<[User[], number]> {
     return this.usersService.findAll(params);
   }
 
   @Get(':email')
-  @UseRoles({
-    resource: 'users',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'users', action: 'read' })
   findOneByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findOneByEmail(email);
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'users',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'users', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
     return this.usersService.update(id, dto);
   }
@@ -96,10 +81,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'users',
-    action: 'delete'
-  })
+  @UseRoles({ resource: 'users', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);
   }

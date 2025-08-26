@@ -18,46 +18,31 @@ export class CommentsController {
   }
 
   @Get()
-  @UseRoles({
-    resource: 'comments',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'comments', action: 'read' })
   findAll(): Promise<Comment[]> {
     return this.commentsService.findAll();
   }
 
   @Get('article/:id')
-  @UseRoles({
-    resource: 'comments',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'comments', action: 'read' })
   findByArticle(@Param('id') id: string, @Query() dto: FilterCommentsDto): Promise<[Comment[], number]> {
     return this.commentsService.findByArticle(id, dto);
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'comments',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'comments', action: 'read' })
   findOne(@Param('id') id: string): Promise<Comment> {
     return this.commentsService.findOne(id);
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'comments',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'comments', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateCommentDto): Promise<Comment> {
     return this.commentsService.update(id, dto);
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'comments',
-    action: 'delete'
-  })
+  @UseRoles({ resource: 'comments', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.commentsService.remove(id);
   }

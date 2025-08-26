@@ -26,19 +26,13 @@ export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Post('')
-  @UseRoles({
-    resource: 'events',
-    action: 'create'
-  })
+  @UseRoles({ resource: 'events', action: 'create' })
   create(@Body() dto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(dto);
   }
 
   @Get('')
-  @UseRoles({
-    resource: 'events',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'events', action: 'read' })
   findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(queryParams);
   }
@@ -62,28 +56,19 @@ export class EventsController {
   }
 
   @Get(':id')
-  @UseRoles({
-    resource: 'events',
-    action: 'read'
-  })
+  @UseRoles({ resource: 'events', action: 'read' })
   findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOne(id);
   }
 
   @Post('publish/:id')
-  @UseRoles({
-    resource: 'events',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'events', action: 'update' })
   togglePublish(@Param('id') id: string): Promise<Event> {
     return this.eventsService.togglePublish(id);
   }
 
   @Post('cover/:id')
-  @UseRoles({
-    resource: 'events',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(
     FileInterceptor('cover', {
       storage: diskStorage({
@@ -99,37 +84,25 @@ export class EventsController {
   }
 
   @Post('cover/remove/:id')
-  @UseRoles({
-    resource: 'events',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'events', action: 'update' })
   removeCover(@Param('id') id: string): Promise<Event> {
     return this.eventsService.removeCover(id);
   }
 
   @Patch(':id')
-  @UseRoles({
-    resource: 'events',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'events', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateEventDto): Promise<Event> {
     return this.eventsService.update(id, dto);
   }
 
   @Post('restore/:id')
-  @UseRoles({
-    resource: 'events',
-    action: 'update'
-  })
+  @UseRoles({ resource: 'events', action: 'update' })
   restore(@Param('id') id: string): Promise<void> {
     return this.eventsService.restore(id);
   }
 
   @Delete(':id')
-  @UseRoles({
-    resource: 'events',
-    action: 'delete'
-  })
+  @UseRoles({ resource: 'events', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.eventsService.remove(id);
   }
