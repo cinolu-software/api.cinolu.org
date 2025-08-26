@@ -29,6 +29,18 @@ export class ArticlesService {
     }
   }
 
+  async highlight(id: string): Promise<Article> {
+    try {
+      const article = await this.findOne(id);
+      return await this.articlesRepository.save({
+        ...article,
+        is_highlighted: !article.is_highlighted
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async addImage(id: string, file: Express.Multer.File): Promise<Article> {
     try {
       const article = await this.findOne(id);
@@ -54,8 +66,7 @@ export class ArticlesService {
   async findAll(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
       const { q, page, tags } = dto;
-      const query = this.articlesRepository
-        .createQueryBuilder('a')
+      const query = this.articlesRepository.createQueryBuilder('a');
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       if (page) query.skip((+page - 1) * 30).take(30);
       if (tags && tags.length > 0) {

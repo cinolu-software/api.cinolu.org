@@ -11,6 +11,9 @@ export class Event extends BaseEntity {
   @Column()
   slug: string;
 
+  @Column({ type: 'boolean' , nullable: true , default: false })
+  is_highlighted: boolean;
+
   @Column({ nullable: true })
   cover: string;
 

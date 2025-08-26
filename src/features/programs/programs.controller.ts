@@ -83,6 +83,12 @@ export class ProgramsController {
     return this.programsService.findOne(id);
   }
 
+  @Patch('highlight/:id')
+  @UseRoles({ resource: 'programs', action: 'update' })
+  toggleHighlight(@Param('id') id: string): Promise<Program> {
+    return this.programsService.highlight(id);
+  }
+
   @Patch(':id')
   @UseRoles({ resource: 'programs', action: 'update' })
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<Program> {

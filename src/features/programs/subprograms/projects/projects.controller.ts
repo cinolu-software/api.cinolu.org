@@ -89,6 +89,12 @@ export class ProjectsController {
     return this.projectsService.removeCover(id);
   }
 
+  @Patch('highlight/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  toggleHighlight(@Param('id') id: string): Promise<Project> {
+    return this.projectsService.highlight(id);
+  }
+
   @Patch(':id')
   @UseRoles({ resource: 'projects', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<Project> {

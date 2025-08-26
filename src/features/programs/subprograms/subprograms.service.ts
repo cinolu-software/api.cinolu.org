@@ -43,6 +43,18 @@ export class SubprogramsService {
     }
   }
 
+  async highlight(id: string): Promise<Subprogram> {
+    try {
+      const subprogram = await this.findOne(id);
+      return await this.subprogramRepository.save({
+        ...subprogram,
+        is_highlighted: !subprogram.is_highlighted
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async togglePublish(id: string): Promise<Subprogram> {
     try {
       const subprogram = await this.findOne(id);

@@ -115,6 +115,18 @@ export class ProjectsService {
     }
   }
 
+  async highlight(id: string): Promise<Project> {
+    try {
+      const project = await this.findOne(id);
+      return await this.projectRepository.save({
+        ...project,
+        is_highlighted: !project.is_highlighted
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async togglePublish(id: string): Promise<Project> {
     try {
       const project = await this.findOne(id);

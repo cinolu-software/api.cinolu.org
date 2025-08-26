@@ -85,6 +85,12 @@ export class ArticlesController {
     return this.articlesService.findOne(id);
   }
 
+  @Patch('highlight/:id')
+  @UseRoles({ resource: 'blogs', action: 'update' })
+  highlight(@Param('id') id: string): Promise<Article> {
+    return this.articlesService.highlight(id);
+  }
+
   @Patch(':id')
   @UseRoles({ resource: 'blogs', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateArticleDto): Promise<Article> {

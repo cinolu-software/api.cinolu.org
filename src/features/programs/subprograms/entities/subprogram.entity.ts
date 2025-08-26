@@ -9,6 +9,9 @@ export class Subprogram extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ type: 'boolean' , nullable: true , default: false })
+  is_highlighted: boolean;
+
   @Column({ unique: true })
   slug: string;
 

@@ -52,6 +52,18 @@ export class EventsService {
     return await query.skip(skip).take(take).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
+  async highlight(id: string): Promise<Event> {
+    try {
+      const event = await this.findOne(id);
+      return await this.eventRepository.save({
+        ...event,
+        is_highlighted: !event.is_highlighted
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async togglePublish(id: string): Promise<Event> {
     try {
       const event = await this.findOne(id);
