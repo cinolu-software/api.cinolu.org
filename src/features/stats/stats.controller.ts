@@ -6,7 +6,7 @@ import { UseRoles } from 'nest-access-control';
 export class StatsController {
   constructor(private highlightsService: StatsService) {}
 
-  @Get()
+  @Get('admin')
   @UseRoles({ resource: 'stats', action: 'read' })
   async findAll(): Promise<IAdminStats> {
     return await this.highlightsService.findAdminStats();

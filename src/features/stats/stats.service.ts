@@ -36,7 +36,6 @@ export class StatsService {
       totalArticles
     ] = await Promise.all([
       queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM \`user\``),
-
       queryRunner.query(
         `
           SELECT r.label AS role, CAST(COUNT(ur.userId) AS UNSIGNED) AS count
@@ -46,7 +45,6 @@ export class StatsService {
           ORDER BY r.name
         `
       ),
-
       queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM program WHERE is_published = true`),
       queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM program WHERE is_published = false`),
       queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM subprogram WHERE is_published = true`),
