@@ -17,7 +17,8 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { RBAC_POLICY } from './core/auth/rbac-policy';
 import { SubprogramsModule } from './features/programs/subprograms/subprograms.module';
-import { HighlightModule } from './features/highlight/highlight.module';
+import { HighlightsModule } from './features/highlights/highlights.module';
+import { StatsModule } from './features/stats/stats.module';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { HighlightModule } from './features/highlight/highlight.module';
     ProgramsModule,
     VenturesModule,
     BlogModule,
-    HighlightModule
+    StatsModule,
+    HighlightsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

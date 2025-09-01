@@ -89,7 +89,7 @@ export class EventsController {
     return this.eventsService.removeCover(id);
   }
 
-  @Patch('highlight/:id')
+  @Patch('highlights/:id')
   @UseRoles({ resource: 'events', action: 'update' })
   toggleHighlight(@Param('id') id: string): Promise<Event> {
     return this.eventsService.highlight(id);

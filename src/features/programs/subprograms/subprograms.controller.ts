@@ -77,7 +77,7 @@ export class SubprogramsController {
     return this.subprogramsService.findOne(id);
   }
 
-  @Patch('highlight/:id')
+  @Patch('highlights/:id')
   @UseRoles({ resource: 'subprograms', action: 'update' })
   toggleHighlight(@Param('id') id: string): Promise<Subprogram> {
     return this.subprogramsService.highlight(id);

@@ -8,6 +8,7 @@ RBAC_POLICY.grant(Role.USER)
   .deleteOwn(['ventures', 'comments'])
   .grant(Role.STAFF)
   .readAny([
+    'stats',
     'users',
     'programs',
     'subprograms',
