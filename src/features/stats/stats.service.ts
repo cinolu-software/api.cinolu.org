@@ -1,64 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { User } from '../../core/users/entities/user.entity';
+import { Program } from '../programs/entities/program.entity';
+import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
+import { Project } from '../programs/subprograms/projects/entities/project.entity';
+import { Article } from '../blog/articles/entities/article.entity';
+import { Venture } from '../ventures/entities/venture.entity';
+import { IAdminStats } from './types/admin-stats.type';
+import { IUSerStats } from './types/user-stats.type';
 
-export interface IAdminStats {
-  totalUsers: number;
-  totalPublishedPrograms: number;
-  totalUnpublishedPrograms: number;
-  totalPublishedSubprograms: number;
-  totalUnpublishedSubprograms: number;
-  totalPublishedProjects: number;
-  totalUnpublishedProjects: number;
-  totalPublishedEvents: number;
-  totalUnpublishedEvents: number;
-  totalArticles: number;
-}
+
+
+
 @Injectable()
 export class StatsService {
   constructor(private dataSource: DataSource) {}
 
   async findAdminStats(): Promise<IAdminStats> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    try {
-      await queryRunner.connect();
-      const [
-        totalUsers,
-        totalPublishedPrograms,
-        totalUnpublishedPrograms,
-        totalPublishedSubprograms,
-        totalUnpublishedSubprograms,
-        totalPublishedProjects,
-        totalUnpublishedProjects,
-        totalPublishedEvents,
-        totalUnpublishedEvents,
-        totalArticles
-      ] = await Promise.all([
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM \`user\``),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM program WHERE is_published = true`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM program WHERE is_published = false`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM subprogram WHERE is_published = true`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM subprogram WHERE is_published = false`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM project WHERE is_published = true`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM project WHERE is_published = false`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM event WHERE is_published = true`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM event WHERE is_published = false`),
-        queryRunner.query(`SELECT CAST(COUNT(*) AS UNSIGNED) AS count FROM article`)
-      ]);
-      return {
-        totalUsers: totalUsers[0].count,
-        totalPublishedPrograms: totalPublishedPrograms[0].count,
-        totalUnpublishedPrograms: totalUnpublishedPrograms[0].count,
-        totalPublishedSubprograms: totalPublishedSubprograms[0].count,
-        totalUnpublishedSubprograms: totalUnpublishedSubprograms[0].count,
-        totalPublishedProjects: totalPublishedProjects[0].count,
-        totalUnpublishedProjects: totalUnpublishedProjects[0].count,
-        totalPublishedEvents: totalPublishedEvents[0].count,
-        totalUnpublishedEvents: totalUnpublishedEvents[0].count,
-        totalArticles: totalArticles[0].count
-      };
-    } finally {
-      await queryRunner.release();
-    }
+    const userRepository = this.dataSource.getRepository(User);
+    const programRepository = this.dataSource.getRepository(Program);
+    const subprogramRepository = this.dataSource.getRepository(Subprogram);
+    const projectRepository = this.dataSource.getRepository(Project);
+    const eventRepository = this.dataSource.getRepository(Event);
+    const articleRepository = this.dataSource.getRepository(Article);
+    const [totalUsers, totalPrograms, totalSubprograms, totalProjects, totalEvents, totalArticles] = await Promise.all([
+      userRepository.count(),
+      programRepository.count(),
+      subprogramRepository.count(),
+      projectRepository.count(),
+      eventRepository.count(),
+      articleRepository.count()
+    ]);
+    return { totalUsers, totalPrograms, totalSubprograms, totalProjects, totalEvents, totalArticles };
+  }
+
+  async findUserStats(user: User): Promise<IUSerStats>  {
+    const ventureRepository = this.dataSource.getRepository(Venture);
+    const [totalVentures] = await Promise.all([ventureRepository.count({ where: { owner: { id: user.id } } })]);
+    return { totalVentures };
   }
 }
-
