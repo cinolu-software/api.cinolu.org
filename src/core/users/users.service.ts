@@ -113,7 +113,7 @@ export class UsersService {
       }
       return await this.userRepository.save({
         ...dto,
-        referred_by: referredBy,
+        referred_by: { id: referredBy?.id },
         referral_code: this.generateRefferalCode(),
         roles: [role]
       });

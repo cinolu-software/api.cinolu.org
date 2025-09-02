@@ -32,7 +32,7 @@ export class SignUpDto {
   @MinLength(6)
   password: string;
 
-  @Match('password')
+  @Match('password', { message: 'Passwords do not match' })
   password_confirm: string;
 
   @IsOptional()
