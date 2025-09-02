@@ -107,7 +107,7 @@ export default class DbSeeder implements Seeder {
             birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
             phone_number: faker.phone.number({ style: 'human' }),
             email: generateUniqueEmail(usedEmails, () => faker.internet.email()),
-            password: bcrypt.hashSync('password1234', 10),
+            password: bcrypt.hashSync('123456', 10),
             roles: [role]
           })
         );
