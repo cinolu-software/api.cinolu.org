@@ -87,19 +87,30 @@ export class UsersService {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
+
     const query = this.userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.roles', 'roles')
-      .leftJoin('user.referrals', 'referrals')
-      .addSelect('COUNT(referrals.id)', 'referralsCount')
-      .groupBy('user.id')
-      .addGroupBy('roles.id');
+      .loadRelationCountAndMap('user.referralsCount', 'user.referrals');
     if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
-    return await query
-      .orderBy('referralsCount', 'DESC') // order by total referrals
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+    const subQuery = this.userRepository
+      .createQueryBuilder('user2')
+      .leftJoin('user2.referrals', 'referrals2')
+      .select('COUNT(referrals2.id)', 'count')
+      .where('user2.id = user.id')
+      .getQuery();
+    query.addSelect(`(${subQuery})`, 'referralsCountTemp').orderBy('referralsCountTemp', 'DESC');
+    return await query.skip(skip).take(take).getManyAndCount();
+  }
+
+  async findAllReferrals(user: User): Promise<[User[], number]> {
+    try {
+      return await this.userRepository.findAndCount({
+        where: { referred_by: { id: user.id } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async signUp(dto: SignUpDto): Promise<User> {
@@ -113,9 +124,9 @@ export class UsersService {
       }
       return await this.userRepository.save({
         ...dto,
-        referred_by: { id: referredBy?.id },
+        referred_by: referredBy ? { id: referredBy.id } : null,
         referral_code: this.generateRefferalCode(),
-        roles: [role]
+        roles: [{ id: role.id }]
       });
     } catch {
       throw new BadRequestException();
