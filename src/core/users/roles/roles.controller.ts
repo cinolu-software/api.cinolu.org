@@ -5,17 +5,10 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { FilterRolesDto } from './dto/filter-roles.dto';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../shared/decorators/public.decorator';
 
 @Controller('roles')
 export class RolesController {
   constructor(private rolesService: RolesService) {}
-
-  @Get('sign-up')
-  @Public()
-  signUpRoles(): Promise<Role[]> {
-    return this.rolesService.signUpRoles();
-  }
 
   @Post('')
   @UseRoles({ resource: 'roles', action: 'create' })

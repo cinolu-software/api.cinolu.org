@@ -37,7 +37,11 @@ export class StatsService {
 
   async findUserStats(user: User): Promise<IUSerStats>  {
     const ventureRepository = this.dataSource.getRepository(Venture);
-    const [totalVentures] = await Promise.all([ventureRepository.count({ where: { owner: { id: user.id } } })]);
-    return { totalVentures };
+    const userRepository = this.dataSource.getRepository(User);
+    const [totalVentures, referralsCount] = await Promise.all([
+      ventureRepository.count({ where: { owner: { id: user.id } } }),
+      userRepository.count({ where: { referred_by: { id: user.id } } })
+    ]);
+    return { totalVentures, referralsCount };
   }
 }

@@ -15,6 +15,7 @@ import { SignUpDto } from 'src/core/auth/dto/sign-up.dto';
 import { CreateWithGoogleDto } from 'src/core/auth/dto/sign-up-with-google.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class UsersService {
@@ -58,6 +59,7 @@ export class UsersService {
       return await this.userRepository.save({
         ...dto,
         password: 'user1234',
+        referral_code: this.generateRefferalCode(),
         roles: dto.roles?.map((id) => ({ id }))
       });
     } catch {
@@ -65,20 +67,55 @@ export class UsersService {
     }
   }
 
+  async saveRefferalCode(user: User): Promise<User> {
+    try {
+      delete user.password;
+      return await this.userRepository.save({
+        ...user,
+        referral_code: this.generateRefferalCode()
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private generateRefferalCode(): string {
+    return nanoid(12);
+  }
+
   async findAll(queryParams: FilterUsersDto): Promise<[User[], number]> {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
-    const query = this.userRepository.createQueryBuilder('user').leftJoinAndSelect('user.roles', 'roles');
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.roles', 'roles')
+      .leftJoin('user.referrals', 'referrals')
+      .addSelect('COUNT(referrals.id)', 'referralsCount')
+      .groupBy('user.id')
+      .addGroupBy('roles.id');
     if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
-    return await query.orderBy('user.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
+    return await query
+      .orderBy('referralsCount', 'DESC') // order by total referrals
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
   }
 
   async signUp(dto: SignUpDto): Promise<User> {
     try {
+      const role = await this.rolesService.findByName('user');
+      let referredBy: User | null = null;
+      if (dto.referral_code) {
+        referredBy = await this.userRepository.findOne({
+          where: { referral_code: dto.referral_code }
+        });
+      }
       return await this.userRepository.save({
         ...dto,
-        roles: dto.roles.map((id) => ({ id }))
+        referred_by: referredBy,
+        referral_code: this.generateRefferalCode(),
+        roles: [role]
       });
     } catch {
       throw new BadRequestException();
@@ -138,6 +175,7 @@ export class UsersService {
   async createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<User> {
     const newUser = await this.userRepository.save({
       ...dto,
+      referral_code: this.generateRefferalCode(),
       roles: [userRole]
     });
     return await this.findOne(newUser.id);
