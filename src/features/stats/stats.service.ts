@@ -8,6 +8,7 @@ import { Article } from '../blog/articles/entities/article.entity';
 import { Venture } from '../ventures/entities/venture.entity';
 import { IAdminStats } from './types/admin-stats.type';
 import { IUSerStats } from './types/user-stats.type';
+import { Event } from '../programs/subprograms/events/entities/event.entity';
 
 
 
