@@ -149,6 +149,7 @@ export class UsersService {
         where: { id },
         relations: ['roles']
       });
+      delete oldUser.password;
       return await this.userRepository.save({
         ...oldUser,
         ...dto,
