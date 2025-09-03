@@ -69,15 +69,10 @@ export class UsersService {
 
   async saveRefferalCode(user: User): Promise<User> {
     try {
-      const oldUser = await this.userRepository.findOneOrFail({
-        where: { id: user.id },
-        relations: ['roles']
-      });
-      delete oldUser.password;
-       return await this.userRepository.save({
-        ...oldUser,
+      await this.userRepository.update(user.id, {
         referral_code: this.generateRefferalCode()
       });
+      return await this.findByEmail(user.email);
     } catch {
       throw new BadRequestException();
     }
@@ -155,6 +150,9 @@ export class UsersService {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
         relations: ['roles']
+      });
+      user['referralsCount'] = await this.userRepository.count({
+        where: { referred_by: { id: user.id } }
       });
       const roles = user.roles.map((role) => role.name);
       return { ...user, roles } as unknown as User;
