@@ -15,6 +15,7 @@ import { SignUpDto } from 'src/core/auth/dto/sign-up.dto';
 import { CreateWithGoogleDto } from 'src/core/auth/dto/sign-up-with-google.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class UsersService {
@@ -58,6 +59,7 @@ export class UsersService {
       return await this.userRepository.save({
         ...dto,
         password: 'user1234',
+        referral_code: this.generateRefferalCode(),
         roles: dto.roles?.map((id) => ({ id }))
       });
     } catch {
@@ -65,20 +67,65 @@ export class UsersService {
     }
   }
 
+  async saveRefferalCode(user: User): Promise<User> {
+    try {
+      await this.userRepository.update(user.id, {
+        referral_code: this.generateRefferalCode()
+      });
+      return await this.findByEmail(user.email);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private generateRefferalCode(): string {
+    return nanoid(12);
+  }
+
   async findAll(queryParams: FilterUsersDto): Promise<[User[], number]> {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
-    const query = this.userRepository.createQueryBuilder('user').leftJoinAndSelect('user.roles', 'roles');
+
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .loadRelationCountAndMap('user.referralsCount', 'user.referrals');
     if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
-    return await query.orderBy('user.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
+    const subQuery = this.userRepository
+      .createQueryBuilder('user2')
+      .leftJoin('user2.referrals', 'referrals2')
+      .select('COUNT(referrals2.id)', 'count')
+      .where('user2.id = user.id')
+      .getQuery();
+    query.addSelect(`(${subQuery})`, 'referralsCountTemp').orderBy('referralsCountTemp', 'DESC');
+    return await query.skip(skip).take(take).getManyAndCount();
+  }
+
+  async findAllReferrals(user: User): Promise<[User[], number]> {
+    try {
+      return await this.userRepository.findAndCount({
+        where: { referred_by: { id: user.id } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async signUp(dto: SignUpDto): Promise<User> {
     try {
+      const role = await this.rolesService.findByName('user');
+      let referredBy: User | null = null;
+      if (dto.referral_code) {
+        referredBy = await this.userRepository.findOne({
+          where: { referral_code: dto.referral_code }
+        });
+      }
       return await this.userRepository.save({
         ...dto,
-        roles: dto.roles.map((id) => ({ id }))
+        referred_by: referredBy ? { id: referredBy.id } : null,
+        referral_code: this.generateRefferalCode(),
+        roles: [{ id: role.id }]
       });
     } catch {
       throw new BadRequestException();
@@ -103,6 +150,9 @@ export class UsersService {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
         relations: ['roles']
+      });
+      user['referralsCount'] = await this.userRepository.count({
+        where: { referred_by: { id: user.id } }
       });
       const roles = user.roles.map((role) => role.name);
       return { ...user, roles } as unknown as User;
@@ -138,6 +188,7 @@ export class UsersService {
   async createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<User> {
     const newUser = await this.userRepository.save({
       ...dto,
+      referral_code: this.generateRefferalCode(),
       roles: [userRole]
     });
     return await this.findOne(newUser.id);
@@ -149,6 +200,7 @@ export class UsersService {
         where: { id },
         relations: ['roles']
       });
+      delete oldUser.password;
       return await this.userRepository.save({
         ...oldUser,
         ...dto,

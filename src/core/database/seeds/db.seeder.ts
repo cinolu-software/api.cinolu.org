@@ -15,6 +15,7 @@ import { EventCategory } from '../../../features/programs/subprograms/events/cat
 import { ProjectCategory } from '../../../features/programs/subprograms/projects/categories/entities/category.entity';
 import { Subprogram } from '../../../features/programs/subprograms/entities/subprogram.entity';
 import { Event } from '../../../features/programs/subprograms/events/entities/event.entity';
+import { nanoid } from 'nanoid';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -84,12 +85,13 @@ export default class DbSeeder implements Seeder {
         city: faker.location.city(),
         country: faker.location.country(),
         biography: faker.lorem.paragraph(),
+        referral_code: nanoid(12),
         reason: faker.lorem.sentence(),
         gender: faker.person.sex(),
         birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
         phone_number: faker.phone.number({ style: 'human' }),
         email: 'admin@admin.com',
-        password: await bcrypt.hash('admin1234', 10),
+        password: await bcrypt.hash('123456', 10),
         roles: [findRole('admin')]
       });
 
@@ -104,6 +106,7 @@ export default class DbSeeder implements Seeder {
             biography: faker.lorem.paragraph(),
             reason: faker.lorem.sentence(),
             gender: faker.person.sex(),
+            referral_code: nanoid(12),
             birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),
             phone_number: faker.phone.number({ style: 'human' }),
             email: generateUniqueEmail(usedEmails, () => faker.internet.email()),

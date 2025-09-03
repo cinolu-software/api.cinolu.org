@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Role } from '../roles/entities/role.entity';
 import { Venture } from 'src/features/ventures/entities/venture.entity';
 import { BaseEntity } from 'src/shared/utils/abstract.entity';
@@ -43,6 +43,15 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   reason: string;
+
+  @Column({ unique: true, nullable: true })
+  referral_code: string;
+
+  @ManyToOne(() => User, (user) => user.referrals, { nullable: true })
+  referred_by: User;
+
+  @OneToMany(() => User, (user) => user.referred_by, { nullable: true })
+  referrals: User[];
 
   @OneToMany(() => Venture, (venture) => venture.owner)
   ventures: Venture[];

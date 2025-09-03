@@ -15,7 +15,7 @@ export interface HighlightedItems {
 }
 
 @Injectable()
-export class HighlightService {
+export class HighlightsService {
   constructor(private dataSource: DataSource) {}
 
   async findAll(): Promise<HighlightedItems> {

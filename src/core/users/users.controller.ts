@@ -29,6 +29,16 @@ import { UseRoles } from 'nest-access-control';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Post('generate/referralCode')
+  async generateRefferalLink(@CurrentUser() user: User): Promise<User> {
+    return this.usersService.saveRefferalCode(user);
+  }
+
+  @Post('find-referrals')
+  async findAllReferrals(@CurrentUser() user: User): Promise<[User[], number]> {
+    return this.usersService.findAllReferrals(user);
+  }
+
   @Post('')
   @UseRoles({ resource: 'users', action: 'create' })
   create(@Body() dto: CreateUserDto): Promise<User> {

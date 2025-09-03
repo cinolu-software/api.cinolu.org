@@ -5,7 +5,4 @@ import { Column, Entity } from 'typeorm';
 export class Role extends BaseEntity {
   @Column({ unique: true })
   name: string;
-
-  @Column({ nullable: true })
-  label: string;
 }
