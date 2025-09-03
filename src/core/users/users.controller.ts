@@ -29,7 +29,7 @@ import { UseRoles } from 'nest-access-control';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post('generate/refferalCode')
+  @Post('generate/referralCode')
   async generateRefferalLink(@CurrentUser() user: User): Promise<User> {
     return this.usersService.saveRefferalCode(user);
   }
