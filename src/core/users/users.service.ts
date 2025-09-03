@@ -69,9 +69,13 @@ export class UsersService {
 
   async saveRefferalCode(user: User): Promise<User> {
     try {
-      delete user.password;
-      return await this.userRepository.save({
-        ...user,
+      const oldUser = await this.userRepository.findOneOrFail({
+        where: { id: user.id },
+        relations: ['roles']
+      });
+      delete oldUser.password;
+       return await this.userRepository.save({
+        ...oldUser,
         referral_code: this.generateRefferalCode()
       });
     } catch {
