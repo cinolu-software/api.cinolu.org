@@ -78,7 +78,10 @@ export class ProgramsService {
 
   async findAllPaginated(queryParams: FilterProgramsDto): Promise<[Program[], number]> {
     const { page = 1, q } = queryParams;
-    const query = this.programRepository.createQueryBuilder('p').orderBy('p.updated_at', 'DESC');
+    const query = this.programRepository
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.categories', 'categories')
+      .orderBy('p.updated_at', 'DESC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     return await query
       .skip((+page - 1) * 40)
@@ -92,8 +95,7 @@ export class ProgramsService {
         where: { id },
         relations: ['categories']
       });
-    } catch (e) {
-      console.error(e);
+    } catch {
       throw new NotFoundException();
     }
   }
@@ -114,7 +116,7 @@ export class ProgramsService {
       return await this.programRepository.save({
         ...program,
         ...dto,
-        categories: dto?.categories ? dto.categories.map((id) => ({ id })) : program.categories
+        categories: dto.categories.map((id) => ({ id }))
       });
     } catch {
       throw new BadRequestException();
