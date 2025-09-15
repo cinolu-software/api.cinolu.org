@@ -29,7 +29,7 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      take: 5
+      relations: ['categories', 'subprograms'],
     });
   }
 
@@ -44,7 +44,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { slug },
-        relations: ['subprograms']
+        relations: ['categories', 'subprograms']
       });
     } catch {
       throw new NotFoundException();
