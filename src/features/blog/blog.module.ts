@@ -4,7 +4,6 @@ import { TagsModule } from './tags/tags.module';
 import { CommentsModule } from './comments/comments.module';
 
 @Module({
-
   imports: [ArticlesModule, TagsModule, CommentsModule]
 })
 export class BlogModule {}

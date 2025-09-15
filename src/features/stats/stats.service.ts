@@ -10,9 +10,6 @@ import { IAdminStats } from './types/admin-stats.type';
 import { IUSerStats } from './types/user-stats.type';
 import { Event } from '../programs/subprograms/events/entities/event.entity';
 
-
-
-
 @Injectable()
 export class StatsService {
   constructor(private dataSource: DataSource) {}
@@ -35,7 +32,7 @@ export class StatsService {
     return { totalUsers, totalPrograms, totalSubprograms, totalProjects, totalEvents, totalArticles };
   }
 
-  async findUserStats(user: User): Promise<IUSerStats>  {
+  async findUserStats(user: User): Promise<IUSerStats> {
     const ventureRepository = this.dataSource.getRepository(Venture);
     const userRepository = this.dataSource.getRepository(User);
     const [totalVentures, referralsCount] = await Promise.all([

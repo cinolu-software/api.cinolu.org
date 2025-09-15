@@ -4,9 +4,10 @@ import { ProgramsController } from './programs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { ProgramSubscriber } from './subscribers/program.subscriber';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Program])],
+  imports: [TypeOrmModule.forFeature([Program]), CategoriesModule],
   controllers: [ProgramsController],
   providers: [ProgramsService, ProgramSubscriber]
 })
