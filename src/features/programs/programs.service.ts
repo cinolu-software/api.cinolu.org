@@ -29,14 +29,14 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      relations: ['categories', 'subprograms'],
+      relations: ['categories', 'subprograms']
     });
   }
 
   async findAll(): Promise<Program[]> {
     return await this.programRepository.find({
       where: { is_published: true },
-      order: { updated_at: 'DESC' },
+      order: { updated_at: 'DESC' }
     });
   }
 
@@ -91,7 +91,8 @@ export class ProgramsService {
         where: { id },
         relations: ['categories']
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       throw new NotFoundException();
     }
   }
