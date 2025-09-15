@@ -6,4 +6,7 @@ export class CreateProgramDto {
 
   @IsNotEmpty()
   description: string;
+
+  @IsNotEmpty()
+  categories: string[];
 }

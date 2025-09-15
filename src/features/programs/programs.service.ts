@@ -17,7 +17,8 @@ export class ProgramsService {
   async create(dto: CreateProgramDto): Promise<Program> {
     try {
       return await this.programRepository.save({
-        ...dto
+        ...dto,
+        categories: dto.categories.map((id) => ({ id }))
       });
     } catch {
       throw new BadRequestException();
@@ -87,7 +88,8 @@ export class ProgramsService {
   async findOne(id: string): Promise<Program> {
     try {
       return await this.programRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['categories']
       });
     } catch {
       throw new NotFoundException();
@@ -109,7 +111,8 @@ export class ProgramsService {
       const program = await this.findOne(id);
       return await this.programRepository.save({
         ...program,
-        ...dto
+        ...dto,
+        categories: dto?.categories ? dto.categories.map((id) => ({ id })) : program.categories
       });
     } catch {
       throw new BadRequestException();
