@@ -31,10 +31,10 @@ export class ProgramsController {
     return this.programsService.create(dto);
   }
 
-  @Get('find-recent')
+  @Get('find-published')
   @Public()
-  findRecent(): Promise<Program[]> {
-    return this.programsService.findRecent();
+  findPublished(): Promise<Program[]> {
+    return this.programsService.findPublished();
   }
 
   @Post('publish/:id')

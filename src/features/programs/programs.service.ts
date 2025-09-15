@@ -25,7 +25,7 @@ export class ProgramsService {
     }
   }
 
-  async findRecent(): Promise<Program[]> {
+  async findPublished(): Promise<Program[]> {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
@@ -36,7 +36,7 @@ export class ProgramsService {
   async findAll(): Promise<Program[]> {
     return await this.programRepository.find({
       where: { is_published: true },
-      order: { updated_at: 'DESC' }
+      order: { updated_at: 'DESC' },
     });
   }
 
