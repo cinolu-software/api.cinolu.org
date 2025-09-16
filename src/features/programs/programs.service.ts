@@ -18,7 +18,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.save({
         ...dto,
-        categories: dto.categories.map((id) => ({ id }))
+        category: { id: dto.category }
       });
     } catch {
       throw new BadRequestException();
@@ -116,7 +116,7 @@ export class ProgramsService {
       return await this.programRepository.save({
         ...program,
         ...dto,
-        categories: dto.categories.map((id) => ({ id }))
+        category: { id: dto.category }
       });
     } catch {
       throw new BadRequestException();

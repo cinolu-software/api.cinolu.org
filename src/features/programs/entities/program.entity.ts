@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../shared/utils/abstract.entity';
 import { Subprogram } from '../subprograms/entities/subprogram.entity';
 import { ProgramCategory } from '../categories/entities/category.entity';
@@ -26,7 +26,7 @@ export class Program extends BaseEntity {
   @OneToMany(() => Subprogram, (sp) => sp.program)
   subprograms: Subprogram[];
 
-  @ManyToMany(() => ProgramCategory, (category) => category.programs)
-  @JoinTable()
-  categories: ProgramCategory[];
+  @OneToMany(() => ProgramCategory, (category) => category.programs)
+  @JoinColumn()
+  category: ProgramCategory;
 }

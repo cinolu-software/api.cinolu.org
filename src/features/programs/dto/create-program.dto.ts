@@ -8,5 +8,5 @@ export class CreateProgramDto {
   description: string;
 
   @IsNotEmpty()
-  categories: string[];
+  category: string;
 }
