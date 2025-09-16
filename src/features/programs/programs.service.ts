@@ -118,7 +118,8 @@ export class ProgramsService {
         ...dto,
         category: { id: dto.category }
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       throw new BadRequestException();
     }
   }

@@ -1,10 +1,13 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ProgramCategories1758009633310 implements MigrationInterface {
-    name = 'ProgramCategories1758009633310'
+export class ProgramCategories1758010835030 implements MigrationInterface {
+    name = 'ProgramCategories1758010835030'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE \`program_category\` DROP FOREIGN KEY \`FK_e93599e259c846159fdb6349466\``);
         await queryRunner.query(`ALTER TABLE \`role\` DROP COLUMN \`label\``);
+        await queryRunner.query(`ALTER TABLE \`program_category\` DROP COLUMN \`programsId\``);
+        await queryRunner.query(`ALTER TABLE \`program\` ADD \`categoryId\` varchar(36) NULL`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD \`referral_code\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD UNIQUE INDEX \`IDX_b3a2ab3d9733917ef876376be3\` (\`referral_code\`)`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD \`referredById\` varchar(36) NULL`);
@@ -29,9 +32,7 @@ export class ProgramCategories1758009633310 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`event\` ADD \`report\` json NULL`);
         await queryRunner.query(`ALTER TABLE \`event\` CHANGE \`form_link\` \`form_link\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`event\` CHANGE \`programId\` \`programId\` varchar(36) NULL`);
-        await queryRunner.query(`ALTER TABLE \`program_category\` DROP FOREIGN KEY \`FK_e93599e259c846159fdb6349466\``);
         await queryRunner.query(`ALTER TABLE \`program_category\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
-        await queryRunner.query(`ALTER TABLE \`program_category\` CHANGE \`programsId\` \`programsId\` varchar(36) NULL`);
         await queryRunner.query(`ALTER TABLE \`program\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`program\` CHANGE \`logo\` \`logo\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`subprogram\` DROP FOREIGN KEY \`FK_40fa1dbc3904326965f9f0f5096\``);
@@ -73,7 +74,7 @@ export class ProgramCategories1758009633310 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`comment\` ADD CONSTRAINT \`FK_276779da446413a0d79598d4fbd\` FOREIGN KEY (\`authorId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`article\` ADD CONSTRAINT \`FK_a9c5f4ec6cceb1604b4a3c84c87\` FOREIGN KEY (\`authorId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`event\` ADD CONSTRAINT \`FK_e2bd221f0e1dcb7bf8174b6ba59\` FOREIGN KEY (\`programId\`) REFERENCES \`subprogram\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE \`program_category\` ADD CONSTRAINT \`FK_e93599e259c846159fdb6349466\` FOREIGN KEY (\`programsId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`program\` ADD CONSTRAINT \`FK_509990a43111b507a484116e0e5\` FOREIGN KEY (\`categoryId\`) REFERENCES \`program_category\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`subprogram\` ADD CONSTRAINT \`FK_40fa1dbc3904326965f9f0f5096\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`project\` ADD CONSTRAINT \`FK_d4774e6a2f0abb35049d3850e8f\` FOREIGN KEY (\`programId\`) REFERENCES \`subprogram\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD CONSTRAINT \`FK_adc492faf309ebf60ca6425e183\` FOREIGN KEY (\`referredById\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -85,7 +86,7 @@ export class ProgramCategories1758009633310 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`user\` DROP FOREIGN KEY \`FK_adc492faf309ebf60ca6425e183\``);
         await queryRunner.query(`ALTER TABLE \`project\` DROP FOREIGN KEY \`FK_d4774e6a2f0abb35049d3850e8f\``);
         await queryRunner.query(`ALTER TABLE \`subprogram\` DROP FOREIGN KEY \`FK_40fa1dbc3904326965f9f0f5096\``);
-        await queryRunner.query(`ALTER TABLE \`program_category\` DROP FOREIGN KEY \`FK_e93599e259c846159fdb6349466\``);
+        await queryRunner.query(`ALTER TABLE \`program\` DROP FOREIGN KEY \`FK_509990a43111b507a484116e0e5\``);
         await queryRunner.query(`ALTER TABLE \`event\` DROP FOREIGN KEY \`FK_e2bd221f0e1dcb7bf8174b6ba59\``);
         await queryRunner.query(`ALTER TABLE \`article\` DROP FOREIGN KEY \`FK_a9c5f4ec6cceb1604b4a3c84c87\``);
         await queryRunner.query(`ALTER TABLE \`comment\` DROP FOREIGN KEY \`FK_276779da446413a0d79598d4fbd\``);
@@ -127,9 +128,7 @@ export class ProgramCategories1758009633310 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`subprogram\` ADD CONSTRAINT \`FK_40fa1dbc3904326965f9f0f5096\` FOREIGN KEY (\`programId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`program\` CHANGE \`logo\` \`logo\` varchar(255) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`program\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
-        await queryRunner.query(`ALTER TABLE \`program_category\` CHANGE \`programsId\` \`programsId\` varchar(36) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`program_category\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
-        await queryRunner.query(`ALTER TABLE \`program_category\` ADD CONSTRAINT \`FK_e93599e259c846159fdb6349466\` FOREIGN KEY (\`programsId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`event\` CHANGE \`programId\` \`programId\` varchar(36) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`event\` CHANGE \`form_link\` \`form_link\` varchar(255) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`event\` DROP COLUMN \`report\``);
@@ -154,7 +153,10 @@ export class ProgramCategories1758009633310 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`user\` DROP COLUMN \`referredById\``);
         await queryRunner.query(`ALTER TABLE \`user\` DROP INDEX \`IDX_b3a2ab3d9733917ef876376be3\``);
         await queryRunner.query(`ALTER TABLE \`user\` DROP COLUMN \`referral_code\``);
+        await queryRunner.query(`ALTER TABLE \`program\` DROP COLUMN \`categoryId\``);
+        await queryRunner.query(`ALTER TABLE \`program_category\` ADD \`programsId\` varchar(36) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`role\` ADD \`label\` varchar(255) NULL DEFAULT 'NULL'`);
+        await queryRunner.query(`ALTER TABLE \`program_category\` ADD CONSTRAINT \`FK_e93599e259c846159fdb6349466\` FOREIGN KEY (\`programsId\`) REFERENCES \`program\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
 
 }
