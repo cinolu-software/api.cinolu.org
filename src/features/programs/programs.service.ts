@@ -29,7 +29,7 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      relations: ['categories', 'subprograms']
+      relations: ['category', 'subprograms']
     });
   }
 
@@ -37,7 +37,7 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      relations: ['categories']
+      relations: ['category']
     });
   }
 
@@ -45,7 +45,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'subprograms']
+        relations: ['category', 'subprograms']
       });
     } catch {
       throw new NotFoundException();
@@ -80,7 +80,7 @@ export class ProgramsService {
     const { page = 1, q } = queryParams;
     const query = this.programRepository
       .createQueryBuilder('p')
-      .leftJoinAndSelect('p.categories', 'categories')
+      .leftJoinAndSelect('p.category', 'category')
       .orderBy('p.updated_at', 'DESC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     return await query
@@ -93,7 +93,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['categories']
+        relations: ['category']
       });
     } catch {
       throw new NotFoundException();
