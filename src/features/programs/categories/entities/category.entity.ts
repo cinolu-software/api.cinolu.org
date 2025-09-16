@@ -7,6 +7,6 @@ export class ProgramCategory extends BaseEntity {
   @Column()
   name: string;
 
-  @ManyToOne(() => Program, (p) => p.categories)
+  @ManyToOne(() => Program, (p) => p.category)
   programs: Program[];
 }
