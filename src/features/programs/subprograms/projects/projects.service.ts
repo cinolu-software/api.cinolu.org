@@ -6,12 +6,14 @@ import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
+import { GalleriesService } from '../../../galleries/galleries.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
-    private projectRepository: Repository<Project>
+    private projectRepository: Repository<Project>,
+    private galleriesService: GalleriesService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -32,6 +34,19 @@ export class ProjectsService {
       where: { name }
     });
     if (project) throw new BadRequestException();
+  }
+
+  async addImages(id: string, files: Express.Multer.File[]): Promise<Project> {
+    try {
+      const project = await this.findOne(id);
+      const imgs = await this.galleriesService.uploadImages(files);
+      return await this.projectRepository.save({
+        ...project,
+        images: [...project.gallery, ...imgs]
+      });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
@@ -108,7 +123,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'categories']
+        relations: ['program', 'categories', 'gallery']
       });
     } catch {
       throw new BadRequestException();

@@ -19,6 +19,7 @@ import { RBAC_POLICY } from './core/auth/rbac-policy';
 import { SubprogramsModule } from './features/programs/subprograms/subprograms.module';
 import { HighlightsModule } from './features/highlights/highlights.module';
 import { StatsModule } from './features/stats/stats.module';
+import { GalleriesModule } from './features/galleries/galleries.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { StatsModule } from './features/stats/stats.module';
     VenturesModule,
     BlogModule,
     StatsModule,
-    HighlightsModule
+    HighlightsModule,
+    GalleriesModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

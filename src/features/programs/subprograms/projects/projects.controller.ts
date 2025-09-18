@@ -8,9 +8,10 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Query
+  Query,
+  UploadedFiles
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -81,6 +82,23 @@ export class ProjectsController {
   )
   addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
     return this.projectsService.addCover(id, file);
+  }
+
+
+  @Post('images/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  @UseInterceptors(
+    FilesInterceptor('images', 5, {
+      storage: diskStorage({
+        destination: './uploads/galleries',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Project> {
+    return this.projectsService.addImages(id, files);
   }
 
   @Post('cover/remove/:id')

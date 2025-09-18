@@ -8,13 +8,14 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Query
+  Query,
+  UploadedFiles
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { FilterEventsDto } from './dto/filter-events.dto';
@@ -81,6 +82,22 @@ export class EventsController {
   )
   addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
     return this.eventsService.addCover(id, file);
+  }
+
+  @Post('images/:id')
+  @UseRoles({ resource: 'events', action: 'update' })
+  @UseInterceptors(
+    FilesInterceptor('images', 5,{
+      storage: diskStorage({
+        destination: './uploads/galleries',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Event> {
+    return this.eventsService.addImages(id, files);
   }
 
   @Post('cover/remove/:id')

@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../../../shared/utils/abstract.entity';
 import { Subprogram } from '../../entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
+import { Gallery } from '../../../../galleries/entities/gallery.entity';
 
 @Entity()
 export class Event extends BaseEntity {
@@ -11,7 +12,7 @@ export class Event extends BaseEntity {
   @Column()
   slug: string;
 
-  @Column({ type: 'boolean' , nullable: true , default: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   is_highlighted: boolean;
 
   @Column({ nullable: true })
@@ -45,4 +46,7 @@ export class Event extends BaseEntity {
   @ManyToMany(() => EventCategory, (category) => category.event)
   @JoinTable()
   categories: EventCategory[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.project)
+  gallery: Gallery[];
 }

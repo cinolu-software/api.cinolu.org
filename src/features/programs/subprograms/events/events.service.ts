@@ -6,12 +6,14 @@ import { Event } from './entities/event.entity';
 import { Repository } from 'typeorm';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import * as fs from 'fs-extra';
+import { GalleriesService } from '../../../galleries/galleries.service';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(Event)
-    private eventRepository: Repository<Event>
+    private eventRepository: Repository<Event>,
+    private galleriesService: GalleriesService
   ) {}
 
   async create(dto: CreateEventDto): Promise<Event> {
@@ -37,6 +39,19 @@ export class EventsService {
     if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(take).getManyAndCount();
+  }
+
+  async addImages(id: string, files: Express.Multer.File[]): Promise<Event> {
+    try {
+      const event = await this.findOne(id);
+      const images = await this.galleriesService.uploadImages(files);
+      return await this.eventRepository.save({
+        ...event,
+        images: [...event.gallery, ...images]
+      });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findPublished(queryParams: FilterEventsDto): Promise<[Event[], number]> {
@@ -124,7 +139,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program']
+        relations: ['categories', 'program', 'gallery']
       });
     } catch {
       throw new BadRequestException();

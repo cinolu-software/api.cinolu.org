@@ -67,7 +67,8 @@ RBAC_POLICY.grant(Role.USER)
     'projectCategories',
     'projects',
     'blogs',
-    'ventures'
+    'ventures',
+    'galleries'
   ])
   .grant(Role.ADMIN)
   .extend(Role.STAFF);

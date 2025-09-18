@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../../../shared/utils/abstract.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
 import { Subprogram } from '../../entities/subprogram.entity';
+import { Gallery } from '../../../../galleries/entities/gallery.entity';
 
 @Entity()
 export class Project extends BaseEntity {
@@ -42,4 +43,7 @@ export class Project extends BaseEntity {
   @ManyToMany(() => ProjectCategory, (category) => category.projects)
   @JoinTable()
   categories: ProjectCategory[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.project)
+  gallery: Gallery[];
 }
