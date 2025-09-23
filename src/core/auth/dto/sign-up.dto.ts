@@ -15,19 +15,10 @@ export class SignUpDto {
   gender: string;
 
   @IsNotEmpty()
-  city: string;
-
-  @IsNotEmpty()
   birth_date: Date;
 
   @IsNotEmpty()
   country: string;
-
-  @IsOptional()
-  reason: string;
-
-  @IsOptional()
-  biography: string;
 
   @MinLength(6)
   password: string;
