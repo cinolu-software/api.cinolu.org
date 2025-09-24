@@ -7,6 +7,7 @@ import { User } from 'src/core/users/entities/user.entity';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
 import { UseRoles } from 'nest-access-control';
+import { Public } from '../../../shared/decorators/public.decorator';
 
 @Controller('comments')
 export class CommentsController {
@@ -24,7 +25,7 @@ export class CommentsController {
   }
 
   @Get('article/:id')
-  @UseRoles({ resource: 'comments', action: 'read' })
+  @Public()
   findByArticle(@Param('id') id: string, @Query() dto: FilterCommentsDto): Promise<[Comment[], number]> {
     return this.commentsService.findByArticle(id, dto);
   }
