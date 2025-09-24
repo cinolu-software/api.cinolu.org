@@ -101,7 +101,7 @@ export class ArticlesService {
     try {
       return await this.articlesRepository.findOneOrFail({
         where: { slug },
-        relations: ['tags', 'comments', 'author']
+        relations: ['tags', 'author']
       });
     } catch {
       throw new BadRequestException();
@@ -118,7 +118,7 @@ export class ArticlesService {
     try {
       return await this.articlesRepository.findOneOrFail({
         where: { id },
-        relations: ['tags', 'comments', 'author']
+        relations: ['tags', 'author']
       });
     } catch {
       throw new BadRequestException();
