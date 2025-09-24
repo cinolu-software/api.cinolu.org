@@ -16,12 +16,12 @@ export class CommentsService {
 
   async create(dto: CreateCommentDto, user: User): Promise<Comment> {
     try {
-      const comment = this.commentsRepository.create({
+      const comment = await this.commentsRepository.save({
         ...dto,
         article: { id: dto.articleId },
         author: user
       });
-      return await this.commentsRepository.save(comment);
+      return await this.findOne(comment.id);
     } catch {
       throw new BadRequestException();
     }
@@ -49,7 +49,8 @@ export class CommentsService {
   async findOne(id: string): Promise<Comment> {
     try {
       return await this.commentsRepository.findOne({
-        where: { id }
+        where: { id },
+        relations: ['author']
       });
     } catch {
       throw new NotFoundException();
