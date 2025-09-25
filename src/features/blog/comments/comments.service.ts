@@ -31,11 +31,11 @@ export class CommentsService {
     return await this.commentsRepository.find();
   }
 
-  async findByArticle(id: string, dto: FilterCommentsDto): Promise<[Comment[], number]> {
+  async findByArticle(slug: string, dto: FilterCommentsDto): Promise<[Comment[], number]> {
     try {
       const { page = 1 } = dto;
       return await this.commentsRepository.findAndCount({
-        where: { article: { id } },
+        where: { article: { slug } },
         relations: ['author'],
         order: { created_at: 'DESC' },
         skip: (+page - 1) * 20,

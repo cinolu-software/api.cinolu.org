@@ -24,10 +24,10 @@ export class CommentsController {
     return this.commentsService.findAll();
   }
 
-  @Get('article/:id')
+  @Get('article/:slug')
   @Public()
-  findByArticle(@Param('id') id: string, @Query() dto: FilterCommentsDto): Promise<[Comment[], number]> {
-    return this.commentsService.findByArticle(id, dto);
+  findByArticle(@Param('slug') slug: string, @Query() dto: FilterCommentsDto): Promise<[Comment[], number]> {
+    return this.commentsService.findByArticle(slug, dto);
   }
 
   @Get(':id')
