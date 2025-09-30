@@ -8,13 +8,14 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
-  Query
+  Query,
+  UploadedFiles
 } from '@nestjs/common';
 import { VenturesService } from './ventures.service';
 import { CreateVentureDto } from './dto/create-venture.dto';
 import { UpdateVentureDto } from './dto/update-venture.dto';
 import { Venture } from './entities/venture.entity';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
@@ -51,6 +52,23 @@ export class VenturesController {
   @Get('by-user')
   findByUser(@Query('page') page: string, @CurrentUser() user: User): Promise<[Venture[], number]> {
     return this.venturesService.findByUser(page, user);
+  }
+
+
+  @Post('images/:id')
+  @UseRoles({ resource: 'ventures', action: 'update' })
+  @UseInterceptors(
+    FilesInterceptor('images', 5,{
+      storage: diskStorage({
+        destination: './uploads/galleries',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Venture> {
+    return this.venturesService.addImages(id, files);
   }
 
   @Post('add-logo/:id')

@@ -7,12 +7,14 @@ import { Venture } from './entities/venture.entity';
 import * as fs from 'fs-extra';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
+import { GalleriesService } from '../galleries/galleries.service';
 
 @Injectable()
 export class VenturesService {
   constructor(
     @InjectRepository(Venture)
-    private ventureRepository: Repository<Venture>
+    private ventureRepository: Repository<Venture>,
+    private galleriesService: GalleriesService,
   ) {}
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
@@ -54,6 +56,20 @@ export class VenturesService {
       throw new NotFoundException();
     }
   }
+
+  async addImages(id: string, files: Express.Multer.File[]): Promise<Venture> {
+    try {
+      const venture = await this.findOne(id);
+      const gallery = await this.galleriesService.uploadImages(files);
+      return await this.ventureRepository.save({
+        ...venture,
+        gallery: [...venture.gallery, ...gallery]
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
 
   async findAll(queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
     const { page = 1, q } = queryParams;

@@ -1,6 +1,8 @@
 import { User } from 'src/core/users/entities/user.entity';
 import { BaseEntity } from 'src/shared/utils/abstract.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Product } from '../products/entities/product.entity';
+import { Gallery } from '../../galleries/entities/gallery.entity';
 
 @Entity()
 export class Venture extends BaseEntity {
@@ -55,4 +57,10 @@ export class Venture extends BaseEntity {
   @ManyToOne(() => User, (user) => user.ventures)
   @JoinColumn()
   owner: User;
+
+  @OneToMany(() => Product, (product) => product.venture)
+  products: Product[];
+
+  @OneToMany(() => Gallery, (gallery) => gallery.venture)
+  gallery: Gallery[];
 }
