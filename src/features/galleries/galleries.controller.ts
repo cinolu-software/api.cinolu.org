@@ -1,4 +1,4 @@
-import { Controller, Delete, Get } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { GalleriesService } from './galleries.service';
 import { Public } from '../../shared/decorators/public.decorator';
 import { Gallery } from './entities/gallery.entity';
@@ -16,7 +16,7 @@ export class GalleriesController {
 
   @Delete(':id')
   @UseRoles({ resource: 'galleries', action: 'delete' })
-  remove(id: string): Promise<void> {
+  remove(@Param('id') id: string): Promise<void> {
     return this.galleriesService.remove(id);
   }
 }
