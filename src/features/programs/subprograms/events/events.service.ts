@@ -128,7 +128,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program']
+        relations: ['categories', 'program', 'gallery']
       });
     } catch {
       throw new BadRequestException();
@@ -139,7 +139,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program', 'gallery']
+        relations: ['categories', 'program']
       });
     } catch {
       throw new BadRequestException();
