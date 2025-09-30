@@ -44,10 +44,10 @@ export class EventsService {
   async addImages(id: string, files: Express.Multer.File[]): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      const images = await this.galleriesService.uploadImages(files);
+      const gallery = await this.galleriesService.uploadImages(files);
       return await this.eventRepository.save({
         ...event,
-        images: [...event.gallery, ...images]
+        gallery: [...event.gallery, ...gallery]
       });
     } catch {
       throw new BadRequestException();
