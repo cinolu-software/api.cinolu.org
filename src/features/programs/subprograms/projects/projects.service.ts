@@ -39,10 +39,10 @@ export class ProjectsService {
   async addImages(id: string, files: Express.Multer.File[]): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      const imgs = await this.galleriesService.uploadImages(files);
+      const gallery = await this.galleriesService.uploadImages(files);
       return await this.projectRepository.save({
         ...project,
-        images: [...project.gallery, ...imgs]
+        gallery: [...project.gallery, ...gallery]
       });
     } catch {
       throw new BadRequestException();
