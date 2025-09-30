@@ -8,6 +8,7 @@ RBAC_POLICY.grant(Role.USER)
   .deleteOwn(['ventures', 'comments'])
   .grant(Role.STAFF)
   .readAny([
+    'products',
     'stats',
     'users',
     'programs',
@@ -25,6 +26,7 @@ RBAC_POLICY.grant(Role.USER)
     'exportUsersCSV'
   ])
   .createAny([
+    'products',
     'users',
     'programs',
     'comments',
@@ -39,6 +41,7 @@ RBAC_POLICY.grant(Role.USER)
     'blogs'
   ])
   .updateAny([
+    'products',
     'users',
     'programs',
     'subprograms',
@@ -55,6 +58,7 @@ RBAC_POLICY.grant(Role.USER)
     'publishVenture'
   ])
   .deleteAny([
+    'products',
     'users',
     'programs',
     'subprograms',

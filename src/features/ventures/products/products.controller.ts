@@ -10,11 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Controller('products')
 export class ProductsController {
-  constructor(
-    private  productsService: ProductsService,
-  ) {}
+  constructor(private productsService: ProductsService) {}
 
   @Post()
+  @UseRoles({ resource: 'products', action: 'create' })
   create(@Body() dto: CreateProductDto): Promise<Product> {
     return this.productsService.create(dto);
   }
@@ -22,7 +21,7 @@ export class ProductsController {
   @Post('images/:id')
   @UseRoles({ resource: 'products', action: 'update' })
   @UseInterceptors(
-    FilesInterceptor('images', 5,{
+    FilesInterceptor('images', 5, {
       storage: diskStorage({
         destination: './uploads/galleries',
         filename: function (_req, file, cb) {
@@ -36,21 +35,25 @@ export class ProductsController {
   }
 
   @Get('venture/:id')
+  @UseRoles({ resource: 'products', action: 'read' })
   findByVenture(@Param('id') id: string): Promise<Product[]> {
     return this.productsService.findByVenture(id);
   }
 
   @Get(':id')
+  @UseRoles({ resource: 'products', action: 'read' })
   findOne(@Param('id') id: string): Promise<Product> {
     return this.productsService.findOne(id);
   }
 
   @Patch(':id')
+  @UseRoles({ resource: 'products', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
+  @UseRoles({ resource: 'products', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.productsService.remove(id);
   }
