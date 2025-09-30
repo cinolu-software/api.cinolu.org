@@ -41,9 +41,8 @@ export class ProductsService {
   async findByVenture(ventureId: string): Promise<Product[]> {
     try {
       return await this.productsRepository.find({
-        where: {
-          venture: { id: ventureId }
-        },
+        where: { venture: { id: ventureId } },
+        relations: ['gallery'],
         order: { created_at: 'DESC' }
       });
     } catch {
@@ -55,7 +54,7 @@ export class ProductsService {
     try {
       return await this.productsRepository.findOneOrFail({
         where: { id },
-        relations: { venture: true }
+        relations: ['gallery']
       });
     } catch {
       throw new NotFoundException();
