@@ -57,13 +57,13 @@ export class VenturesService {
     }
   }
 
-  async addImages(id: string, files: Express.Multer.File[]): Promise<Venture> {
+  async addImages(id: string, file: Express.Multer.File): Promise<Venture> {
     try {
       const venture = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImages(files);
+      const image = await this.galleriesService.uploadImage(file);
       return await this.ventureRepository.save({
         ...venture,
-        gallery: [...venture.gallery, ...gallery]
+        gallery: [...venture.gallery, image]
       });
     } catch {
       throw new BadRequestException();

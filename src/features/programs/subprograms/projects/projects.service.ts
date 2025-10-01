@@ -39,7 +39,7 @@ export class ProjectsService {
   async addImage(id: string, file: Express.Multer.File): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImages(file);
+      const gallery = await this.galleriesService.uploadImage(file);
       return await this.projectRepository.save({
         ...project,
         gallery: [...project.gallery, gallery]

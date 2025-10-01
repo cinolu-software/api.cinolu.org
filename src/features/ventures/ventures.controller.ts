@@ -8,14 +8,13 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
-  Query,
-  UploadedFiles
+  Query
 } from '@nestjs/common';
 import { VenturesService } from './ventures.service';
 import { CreateVentureDto } from './dto/create-venture.dto';
 import { UpdateVentureDto } from './dto/update-venture.dto';
 import { Venture } from './entities/venture.entity';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
@@ -44,7 +43,7 @@ export class VenturesController {
   }
 
   @Patch('toggle-publish/:slug')
-  @UseRoles({ resource: 'publishVenture', action: 'update', possession: 'any' })
+  @UseRoles({ resource: 'publishVenture', action: 'update' })
   togglePublish(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.togglePublish(slug);
   }
@@ -54,11 +53,10 @@ export class VenturesController {
     return this.venturesService.findByUser(page, user);
   }
 
-
-  @Post('images/:id')
+  @Post('gallery/:id')
   @UseRoles({ resource: 'ventures', action: 'update' })
   @UseInterceptors(
-    FilesInterceptor('images', 5,{
+    FileInterceptor('image', {
       storage: diskStorage({
         destination: './uploads/galleries',
         filename: function (_req, file, cb) {
@@ -67,8 +65,8 @@ export class VenturesController {
       })
     })
   )
-  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Venture> {
-    return this.venturesService.addImages(id, files);
+  addImages(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
+    return this.venturesService.addImages(id, file);
   }
 
   @Post('add-logo/:id')

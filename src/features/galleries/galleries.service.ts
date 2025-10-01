@@ -11,7 +11,7 @@ export class GalleriesService {
     private galleryRepository: Repository<Gallery>
   ) {}
 
-  async uploadImages(file: Express.Multer.File): Promise<Gallery> {
+  async uploadImage(file: Express.Multer.File): Promise<Gallery> {
     try {
       return await this.galleryRepository.save({ image: file.filename });
     } catch {

@@ -25,13 +25,13 @@ export class ProductsService {
     }
   }
 
-  async addImages(id: string, files: Express.Multer.File[]): Promise<Product> {
+  async addImage(id: string, file: Express.Multer.File): Promise<Product> {
     try {
       const project = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImages(files);
+      const image = await this.galleriesService.uploadImage(file);
       return await this.productsRepository.save({
         ...project,
-        gallery: [...project.gallery, ...gallery]
+        gallery: [...project.gallery, image]
       });
     } catch {
       throw new BadRequestException();

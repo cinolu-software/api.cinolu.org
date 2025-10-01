@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { UseRoles } from 'nest-access-control';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -18,10 +18,10 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
-  @Post('images/:id')
+  @Post('gallery/:id')
   @UseRoles({ resource: 'products', action: 'update' })
   @UseInterceptors(
-    FilesInterceptor('images', 5, {
+    FileInterceptor('image', {
       storage: diskStorage({
         destination: './uploads/galleries',
         filename: function (_req, file, cb) {
@@ -30,8 +30,8 @@ export class ProductsController {
       })
     })
   )
-  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Product> {
-    return this.productsService.addImages(id, files);
+  addImages(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Product> {
+    return this.productsService.addImage(id, file);
   }
 
   @Get('venture/:id')
