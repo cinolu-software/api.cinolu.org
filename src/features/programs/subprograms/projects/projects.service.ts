@@ -36,13 +36,13 @@ export class ProjectsService {
     if (project) throw new BadRequestException();
   }
 
-  async addImages(id: string, files: Express.Multer.File[]): Promise<Project> {
+  async addImage(id: string, file: Express.Multer.File): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImages(files);
+      const gallery = await this.galleriesService.uploadImages(file);
       return await this.projectRepository.save({
         ...project,
-        gallery: [...project.gallery, ...gallery]
+        gallery: [...project.gallery, gallery]
       });
     } catch {
       throw new BadRequestException();

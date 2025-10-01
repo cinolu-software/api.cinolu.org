@@ -41,16 +41,15 @@ export class EventsService {
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
-  async addImages(id: string, files: Express.Multer.File[]): Promise<Event> {
+  async addImage(id: string, file: Express.Multer.File): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImages(files);
+      const gallery = await this.galleriesService.uploadImages(file);
       return await this.eventRepository.save({
         ...event,
-        gallery: [...event.gallery, ...gallery]
+        gallery: [...event.gallery, gallery]
       });
-    } catch (e) {
-      console.error(e);
+    } catch {
       throw new BadRequestException();
     }
   }

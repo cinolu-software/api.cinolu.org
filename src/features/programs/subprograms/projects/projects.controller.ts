@@ -8,10 +8,9 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Query,
-  UploadedFiles
+  Query
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -34,8 +33,8 @@ export class ProjectsController {
 
   @Get('')
   @UseRoles({ resource: 'projects', action: 'read' })
-  findAll(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
-    return this.projectsService.findAll(queryParams);
+  findAll(@Query() qp: FilterProjectsDto): Promise<[Project[], number]> {
+    return this.projectsService.findAll(qp);
   }
 
   @Get('find-recent')
@@ -84,11 +83,10 @@ export class ProjectsController {
     return this.projectsService.addCover(id, file);
   }
 
-
-  @Post('images/:id')
+  @Post('gallery/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
-    FilesInterceptor('images', 5, {
+    FileInterceptor('image', {
       storage: diskStorage({
         destination: './uploads/galleries',
         filename: function (_req, file, cb) {
@@ -97,8 +95,8 @@ export class ProjectsController {
       })
     })
   )
-  addImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]): Promise<Project> {
-    return this.projectsService.addImages(id, files);
+  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
+    return this.projectsService.addImage(id, file);
   }
 
   @Post('cover/remove/:id')
