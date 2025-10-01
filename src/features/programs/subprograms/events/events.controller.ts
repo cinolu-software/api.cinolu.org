@@ -87,7 +87,7 @@ export class EventsController {
   @Post('images/:id')
   @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(
-    FilesInterceptor('images', 5,{
+    FilesInterceptor('images', 5, {
       storage: diskStorage({
         destination: './uploads/galleries',
         filename: function (_req, file, cb) {

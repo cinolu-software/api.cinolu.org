@@ -23,7 +23,7 @@ export class GalleriesService {
 
   async remove(id: string): Promise<void> {
     try {
-      await this.galleryRepository.softDelete(id);
+      await this.galleryRepository.delete(id);
       await fs.remove(`./uploads/galleries/${id}`);
     } catch {
       throw new BadRequestException();
