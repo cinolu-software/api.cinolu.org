@@ -49,7 +49,8 @@ export class EventsService {
         ...event,
         gallery: [...event.gallery, ...gallery]
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       throw new BadRequestException();
     }
   }
@@ -139,7 +140,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program']
+        relations: ['categories', 'program', 'gallery']
       });
     } catch {
       throw new BadRequestException();

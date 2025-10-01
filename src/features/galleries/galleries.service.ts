@@ -11,9 +11,6 @@ export class GalleriesService {
     private galleryRepository: Repository<Gallery>
   ) {}
 
-  async findAll(): Promise<Gallery[]> {
-    return await this.galleryRepository.createQueryBuilder('g').groupBy('g.event').addGroupBy('g.project').getMany();
-  }
 
   async uploadImages(files: Express.Multer.File[]): Promise<Gallery[]> {
     try {

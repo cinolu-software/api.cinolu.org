@@ -47,6 +47,6 @@ export class Event extends BaseEntity {
   @JoinTable()
   categories: EventCategory[];
 
-  @OneToMany(() => Gallery, (gallery) => gallery.project)
+  @OneToMany(() => Gallery, (gallery) => gallery.event)
   gallery: Gallery[];
 }
