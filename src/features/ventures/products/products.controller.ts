@@ -5,6 +5,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { UseRoles } from 'nest-access-control';
 import { FilterProductsDto } from './dto/filter-products.dto';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { User } from 'src/core/users/entities/user.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -15,10 +17,10 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
-  @Get('user/:id')
+  @Get('by-user')
   @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
-  findAll(@Param('id') userId: string, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
-    return this.productsService.findAll(userId, query);
+  findAll(@CurrentUser() user: User, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
+    return this.productsService.findAll(user, query);
   }
 
   @Get(':slug')
