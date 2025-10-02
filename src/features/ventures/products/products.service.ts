@@ -4,6 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
+import { FilterProductsDto } from './dto/filter-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -12,11 +13,14 @@ export class ProductsService {
     private productsRepository: Repository<Product>
   ) {}
 
-  async findAll(userId: string): Promise<Product[]> {
+  async findAll(userId: string, query: FilterProductsDto): Promise<Product[]> {
     try {
+      const { page } = query;
       return await this.productsRepository.find({
         where: { venture: { owner: { id: userId } } },
-        order: { created_at: 'DESC' }
+        order: { created_at: 'DESC' },
+        take: 10,
+        skip: (Number(page) - 1) * 10
       });
     } catch {
       throw new NotFoundException();

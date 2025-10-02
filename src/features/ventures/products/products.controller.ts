@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { UseRoles } from 'nest-access-control';
+import { FilterProductsDto } from './dto/filter-products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -16,8 +17,8 @@ export class ProductsController {
 
   @Get('user/:id')
   @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
-  findAll(@Param('id') userId: string): Promise<Product[]> {
-    return this.productsService.findAll(userId);
+  findAll(@Param('id') userId: string, @Query() query: FilterProductsDto): Promise<Product[]> {
+    return this.productsService.findAll(userId, query);
   }
 
   @Get(':slug')
