@@ -68,7 +68,7 @@ export class GalleriesController {
   }
 
   @Post('venture/:id')
-  @UseRoles({ resource: 'ventures', action: 'update' })
+  @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -84,7 +84,7 @@ export class GalleriesController {
   }
 
   @Post('product/:id')
-  @UseRoles({ resource: 'products', action: 'update' })
+  @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
