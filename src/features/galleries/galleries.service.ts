@@ -11,18 +11,139 @@ export class GalleriesService {
     private galleryRepository: Repository<Gallery>
   ) {}
 
-  async uploadImage(file: Express.Multer.File): Promise<Gallery> {
+  async uploadProjectImage(projectId: string, file: Express.Multer.File): Promise<Gallery> {
     try {
-      return await this.galleryRepository.save({ image: file.filename });
+      return await this.galleryRepository.save({
+        project: { id: projectId },
+        image: file.filename
+      });
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async remove(id: string): Promise<void> {
+  async findByProject(projectId: string): Promise<Gallery[]> {
     try {
+      return await this.galleryRepository.find({
+        where: { project: { id: projectId } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async uploadEventImage(eventId: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      return await this.galleryRepository.save({
+        event: { id: eventId },
+        image: file.filename
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByEvent(eventId: string): Promise<Gallery[]> {
+    try {
+      return await this.galleryRepository.find({
+        where: { event: { id: eventId } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async uploadVentureImage(ventureId: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      return await this.galleryRepository.save({
+        venture: { id: ventureId },
+        image: file.filename
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByVenture(ventureId: string): Promise<Gallery[]> {
+    try {
+      return await this.galleryRepository.find({
+        where: { venture: { id: ventureId } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findOne(id: string): Promise<Gallery> {
+    try {
+      return await this.galleryRepository.findOneOrFail({
+        where: { id }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async uploadProductImage(productId: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      return await this.galleryRepository.save({
+        product: { id: productId },
+        image: file.filename
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByProduct(productId: string): Promise<Gallery[]> {
+    try {
+      return await this.galleryRepository.find({
+        where: { product: { id: productId } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async deleteProjectImage(id: string): Promise<void> {
+    try {
+      const gallery = await this.findOne(id);
       await this.galleryRepository.delete(id);
-      await fs.remove(`./uploads/galleries/${id}`);
+      await fs.remove(`./uploads/galleries/projects/${gallery.image}`);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async deleteEventImage(id: string): Promise<void> {
+    try {
+      const gallery = await this.findOne(id);
+      await this.galleryRepository.delete(id);
+      await fs.remove(`./uploads/galleries/events/${gallery.image}`);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async deleteVentureImage(id: string): Promise<void> {
+    try {
+      const gallery = await this.findOne(id);
+      await this.galleryRepository.delete(id);
+      await fs.remove(`./uploads/galleries/ventures/${gallery.image}`);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async deleteProductImage(id: string): Promise<void> {
+    try {
+      const gallery = await this.findOne(id);
+      await this.galleryRepository.delete(id);
+      await fs.remove(`./uploads/galleries/products/${gallery.image}`);
     } catch {
       throw new BadRequestException();
     }
