@@ -10,31 +10,30 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Post()
-  @UseRoles({ resource: 'products', action: 'create' })
   create(@Body() dto: CreateProductDto): Promise<Product> {
     return this.productsService.create(dto);
   }
 
-  @Get('venture/:id')
-  @UseRoles({ resource: 'products', action: 'read' })
-  findByVenture(@Param('id') id: string): Promise<Product[]> {
-    return this.productsService.findByVenture(id);
+  @Get('user/:id')
+  @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
+  findAll(@Param('id') userId: string): Promise<Product[]> {
+    return this.productsService.findAll(userId);
   }
 
-  @Get(':id')
-  @UseRoles({ resource: 'products', action: 'read' })
-  findOne(@Param('id') id: string): Promise<Product> {
-    return this.productsService.findOne(id);
+  @Get(':slug')
+  @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
+  findOne(@Param('slug') slug: string): Promise<Product> {
+    return this.productsService.findOne(slug);
   }
 
   @Patch(':id')
-  @UseRoles({ resource: 'products', action: 'update' })
+  @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   update(@Param('id') id: string, @Body() dto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
-  @UseRoles({ resource: 'products', action: 'delete' })
+  @UseRoles({ resource: 'products', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
     return this.productsService.remove(id);
   }

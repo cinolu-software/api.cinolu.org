@@ -14,6 +14,9 @@ export class Product extends BaseEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
+  @Column({ unique: true })
+  slug: string;
+
   @ManyToOne(() => Venture, (venture) => venture.products)
   @JoinColumn()
   venture: Venture;

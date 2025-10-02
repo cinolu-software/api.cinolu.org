@@ -12,6 +12,17 @@ export class ProductsService {
     private productsRepository: Repository<Product>
   ) {}
 
+  async findAll(userId: string): Promise<Product[]> {
+    try {
+      return await this.productsRepository.find({
+        where: { venture: { owner: { id: userId } } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async create(dto: CreateProductDto): Promise<Product> {
     try {
       return await this.productsRepository.save({
@@ -23,21 +34,10 @@ export class ProductsService {
     }
   }
 
-  async findByVenture(ventureId: string): Promise<Product[]> {
-    try {
-      return await this.productsRepository.find({
-        where: { venture: { id: ventureId } },
-        order: { created_at: 'DESC' }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  async findOne(id: string): Promise<Product> {
+  async findOne(slug: string): Promise<Product> {
     try {
       return await this.productsRepository.findOneOrFail({
-        where: { id }
+        where: { slug }
       });
     } catch {
       throw new NotFoundException();
