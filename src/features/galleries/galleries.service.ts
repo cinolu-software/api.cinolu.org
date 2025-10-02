@@ -69,7 +69,7 @@ export class GalleriesService {
   async findByVenture(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
-        where: { venture: { id: slug } },
+        where: { venture: { slug } },
         order: { created_at: 'DESC' }
       });
     } catch {
