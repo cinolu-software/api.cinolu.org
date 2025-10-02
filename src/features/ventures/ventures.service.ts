@@ -55,6 +55,17 @@ export class VenturesService {
     }
   }
 
+  async findByUserUnpaginated(user: User): Promise<Venture[]> {
+    try {
+      return await this.ventureRepository.find({
+        where: { owner: { id: user.id } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async findAll(queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
     const { page = 1, q } = queryParams;
     const take = 40;

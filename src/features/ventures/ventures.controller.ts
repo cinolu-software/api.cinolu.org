@@ -53,6 +53,11 @@ export class VenturesController {
     return this.venturesService.findByUser(page, user);
   }
 
+  @Get('by-user/unpaginated')
+  findByUserUnpaginated(@CurrentUser() user: User): Promise<Venture[]> {
+    return this.venturesService.findByUserUnpaginated(user);
+  }
+
   @Post('add-logo/:id')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
