@@ -83,22 +83,6 @@ export class EventsController {
     return this.eventsService.addCover(id, file);
   }
 
-  @Post('gallery/:id')
-  @UseRoles({ resource: 'events', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
-  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
-    return this.eventsService.addImage(id, file);
-  }
-
   @Post('cover/remove/:id')
   @UseRoles({ resource: 'events', action: 'update' })
   removeCover(@Param('id') id: string): Promise<Event> {

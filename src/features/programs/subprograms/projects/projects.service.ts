@@ -6,14 +6,12 @@ import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
-import { GalleriesService } from '../../../galleries/galleries.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
-    private projectRepository: Repository<Project>,
-    private galleriesService: GalleriesService
+    private projectRepository: Repository<Project>
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -34,19 +32,6 @@ export class ProjectsService {
       where: { name }
     });
     if (project) throw new BadRequestException();
-  }
-
-  async addImage(id: string, file: Express.Multer.File): Promise<Project> {
-    try {
-      const project = await this.findOne(id);
-      const gallery = await this.galleriesService.uploadImage(file);
-      return await this.projectRepository.save({
-        ...project,
-        gallery: [...project.gallery, gallery]
-      });
-    } catch {
-      throw new BadRequestException();
-    }
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
@@ -112,7 +97,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'gallery']
+        relations: ['categories']
       });
     } catch {
       throw new BadRequestException();
@@ -123,7 +108,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['program', 'categories', 'gallery']
+        relations: ['categories']
       });
     } catch {
       throw new BadRequestException();

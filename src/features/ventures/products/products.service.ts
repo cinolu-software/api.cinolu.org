@@ -4,14 +4,12 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
-import { GalleriesService } from '../../galleries/galleries.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>,
-    private galleriesService: GalleriesService
+    private productsRepository: Repository<Product>
   ) {}
 
   async create(dto: CreateProductDto): Promise<Product> {
@@ -25,24 +23,10 @@ export class ProductsService {
     }
   }
 
-  async addImage(id: string, file: Express.Multer.File): Promise<Product> {
-    try {
-      const project = await this.findOne(id);
-      const image = await this.galleriesService.uploadImage(file);
-      return await this.productsRepository.save({
-        ...project,
-        gallery: [...project.gallery, image]
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async findByVenture(ventureId: string): Promise<Product[]> {
     try {
       return await this.productsRepository.find({
         where: { venture: { id: ventureId } },
-        relations: ['gallery'],
         order: { created_at: 'DESC' }
       });
     } catch {
@@ -53,8 +37,7 @@ export class ProductsService {
   async findOne(id: string): Promise<Product> {
     try {
       return await this.productsRepository.findOneOrFail({
-        where: { id },
-        relations: ['gallery']
+        where: { id }
       });
     } catch {
       throw new NotFoundException();

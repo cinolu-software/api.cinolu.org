@@ -53,22 +53,6 @@ export class VenturesController {
     return this.venturesService.findByUser(page, user);
   }
 
-  @Post('gallery/:id')
-  @UseRoles({ resource: 'ventures', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
-  addImages(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
-    return this.venturesService.addImages(id, file);
-  }
-
   @Post('add-logo/:id')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(

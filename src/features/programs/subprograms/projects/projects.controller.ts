@@ -83,22 +83,6 @@ export class ProjectsController {
     return this.projectsService.addCover(id, file);
   }
 
-  @Post('gallery/:id')
-  @UseRoles({ resource: 'projects', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
-  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
-    return this.projectsService.addImage(id, file);
-  }
-
   @Post('cover/remove/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
   removeCover(@Param('id') id: string): Promise<Project> {
