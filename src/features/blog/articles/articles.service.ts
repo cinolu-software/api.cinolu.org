@@ -65,14 +65,10 @@ export class ArticlesService {
 
   async findAll(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
-      const { q, page, tags } = dto;
+      const { q, page } = dto;
       const query = this.articlesRepository.createQueryBuilder('a');
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       if (page) query.skip((+page - 1) * 30).take(30);
-      if (tags && tags.length > 0) {
-        const arrTags = tags.split(',');
-        query.andWhere('tags.id IN (:...arrTags)', { arrTags });
-      }
       return await query.orderBy('a.created_at', 'DESC').getManyAndCount();
     } catch {
       throw new BadRequestException();
@@ -81,17 +77,13 @@ export class ArticlesService {
 
   async findPublished(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
-      const { page, tags } = dto;
+      const { page } = dto;
       const query = this.articlesRepository
         .createQueryBuilder('a')
         .leftJoinAndSelect('a.tags', 'tags')
-        .where('a.published_at > NOW()');
+        .where('a.published_at <= NOW()');
       if (page) query.skip((+page - 1) * 12).take(12);
-      if (tags && tags.length > 0) {
-        const arrTags = tags.split(',');
-        query.andWhere('tags.id IN (:...arrTags)', { arrTags });
-      }
-      return await query.getManyAndCount();
+      return await query.orderBy('a.published_at', 'DESC').getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
