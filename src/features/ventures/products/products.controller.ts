@@ -17,7 +17,7 @@ export class ProductsController {
 
   @Get('user/:id')
   @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
-  findAll(@Param('id') userId: string, @Query() query: FilterProductsDto): Promise<Product[]> {
+  findAll(@Param('id') userId: string, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
     return this.productsService.findAll(userId, query);
   }
 

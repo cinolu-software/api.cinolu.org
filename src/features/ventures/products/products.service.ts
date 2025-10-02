@@ -13,10 +13,10 @@ export class ProductsService {
     private productsRepository: Repository<Product>
   ) {}
 
-  async findAll(userId: string, query: FilterProductsDto): Promise<Product[]> {
+  async findAll(userId: string, query: FilterProductsDto): Promise<[Product[], number]> {
     try {
       const { page } = query;
-      return await this.productsRepository.find({
+      return await this.productsRepository.findAndCount({
         where: { venture: { owner: { id: userId } } },
         order: { created_at: 'DESC' },
         take: 10,
