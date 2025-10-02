@@ -11,28 +11,28 @@ import { Public } from 'src/shared/decorators/public.decorator';
 export class GalleriesController {
   constructor(private galleriesService: GalleriesService) {}
 
-  @Get('project/:id')
+  @Get('project/:slug')
   @Public()
-  findByProject(@Param('id') id: string): Promise<Gallery[]> {
-    return this.galleriesService.findByProject(id);
+  findByProject(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.galleriesService.findByProject(slug);
   }
 
-  @Get('event/:id')
+  @Get('event/:slug')
   @Public()
-  findByEvent(@Param('id') id: string): Promise<Gallery[]> {
-    return this.galleriesService.findByEvent(id);
+  findByEvent(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.galleriesService.findByEvent(slug);
   }
 
-  @Get('venture/:id')
+  @Get('venture/:slug')
   @Public()
-  findByVenture(@Param('id') id: string): Promise<Gallery[]> {
-    return this.galleriesService.findByVenture(id);
+  findByVenture(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.galleriesService.findByVenture(slug);
   }
 
-  @Get('product/:id')
+  @Get('product/:slug')
   @Public()
-  findByProduct(@Param('id') id: string): Promise<Gallery[]> {
-    return this.galleriesService.findByProduct(id);
+  findByProduct(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.galleriesService.findByProduct(slug);
   }
 
   @Post('project/:id')

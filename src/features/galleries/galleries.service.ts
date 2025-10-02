@@ -22,10 +22,10 @@ export class GalleriesService {
     }
   }
 
-  async findByProject(projectId: string): Promise<Gallery[]> {
+  async findByProject(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
-        where: { project: { id: projectId } },
+        where: { project: { slug } },
         order: { created_at: 'DESC' }
       });
     } catch {
@@ -44,10 +44,10 @@ export class GalleriesService {
     }
   }
 
-  async findByEvent(eventId: string): Promise<Gallery[]> {
+  async findByEvent(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
-        where: { event: { id: eventId } },
+        where: { event: { slug } },
         order: { created_at: 'DESC' }
       });
     } catch {
@@ -66,10 +66,10 @@ export class GalleriesService {
     }
   }
 
-  async findByVenture(ventureId: string): Promise<Gallery[]> {
+  async findByVenture(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
-        where: { venture: { id: ventureId } },
+        where: { venture: { id: slug } },
         order: { created_at: 'DESC' }
       });
     } catch {
