@@ -42,7 +42,8 @@ export class ProductsService {
   async findOne(slug: string): Promise<Product> {
     try {
       return await this.productsRepository.findOneOrFail({
-        where: { slug }
+        where: { slug },
+        relations: ['venture']
       });
     } catch {
       throw new NotFoundException();
