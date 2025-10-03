@@ -98,10 +98,10 @@ export class GalleriesService {
     }
   }
 
-  async findByProduct(productId: string): Promise<Gallery[]> {
+  async findByProduct(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
-        where: { product: { id: productId } },
+        where: { product: { slug } },
         order: { created_at: 'DESC' }
       });
     } catch {
