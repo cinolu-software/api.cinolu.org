@@ -50,9 +50,9 @@ export class ProductsService {
     }
   }
 
-  async update(id: string, dto: UpdateProductDto): Promise<Product> {
+  async update(slug: string, dto: UpdateProductDto): Promise<Product> {
     try {
-      const product = await this.findOne(id);
+      const product = await this.findOne(slug);
       const updated = Object.assign(product, dto);
       return await this.productsRepository.save(updated);
     } catch {
