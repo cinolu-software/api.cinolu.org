@@ -118,7 +118,7 @@ export class GalleriesController {
   }
 
   @Delete('product/:id')
-  @UseRoles({ resource: 'products', action: 'update' })
+  @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   deleteProductImage(@Param('id') id: string): Promise<void> {
     return this.galleriesService.deleteProductImage(id);
   }
