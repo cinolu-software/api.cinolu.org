@@ -39,7 +39,7 @@ export class ProductsService {
     }
   }
 
-  async findOne(slug: string): Promise<Product> {
+  async findBySlug(slug: string): Promise<Product> {
     try {
       return await this.productsRepository.findOneOrFail({
         where: { slug },
@@ -50,9 +50,19 @@ export class ProductsService {
     }
   }
 
+  async findOne(id: string): Promise<Product> {
+    try {
+      return await this.productsRepository.findOneOrFail({
+        where: { id }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async update(slug: string, dto: UpdateProductDto): Promise<Product> {
     try {
-      const product = await this.findOne(slug);
+      const product = await this.findBySlug(slug);
       const updated = Object.assign(product, dto);
       return await this.productsRepository.save(updated);
     } catch {
@@ -63,7 +73,7 @@ export class ProductsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.productsRepository.softDelete(id);
+      await this.productsRepository.delete(id);
     } catch {
       throw new BadRequestException();
     }

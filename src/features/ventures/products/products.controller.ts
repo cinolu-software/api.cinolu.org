@@ -26,7 +26,7 @@ export class ProductsController {
   @Get(':slug')
   @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
   findOne(@Param('slug') slug: string): Promise<Product> {
-    return this.productsService.findOne(slug);
+    return this.productsService.findBySlug(slug);
   }
 
   @Patch(':slug')
