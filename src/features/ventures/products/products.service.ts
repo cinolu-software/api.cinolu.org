@@ -73,7 +73,7 @@ export class ProductsService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.productsRepository.delete(id);
+      await this.productsRepository.softDelete(id);
     } catch {
       throw new BadRequestException();
     }
