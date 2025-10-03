@@ -29,10 +29,10 @@ export class ProductsController {
     return this.productsService.findOne(slug);
   }
 
-  @Patch(':id')
+  @Patch(':slug')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
-  update(@Param('id') id: string, @Body() dto: UpdateProductDto): Promise<Product> {
-    return this.productsService.update(id, dto);
+  update(@Param('slug') slug: string, @Body() dto: UpdateProductDto): Promise<Product> {
+    return this.productsService.update(slug, dto);
   }
 
   @Delete(':id')
