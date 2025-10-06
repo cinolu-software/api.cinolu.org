@@ -15,13 +15,13 @@ export class Article extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ type: 'boolean' , nullable: true , default: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   is_highlighted: boolean;
 
-  @Column()
+  @Column({ type: 'longtext' })
   summary: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'longtext' })
   content: string;
 
   @Column({ type: 'datetime', nullable: true })
