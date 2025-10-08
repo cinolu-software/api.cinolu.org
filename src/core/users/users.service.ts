@@ -67,6 +67,18 @@ export class UsersService {
     }
   }
 
+  async findEntrepreneurs(): Promise<User[]> {
+    try {
+      const query = this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.ventures', 'ventures')
+        .where('ventures.id IS NOT NULL');
+      return await query.getMany();
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async saveRefferalCode(user: User): Promise<User> {
     try {
       await this.userRepository.update(user.id, {

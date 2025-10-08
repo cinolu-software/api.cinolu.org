@@ -63,6 +63,12 @@ export class UsersController {
     return this.usersService.findAll(params);
   }
 
+  @Get('entrepreneurs')
+  @Public()
+  findEntrepreneurs(): Promise<User[]> {
+    return this.usersService.findEntrepreneurs();
+  }
+
   @Get(':email')
   @UseRoles({ resource: 'users', action: 'read' })
   findOneByEmail(@Param('email') email: string): Promise<User> {
