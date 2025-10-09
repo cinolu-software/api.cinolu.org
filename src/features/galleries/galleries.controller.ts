@@ -106,7 +106,7 @@ export class GalleriesController {
   }
 
   @Post('article/:id')
-  @UseRoles({ resource: 'blog', action: 'update' })
+  @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -122,7 +122,7 @@ export class GalleriesController {
   }
 
   @Delete('article/:id')
-  @UseRoles({ resource: 'blog', action: 'update' })
+  @UseRoles({ resource: 'blogs', action: 'update' })
   deleteArticleImage(@Param('id') id: string): Promise<void> {
     return this.galleriesService.deleteArticleImage(id);
   }
