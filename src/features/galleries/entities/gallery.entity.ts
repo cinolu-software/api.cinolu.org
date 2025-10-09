@@ -4,6 +4,7 @@ import { Project } from '../../programs/subprograms/projects/entities/project.en
 import { Event } from '../../programs/subprograms/events/entities/event.entity';
 import { Product } from '../../ventures/products/entities/product.entity';
 import { Venture } from '../../ventures/entities/venture.entity';
+import { Article } from 'src/features/blog/articles/entities/article.entity';
 
 @Entity()
 export class Gallery extends BaseEntity {
@@ -18,7 +19,6 @@ export class Gallery extends BaseEntity {
   @JoinColumn()
   event: Event;
 
-
   @ManyToOne(() => Product)
   @JoinColumn()
   product: Product;
@@ -26,4 +26,8 @@ export class Gallery extends BaseEntity {
   @ManyToOne(() => Venture)
   @JoinColumn()
   venture: Venture;
+
+  @ManyToOne(() => Article)
+  @JoinColumn()
+  article: Article;
 }

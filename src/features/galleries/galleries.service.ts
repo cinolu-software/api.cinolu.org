@@ -66,6 +66,28 @@ export class GalleriesService {
     }
   }
 
+  async uploadArticleImage(articleId: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      return await this.galleryRepository.save({
+        article: { id: articleId },
+        image: file.filename
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByArticle(slug: string): Promise<Gallery[]> {
+    try {
+      return await this.galleryRepository.find({
+        where: { article: { slug } },
+        order: { created_at: 'DESC' }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findByVenture(slug: string): Promise<Gallery[]> {
     try {
       return await this.galleryRepository.find({
@@ -104,6 +126,16 @@ export class GalleriesService {
         where: { product: { slug } },
         order: { created_at: 'DESC' }
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async deleteArticleImage(id: string): Promise<void> {
+    try {
+      const gallery = await this.findOne(id);
+      await this.galleryRepository.delete(id);
+      await fs.remove(`./uploads/galleries/articles/${gallery.image}`);
     } catch {
       throw new BadRequestException();
     }

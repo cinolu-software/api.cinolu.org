@@ -17,6 +17,12 @@ export class GalleriesController {
     return this.galleriesService.findByProject(slug);
   }
 
+  @Get('article/:slug')
+  @Public()
+  findByArticle(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.galleriesService.findByArticle(slug);
+  }
+
   @Get('event/:slug')
   @Public()
   findByEvent(@Param('slug') slug: string): Promise<Gallery[]> {
@@ -97,6 +103,28 @@ export class GalleriesController {
   )
   uploadProductImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
     return this.galleriesService.uploadProductImage(id, file);
+  }
+
+  @Post('article/:id')
+  @UseRoles({ resource: 'blog', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/galleries/articles',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  uploadArticleImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+    return this.galleriesService.uploadArticleImage(id, file);
+  }
+
+  @Delete('article/:id')
+  @UseRoles({ resource: 'blog', action: 'update' })
+  deleteArticleImage(@Param('id') id: string): Promise<void> {
+    return this.galleriesService.deleteArticleImage(id);
   }
 
   @Delete('project/:id')

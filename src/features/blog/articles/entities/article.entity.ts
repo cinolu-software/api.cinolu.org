@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany
 import { Tag } from '../../tags/entities/tag.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { User } from 'src/core/users/entities/user.entity';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Entity()
 export class Article extends BaseEntity {
@@ -37,4 +38,7 @@ export class Article extends BaseEntity {
   @ManyToOne(() => User, (user) => user.articles)
   @JoinColumn()
   author: User;
+
+  @OneToMany(() => Gallery, (gallery) => gallery.article)
+  gallery: Gallery[];
 }

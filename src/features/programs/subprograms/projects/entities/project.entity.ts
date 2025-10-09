@@ -9,7 +9,7 @@ export class Project extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ type: 'boolean' , nullable: true , default: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   is_highlighted: boolean;
 
   @Column({ unique: true })
@@ -17,9 +17,6 @@ export class Project extends BaseEntity {
 
   @Column({ nullable: true })
   cover: string;
-
-  @Column({ type: 'json', nullable: true })
-  report: JSON;
 
   @Column({ type: 'longtext' })
   description: string;

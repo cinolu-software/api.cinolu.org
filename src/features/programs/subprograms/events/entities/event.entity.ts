@@ -18,9 +18,6 @@ export class Event extends BaseEntity {
   @Column({ nullable: true })
   cover: string;
 
-  @Column({ type: 'json', nullable: true })
-  report: JSON;
-
   @Column()
   place: string;
 
