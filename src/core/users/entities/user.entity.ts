@@ -41,9 +41,6 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   profile: string;
 
-  @Column({ nullable: true })
-  reason: string;
-
   @Column({ unique: true, nullable: true })
   referral_code: string;
 

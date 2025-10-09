@@ -23,9 +23,6 @@ export default class CreateUserDto {
   country: string;
 
   @IsOptional()
-  reason: string;
-
-  @IsOptional()
   biography: string;
 
   @IsNotEmpty()
