@@ -1,14 +1,14 @@
+import { Program } from 'src/features/programs/entities/program.entity';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { User } from '../../core/users/entities/user.entity';
-import { Program } from '../programs/entities/program.entity';
-import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
-import { Project } from '../programs/subprograms/projects/entities/project.entity';
 import { Article } from '../blog/articles/entities/article.entity';
 import { Venture } from '../ventures/entities/venture.entity';
 import { IAdminStats } from './types/admin-stats.type';
 import { IUSerStats } from './types/user-stats.type';
-import { Event } from '../programs/subprograms/events/entities/event.entity';
+import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
+import { Project } from '../programs/subprograms/activities/projects/entities/project.entity';
+import { Event } from '../programs/subprograms/activities/events/entities/event.entity';
 
 @Injectable()
 export class StatsService {

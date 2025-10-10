@@ -4,8 +4,8 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { EventCategory } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
-import { Public } from '../../../../../shared/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
+import { Public } from 'src/shared/decorators/public.decorator';
 
 @Controller('event-categories')
 export class CategoriesController {

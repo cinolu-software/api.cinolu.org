@@ -10,12 +10,12 @@ import { Role } from 'src/core/users/roles/entities/role.entity';
 import { Article } from 'src/features/blog/articles/entities/article.entity';
 import { Tag } from 'src/features/blog/tags/entities/tag.entity';
 import { Comment } from 'src/features/blog/comments/entities/comment.entity';
-import { Project } from '../../../features/programs/subprograms/projects/entities/project.entity';
-import { EventCategory } from '../../../features/programs/subprograms/events/categories/entities/category.entity';
-import { ProjectCategory } from '../../../features/programs/subprograms/projects/categories/entities/category.entity';
-import { Subprogram } from '../../../features/programs/subprograms/entities/subprogram.entity';
-import { Event } from '../../../features/programs/subprograms/events/entities/event.entity';
 import { nanoid } from 'nanoid';
+import { EventCategory } from 'src/features/programs/subprograms/activities/events/categories/entities/category.entity';
+import { ProjectCategory } from 'src/features/programs/subprograms/activities/projects/categories/entities/category.entity';
+import { Project } from 'src/features/programs/subprograms/activities/projects/entities/project.entity';
+import { Subprogram } from 'src/features/programs/subprograms/entities/subprogram.entity';
+import { Event } from 'src/features/programs/subprograms/activities/events/entities/event.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {
@@ -25,7 +25,7 @@ export default class DbSeeder implements Seeder {
     const userRepository = dataSource.getRepository(User);
     const roleRepository = dataSource.getRepository(Role);
     const programRepository = dataSource.getRepository(Program);
-    const subprogramRepository = dataSource.getRepository(Subprogram); // Assuming subprograms are also stored in Program
+    const subprogramRepository = dataSource.getRepository(Subprogram);
     const eventRepository = dataSource.getRepository(Event);
     const projectRepository = dataSource.getRepository(Project);
     const eventCategoryRepository = dataSource.getRepository(EventCategory);
@@ -104,7 +104,6 @@ export default class DbSeeder implements Seeder {
             city: faker.location.city(),
             country: faker.location.country(),
             biography: faker.lorem.paragraph(),
-            reason: faker.lorem.sentence(),
             gender: faker.person.sex(),
             referral_code: nanoid(12),
             birth_date: faker.date.birthdate({ min: 18, max: 60, mode: 'age' }),

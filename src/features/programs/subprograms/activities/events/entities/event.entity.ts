@@ -1,8 +1,9 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../../../shared/utils/abstract.entity';
-import { Subprogram } from '../../entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
-import { Gallery } from '../../../../galleries/entities/gallery.entity';
+import { Indicator } from '../../indicators/entities/indicator.entity';
+import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
+import { Subprogram } from '../../../entities/subprogram.entity';
 
 @Entity()
 export class Event extends BaseEntity {
@@ -46,4 +47,7 @@ export class Event extends BaseEntity {
 
   @OneToMany(() => Gallery, (gallery) => gallery.event)
   gallery: Gallery[];
+
+  @OneToMany(() => Indicator, (indicator) => indicator.event)
+  indicators: Indicator[];
 }

@@ -24,4 +24,7 @@ export default class UpdateProfileDto {
 
   @IsOptional()
   biography: string;
+
+  @IsOptional()
+  roles: string[];
 }

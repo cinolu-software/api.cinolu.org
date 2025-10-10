@@ -18,8 +18,8 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
-import { Public } from '../../../../shared/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
+import { Public } from 'src/shared/decorators/public.decorator';
 
 @Controller('projects')
 export class ProjectsController {

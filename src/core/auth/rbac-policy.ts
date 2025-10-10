@@ -26,6 +26,7 @@ RBAC_POLICY.grant(Role.USER)
     'exportUsersCSV'
   ])
   .createAny([
+    'indicators',
     'users',
     'programs',
     'comments',
@@ -40,6 +41,7 @@ RBAC_POLICY.grant(Role.USER)
     'blogs'
   ])
   .updateAny([
+    'indicators',
     'users',
     'programs',
     'subprograms',
@@ -56,6 +58,7 @@ RBAC_POLICY.grant(Role.USER)
     'publishVenture'
   ])
   .deleteAny([
+    'indicators',
     'users',
     'programs',
     'subprograms',

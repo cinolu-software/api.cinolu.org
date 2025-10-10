@@ -1,15 +1,15 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../../shared/utils/abstract.entity';
-import { Project } from '../projects/entities/project.entity';
-import { Event } from '../events/entities/event.entity';
 import { Program } from '../../entities/program.entity';
+import { Project } from '../activities/projects/entities/project.entity';
+import { Event } from '../activities/events/entities/event.entity';
 
 @Entity()
 export class Subprogram extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({ type: 'boolean' , nullable: true , default: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   is_highlighted: boolean;
 
   @Column({ unique: true })

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Program } from '../programs/entities/program.entity';
 import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
-import { Event } from '../programs/subprograms/events/entities/event.entity';
-import { Project } from '../programs/subprograms/projects/entities/project.entity';
 import { Article } from '../blog/articles/entities/article.entity';
+import { Project } from '../programs/subprograms/activities/projects/entities/project.entity';
+import { Event } from '../programs/subprograms/activities/events/entities/event.entity';
 
 export interface HighlightedItems {
   programs: Program[];
