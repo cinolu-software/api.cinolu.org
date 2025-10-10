@@ -12,45 +12,31 @@ export class IndicatorsService {
     private indicatorRepository: Repository<Indicator>
   ) {}
 
-  async createForEvent(id: string, dto: CreateIndicatorDto): Promise<Indicator> {
+  async createForEvent(id: string, dto: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
-      return await this.indicatorRepository.save({
-        ...dto,
-        event: { id }
-      });
+      const indicators = dto.map((data) =>
+        this.indicatorRepository.create({
+          ...data,
+          event: { id }
+        })
+      );
+      return await this.indicatorRepository.save(indicators);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async createForProject(id: string, dto: CreateIndicatorDto): Promise<Indicator> {
+  async createForProject(id: string, dto: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
-      return await this.indicatorRepository.save({
-        ...dto,
-        project: { id }
-      });
+      const indicators = dto.map((data) =>
+        this.indicatorRepository.create({
+          ...data,
+          project: { id }
+        })
+      );
+      return await this.indicatorRepository.save(indicators);
     } catch {
       throw new BadRequestException();
-    }
-  }
-
-  findByEvent(eventId: string): Promise<Indicator[]> {
-    try {
-      return this.indicatorRepository.find({
-        where: { event: { id: eventId } }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  findByProject(projectId: string): Promise<Indicator[]> {
-    try {
-      return this.indicatorRepository.find({
-        where: { project: { id: projectId } }
-      });
-    } catch {
-      throw new NotFoundException();
     }
   }
 
