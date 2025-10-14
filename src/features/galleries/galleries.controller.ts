@@ -1,16 +1,11 @@
-import { Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { GalleriesService } from './galleries.service';
-import { UseRoles } from 'nest-access-control';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
-import { Gallery } from './entities/gallery.entity';
-import { Public } from 'src/shared/decorators/public.decorator';
+// import { v4 as uuidv4 } from 'uuid';
 
 @Controller('galleries')
 export class GalleriesController {
   constructor(private galleriesService: GalleriesService) {}
-
+  /*
   @Get('project/:slug')
   @Public()
   findByProject(@Param('slug') slug: string): Promise<Gallery[]> {
@@ -150,4 +145,5 @@ export class GalleriesController {
   deleteProductImage(@Param('id') id: string): Promise<void> {
     return this.galleriesService.deleteProductImage(id);
   }
+    */
 }

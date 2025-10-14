@@ -8,13 +8,17 @@ import * as fs from 'fs-extra';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { IndicatorsService } from '../indicators/indicators.service';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
+import { Indicator } from '../indicators/entities/indicator.entity';
+import { GalleriesService } from 'src/features/galleries/galleries.service';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    private indicatorsService: IndicatorsService
+    private indicatorsService: IndicatorsService,
+    private galleryService: GalleriesService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -29,13 +33,49 @@ export class ProjectsService {
     }
   }
 
-  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Project> {
+  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
       const project = await this.findOne(id);
       const indicators = await this.indicatorsService.create(dtos);
       const ids = project.indicators.map((indicator) => indicator.id);
       await this.indicatorsService.removeMany(ids);
-      return await this.projectRepository.save({ ...project, indicators });
+      await this.projectRepository.save({ ...project, indicators });
+      return indicators;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      const project = await this.findOne(id);
+      const gallery = await this.galleryService.create(file);
+      project.gallery.push(gallery);
+      await this.projectRepository.save(project);
+      return gallery;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeGallery(projectId: string, galleryId: string): Promise<void> {
+    try {
+      const project = await this.findOne(projectId);
+      await this.galleryService.remove(galleryId);
+      project.gallery = project.gallery.filter(async (g) => {
+        await fs.remove(`./uploads/galleries/projects/${g.image}`);
+        return g.id !== galleryId;
+      });
+      await this.projectRepository.save(project);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findGallery(projectId: string): Promise<Gallery[]> {
+    try {
+      const project = await this.findOne(projectId);
+      return project.gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -115,7 +155,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program', 'indicators']
+        relations: ['categories', 'gallery', 'program', 'indicators']
       });
     } catch {
       throw new BadRequestException();

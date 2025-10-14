@@ -8,6 +8,7 @@ import { FilterEventsDto } from './dto/filter-events.dto';
 import * as fs from 'fs-extra';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 import { IndicatorsService } from '../indicators/indicators.service';
+import { Indicator } from '../indicators/entities/indicator.entity';
 
 @Injectable()
 export class EventsService {
@@ -29,13 +30,14 @@ export class EventsService {
     }
   }
 
-  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Event> {
+  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
       const event = await this.findOne(id);
       const indicators = await this.indicatorsService.create(dtos);
       const ids = event.indicators.map((indicator) => indicator.id);
       await this.indicatorsService.removeMany(ids);
-      return await this.eventRepository.save({ ...event, indicators });
+      await this.eventRepository.save({ ...event, indicators });
+      return indicators;
     } catch {
       throw new BadRequestException();
     }

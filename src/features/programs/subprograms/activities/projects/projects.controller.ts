@@ -21,6 +21,8 @@ import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from 'src/shared/decorators/public.decorator';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
+import { Indicator } from '../indicators/entities/indicator.entity';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -64,8 +66,36 @@ export class ProjectsController {
 
   @Post('indicators/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Project> {
+  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     return this.projectsService.addIndicators(id, dtos);
+  }
+
+  @Post('gallery/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/galleries/projects',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+    return this.projectsService.addGallery(id, file);
+  }
+
+  @Post('gallery/remove/:id/:galleryId')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
+    return this.projectsService.removeGallery(id, galleryId);
+  }
+
+  @Get('gallery/:id')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  findGallery(@Param('id') id: string): Promise<Gallery[]> {
+    return this.projectsService.findGallery(id);
   }
 
   @Post('publish/:id')

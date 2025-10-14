@@ -21,6 +21,7 @@ import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from 'src/shared/decorators/public.decorator';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
+import { Indicator } from '../indicators/entities/indicator.entity';
 
 @Controller('events')
 export class EventsController {
@@ -58,7 +59,7 @@ export class EventsController {
 
   @Post('indicators/:id')
   @UseRoles({ resource: 'events', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Event> {
+  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     return this.eventsService.addIndicators(id, dtos);
   }
 
