@@ -83,7 +83,8 @@ export class ProductsService {
   async findOne(id: string): Promise<Product> {
     try {
       return await this.productsRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['gallery']
       });
     } catch {
       throw new NotFoundException();
