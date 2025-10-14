@@ -6,12 +6,15 @@ import { Event } from './entities/event.entity';
 import { Repository } from 'typeorm';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import * as fs from 'fs-extra';
+import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
+import { IndicatorsService } from '../indicators/indicators.service';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(Event)
-    private eventRepository: Repository<Event>
+    private eventRepository: Repository<Event>,
+    private indicatorsService: IndicatorsService
   ) {}
 
   async create(dto: CreateEventDto): Promise<Event> {
@@ -21,6 +24,18 @@ export class EventsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Event> {
+    try {
+      const event = await this.findOne(id);
+      const indicators = await this.indicatorsService.create(dtos);
+      const ids = event.indicators.map((indicator) => indicator.id);
+      await this.indicatorsService.removeMany(ids);
+      return await this.eventRepository.save({ ...event, indicators });
     } catch {
       throw new BadRequestException();
     }
@@ -124,7 +139,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program']
+        relations: ['categories', 'program', 'indicators']
       });
     } catch {
       throw new BadRequestException();

@@ -20,6 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from 'src/shared/decorators/public.decorator';
+import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 
 @Controller('events')
 export class EventsController {
@@ -53,6 +54,12 @@ export class EventsController {
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Event> {
     return this.eventsService.findBySlug(slug);
+  }
+
+  @Post('indicators/:id')
+  @UseRoles({ resource: 'events', action: 'update' })
+  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Event> {
+    return this.eventsService.addIndicators(id, dtos);
   }
 
   @Get(':id')

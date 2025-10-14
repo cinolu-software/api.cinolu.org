@@ -20,6 +20,7 @@ import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from 'src/shared/decorators/public.decorator';
+import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -59,6 +60,12 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
+  }
+
+  @Post('indicators/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Project> {
+    return this.projectsService.addIndicators(id, dtos);
   }
 
   @Post('publish/:id')

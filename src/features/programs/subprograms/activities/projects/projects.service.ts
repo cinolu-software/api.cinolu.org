@@ -6,17 +6,19 @@ import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
+import { IndicatorsService } from '../indicators/indicators.service';
+import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
-    private projectRepository: Repository<Project>
+    private projectRepository: Repository<Project>,
+    private indicatorsService: IndicatorsService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
     try {
-      await this.throwIfExist(dto.name);
       return await this.projectRepository.save({
         ...dto,
         program: { id: dto.program },
@@ -27,11 +29,16 @@ export class ProjectsService {
     }
   }
 
-  async throwIfExist(name: string): Promise<void> {
-    const project = await this.projectRepository.findOne({
-      where: { name }
-    });
-    if (project) throw new BadRequestException();
+  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Project> {
+    try {
+      const project = await this.findOne(id);
+      const indicators = await this.indicatorsService.create(dtos);
+      const ids = project.indicators.map((indicator) => indicator.id);
+      await this.indicatorsService.removeMany(ids);
+      return await this.projectRepository.save({ ...project, indicators });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
@@ -108,7 +115,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program']
+        relations: ['categories', 'program', 'indicators']
       });
     } catch {
       throw new BadRequestException();

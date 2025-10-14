@@ -1,9 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateIndicatorDto } from './dto/create-indicator.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Indicator } from './entities/indicator.entity';
-import { UpdateIndicatorDto } from './dto/update-indicator.dto';
 
 @Injectable()
 export class IndicatorsService {
@@ -12,57 +11,18 @@ export class IndicatorsService {
     private indicatorRepository: Repository<Indicator>
   ) {}
 
-  async createForEvent(id: string, dto: CreateIndicatorDto[]): Promise<Indicator[]> {
+  async create(dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
-      const indicators = dto.map((data) =>
-        this.indicatorRepository.create({
-          ...data,
-          event: { id }
-        })
-      );
+      const indicators = dtos.map((data) => this.indicatorRepository.create(data));
       return await this.indicatorRepository.save(indicators);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async createForProject(id: string, dto: CreateIndicatorDto[]): Promise<Indicator[]> {
+  async removeMany(ids: string[]): Promise<void> {
     try {
-      const indicators = dto.map((data) =>
-        this.indicatorRepository.create({
-          ...data,
-          project: { id }
-        })
-      );
-      return await this.indicatorRepository.save(indicators);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async findOne(id: string): Promise<Indicator> {
-    try {
-      return await this.indicatorRepository.findOneOrFail({
-        where: { id }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  async update(id: string, dto: UpdateIndicatorDto): Promise<Indicator> {
-    try {
-      const indicator = await this.findOne(id);
-      return await this.indicatorRepository.save({ ...indicator, ...dto });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async remove(id: string): Promise<void> {
-    try {
-      await this.findOne(id);
-      await this.indicatorRepository.softDelete(id);
+      await Promise.all(ids.map(async (id) => await this.indicatorRepository.delete(id)));
     } catch {
       throw new BadRequestException();
     }
