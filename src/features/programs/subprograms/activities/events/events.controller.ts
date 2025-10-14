@@ -88,7 +88,7 @@ export class EventsController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.eventsService.addGallery(id, file);
   }
 

@@ -29,13 +29,12 @@ export class VenturesService {
     }
   }
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
       const venture = await this.findOne(id);
       const gallery = await this.galleryService.create(file);
-      venture.gallery.push(gallery);
+      venture.gallery = [...venture.gallery, gallery];
       await this.ventureRepository.save(venture);
-      return gallery;
     } catch {
       throw new BadRequestException();
     }

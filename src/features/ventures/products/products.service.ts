@@ -42,13 +42,12 @@ export class ProductsService {
     }
   }
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
       const product = await this.findOne(id);
       const gallery = await this.galleryService.create(file);
-      product.gallery.push(gallery);
+      product.gallery = [...product.gallery, gallery];
       await this.productsRepository.save(product);
-      return gallery;
     } catch {
       throw new BadRequestException();
     }

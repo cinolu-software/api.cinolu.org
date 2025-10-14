@@ -61,7 +61,7 @@ export class VenturesController {
   }
 
   @Post('gallery/:id')
-  @UseRoles({ resource: 'ventures', action: 'update' })
+  @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -72,12 +72,12 @@ export class VenturesController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.venturesService.addGallery(id, file);
   }
 
   @Delete('gallery/remove/:id')
-  @UseRoles({ resource: 'ventures', action: 'update' })
+  @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   removeGallery(@Param('id') id: string): Promise<void> {
     return this.venturesService.removeGallery(id);
   }

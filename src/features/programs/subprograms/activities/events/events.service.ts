@@ -46,13 +46,12 @@ export class EventsService {
     }
   }
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
       const event = await this.findOne(id);
       const gallery = await this.galleryService.create(file);
-      event.gallery.push(gallery);
+      event.gallery = [...event.gallery, gallery];
       await this.eventRepository.save(event);
-      return gallery;
     } catch {
       throw new BadRequestException();
     }
