@@ -22,6 +22,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '../../../shared/decorators/public.decorator';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Controller('articles')
 export class ArticlesController {
@@ -43,6 +44,34 @@ export class ArticlesController {
   @UseRoles({ resource: 'blogs', action: 'read' })
   findAll(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
     return this.articlesService.findAll(dto);
+  }
+
+  @Post('gallery/:id')
+  @UseRoles({ resource: 'blogs', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/galleries/articles',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+    return this.articlesService.addGallery(id, file);
+  }
+
+  @Post('gallery/remove/:id/:galleryId')
+  @UseRoles({ resource: 'blogs', action: 'update' })
+  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
+    return this.articlesService.removeGallery(id, galleryId);
+  }
+
+  @Get('gallery/:id')
+  @Public()
+  findGallery(@Param('id') id: string): Promise<Gallery[]> {
+    return this.articlesService.findGallery(id);
   }
 
   @Post('cover/:id')

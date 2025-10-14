@@ -9,13 +9,16 @@ import * as fs from 'fs-extra';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 import { IndicatorsService } from '../indicators/indicators.service';
 import { Indicator } from '../indicators/entities/indicator.entity';
+import { GalleriesService } from 'src/features/galleries/galleries.service';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
-    private indicatorsService: IndicatorsService
+    private indicatorsService: IndicatorsService,
+    private galleryService: GalleriesService
   ) {}
 
   async create(dto: CreateEventDto): Promise<Event> {
@@ -38,6 +41,40 @@ export class EventsService {
       await this.indicatorsService.removeMany(ids);
       await this.eventRepository.save({ ...event, indicators });
       return indicators;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      const event = await this.findOne(id);
+      const gallery = await this.galleryService.create(file);
+      event.gallery.push(gallery);
+      await this.eventRepository.save(event);
+      return gallery;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeGallery(id: string, galleryId: string): Promise<void> {
+    try {
+      const event = await this.findOne(id);
+      await this.galleryService.remove(galleryId);
+      event.gallery = event.gallery.filter(async (g) => {
+        if (g.id === galleryId) await fs.remove(`./uploads/galleries/events/${g.image}`);
+        return g.id !== galleryId;
+      });
+      await this.eventRepository.save(event);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findGallery(id: string): Promise<Gallery[]> {
+    try {
+      return (await this.findOne(id)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -141,7 +178,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program', 'indicators']
+        relations: ['categories', 'program', 'indicators', 'gallery']
       });
     } catch {
       throw new BadRequestException();
@@ -160,10 +197,6 @@ export class EventsService {
     } catch {
       throw new BadRequestException();
     }
-  }
-
-  async restore(id: string): Promise<void> {
-    await this.eventRepository.restore(id);
   }
 
   async remove(id: string): Promise<void> {

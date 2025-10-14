@@ -7,12 +7,15 @@ import { Venture } from './entities/venture.entity';
 import * as fs from 'fs-extra';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
+import { GalleriesService } from '../galleries/galleries.service';
+import { Gallery } from '../galleries/entities/gallery.entity';
 
 @Injectable()
 export class VenturesService {
   constructor(
     @InjectRepository(Venture)
-    private ventureRepository: Repository<Venture>
+    private ventureRepository: Repository<Venture>,
+    private galleryService: GalleriesService
   ) {}
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
@@ -21,6 +24,40 @@ export class VenturesService {
         ...dto,
         owner: { id: user.id }
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      const venture = await this.findOne(id);
+      const gallery = await this.galleryService.create(file);
+      venture.gallery.push(gallery);
+      await this.ventureRepository.save(venture);
+      return gallery;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeGallery(id: string, galleryId: string): Promise<void> {
+    try {
+      const venture = await this.findOne(id);
+      await this.galleryService.remove(galleryId);
+      venture.gallery = venture.gallery.filter(async (g) => {
+        if (g.id === galleryId) await fs.remove(`./uploads/galleries/ventures/${g.image}`);
+        return g.id !== galleryId;
+      });
+      await this.ventureRepository.save(venture);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findGallery(id: string): Promise<Gallery[]> {
+    try {
+      return (await this.findOne(id)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -78,7 +115,8 @@ export class VenturesService {
   async findOne(id: string): Promise<Venture> {
     try {
       return await this.ventureRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['gallery']
       });
     } catch {
       throw new NotFoundException();

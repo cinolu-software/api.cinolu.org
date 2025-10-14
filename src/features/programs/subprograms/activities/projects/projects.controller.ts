@@ -93,7 +93,7 @@ export class ProjectsController {
   }
 
   @Get('gallery/:id')
-  @UseRoles({ resource: 'projects', action: 'read' })
+  @Public()
   findGallery(@Param('id') id: string): Promise<Gallery[]> {
     return this.projectsService.findGallery(id);
   }

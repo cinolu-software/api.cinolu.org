@@ -6,12 +6,16 @@ import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { FilterProductsDto } from './dto/filter-products.dto';
 import { User } from 'src/core/users/entities/user.entity';
+import { GalleriesService } from 'src/features/galleries/galleries.service';
+import * as fs from 'fs-extra';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>
+    private productsRepository: Repository<Product>,
+    private galleryService: GalleriesService
   ) {}
 
   async findAll(user: User, query: FilterProductsDto): Promise<[Product[], number]> {
@@ -34,6 +38,40 @@ export class ProductsService {
         ...dto,
         venture: { id: dto.ventureId }
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      const product = await this.findOne(id);
+      const gallery = await this.galleryService.create(file);
+      product.gallery.push(gallery);
+      await this.productsRepository.save(product);
+      return gallery;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeGallery(id: string, galleryId: string): Promise<void> {
+    try {
+      const product = await this.findOne(id);
+      await this.galleryService.remove(galleryId);
+      product.gallery = product.gallery.filter(async (g) => {
+        if (g.id === galleryId) await fs.remove(`./uploads/galleries/products/${g.image}`);
+        return g.id !== galleryId;
+      });
+      await this.productsRepository.save(product);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findGallery(id: string): Promise<Gallery[]> {
+    try {
+      return (await this.findOne(id)).gallery;
     } catch {
       throw new BadRequestException();
     }

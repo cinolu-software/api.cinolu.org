@@ -6,9 +6,10 @@ import { Event } from './entities/event.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { EventSubscriber } from './subscribers/event.subscriber';
 import { IndicatorsModule } from '../indicators/indicators.module';
+import { GalleriesModule } from 'src/features/galleries/galleries.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Event]), CategoriesModule, IndicatorsModule],
+  imports: [TypeOrmModule.forFeature([Event]), CategoriesModule, IndicatorsModule, GalleriesModule],
   controllers: [EventsController],
   providers: [EventsService, EventSubscriber]
 })

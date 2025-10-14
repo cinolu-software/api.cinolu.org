@@ -21,6 +21,8 @@ import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { UseRoles } from 'nest-access-control';
+import { Gallery } from '../galleries/entities/gallery.entity';
+import { Public } from 'src/shared/decorators/public.decorator';
 
 @Controller('ventures')
 export class VenturesController {
@@ -58,12 +60,40 @@ export class VenturesController {
     return this.venturesService.findByUserUnpaginated(user);
   }
 
+  @Post('gallery/:id')
+  @UseRoles({ resource: 'ventures', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/galleries/ventures',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+    return this.venturesService.addGallery(id, file);
+  }
+
+  @Post('gallery/remove/:id/:galleryId')
+  @UseRoles({ resource: 'ventures', action: 'update' })
+  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
+    return this.venturesService.removeGallery(id, galleryId);
+  }
+
+  @Get('gallery/:id')
+  @Public()
+  findGallery(@Param('id') id: string): Promise<Gallery[]> {
+    return this.venturesService.findGallery(id);
+  }
+
   @Post('add-logo/:id')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('logo', {
       storage: diskStorage({
-        destination: './uploads/enterprises/logos',
+        destination: './uploads/ventures/logos',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }

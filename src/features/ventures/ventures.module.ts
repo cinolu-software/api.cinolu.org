@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Venture } from './entities/venture.entity';
 import { VentureSubscriber } from './subscribers/venture.subscriber';
 import { ProductsModule } from './products/products.module';
+import { GalleriesModule } from '../galleries/galleries.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Venture]), ProductsModule],
+  imports: [TypeOrmModule.forFeature([Venture]), ProductsModule, GalleriesModule],
   controllers: [VenturesController],
   providers: [VenturesService, VentureSubscriber]
 })

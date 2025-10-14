@@ -58,12 +58,12 @@ export class ProjectsService {
     }
   }
 
-  async removeGallery(projectId: string, galleryId: string): Promise<void> {
+  async removeGallery(id: string, galleryId: string): Promise<void> {
     try {
-      const project = await this.findOne(projectId);
+      const project = await this.findOne(id);
       await this.galleryService.remove(galleryId);
       project.gallery = project.gallery.filter(async (g) => {
-        await fs.remove(`./uploads/galleries/projects/${g.image}`);
+        if (g.id === galleryId) await fs.remove(`./uploads/galleries/projects/${g.image}`);
         return g.id !== galleryId;
       });
       await this.projectRepository.save(project);
@@ -72,10 +72,9 @@ export class ProjectsService {
     }
   }
 
-  async findGallery(projectId: string): Promise<Gallery[]> {
+  async findGallery(id: string): Promise<Gallery[]> {
     try {
-      const project = await this.findOne(projectId);
-      return project.gallery;
+      return (await this.findOne(id)).gallery;
     } catch {
       throw new BadRequestException();
     }

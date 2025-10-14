@@ -22,6 +22,7 @@ import { UseRoles } from 'nest-access-control';
 import { Public } from 'src/shared/decorators/public.decorator';
 import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
 import { Indicator } from '../indicators/entities/indicator.entity';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Controller('events')
 export class EventsController {
@@ -75,6 +76,34 @@ export class EventsController {
     return this.eventsService.togglePublish(id);
   }
 
+  @Post('gallery/:id')
+  @UseRoles({ resource: 'events', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/galleries/events',
+        filename: function (_req, file, cb) {
+          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
+        }
+      })
+    })
+  )
+  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Gallery> {
+    return this.eventsService.addGallery(id, file);
+  }
+
+  @Post('gallery/remove/:id/:galleryId')
+  @UseRoles({ resource: 'events', action: 'update' })
+  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
+    return this.eventsService.removeGallery(id, galleryId);
+  }
+
+  @Get('gallery/:id')
+  @Public()
+  findGallery(@Param('id') id: string): Promise<Gallery[]> {
+    return this.eventsService.findGallery(id);
+  }
+
   @Post('cover/:id')
   @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(
@@ -107,12 +136,6 @@ export class EventsController {
   @UseRoles({ resource: 'events', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateEventDto): Promise<Event> {
     return this.eventsService.update(id, dto);
-  }
-
-  @Post('restore/:id')
-  @UseRoles({ resource: 'events', action: 'update' })
-  restore(@Param('id') id: string): Promise<void> {
-    return this.eventsService.restore(id);
   }
 
   @Delete(':id')

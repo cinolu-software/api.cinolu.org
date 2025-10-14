@@ -7,12 +7,15 @@ import { Article } from './entities/article.entity';
 import { FilterArticlesDto } from './dto/filter-articles.dto';
 import { User } from 'src/core/users/entities/user.entity';
 import * as fs from 'fs-extra';
+import { GalleriesService } from 'src/features/galleries/galleries.service';
+import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
-    private articlesRepository: Repository<Article>
+    private articlesRepository: Repository<Article>,
+    private galleryService: GalleriesService
   ) {}
 
   async create(dto: CreateArticleDto, user: User): Promise<Article> {
@@ -24,6 +27,40 @@ export class ArticlesService {
         author: user
       });
       return await this.articlesRepository.save(article);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addGallery(id: string, file: Express.Multer.File): Promise<Gallery> {
+    try {
+      const article = await this.findOne(id);
+      const gallery = await this.galleryService.create(file);
+      article.gallery.push(gallery);
+      await this.articlesRepository.save(article);
+      return gallery;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async removeGallery(id: string, galleryId: string): Promise<void> {
+    try {
+      const article = await this.findOne(id);
+      await this.galleryService.remove(galleryId);
+      article.gallery = article.gallery.filter(async (g) => {
+        if (g.id === galleryId) await fs.remove(`./uploads/galleries/articles/${g.image}`);
+        return g.id !== galleryId;
+      });
+      await this.articlesRepository.save(article);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findGallery(id: string): Promise<Gallery[]> {
+    try {
+      return (await this.findOne(id)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -110,7 +147,7 @@ export class ArticlesService {
     try {
       return await this.articlesRepository.findOneOrFail({
         where: { id },
-        relations: ['tags', 'author']
+        relations: ['tags', 'author', 'gallery']
       });
     } catch {
       throw new BadRequestException();
