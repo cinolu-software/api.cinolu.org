@@ -36,9 +36,9 @@ export class ProjectsService {
   async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
       const project = await this.findOne(id);
-      const indicators = await this.indicatorsService.create(dtos);
       const ids = project.indicators.map((indicator) => indicator.id);
       await this.indicatorsService.removeMany(ids);
+      const indicators = await this.indicatorsService.create(dtos);
       await this.projectRepository.save({ ...project, indicators });
       return indicators;
     } catch {

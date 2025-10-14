@@ -36,9 +36,9 @@ export class EventsService {
   async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
       const event = await this.findOne(id);
-      const indicators = await this.indicatorsService.create(dtos);
       const ids = event.indicators.map((indicator) => indicator.id);
       await this.indicatorsService.removeMany(ids);
+      const indicators = await this.indicatorsService.create(dtos);
       await this.eventRepository.save({ ...event, indicators });
       return indicators;
     } catch {
