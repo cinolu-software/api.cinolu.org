@@ -55,10 +55,10 @@ export class ProductsController {
     return this.productsService.removeGallery(id, galleryId);
   }
 
-  @Get('gallery/:id')
+  @Get('gallery/:slug')
   @Public()
-  findGallery(@Param('id') id: string): Promise<Gallery[]> {
-    return this.productsService.findGallery(id);
+  findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.productsService.findGallery(slug);
   }
 
   @Get('by-user')

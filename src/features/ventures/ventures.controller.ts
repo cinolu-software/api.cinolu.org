@@ -82,10 +82,10 @@ export class VenturesController {
     return this.venturesService.removeGallery(id, galleryId);
   }
 
-  @Get('gallery/:id')
+  @Get('gallery/:slug')
   @Public()
-  findGallery(@Param('id') id: string): Promise<Gallery[]> {
-    return this.venturesService.findGallery(id);
+  findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.venturesService.findGallery(slug);
   }
 
   @Post('add-logo/:id')

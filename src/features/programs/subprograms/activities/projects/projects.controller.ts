@@ -92,10 +92,10 @@ export class ProjectsController {
     return this.projectsService.removeGallery(id, galleryId);
   }
 
-  @Get('gallery/:id')
+  @Get('gallery/:slug')
   @Public()
-  findGallery(@Param('id') id: string): Promise<Gallery[]> {
-    return this.projectsService.findGallery(id);
+  findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.projectsService.findGallery(slug);
   }
 
   @Post('publish/:id')

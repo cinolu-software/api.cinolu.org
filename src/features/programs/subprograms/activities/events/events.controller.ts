@@ -98,10 +98,10 @@ export class EventsController {
     return this.eventsService.removeGallery(id, galleryId);
   }
 
-  @Get('gallery/:id')
+  @Get('gallery/:slug')
   @Public()
-  findGallery(@Param('id') id: string): Promise<Gallery[]> {
-    return this.eventsService.findGallery(id);
+  findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
+    return this.eventsService.findGallery(slug);
   }
 
   @Post('cover/:id')

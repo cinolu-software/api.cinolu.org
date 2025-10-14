@@ -72,9 +72,9 @@ export class EventsService {
     }
   }
 
-  async findGallery(id: string): Promise<Gallery[]> {
+  async findGallery(slug: string): Promise<Gallery[]> {
     try {
-      return (await this.findOne(id)).gallery;
+      return (await this.findBySlug(slug)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -167,7 +167,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'indicators']
+        relations: ['categories', 'program', 'indicators', 'gallery']
       });
     } catch {
       throw new BadRequestException();

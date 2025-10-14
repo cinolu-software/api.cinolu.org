@@ -72,9 +72,9 @@ export class ProjectsService {
     }
   }
 
-  async findGallery(id: string): Promise<Gallery[]> {
+  async findGallery(slug: string): Promise<Gallery[]> {
     try {
-      return (await this.findOne(id)).gallery;
+      return (await this.findBySlug(slug)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -143,7 +143,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'indicators']
+        relations: ['categories', 'program', 'indicators', 'gallery']
       });
     } catch {
       throw new BadRequestException();

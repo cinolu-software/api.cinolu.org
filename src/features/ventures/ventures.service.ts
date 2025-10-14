@@ -55,9 +55,9 @@ export class VenturesService {
     }
   }
 
-  async findGallery(id: string): Promise<Gallery[]> {
+  async findGallery(slug: string): Promise<Gallery[]> {
     try {
-      return (await this.findOne(id)).gallery;
+      return (await this.findBySlug(slug)).gallery;
     } catch {
       throw new BadRequestException();
     }
@@ -66,7 +66,8 @@ export class VenturesService {
   async findBySlug(slug: string): Promise<Venture> {
     try {
       return await this.ventureRepository.findOneOrFail({
-        where: { slug }
+        where: { slug },
+        relations: ['gallery']
       });
     } catch {
       throw new NotFoundException();
