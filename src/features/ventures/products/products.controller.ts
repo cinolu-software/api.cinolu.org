@@ -38,7 +38,7 @@ export class ProductsController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads/galleries/products',
+        destination: './uploads/galleries',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
@@ -49,10 +49,10 @@ export class ProductsController {
     return this.productsService.addGallery(id, file);
   }
 
-  @Post('gallery/remove/:id/:galleryId')
+  @Delete('gallery/remove/:id')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
-  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
-    return this.productsService.removeGallery(id, galleryId);
+  removeGallery(@Param('id') id: string): Promise<void> {
+    return this.productsService.removeGallery(id);
   }
 
   @Get('gallery/:slug')

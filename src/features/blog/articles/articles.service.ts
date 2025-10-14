@@ -44,15 +44,9 @@ export class ArticlesService {
     }
   }
 
-  async removeGallery(id: string, galleryId: string): Promise<void> {
+  async removeGallery(id: string): Promise<void> {
     try {
-      const article = await this.findOne(id);
-      await this.galleryService.remove(galleryId);
-      article.gallery = article.gallery.filter(async (g) => {
-        if (g.id === galleryId) await fs.remove(`./uploads/galleries/articles/${g.image}`);
-        return g.id !== galleryId;
-      });
-      await this.articlesRepository.save(article);
+      await this.galleryService.remove(id);
     } catch {
       throw new BadRequestException();
     }

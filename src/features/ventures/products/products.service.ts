@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { FilterProductsDto } from './dto/filter-products.dto';
 import { User } from 'src/core/users/entities/user.entity';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
-import * as fs from 'fs-extra';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Injectable()
@@ -55,15 +54,9 @@ export class ProductsService {
     }
   }
 
-  async removeGallery(id: string, galleryId: string): Promise<void> {
+  async removeGallery(id: string): Promise<void> {
     try {
-      const product = await this.findOne(id);
-      await this.galleryService.remove(galleryId);
-      product.gallery = product.gallery.filter(async (g) => {
-        if (g.id === galleryId) await fs.remove(`./uploads/galleries/products/${g.image}`);
-        return g.id !== galleryId;
-      });
-      await this.productsRepository.save(product);
+      await this.galleryService.remove(id);
     } catch {
       throw new BadRequestException();
     }

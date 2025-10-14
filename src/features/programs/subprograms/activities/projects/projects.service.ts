@@ -58,15 +58,9 @@ export class ProjectsService {
     }
   }
 
-  async removeGallery(id: string, galleryId: string): Promise<void> {
+  async removeGallery(id: string): Promise<void> {
     try {
-      const project = await this.findOne(id);
-      await this.galleryService.remove(galleryId);
-      project.gallery = project.gallery.filter(async (g) => {
-        if (g.id === galleryId) await fs.remove(`./uploads/galleries/projects/${g.image}`);
-        return g.id !== galleryId;
-      });
-      await this.projectRepository.save(project);
+      await this.galleryService.remove(id);
     } catch {
       throw new BadRequestException();
     }

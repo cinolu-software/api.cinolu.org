@@ -75,7 +75,7 @@ export class ProjectsController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads/galleries/projects',
+        destination: './uploads/galleries',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
@@ -86,10 +86,10 @@ export class ProjectsController {
     return this.projectsService.addGallery(id, file);
   }
 
-  @Post('gallery/remove/:id/:galleryId')
+  @Delete('gallery/remove/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
-  removeGallery(@Param('id') id: string, @Param('galleryId') galleryId: string): Promise<void> {
-    return this.projectsService.removeGallery(id, galleryId);
+  removeGallery(@Param('id') id: string): Promise<void> {
+    return this.projectsService.removeGallery(id);
   }
 
   @Get('gallery/:slug')
