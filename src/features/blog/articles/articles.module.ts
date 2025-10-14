@@ -7,8 +7,8 @@ import { ArticlesSubscriber } from './subscribers/articles.subscriber';
 import { GalleriesModule } from 'src/features/galleries/galleries.module';
 
 @Module({
-  controllers: [ArticlesController, GalleriesModule],
+  controllers: [ArticlesController],
   providers: [ArticlesService, ArticlesSubscriber],
-  imports: [TypeOrmModule.forFeature([Article])]
+  imports: [TypeOrmModule.forFeature([Article]), GalleriesModule]
 })
 export class ArticlesModule {}
