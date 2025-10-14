@@ -109,7 +109,7 @@ export class VenturesController {
   @UseInterceptors(
     FileInterceptor('cover', {
       storage: diskStorage({
-        destination: './uploads/enterprises/covers',
+        destination: './uploads/ventures/covers',
         filename: function (_req, file, cb) {
           cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
         }
