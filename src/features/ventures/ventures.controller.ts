@@ -40,6 +40,7 @@ export class VenturesController {
   }
 
   @Get('by-slug/:slug')
+  @Public()
   findBySlug(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.findBySlug(slug);
   }
