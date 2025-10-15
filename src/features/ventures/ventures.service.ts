@@ -60,7 +60,7 @@ export class VenturesService {
     try {
       return await this.ventureRepository.findOneOrFail({
         where: { slug },
-        relations: ['gallery']
+        relations: ['gallery', 'products', 'products.gallery']
       });
     } catch {
       throw new NotFoundException();
