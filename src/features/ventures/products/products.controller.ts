@@ -68,7 +68,7 @@ export class ProductsController {
   }
 
   @Get(':slug')
-  @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
+  @Public()
   findOne(@Param('slug') slug: string): Promise<Product> {
     return this.productsService.findBySlug(slug);
   }
