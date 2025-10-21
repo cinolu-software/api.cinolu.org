@@ -1,9 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateIndicatorDto {
+export class IndicatorDto {
   @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
-  value: number;
 }

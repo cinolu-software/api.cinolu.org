@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../../shared/utils/abstract.entity';
+import { AbstractEntity } from '../../../../core/database/abstract.entity';
 import { Program } from '../../entities/program.entity';
 
 @Entity()
-export class ProgramCategory extends BaseEntity {
+export class ProgramCategory extends AbstractEntity {
   @Column()
   name: string;
 

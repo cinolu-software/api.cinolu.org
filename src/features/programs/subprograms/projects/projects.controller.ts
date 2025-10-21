@@ -19,10 +19,10 @@ import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
-import { Public } from 'src/shared/decorators/public.decorator';
-import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
-import { Indicator } from '../indicators/entities/indicator.entity';
+import { Public } from 'src/core/auth/decorators/public.decorator';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
+import { Metric } from '../metrics/entities/metric.entity';
+import { MetricDto } from '../metrics/dto/metric.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -32,6 +32,18 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'create' })
   create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
+  }
+
+  @Get('metrics/:id')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  findMetrics(@Param('id') id: string): Promise<Metric[]> {
+    return this.projectsService.findMetrics(id);
+  }
+
+  @Patch('metrics/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  updateMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
+    return this.projectsService.updateMetrics(id, dto);
   }
 
   @Get('')
@@ -62,12 +74,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
-  }
-
-  @Post('indicators/:id')
-  @UseRoles({ resource: 'projects', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
-    return this.projectsService.addIndicators(id, dtos);
   }
 
   @Post('gallery/:id')

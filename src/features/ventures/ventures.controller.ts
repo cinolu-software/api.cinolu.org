@@ -17,12 +17,12 @@ import { Venture } from './entities/venture.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { CurrentUser } from 'src/core/auth/decorators/current-user.decorator';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { UseRoles } from 'nest-access-control';
 import { Gallery } from '../galleries/entities/gallery.entity';
-import { Public } from 'src/shared/decorators/public.decorator';
+import { Public } from 'src/core/auth/decorators/public.decorator';
 
 @Controller('ventures')
 export class VenturesController {

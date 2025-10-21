@@ -1,5 +1,5 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-import { Match } from '../../../shared/decorators/match.decorator';
+import { Match } from '../decorators/match.decorator';
 
 export class UpdatePasswordDto {
   @MinLength(6)

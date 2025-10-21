@@ -6,12 +6,18 @@ import { Program } from './entities/program.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import * as fs from 'fs-extra';
+import { Indicator } from './entities/indicator.entity';
+import { MetricsService } from './subprograms/metrics/metrics.service';
+import { IndicatorDto } from './dto/indicator.dto';
 
 @Injectable()
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private programRepository: Repository<Program>
+    private programRepository: Repository<Program>,
+    @InjectRepository(Indicator)
+    private indicatorRepository: Repository<Indicator>,
+    private metricsService: MetricsService
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
@@ -20,6 +26,46 @@ export class ProgramsService {
         ...dto,
         category: { id: dto.category }
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addIndicators(id: string, dtos: IndicatorDto[]): Promise<Indicator[]> {
+    try {
+      const data = dtos.map((dto) =>
+        this.indicatorRepository.create({
+          ...dto,
+          program: { id }
+        })
+      );
+      const indicators = await this.indicatorRepository.save(data);
+      const indicatorsIds = indicators.map((i) => i.id);
+      await this.generateMetrics(id, indicatorsIds);
+      return indicators;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findIndicators(id: string): Promise<Indicator[]> {
+    try {
+      return await this.indicatorRepository.find({
+        where: { program: { id } },
+        order: { created_at: 'ASC' }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
+  async updateIndicators(id: string, dtos: { id: string; name: string }[]): Promise<Indicator[]> {
+    try {
+      dtos.forEach(async (dto) => {
+        await this.indicatorRepository.findOneBy({ id: dto.id });
+        await this.indicatorRepository.update(dto.id, dto);
+      });
+      return await this.findIndicators(id);
     } catch {
       throw new BadRequestException();
     }
@@ -93,7 +139,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['category']
+        relations: ['category', 'indicators']
       });
     } catch {
       throw new NotFoundException();
@@ -123,10 +169,34 @@ export class ProgramsService {
     }
   }
 
+  async removeIndicator(id: string): Promise<void> {
+    try {
+      await this.indicatorRepository.softDelete(id);
+      await this.metricsService.removeMetric(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
       await this.programRepository.softDelete(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private async generateMetrics(id: string, indicators: string[]): Promise<void> {
+    try {
+      const program = await this.programRepository.findOneOrFail({
+        where: { id },
+        relations: ['subprograms.projects', 'subprograms.events']
+      });
+      for (const sub of program.subprograms) {
+        sub.projects.map(async (p) => await this.metricsService.generateMetrics('project', p.id, indicators));
+        sub.events.map(async (e) => await this.metricsService.generateMetrics('event', e.id, indicators));
+      }
     } catch {
       throw new BadRequestException();
     }

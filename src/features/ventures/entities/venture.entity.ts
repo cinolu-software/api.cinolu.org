@@ -1,11 +1,11 @@
 import { User } from 'src/core/users/entities/user.entity';
-import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { AbstractEntity } from 'src/core/database/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { Gallery } from '../../galleries/entities/gallery.entity';
 
 @Entity()
-export class Venture extends BaseEntity {
+export class Venture extends AbstractEntity {
   @Column()
   name: string;
 

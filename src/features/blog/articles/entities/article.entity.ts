@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { AbstractEntity } from 'src/core/database/abstract.entity';
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Tag } from '../../tags/entities/tag.entity';
 import { Comment } from '../../comments/entities/comment.entity';
@@ -6,7 +6,7 @@ import { User } from 'src/core/users/entities/user.entity';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 
 @Entity()
-export class Article extends BaseEntity {
+export class Article extends AbstractEntity {
   @Column()
   title: string;
 

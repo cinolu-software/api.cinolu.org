@@ -6,19 +6,19 @@ import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
-import { IndicatorsService } from '../indicators/indicators.service';
-import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
-import { Indicator } from '../indicators/entities/indicator.entity';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
+import { MetricsService } from '../metrics/metrics.service';
+import { Metric } from '../metrics/entities/metric.entity';
+import { MetricDto } from '../metrics/dto/metric.dto';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    private indicatorsService: IndicatorsService,
-    private galleryService: GalleriesService
+    private galleryService: GalleriesService,
+    private metricsService: MetricsService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -33,14 +33,19 @@ export class ProjectsService {
     }
   }
 
-  async addIndicators(id: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
+  async findMetrics(id: string): Promise<Metric[]> {
     try {
-      const project = await this.findOne(id);
-      const ids = project.indicators.map((indicator) => indicator.id);
-      await this.indicatorsService.removeMany(ids);
-      const indicators = await this.indicatorsService.create(dtos);
-      await this.projectRepository.save({ ...project, indicators });
-      return indicators;
+      await this.findOne(id);
+      return await this.metricsService.findByActivity('project', id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async updateMetrics(id: string, dto: MetricDto[]): Promise<Metric[]> {
+    try {
+      await this.metricsService.updateMetrics(dto);
+      return await this.findMetrics(id);
     } catch {
       throw new BadRequestException();
     }
@@ -136,7 +141,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'indicators', 'gallery']
+        relations: ['categories', 'program', 'gallery']
       });
     } catch {
       throw new BadRequestException();
@@ -147,7 +152,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'gallery', 'program', 'indicators']
+        relations: ['categories', 'gallery', 'program', 'metrics']
       });
     } catch {
       throw new BadRequestException();

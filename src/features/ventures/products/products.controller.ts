@@ -16,12 +16,12 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { UseRoles } from 'nest-access-control';
 import { FilterProductsDto } from './dto/filter-products.dto';
-import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { CurrentUser } from 'src/core/auth/decorators/current-user.decorator';
 import { User } from 'src/core/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
-import { Public } from 'src/shared/decorators/public.decorator';
+import { Public } from 'src/core/auth/decorators/public.decorator';
 import { v4 as uuidv4 } from 'uuid';
 
 @Controller('products')

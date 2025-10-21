@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../../shared/utils/abstract.entity';
+import { AbstractEntity } from '../../../../core/database/abstract.entity';
 import { Program } from '../../entities/program.entity';
-import { Project } from '../activities/projects/entities/project.entity';
-import { Event } from '../activities/events/entities/event.entity';
+import { Project } from '../projects/entities/project.entity';
+import { Event } from '../events/entities/event.entity';
 
 @Entity()
-export class Subprogram extends BaseEntity {
+export class Subprogram extends AbstractEntity {
   @Column()
   name: string;
 

@@ -1,12 +1,12 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { ProjectCategory } from '../categories/entities/category.entity';
-import { Indicator } from '../../indicators/entities/indicator.entity';
-import { BaseEntity } from 'src/shared/utils/abstract.entity';
-import { Subprogram } from '../../../entities/subprogram.entity';
+import { AbstractEntity } from 'src/core/database/abstract.entity';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
+import { Subprogram } from '../../entities/subprogram.entity';
+import { Metric } from '../../metrics/entities/metric.entity';
 
 @Entity()
-export class Project extends BaseEntity {
+export class Project extends AbstractEntity {
   @Column()
   name: string;
 
@@ -45,6 +45,6 @@ export class Project extends BaseEntity {
   @OneToMany(() => Gallery, (gallery) => gallery.project)
   gallery: Gallery[];
 
-  @OneToMany(() => Indicator, (indicator) => indicator.project)
-  indicators: Indicator[];
+  @OneToMany(() => Metric, (metric) => metric.project)
+  metrics: Metric[];
 }

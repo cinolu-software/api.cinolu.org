@@ -1,10 +1,10 @@
-import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { AbstractEntity } from 'src/core/database/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Article } from '../../articles/entities/article.entity';
 import { User } from 'src/core/users/entities/user.entity';
 
 @Entity()
-export class Comment extends BaseEntity {
+export class Comment extends AbstractEntity {
   @Column()
   content: string;
 

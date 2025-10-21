@@ -11,11 +11,11 @@ import { Article } from 'src/features/blog/articles/entities/article.entity';
 import { Tag } from 'src/features/blog/tags/entities/tag.entity';
 import { Comment } from 'src/features/blog/comments/entities/comment.entity';
 import { nanoid } from 'nanoid';
-import { EventCategory } from 'src/features/programs/subprograms/activities/events/categories/entities/category.entity';
-import { ProjectCategory } from 'src/features/programs/subprograms/activities/projects/categories/entities/category.entity';
-import { Project } from 'src/features/programs/subprograms/activities/projects/entities/project.entity';
 import { Subprogram } from 'src/features/programs/subprograms/entities/subprogram.entity';
-import { Event } from 'src/features/programs/subprograms/activities/events/entities/event.entity';
+import { EventCategory } from 'src/features/programs/subprograms/events/categories/entities/category.entity';
+import { ProjectCategory } from 'src/features/programs/subprograms/projects/categories/entities/category.entity';
+import { Project } from 'src/features/programs/subprograms/projects/entities/project.entity';
+import { Event } from 'src/features/programs/subprograms/events/entities/event.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {

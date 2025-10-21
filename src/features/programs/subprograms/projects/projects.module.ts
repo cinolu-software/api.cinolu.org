@@ -5,11 +5,11 @@ import { Project } from './entities/project.entity';
 import { ProjectsController } from './projects.controller';
 import { CategoriesModule } from './categories/categories.module';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
-import { IndicatorsModule } from '../indicators/indicators.module';
 import { GalleriesModule } from 'src/features/galleries/galleries.module';
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Project]), CategoriesModule, IndicatorsModule, GalleriesModule],
+  imports: [TypeOrmModule.forFeature([Project]), CategoriesModule, GalleriesModule, MetricsModule],
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectSubscriber]
 })

@@ -19,10 +19,10 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
-import { Public } from 'src/shared/decorators/public.decorator';
-import { CreateIndicatorDto } from '../indicators/dto/create-indicator.dto';
-import { Indicator } from '../indicators/entities/indicator.entity';
+import { Public } from 'src/core/auth/decorators/public.decorator';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
+import { Metric } from '../metrics/entities/metric.entity';
+import { MetricDto } from '../metrics/dto/metric.dto';
 
 @Controller('events')
 export class EventsController {
@@ -38,6 +38,18 @@ export class EventsController {
   @UseRoles({ resource: 'events', action: 'read' })
   findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(queryParams);
+  }
+
+  @Get('metrics/:id')
+  @UseRoles({ resource: 'events', action: 'read' })
+  findMetrics(@Param('id') id: string): Promise<Metric[]> {
+    return this.eventsService.findMetrics(id);
+  }
+
+  @Patch('metrics/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  updateMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
+    return this.eventsService.updateMetrics(id, dto);
   }
 
   @Get('find-recent')
@@ -56,12 +68,6 @@ export class EventsController {
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Event> {
     return this.eventsService.findBySlug(slug);
-  }
-
-  @Post('indicators/:id')
-  @UseRoles({ resource: 'events', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
-    return this.eventsService.addIndicators(id, dtos);
   }
 
   @Get(':id')

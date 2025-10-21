@@ -18,8 +18,10 @@ import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Public } from '../../shared/decorators/public.decorator';
+import { Public } from '../../core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
+import { Indicator } from './entities/indicator.entity';
+import { IndicatorDto } from './dto/indicator.dto';
 
 @Controller('programs')
 export class ProgramsController {
@@ -41,6 +43,24 @@ export class ProgramsController {
   @UseRoles({ resource: 'programs', action: 'update' })
   togglePublish(@Param('id') id: string): Promise<Program> {
     return this.programsService.togglePublish(id);
+  }
+
+  @Get('indicators/:id')
+  @UseRoles({ resource: 'programs', action: 'read' })
+  findIndicators(@Param('id') id: string): Promise<Indicator[]> {
+    return this.programsService.findIndicators(id);
+  }
+
+  @Post('indicators/:id')
+  @UseRoles({ resource: 'programs', action: 'update' })
+  addIndicators(@Param('id') id: string, @Body() dto: IndicatorDto[]): Promise<Indicator[]> {
+    return this.programsService.addIndicators(id, dto);
+  }
+
+  @Patch('indicators/:id')
+  @UseRoles({ resource: 'programs', action: 'update' })
+  updateIndicators(@Param('id') id: string, @Body() dtos: { id: string; name: string }[]): Promise<Indicator[]> {
+    return this.programsService.updateIndicators(id, dtos);
   }
 
   @Post('logo/:id')
@@ -99,5 +119,11 @@ export class ProgramsController {
   @UseRoles({ resource: 'programs', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.programsService.remove(id);
+  }
+
+  @Delete('indicators/:id')
+  @UseRoles({ resource: 'programs', action: 'update' })
+  removeIndicator(@Param('id') id: string): Promise<void> {
+    return this.programsService.removeIndicator(id);
   }
 }

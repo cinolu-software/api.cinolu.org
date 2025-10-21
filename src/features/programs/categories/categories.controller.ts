@@ -5,7 +5,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('program-categories')
 export class CategoriesController {

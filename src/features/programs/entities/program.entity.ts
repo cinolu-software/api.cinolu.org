@@ -1,10 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../shared/utils/abstract.entity';
+import { AbstractEntity } from '../../../core/database/abstract.entity';
 import { Subprogram } from '../subprograms/entities/subprogram.entity';
 import { ProgramCategory } from '../categories/entities/category.entity';
+import { Indicator } from './indicator.entity';
 
 @Entity()
-export class Program extends BaseEntity {
+export class Program extends AbstractEntity {
   @Column()
   name: string;
 
@@ -29,4 +30,7 @@ export class Program extends BaseEntity {
   @ManyToOne(() => ProgramCategory, (category) => category.programs)
   @JoinColumn()
   category: ProgramCategory;
+
+  @OneToMany(() => Indicator, (i) => i.program)
+  indicators: Indicator[];
 }

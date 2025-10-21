@@ -18,7 +18,7 @@ import { FilterSubprogramDto } from './dto/filter-subprogram.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 
 @Controller('subprograms')

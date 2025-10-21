@@ -4,10 +4,10 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
 import { User } from 'src/core/users/entities/user.entity';
-import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { CurrentUser } from 'src/core/auth/decorators/current-user.decorator';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('comments')
 export class CommentsController {

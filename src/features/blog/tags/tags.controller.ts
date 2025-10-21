@@ -5,7 +5,7 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 import { FilterTagsDto } from './dto/filter-tags.dto';
 import { Tag } from './entities/tag.entity';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../shared/decorators/public.decorator';
+import { Public } from '../../../core/auth/decorators/public.decorator';
 
 @Controller('tags')
 export class TagsController {

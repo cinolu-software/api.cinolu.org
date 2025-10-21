@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToMany } from 'typeorm';
 import { Event } from '../../entities/event.entity';
-import { BaseEntity } from 'src/shared/utils/abstract.entity';
+import { AbstractEntity } from 'src/core/database/abstract.entity';
 
 @Entity()
-export class EventCategory extends BaseEntity {
+export class EventCategory extends AbstractEntity {
   @Column()
   name: string;
 
