@@ -44,12 +44,6 @@ export class ProgramsController {
     return this.programsService.togglePublish(id);
   }
 
-  @Get('indicators/:id')
-  @UseRoles({ resource: 'programs', action: 'read' })
-  findIndicators(@Param('id') id: string): Promise<Indicator[]> {
-    return this.programsService.findIndicators(id);
-  }
-
   @Post('indicators/:id')
   @UseRoles({ resource: 'programs', action: 'update' })
   addIndicators(@Param('id') id: string, @Body() dto: string[]): Promise<Indicator[]> {

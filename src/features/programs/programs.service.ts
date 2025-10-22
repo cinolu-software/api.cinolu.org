@@ -62,7 +62,9 @@ export class ProgramsService {
     try {
       dtos.forEach(async (dto) => {
         await this.indicatorRepository.findOneBy({ id: dto.id });
-        await this.indicatorRepository.update(dto.id, dto);
+        await this.indicatorRepository.update(dto.id, {
+          name: dto.name
+        });
       });
       return await this.findIndicators(id);
     } catch {
@@ -82,7 +84,7 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      relations: ['category']
+      relations: ['category', 'indicators']
     });
   }
 
