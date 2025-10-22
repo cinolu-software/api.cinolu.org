@@ -72,7 +72,7 @@ export class AuthService {
     return isMatch;
   }
 
-  async generateToken(user: User, expiresIn: string): Promise<string> {
+  async generateToken(user: User, expiresIn: number): Promise<string> {
     const payload = { sub: user.id, name: user.name };
     return this.jwtService.signAsync(payload, { secret: process.env.JWT_SECRET, expiresIn });
   }
@@ -97,7 +97,7 @@ export class AuthService {
   async forgotPassword(dto: forgotPasswordDto): Promise<void> {
     try {
       const user = await this.usersService.findByEmail(dto.email);
-      const token = await this.generateToken(user, '15min');
+      const token = await this.generateToken(user, 15 * 60);
       const link = process.env.FRONTEND_URI + 'reset-password?token=' + token;
       this.eventEmitter.emit('user.reset-password', { user, link });
     } catch {
