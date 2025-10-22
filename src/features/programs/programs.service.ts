@@ -8,7 +8,6 @@ import { FilterProgramsDto } from './dto/filter-programs.dto';
 import * as fs from 'fs-extra';
 import { Indicator } from './entities/indicator.entity';
 import { MetricsService } from './subprograms/metrics/metrics.service';
-import { IndicatorDto } from './dto/indicator.dto';
 
 @Injectable()
 export class ProgramsService {
@@ -31,11 +30,11 @@ export class ProgramsService {
     }
   }
 
-  async addIndicators(id: string, dtos: IndicatorDto[]): Promise<Indicator[]> {
+  async addIndicators(id: string, dtos: string[]): Promise<Indicator[]> {
     try {
       const data = dtos.map((dto) =>
         this.indicatorRepository.create({
-          ...dto,
+          name: dto,
           program: { id }
         })
       );

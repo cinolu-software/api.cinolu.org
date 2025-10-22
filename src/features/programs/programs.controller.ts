@@ -21,7 +21,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Public } from '../../core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 import { Indicator } from './entities/indicator.entity';
-import { IndicatorDto } from './dto/indicator.dto';
 
 @Controller('programs')
 export class ProgramsController {
@@ -53,7 +52,7 @@ export class ProgramsController {
 
   @Post('indicators/:id')
   @UseRoles({ resource: 'programs', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dto: IndicatorDto[]): Promise<Indicator[]> {
+  addIndicators(@Param('id') id: string, @Body() dto: string[]): Promise<Indicator[]> {
     return this.programsService.addIndicators(id, dto);
   }
 
