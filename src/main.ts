@@ -1,19 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import passport from 'passport';
-import session from 'express-session';
+import * as passport from 'passport';
+import * as session from 'express-session';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
-const port = Number(process.env.PORT) as number;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = Number(process.env.PORT) as number;
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({
     origin: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   });
   app.use(
     session({
@@ -25,11 +24,9 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
   const config = new DocumentBuilder().setTitle('API DOCS').build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
-
   await app.listen(port);
 }
 bootstrap();
