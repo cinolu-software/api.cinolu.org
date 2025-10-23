@@ -120,7 +120,8 @@ export class ProgramsService {
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.category', 'category')
       .leftJoinAndSelect('p.indicators', 'indicators')
-      .orderBy('p.updated_at', 'DESC');
+      .orderBy('p.updated_at', 'DESC')
+      .addOrderBy('indicators.created_at', 'ASC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     return await query
       .skip((+page - 1) * 40)
