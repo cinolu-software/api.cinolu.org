@@ -75,7 +75,7 @@ export class ProgramsService {
     return await this.programRepository.find({
       where: { is_published: true },
       order: { updated_at: 'DESC' },
-      relations: ['category', 'indicators']
+      relations: ['category']
     });
   }
 
@@ -119,6 +119,7 @@ export class ProgramsService {
     const query = this.programRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.category', 'category')
+      .leftJoinAndSelect('p.indicators', 'indicators')
       .orderBy('p.updated_at', 'DESC');
     if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     return await query
