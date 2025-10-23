@@ -141,7 +141,8 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'gallery']
+        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics'],
+        order: { program: { program: { indicators: { created_at: 'ASC' } } } }
       });
     } catch {
       throw new BadRequestException();
@@ -152,7 +153,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'gallery', 'program', 'metrics']
+        relations: ['categories', 'gallery', 'metrics']
       });
     } catch {
       throw new BadRequestException();
