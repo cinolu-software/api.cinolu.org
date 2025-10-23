@@ -9,8 +9,8 @@ import * as fs from 'fs-extra';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 import { MetricsService } from '../metrics/metrics.service';
-import { Metric } from '../metrics/entities/metric.entity';
 import { MetricDto } from '../metrics/dto/metric.dto';
+import { Metric } from '../metrics/entities/metric.entity';
 
 @Injectable()
 export class EventsService {
@@ -33,19 +33,25 @@ export class EventsService {
     }
   }
 
-  async findMetrics(id: string): Promise<Metric[]> {
+  async addTargetMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
-      await this.findOne(id);
-      return await this.metricsService.findByActivity('project', id);
+      const metricsDto = dto.map((metric) => ({
+        ...metric,
+        event: { id: eventId }
+      }));
+      return await this.metricsService.addTarget(metricsDto);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async updateMetrics(id: string, dto: MetricDto[]): Promise<Metric[]> {
+  async addAchievedMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
-      await this.metricsService.updateMetrics(dto);
-      return await this.findMetrics(id);
+      const metricsDto = dto.map((metric) => ({
+        ...metric,
+        event: { id: eventId }
+      }));
+      return await this.metricsService.addAchieved(metricsDto);
     } catch {
       throw new BadRequestException();
     }

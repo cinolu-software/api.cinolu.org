@@ -9,8 +9,8 @@ import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 import { MetricsService } from '../metrics/metrics.service';
-import { Metric } from '../metrics/entities/metric.entity';
 import { MetricDto } from '../metrics/dto/metric.dto';
+import { Metric } from '../metrics/entities/metric.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -28,24 +28,6 @@ export class ProjectsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async findMetrics(id: string): Promise<Metric[]> {
-    try {
-      await this.findOne(id);
-      return await this.metricsService.findByActivity('project', id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async updateMetrics(id: string, dto: MetricDto[]): Promise<Metric[]> {
-    try {
-      await this.metricsService.updateMetrics(dto);
-      return await this.findMetrics(id);
     } catch {
       throw new BadRequestException();
     }
@@ -137,11 +119,35 @@ export class ProjectsService {
     }
   }
 
+  async addTargetMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
+    try {
+      const metricsDto = dto.map((metric) => ({
+        ...metric,
+        project: { id: projectId }
+      }));
+      return await this.metricsService.addTarget(metricsDto);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async addAchievedMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
+    try {
+      const metricsDto = dto.map((metric) => ({
+        ...metric,
+        project: { id: projectId }
+      }));
+      return await this.metricsService.addAchieved(metricsDto);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findBySlug(slug: string): Promise<Project> {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics'],
+        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics.indicator'],
         order: { program: { program: { indicators: { created_at: 'ASC' } } } }
       });
     } catch {

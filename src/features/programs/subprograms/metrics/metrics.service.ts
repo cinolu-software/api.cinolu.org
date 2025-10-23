@@ -11,43 +11,30 @@ export class MetricsService {
     private metricsRepository: Repository<Metric>
   ) {}
 
-  async generateMetrics(activity: 'project' | 'event', id: string, indicators: string[]): Promise<void> {
+  async addTarget(metricDto: MetricDto[]): Promise<Metric[]> {
     try {
-      const metrics = indicators.map((indicatorId) =>
+      const metrics = metricDto.map((dto) =>
         this.metricsRepository.create({
-          [activity]: { id },
-          indicator: { id: indicatorId }
+          ...dto,
+          target: dto.value,
+          indicator: { id: dto.id }
         })
       );
-      await this.metricsRepository.save(metrics);
+      return await this.metricsRepository.save(metrics);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findByActivity(activity: 'project' | 'event', id: string): Promise<Metric[]> {
+  async addAchieved(metricDto: MetricDto[]): Promise<Metric[]> {
     try {
-      return await this.metricsRepository.find({
-        where: { [activity]: { id } },
-        relations: ['indicator'],
-        order: { [activity]: { created_at: 'ASC' } }
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async updateMetrics(dto: MetricDto[]): Promise<void> {
-    try {
-      await Promise.all(dto.map(async (item) => await this.metricsRepository.update(item.id, { ...item })));
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async removeMetric(indicatorId: string): Promise<void> {
-    try {
-      await this.metricsRepository.delete({ indicator: { id: indicatorId } });
+      const metrics = metricDto.map((dto) =>
+        this.metricsRepository.create({
+          achieved: dto.value,
+          indicator: { id: dto.id }
+        })
+      );
+      return await this.metricsRepository.save(metrics);
     } catch {
       throw new BadRequestException();
     }

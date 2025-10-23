@@ -1,15 +1,9 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class MetricDto {
   @IsNotEmpty()
   id: string;
 
-  @IsOptional()
-  target: number;
-
-  @IsOptional()
-  achieved: number;
-
-  @IsOptional()
-  is_public: boolean;
+  @IsNotEmpty()
+  value: number;
 }

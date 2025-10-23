@@ -34,16 +34,16 @@ export class ProjectsController {
     return this.projectsService.create(dto);
   }
 
-  @Get('metrics/:id')
-  @UseRoles({ resource: 'projects', action: 'read' })
-  findMetrics(@Param('id') id: string): Promise<Metric[]> {
-    return this.projectsService.findMetrics(id);
+  @Post('metrics/target/:id')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  add(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
+    return this.projectsService.addTargetMetrics(id, dto);
   }
 
-  @Patch('metrics/:id')
+  @Post('metrics/achieved/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
-  updateMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
-    return this.projectsService.updateMetrics(id, dto);
+  addAchieved(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
+    return this.projectsService.addAchievedMetrics(id, dto);
   }
 
   @Get('')
