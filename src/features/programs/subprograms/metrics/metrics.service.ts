@@ -30,6 +30,7 @@ export class MetricsService {
     try {
       const metrics = metricDto.map((dto) =>
         this.metricsRepository.create({
+          ...dto,
           achieved: dto.value,
           indicator: { id: dto.id }
         })
