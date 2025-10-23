@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import * as fs from 'fs-extra';
 import { Indicator } from './entities/indicator.entity';
-import { MetricsService } from './subprograms/metrics/metrics.service';
 
 @Injectable()
 export class ProgramsService {
@@ -15,8 +14,7 @@ export class ProgramsService {
     @InjectRepository(Program)
     private programRepository: Repository<Program>,
     @InjectRepository(Indicator)
-    private indicatorRepository: Repository<Indicator>,
-    private metricsService: MetricsService
+    private indicatorRepository: Repository<Indicator>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
@@ -30,46 +28,39 @@ export class ProgramsService {
     }
   }
 
-  async addIndicators(id: string, dtos: string[]): Promise<Indicator[]> {
+  async addIndicators(programId: string, dtos: string[]): Promise<Indicator[]> {
     try {
-      const data = dtos.map((dto) =>
+      const existing = await this.indicatorRepository.find({
+        where: { program: { id: programId } }
+      });
+      const [updatedData, toDelete] = this.diffIndicators(existing, dtos, programId);
+      await this.deleteIndicators(toDelete);
+      return await this.indicatorRepository.save(updatedData);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private diffIndicators(existing: Indicator[], dtos: string[], programId: string): Indicator[][] {
+    const existingNames = new Set(existing.map((i) => i.name));
+    const dtoNames = new Set(dtos);
+    const toDelete = existing.filter((i) => !dtoNames.has(i.name));
+    const toAdd = dtos
+      .filter((name) => !existingNames.has(name))
+      .map((name) =>
         this.indicatorRepository.create({
-          name: dto,
-          program: { id }
+          name,
+          program: { id: programId }
         })
       );
-      const indicators = await this.indicatorRepository.save(data);
-      const indicatorsIds = indicators.map((i) => i.id);
-      await this.generateMetrics(id, indicatorsIds);
-      return indicators;
-    } catch {
-      throw new BadRequestException();
-    }
+    const toUpdate = existing.filter((i) => dtoNames.has(i.name));
+    const updatedData = [...toUpdate, ...toAdd];
+    return [updatedData, toDelete];
   }
 
-  async findIndicators(id: string): Promise<Indicator[]> {
-    try {
-      return await this.indicatorRepository.find({
-        where: { program: { id } },
-        order: { created_at: 'ASC' }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  async updateIndicators(id: string, dtos: { id: string; name: string }[]): Promise<Indicator[]> {
-    try {
-      dtos.forEach(async (dto) => {
-        await this.indicatorRepository.findOneBy({ id: dto.id });
-        await this.indicatorRepository.update(dto.id, {
-          name: dto.name
-        });
-      });
-      return await this.findIndicators(id);
-    } catch {
-      throw new BadRequestException();
-    }
+  private async deleteIndicators(toDelete: Indicator[]): Promise<void> {
+    if (!toDelete.length) return;
+    await this.indicatorRepository.softRemove(toDelete);
   }
 
   async findPublished(): Promise<Program[]> {
@@ -170,34 +161,10 @@ export class ProgramsService {
     }
   }
 
-  async removeIndicator(id: string): Promise<void> {
-    try {
-      await this.indicatorRepository.softDelete(id);
-      await this.metricsService.removeMetric(id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
       await this.programRepository.softDelete(id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async generateMetrics(id: string, indicators: string[]): Promise<void> {
-    try {
-      const program = await this.programRepository.findOneOrFail({
-        where: { id },
-        relations: ['subprograms.projects', 'subprograms.events']
-      });
-      for (const sub of program.subprograms) {
-        sub.projects.map(async (p) => await this.metricsService.generateMetrics('project', p.id, indicators));
-        sub.events.map(async (e) => await this.metricsService.generateMetrics('event', e.id, indicators));
-      }
     } catch {
       throw new BadRequestException();
     }

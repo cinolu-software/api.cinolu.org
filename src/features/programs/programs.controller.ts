@@ -50,12 +50,6 @@ export class ProgramsController {
     return this.programsService.addIndicators(id, dto);
   }
 
-  @Patch('indicators/:id')
-  @UseRoles({ resource: 'programs', action: 'update' })
-  updateIndicators(@Param('id') id: string, @Body() dtos: { id: string; name: string }[]): Promise<Indicator[]> {
-    return this.programsService.updateIndicators(id, dtos);
-  }
-
   @Post('logo/:id')
   @UseRoles({ resource: 'programs', action: 'update' })
   @UseInterceptors(
@@ -112,11 +106,5 @@ export class ProgramsController {
   @UseRoles({ resource: 'programs', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.programsService.remove(id);
-  }
-
-  @Delete('indicators/:id')
-  @UseRoles({ resource: 'programs', action: 'update' })
-  removeIndicator(@Param('id') id: string): Promise<void> {
-    return this.programsService.removeIndicator(id);
   }
 }

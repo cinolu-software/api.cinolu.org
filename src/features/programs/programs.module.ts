@@ -6,10 +6,9 @@ import { Program } from './entities/program.entity';
 import { ProgramSubscriber } from './subscribers/program.subscriber';
 import { CategoriesModule } from './categories/categories.module';
 import { Indicator } from './entities/indicator.entity';
-import { MetricsModule } from './subprograms/metrics/metrics.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Program, Indicator]), CategoriesModule, MetricsModule],
+  imports: [TypeOrmModule.forFeature([Program, Indicator]), CategoriesModule],
   controllers: [ProgramsController],
   providers: [ProgramsService, ProgramSubscriber]
 })
