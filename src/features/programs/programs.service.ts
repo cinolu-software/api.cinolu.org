@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Program } from './entities/program.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 import { Indicator } from './entities/indicator.entity';
 
 @Injectable()

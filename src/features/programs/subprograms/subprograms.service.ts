@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Subprogram } from './entities/subprogram.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterSubprogramDto } from './dto/filter-subprogram.dto';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class SubprogramsService {

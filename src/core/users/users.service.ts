@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import UpdateProfileDto from '../auth/dto/update-profile.dto';

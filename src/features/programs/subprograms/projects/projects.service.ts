@@ -4,7 +4,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';

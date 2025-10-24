@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { Article } from './entities/article.entity';
 import { FilterArticlesDto } from './dto/filter-articles.dto';
 import { User } from 'src/core/users/entities/user.entity';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 import { GalleriesService } from 'src/features/galleries/galleries.service';
 import { Gallery } from 'src/features/galleries/entities/gallery.entity';
 

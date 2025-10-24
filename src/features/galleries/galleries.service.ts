@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gallery } from './entities/gallery.entity';
 import { Repository } from 'typeorm';
-import * as fs from 'fs-extra';
+import { promises as fs } from 'fs';
 import { AddGalleryDto } from './dto/add-gallery.dto';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class GalleriesService {
   async remove(id: string): Promise<void> {
     try {
       const img = await this.findOne(id);
-      await fs.remove(`./uploads/galleries/${img.image}`);
+      await fs.unlink(`./uploads/galleries/${img.image}`);
       await this.galleryRepository.delete(id);
     } catch {
       throw new BadRequestException();

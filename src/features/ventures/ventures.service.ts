@@ -4,11 +4,11 @@ import { UpdateVentureDto } from './dto/update-venture.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Venture } from './entities/venture.entity';
-import * as fs from 'fs-extra';
 import { User } from '../../core/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { GalleriesService } from '../galleries/galleries.service';
 import { Gallery } from '../galleries/entities/gallery.entity';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class VenturesService {
