@@ -121,25 +121,13 @@ export class ProjectsService {
     }
   }
 
-  async addTargetMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
+  async addMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
       const metricsDto = dto.map((metric) => ({
         ...metric,
         project: { id: projectId }
       }));
-      return await this.metricsService.addTarget(metricsDto);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async addAchievedMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
-    try {
-      const metricsDto = dto.map((metric) => ({
-        ...metric,
-        project: { id: projectId }
-      }));
-      return await this.metricsService.addAchieved(metricsDto);
+      return await this.metricsService.addMetrics(metricsDto);
     } catch {
       throw new BadRequestException();
     }

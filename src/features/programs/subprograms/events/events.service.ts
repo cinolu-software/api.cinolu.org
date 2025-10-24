@@ -33,25 +33,13 @@ export class EventsService {
     }
   }
 
-  async addTargetMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
+  async addMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
       const metricsDto = dto.map((metric) => ({
         ...metric,
         event: { id: eventId }
       }));
-      return await this.metricsService.addTarget(metricsDto);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async addAchievedMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
-    try {
-      const metricsDto = dto.map((metric) => ({
-        ...metric,
-        event: { id: eventId }
-      }));
-      return await this.metricsService.addAchieved(metricsDto);
+      return await this.metricsService.addMetrics(metricsDto);
     } catch {
       throw new BadRequestException();
     }

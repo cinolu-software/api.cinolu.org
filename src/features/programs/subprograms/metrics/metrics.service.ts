@@ -11,27 +11,11 @@ export class MetricsService {
     private metricsRepository: Repository<Metric>
   ) {}
 
-  async addTarget(metricDto: MetricDto[]): Promise<Metric[]> {
+  async addMetrics(metricDto: MetricDto[]): Promise<Metric[]> {
     try {
       const metrics = metricDto.map((dto) =>
         this.metricsRepository.create({
           ...dto,
-          target: dto.value,
-          indicator: { id: dto.id }
-        })
-      );
-      return await this.metricsRepository.save(metrics);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async addAchieved(metricDto: MetricDto[]): Promise<Metric[]> {
-    try {
-      const metrics = metricDto.map((dto) =>
-        this.metricsRepository.create({
-          ...dto,
-          achieved: dto.value,
           indicator: { id: dto.id }
         })
       );

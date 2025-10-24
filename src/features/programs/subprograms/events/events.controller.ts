@@ -39,16 +39,11 @@ export class EventsController {
   findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(queryParams);
   }
-  @Patch('metrics/target/:id')
-  @UseRoles({ resource: 'events', action: 'update' })
-  add(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
-    return this.eventsService.addTargetMetrics(id, dto);
-  }
 
-  @Patch('metrics/achieved/:id')
+  @Post('metrics/:id')
   @UseRoles({ resource: 'events', action: 'update' })
-  addAchieved(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
-    return this.eventsService.addAchievedMetrics(id, dto);
+  addMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
+    return this.eventsService.addMetrics(id, dto);
   }
 
   @Get('find-recent')
