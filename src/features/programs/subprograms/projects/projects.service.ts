@@ -123,11 +123,7 @@ export class ProjectsService {
 
   async addMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
-      const metricsDto = dto.map((metric) => ({
-        ...metric,
-        project: { id: projectId }
-      }));
-      return await this.metricsService.addMetrics(metricsDto);
+      return await this.metricsService.addMetrics('project', projectId, dto);
     } catch {
       throw new BadRequestException();
     }

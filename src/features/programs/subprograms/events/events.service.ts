@@ -35,11 +35,7 @@ export class EventsService {
 
   async addMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
     try {
-      const metricsDto = dto.map((metric) => ({
-        ...metric,
-        event: { id: eventId }
-      }));
-      return await this.metricsService.addMetrics(metricsDto);
+      return await this.metricsService.addMetrics('event', eventId, dto);
     } catch {
       throw new BadRequestException();
     }
@@ -161,7 +157,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics']
+        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics.indicator']
       });
     } catch {
       throw new BadRequestException();

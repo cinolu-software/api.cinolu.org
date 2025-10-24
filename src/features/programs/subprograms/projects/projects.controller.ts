@@ -26,7 +26,7 @@ import { MetricDto } from '../metrics/dto/metric.dto';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(private projectsService: ProjectsService) {}
 
   @Post('')
   @UseRoles({ resource: 'projects', action: 'create' })

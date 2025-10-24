@@ -2,7 +2,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class MetricDto {
   @IsNotEmpty()
-  id: string;
+  indicatorId: string;
 
   @IsOptional()
   target: number;
