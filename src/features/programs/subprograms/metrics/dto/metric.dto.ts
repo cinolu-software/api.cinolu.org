@@ -1,9 +1,12 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class MetricDto {
   @IsNotEmpty()
   id: string;
 
-  @IsNotEmpty()
-  value: number;
+  @IsOptional()
+  target: number;
+
+  @IsOptional()
+  achieved: number;
 }
