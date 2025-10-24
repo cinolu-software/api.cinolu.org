@@ -44,10 +44,12 @@ export class ProductsService {
 
   async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
-      const product = await this.findOne(id);
-      const gallery = await this.galleryService.create(file);
-      product.gallery = [...product.gallery, gallery];
-      await this.productsRepository.save(product);
+      await this.findOne(id);
+      const dto = {
+        image: file.filename,
+        product: { id }
+      };
+      await this.galleryService.create(dto);
     } catch {
       throw new BadRequestException();
     }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Gallery } from './entities/gallery.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs-extra';
+import { AddGalleryDto } from './dto/add-gallery.dto';
 
 @Injectable()
 export class GalleriesService {
@@ -11,10 +12,11 @@ export class GalleriesService {
     private galleryRepository: Repository<Gallery>
   ) {}
 
-  async create(file: Express.Multer.File): Promise<Gallery> {
+  async create(dto: AddGalleryDto): Promise<Gallery> {
     try {
       return await this.galleryRepository.save({
-        image: file.filename
+        ...dto,
+        image: dto.image
       });
     } catch {
       throw new BadRequestException();
