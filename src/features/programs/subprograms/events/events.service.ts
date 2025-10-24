@@ -161,7 +161,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program', 'gallery']
+        relations: ['categories', 'program.program.indicators', 'gallery']
       });
     } catch {
       throw new BadRequestException();
