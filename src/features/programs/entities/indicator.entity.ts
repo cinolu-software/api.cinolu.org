@@ -8,6 +8,12 @@ export class Indicator extends AbstractEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  target: number;
+
+  @Column({ nullable: true })
+  year: number;
+
   @ManyToOne(() => Program, (program) => program.indicators)
   @JoinColumn()
   program: Program;

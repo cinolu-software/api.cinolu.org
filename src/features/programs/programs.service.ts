@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { promises as fs } from 'fs';
 import { Indicator } from './entities/indicator.entity';
+import { CreateIndicatorDto } from './dto/create-indicator.dto';
 
 @Injectable()
 export class ProgramsService {
@@ -28,12 +29,9 @@ export class ProgramsService {
     }
   }
 
-  async addIndicators(programId: string, dtos: string[]): Promise<Indicator[]> {
+  async addIndicators(programId: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
     try {
-      const existing = await this.indicatorRepository.find({
-        where: { program: { id: programId } }
-      });
-      const [updatedData, toDelete] = this.diffIndicators(existing, dtos, programId);
+      const [updatedData, toDelete] = await this.diffIndicators(dtos, programId);
       await this.deleteIndicators(toDelete);
       return await this.indicatorRepository.save(updatedData);
     } catch {
@@ -41,15 +39,18 @@ export class ProgramsService {
     }
   }
 
-  private diffIndicators(existing: Indicator[], dtos: string[], programId: string): Indicator[][] {
+  private async diffIndicators(dtos: CreateIndicatorDto[], programId: string): Promise<Indicator[][]> {
+    const existing = await this.indicatorRepository.find({
+      where: { program: { id: programId } }
+    });
     const existingNames = new Set(existing.map((i) => i.name));
-    const dtoNames = new Set(dtos);
+    const dtoNames = new Set(dtos.map((dto) => dto.name));
     const toDelete = existing.filter((i) => !dtoNames.has(i.name));
     const toAdd = dtos
-      .filter((name) => !existingNames.has(name))
-      .map((name) =>
+      .filter((dto) => !existingNames.has(dto.name))
+      .map((dto) =>
         this.indicatorRepository.create({
-          name,
+          ...dto,
           program: { id: programId }
         })
       );

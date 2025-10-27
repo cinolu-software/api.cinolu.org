@@ -12,9 +12,6 @@ export class Metric extends AbstractEntity {
   @Column({ type: 'float', nullable: true })
   achieved: number;
 
-  @Column({ type: 'boolean', default: false })
-  is_public: boolean;
-
   @ManyToOne(() => Indicator)
   @JoinColumn()
   indicator: Indicator;
