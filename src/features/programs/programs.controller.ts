@@ -67,6 +67,12 @@ export class ProgramsController {
     return this.programsService.addLogo(id, file);
   }
 
+  @Get('indicators/:id/:year')
+  @Public()
+  findIndicatorsByYear(@Param('id') id: string, @Param('year') year: number): Promise<Indicator[]> {
+    return this.programsService.findIndicatorsByYear(id, year);
+  }
+
   @Get('slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Program> {

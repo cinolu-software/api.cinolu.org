@@ -43,18 +43,24 @@ export class ProgramsService {
     const existing = await this.indicatorRepository.find({
       where: { program: { id: programId } }
     });
-    const existingNames = new Set(existing.map((i) => i.name));
-    const dtoNames = new Set(dtos.map((dto) => dto.name));
-    const toDelete = existing.filter((i) => !dtoNames.has(i.name));
+    const yearsBeingUpdated = new Set(dtos.map((dto) => dto.year));
+    const existingKeys = new Map(existing.map((i) => [`${i.name}-${i.year}`, i]));
+    const dtoKeys = new Set(dtos.map((dto) => `${dto.name}-${dto.year}`));
+    const toDelete = existing.filter((i) => yearsBeingUpdated.has(i.year) && !dtoKeys.has(`${i.name}-${i.year}`));
     const toAdd = dtos
-      .filter((dto) => !existingNames.has(dto.name))
+      .filter((dto) => !existingKeys.has(`${dto.name}-${dto.year}`))
       .map((dto) =>
         this.indicatorRepository.create({
           ...dto,
           program: { id: programId }
         })
       );
-    const toUpdate = existing.filter((i) => dtoNames.has(i.name));
+    const toUpdate = dtos
+      .filter((dto) => existingKeys.has(`${dto.name}-${dto.year}`))
+      .map((dto) => {
+        const existing = existingKeys.get(`${dto.name}-${dto.year}`);
+        return Object.assign(existing, dto);
+      });
     const updatedData = [...toUpdate, ...toAdd];
     return [updatedData, toDelete];
   }
@@ -82,9 +88,35 @@ export class ProgramsService {
 
   async findBySlug(slug: string): Promise<Program> {
     try {
-      return await this.programRepository.findOneOrFail({
+      const program = await this.programRepository.findOneOrFail({
         where: { slug },
         relations: ['category', 'subprograms']
+      });
+      const indicators = await this.indicatorRepository.find({
+        where: { program: { id: program.id } },
+        order: { year: 'ASC', created_at: 'ASC' }
+      });
+      const grouped = indicators.reduce(
+        (acc: Record<string, Indicator[]>, ind: Indicator) => {
+          const key = ind.year;
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(ind);
+          return acc;
+        },
+        {} as Record<string, Indicator[]>
+      );
+      program['indicators_grouped'] = grouped;
+      return program;
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
+  async findIndicatorsByYear(programId: string, year: number): Promise<Indicator[]> {
+    try {
+      return await this.indicatorRepository.find({
+        where: { program: { id: programId }, year },
+        order: { created_at: 'ASC' }
       });
     } catch {
       throw new NotFoundException();
