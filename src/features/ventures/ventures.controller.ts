@@ -33,6 +33,12 @@ export class VenturesController {
     return this.venturesService.create(user, dto);
   }
 
+  @Get('published')
+  @Public()
+  findPublished(): Promise<Venture[]> {
+    return this.venturesService.findPublished();
+  }
+
   @Get()
   @UseRoles({ resource: 'ventures', action: 'read', possession: 'any' })
   findAll(@Query() queryParams: FilterVenturesDto): Promise<[Venture[], number]> {

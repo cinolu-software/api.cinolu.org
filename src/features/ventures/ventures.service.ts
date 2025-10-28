@@ -50,6 +50,12 @@ export class VenturesService {
     }
   }
 
+  async findPublished(): Promise<Venture[]> {
+    return await this.ventureRepository.find({
+      where: { is_published: true }
+    });
+  }
+
   async findGallery(slug: string): Promise<Gallery[]> {
     try {
       return (await this.findBySlug(slug)).gallery;
