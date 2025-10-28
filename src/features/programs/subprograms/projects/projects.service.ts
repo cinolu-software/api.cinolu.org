@@ -133,8 +133,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program.program.indicators', 'gallery', 'metrics.indicator'],
-        order: { program: { program: { indicators: { created_at: 'ASC' } } } }
+        relations: ['categories', 'program.program', 'gallery', 'metrics.indicator']
       });
     } catch {
       throw new BadRequestException();
