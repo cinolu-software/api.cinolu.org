@@ -24,10 +24,10 @@ export class ProductsService {
         where: { venture: { owner: { id: user.id } } },
         order: { created_at: 'DESC' },
         take: 10,
-        skip: (Number(page) - 1) * 10
+        skip: (+page - 1) * 10
       });
     } catch {
-      throw new NotFoundException('Oups!!');
+      throw new NotFoundException();
     }
   }
 

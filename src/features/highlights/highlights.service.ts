@@ -5,35 +5,51 @@ import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
 import { Article } from '../blog/articles/entities/article.entity';
 import { Project } from '../programs/subprograms/projects/entities/project.entity';
 import { Event } from '../programs/subprograms/events/entities/event.entity';
-
-export interface HighlightedItems {
-  programs: Program[];
-  subprograms: Subprogram[];
-  events: Event[];
-  projects: Project[];
-  articles: Article[];
-}
+import { HighlightedItems } from './types/highlighted-items.type';
 
 @Injectable()
 export class HighlightsService {
-  constructor(private dataSource: DataSource) {}
+  constructor(private readonly dataSource: DataSource) {}
 
   async findAll(): Promise<HighlightedItems> {
-    const programs = await this.dataSource.getRepository(Program).find({
-      where: { is_highlighted: true }
-    });
-    const subprograms = await this.dataSource.getRepository(Subprogram).find({
-      where: { is_highlighted: true }
-    });
-    const events = await this.dataSource.getRepository(Event).find({
-      where: { is_highlighted: true }
-    });
-    const projects = await this.dataSource.getRepository(Project).find({
-      where: { is_highlighted: true }
-    });
-    const articles = await this.dataSource.getRepository(Article).find({
-      where: { is_highlighted: true }
-    });
+    const [programs, subprograms, events, projects, articles] = await Promise.all([
+      this.findHighlightedPrograms(),
+      this.findHighlightedSubprograms(),
+      this.findHighlightedEvents(),
+      this.findHighlightedProjects(),
+      this.findHighlightedArticles()
+    ]);
+
     return { programs, subprograms, events, projects, articles };
+  }
+
+  private async findHighlightedPrograms(): Promise<Program[]> {
+    return await this.dataSource.getRepository(Program).find({
+      where: { is_highlighted: true }
+    });
+  }
+
+  private async findHighlightedSubprograms(): Promise<Subprogram[]> {
+    return await this.dataSource.getRepository(Subprogram).find({
+      where: { is_highlighted: true }
+    });
+  }
+
+  private async findHighlightedEvents(): Promise<Event[]> {
+    return await this.dataSource.getRepository(Event).find({
+      where: { is_highlighted: true }
+    });
+  }
+
+  private async findHighlightedProjects(): Promise<Project[]> {
+    return await this.dataSource.getRepository(Project).find({
+      where: { is_highlighted: true }
+    });
+  }
+
+  private async findHighlightedArticles(): Promise<Article[]> {
+    return await this.dataSource.getRepository(Article).find({
+      where: { is_highlighted: true }
+    });
   }
 }

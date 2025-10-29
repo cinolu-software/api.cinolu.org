@@ -1,25 +1,26 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { promises as fs } from 'fs';
+import { Subprogram } from './entities/subprogram.entity';
 import { CreateSubprogramDto } from './dto/create-subprogram.dto';
 import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
-import { Repository } from 'typeorm';
-import { Subprogram } from './entities/subprogram.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { FilterSubprogramDto } from './dto/filter-subprogram.dto';
-import { promises as fs } from 'fs';
 
 @Injectable()
 export class SubprogramsService {
   constructor(
     @InjectRepository(Subprogram)
-    private subprogramRepository: Repository<Subprogram>
+    private readonly subprogramRepository: Repository<Subprogram>
   ) {}
 
   async create(dto: CreateSubprogramDto): Promise<Subprogram> {
     try {
-      return await this.subprogramRepository.save({
+      const subprogram = this.subprogramRepository.create({
         ...dto,
         program: { id: dto.programId }
       });
+      return await this.subprogramRepository.save(subprogram);
     } catch {
       throw new BadRequestException();
     }
@@ -44,27 +45,15 @@ export class SubprogramsService {
   }
 
   async highlight(id: string): Promise<Subprogram> {
-    try {
-      const subprogram = await this.findOne(id);
-      return await this.subprogramRepository.save({
-        ...subprogram,
-        is_highlighted: !subprogram.is_highlighted
-      });
-    } catch {
-      throw new BadRequestException();
-    }
+    const subprogram = await this.findOne(id);
+    subprogram.is_highlighted = !subprogram.is_highlighted;
+    return await this.subprogramRepository.save(subprogram);
   }
 
   async togglePublish(id: string): Promise<Subprogram> {
-    try {
-      const subprogram = await this.findOne(id);
-      return await this.subprogramRepository.save({
-        ...subprogram,
-        is_published: !subprogram.is_published
-      });
-    } catch {
-      throw new BadRequestException();
-    }
+    const subprogram = await this.findOne(id);
+    subprogram.is_published = !subprogram.is_published;
+    return await this.subprogramRepository.save(subprogram);
   }
 
   async findAllPaginated(queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
@@ -73,11 +62,13 @@ export class SubprogramsService {
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.program', 'program')
       .orderBy('p.updated_at', 'DESC');
-    if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
-    return await query
-      .skip((+page - 1) * 40)
-      .take(40)
-      .getManyAndCount();
+
+    if (q) {
+      query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
+    }
+
+    const skip = (+page - 1) * 10;
+    return await query.skip(skip).take(10).getManyAndCount();
   }
 
   async findOne(id: string): Promise<Subprogram> {
@@ -93,8 +84,17 @@ export class SubprogramsService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Subprogram> {
     try {
       const subprogram = await this.findOne(id);
-      if (subprogram.logo) await fs.unlink(`./uploads/subprograms/${subprogram.logo}`);
-      return await this.subprogramRepository.save({ ...subprogram, logo: file.filename });
+      await this.removeOldLogo(subprogram.logo);
+      subprogram.logo = file.filename;
+      return await this.subprogramRepository.save(subprogram);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private async removeOldLogo(logoFilename?: string): Promise<void> {
+    try {
+      await fs.unlink(`./uploads/subprograms/${logoFilename}`);
     } catch {
       throw new BadRequestException();
     }
@@ -115,8 +115,8 @@ export class SubprogramsService {
 
   async remove(id: string): Promise<void> {
     try {
-      await this.findOne(id);
-      await this.subprogramRepository.softDelete(id);
+      const subprogram = await this.findOne(id);
+      await this.subprogramRepository.softDelete(subprogram.id);
     } catch {
       throw new BadRequestException();
     }

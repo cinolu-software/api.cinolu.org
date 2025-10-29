@@ -1,23 +1,21 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Gallery } from './entities/gallery.entity';
 import { Repository } from 'typeorm';
 import { promises as fs } from 'fs';
+import { Gallery } from './entities/gallery.entity';
 import { AddGalleryDto } from './dto/add-gallery.dto';
 
 @Injectable()
 export class GalleriesService {
   constructor(
     @InjectRepository(Gallery)
-    private galleryRepository: Repository<Gallery>
+    private readonly galleryRepository: Repository<Gallery>
   ) {}
 
   async create(dto: AddGalleryDto): Promise<Gallery> {
     try {
-      return await this.galleryRepository.save({
-        ...dto,
-        image: dto.image
-      });
+      const gallery = this.galleryRepository.create(dto);
+      return await this.galleryRepository.save(gallery);
     } catch {
       throw new BadRequestException();
     }
@@ -29,15 +27,23 @@ export class GalleriesService {
         where: { id }
       });
     } catch {
-      throw new BadRequestException();
+      throw new NotFoundException();
     }
   }
 
   async remove(id: string): Promise<void> {
     try {
-      const img = await this.findOne(id);
-      await fs.unlink(`./uploads/galleries/${img.image}`);
+      const gallery = await this.findOne(id);
+      await this.removeImageFile(gallery.image);
       await this.galleryRepository.delete(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private async removeImageFile(filename: string): Promise<void> {
+    try {
+      await fs.unlink(`./uploads/galleries/${filename}`);
     } catch {
       throw new BadRequestException();
     }

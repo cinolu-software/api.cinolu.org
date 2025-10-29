@@ -1,68 +1,87 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { promises as fs } from 'fs';
+import { Program } from './entities/program.entity';
+import { Indicator } from './entities/indicator.entity';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
-import { Repository } from 'typeorm';
-import { Program } from './entities/program.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
-import { promises as fs } from 'fs';
-import { Indicator } from './entities/indicator.entity';
-import { CreateIndicatorDto } from './dto/create-indicator.dto';
+import { IndicatorDto } from './dto/indicator.dto';
+
+type ProgramWithIndicators = Program & { indicators_grouped?: Record<string, Indicator[]> };
 
 @Injectable()
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private programRepository: Repository<Program>,
+    private readonly programRepository: Repository<Program>,
     @InjectRepository(Indicator)
-    private indicatorRepository: Repository<Indicator>
+    private readonly indicatorRepository: Repository<Indicator>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
     try {
-      return await this.programRepository.save({
+      const program = this.programRepository.create({
         ...dto,
         category: { id: dto.category }
       });
+      return await this.programRepository.save(program);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async addIndicators(programId: string, dtos: CreateIndicatorDto[]): Promise<Indicator[]> {
+  async addIndicators(programId: string, dto: IndicatorDto): Promise<Indicator[]> {
     try {
-      const [updatedData, toDelete] = await this.diffIndicators(dtos, programId);
-      await this.deleteIndicators(toDelete);
-      return await this.indicatorRepository.save(updatedData);
+      const [indicatorsToSave, indicatorsToDelete] = await this.diffIndicators(dto, programId);
+      await this.deleteIndicators(indicatorsToDelete);
+      return await this.indicatorRepository.save(indicatorsToSave);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  private async diffIndicators(dtos: CreateIndicatorDto[], programId: string): Promise<Indicator[][]> {
-    const existing = await this.indicatorRepository.find({
-      where: { program: { id: programId } }
-    });
-    const yearsBeingUpdated = new Set(dtos.map((dto) => dto.year));
-    const existingKeys = new Map(existing.map((i) => [`${i.name}-${i.year}`, i]));
-    const dtoKeys = new Set(dtos.map((dto) => `${dto.name}-${dto.year}`));
-    const toDelete = existing.filter((i) => yearsBeingUpdated.has(i.year) && !dtoKeys.has(`${i.name}-${i.year}`));
-    const toAdd = dtos
-      .filter((dto) => !existingKeys.has(`${dto.name}-${dto.year}`))
-      .map((dto) =>
-        this.indicatorRepository.create({
-          ...dto,
-          program: { id: programId }
+  private async diffIndicators(dto: IndicatorDto, programId: string): Promise<[Indicator[], Indicator[]]> {
+    const existingIndicators = await this.findIndicatorsByYear(programId, dto.year);
+    const existingIndicatorsMap = new Map(existingIndicators.map((i) => [i.name, i]));
+    const newIndicatorNames = new Set(dto.metrics.flatMap((metric) => Object.keys(metric)));
+    const indicatorsToDelete = existingIndicators.filter((i) => !newIndicatorNames.has(i.name));
+    const indicatorsToAdd = this.createNewIndicatorsFromMetrics(dto, existingIndicatorsMap, programId);
+    const indicatorsToUpdate = this.updateExistingIndicatorsFromMetrics(dto, existingIndicatorsMap);
+    return [[...indicatorsToUpdate, ...indicatorsToAdd], indicatorsToDelete];
+  }
+
+  private createNewIndicatorsFromMetrics(
+    dto: IndicatorDto,
+    existings: Map<string, Indicator>,
+    programId: string
+  ): Indicator[] {
+    return dto.metrics.flatMap((metric) =>
+      Object.entries(metric)
+        .filter(([name]) => !existings.has(name))
+        .map(([name, target]) =>
+          this.indicatorRepository.create({
+            name,
+            target,
+            year: dto.year,
+            program: { id: programId }
+          })
+        )
+    );
+  }
+
+  private updateExistingIndicatorsFromMetrics(dto: IndicatorDto, existings: Map<string, Indicator>): Indicator[] {
+    return dto.metrics.flatMap((metric) =>
+      Object.entries(metric)
+        .filter(([name]) => existings.has(name))
+        .map(([name, target]) => {
+          const existing = existings.get(name);
+          if (!existing) throw new BadRequestException();
+          existing.target = target;
+          return existing;
         })
-      );
-    const toUpdate = dtos
-      .filter((dto) => existingKeys.has(`${dto.name}-${dto.year}`))
-      .map((dto) => {
-        const existing = existingKeys.get(`${dto.name}-${dto.year}`);
-        return Object.assign(existing, dto);
-      });
-    const updatedData = [...toUpdate, ...toAdd];
-    return [updatedData, toDelete];
+    );
   }
 
   private async deleteIndicators(toDelete: Indicator[]): Promise<void> {
@@ -86,30 +105,36 @@ export class ProgramsService {
     });
   }
 
-  async findBySlug(slug: string): Promise<Program> {
+  async findBySlug(slug: string): Promise<ProgramWithIndicators> {
     try {
       const program = await this.programRepository.findOneOrFail({
         where: { slug },
         relations: ['category', 'subprograms']
       });
-      const indicators = await this.indicatorRepository.find({
-        where: { program: { id: program.id } },
-        order: { year: 'ASC', created_at: 'ASC' }
-      });
-      const grouped = indicators.reduce(
-        (acc: Record<string, Indicator[]>, ind: Indicator) => {
-          const key = ind.year;
-          if (!acc[key]) acc[key] = [];
-          acc[key].push(ind);
-          return acc;
-        },
-        {} as Record<string, Indicator[]>
-      );
-      program['indicators_grouped'] = grouped;
-      return program;
+      const indicators = await this.findProgramIndicators(program.id);
+      const indicators_grouped = this.groupIndicatorsByYear(indicators);
+      return { ...program, indicators_grouped };
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  private async findProgramIndicators(programId: string): Promise<Indicator[]> {
+    return await this.indicatorRepository.find({
+      where: { program: { id: programId } },
+      order: { year: 'ASC', created_at: 'ASC' }
+    });
+  }
+
+  private groupIndicatorsByYear(indicators: Indicator[]): Record<string, Indicator[]> {
+    return indicators.reduce((grouped: Record<string, Indicator[]>, indicator: Indicator) => {
+      const year = String(indicator.year);
+      if (!grouped[year]) {
+        grouped[year] = [];
+      }
+      grouped[year].push(indicator);
+      return grouped;
+    }, {});
   }
 
   async findIndicatorsByYear(programId: string, year: number): Promise<Indicator[]> {
@@ -124,27 +149,15 @@ export class ProgramsService {
   }
 
   async highlight(id: string): Promise<Program> {
-    try {
-      const program = await this.findOne(id);
-      return await this.programRepository.save({
-        ...program,
-        is_highlighted: !program.is_highlighted
-      });
-    } catch {
-      throw new NotFoundException();
-    }
+    const program = await this.findOne(id);
+    program.is_highlighted = !program.is_highlighted;
+    return await this.programRepository.save(program);
   }
 
   async togglePublish(id: string): Promise<Program> {
-    try {
-      const program = await this.findOne(id);
-      return await this.programRepository.save({
-        ...program,
-        is_published: !program.is_published
-      });
-    } catch {
-      throw new BadRequestException();
-    }
+    const program = await this.findOne(id);
+    program.is_published = !program.is_published;
+    return await this.programRepository.save(program);
   }
 
   async findAllPaginated(queryParams: FilterProgramsDto): Promise<[Program[], number]> {
@@ -152,14 +165,12 @@ export class ProgramsService {
     const query = this.programRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.category', 'category')
-      .leftJoinAndSelect('p.indicators', 'indicators')
-      .orderBy('p.updated_at', 'DESC')
-      .addOrderBy('indicators.created_at', 'ASC');
-    if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
-    return await query
-      .skip((+page - 1) * 40)
-      .take(40)
-      .getManyAndCount();
+      .orderBy('p.updated_at', 'DESC');
+    if (q) {
+      query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
+    }
+    const skip = (+page - 1) * 10;
+    return await query.skip(skip).take(10).getManyAndCount();
   }
 
   async findOne(id: string): Promise<Program> {
@@ -176,8 +187,17 @@ export class ProgramsService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Program> {
     try {
       const program = await this.findOne(id);
-      if (program.logo) await fs.unlink(`./uploads/programs/${program.logo}`);
-      return await this.programRepository.save({ ...program, logo: file.filename });
+      await this.removeOldLogo(program.logo);
+      program.logo = file.filename;
+      return await this.programRepository.save(program);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private async removeOldLogo(logoFilename?: string): Promise<void> {
+    try {
+      await fs.unlink(`./uploads/programs/${logoFilename}`);
     } catch {
       throw new BadRequestException();
     }
@@ -189,7 +209,7 @@ export class ProgramsService {
       return await this.programRepository.save({
         ...program,
         ...dto,
-        category: { id: dto.category }
+        category: dto.category ? { id: dto.category } : program.category
       });
     } catch {
       throw new BadRequestException();
@@ -198,8 +218,8 @@ export class ProgramsService {
 
   async remove(id: string): Promise<void> {
     try {
-      await this.findOne(id);
-      await this.programRepository.softDelete(id);
+      const program = await this.findOne(id);
+      await this.programRepository.softDelete(program.id);
     } catch {
       throw new BadRequestException();
     }

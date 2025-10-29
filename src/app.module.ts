@@ -5,21 +5,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
-import { ProgramsModule } from './features/programs/programs.module';
-import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
-import { VenturesModule } from './features/ventures/ventures.module';
 import { UsersModule } from './core/users/users.module';
-import { BlogModule } from './features/blog/blog.module';
-import { AuthGuard } from './core/auth/guards/auth.guard';
-import { AccessControlModule, ACGuard } from 'nest-access-control';
-import { RBAC_POLICY } from './core/auth/rbac-policy';
+import { ProgramsModule } from './features/programs/programs.module';
 import { SubprogramsModule } from './features/programs/subprograms/subprograms.module';
+import { VenturesModule } from './features/ventures/ventures.module';
+import { BlogModule } from './features/blog/blog.module';
 import { HighlightsModule } from './features/highlights/highlights.module';
 import { StatsModule } from './features/stats/stats.module';
 import { GalleriesModule } from './features/galleries/galleries.module';
+import { RBAC_POLICY } from '@/core/auth/rbac-policy';
+import { AuthGuard } from '@/core/auth/guards/auth.guard';
+import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 
 @Module({
   imports: [
@@ -30,7 +30,8 @@ import { GalleriesModule } from './features/galleries/galleries.module';
       renderPath: '/uploads'
     }),
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
+      cache: true
     }),
     JwtModule.registerAsync({
       global: true,

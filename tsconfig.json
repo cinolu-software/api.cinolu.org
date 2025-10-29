@@ -17,5 +17,10 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@/common/*": ["src/common/*"],
+      "@/core/*": ["src/core/*"],
+      "@/features/*": ["src/features/*"]
+    }
   }
 }

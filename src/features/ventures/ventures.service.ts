@@ -1,29 +1,30 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateVentureDto } from './dto/create-venture.dto';
-import { UpdateVentureDto } from './dto/update-venture.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { promises as fs } from 'fs';
 import { Venture } from './entities/venture.entity';
 import { User } from '../../core/users/entities/user.entity';
+import { Gallery } from '../galleries/entities/gallery.entity';
+import { CreateVentureDto } from './dto/create-venture.dto';
+import { UpdateVentureDto } from './dto/update-venture.dto';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { GalleriesService } from '../galleries/galleries.service';
-import { Gallery } from '../galleries/entities/gallery.entity';
-import { promises as fs } from 'fs';
 
 @Injectable()
 export class VenturesService {
   constructor(
     @InjectRepository(Venture)
-    private ventureRepository: Repository<Venture>,
-    private galleryService: GalleriesService
+    private readonly ventureRepository: Repository<Venture>,
+    private readonly galleryService: GalleriesService
   ) {}
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
     try {
-      return await this.ventureRepository.save({
+      const venture = this.ventureRepository.create({
         ...dto,
         owner: { id: user.id }
       });
+      return await this.ventureRepository.save(venture);
     } catch {
       throw new BadRequestException();
     }
@@ -32,11 +33,11 @@ export class VenturesService {
   async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.findOne(id);
-      const dto = {
+      const galleryDto = {
         image: file.filename,
         venture: { id }
       };
-      await this.galleryService.create(dto);
+      await this.galleryService.create(galleryDto);
     } catch {
       throw new BadRequestException();
     }
@@ -52,16 +53,14 @@ export class VenturesService {
 
   async findPublished(): Promise<Venture[]> {
     return await this.ventureRepository.find({
-      where: { is_published: true }
+      where: { is_published: true },
+      relations: ['gallery', 'products', 'owner']
     });
   }
 
   async findGallery(slug: string): Promise<Gallery[]> {
-    try {
-      return (await this.findBySlug(slug)).gallery;
-    } catch {
-      throw new BadRequestException();
-    }
+    const venture = await this.findBySlug(slug);
+    return venture.gallery;
   }
 
   async findBySlug(slug: string): Promise<Venture> {
@@ -82,11 +81,12 @@ export class VenturesService {
   }
 
   async findByUser(page: string, user: User): Promise<[Venture[], number]> {
+    const skip = (+page - 1) * 40;
     try {
       return await this.ventureRepository.findAndCount({
         where: { owner: { id: user.id } },
-        skip: ((+page || 1) - 1) * 12,
-        take: 12,
+        skip,
+        take: 30,
         order: { created_at: 'DESC' }
       });
     } catch {
@@ -128,7 +128,8 @@ export class VenturesService {
   async update(slug: string, dto: UpdateVentureDto): Promise<Venture> {
     try {
       const venture = await this.findBySlug(slug);
-      return await this.ventureRepository.save({ ...venture, ...dto });
+      Object.assign(venture, dto);
+      return await this.ventureRepository.save(venture);
     } catch {
       throw new BadRequestException();
     }
@@ -137,8 +138,9 @@ export class VenturesService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Venture> {
     try {
       const venture = await this.findOne(id);
-      if (venture.logo) await fs.unlink(`./uploads/ventures/logos/${venture.logo}`);
-      return await this.ventureRepository.save({ ...venture, logo: file.filename });
+      await this.removeOldFile(venture.logo, './uploads/ventures/logos');
+      venture.logo = file.filename;
+      return await this.ventureRepository.save(venture);
     } catch {
       throw new BadRequestException();
     }
@@ -147,8 +149,17 @@ export class VenturesService {
   async addCover(id: string, file: Express.Multer.File): Promise<Venture> {
     try {
       const venture = await this.findOne(id);
-      if (venture.cover) await fs.unlink(`./uploads/ventures/covers/${venture.cover}`);
-      return await this.ventureRepository.save({ ...venture, cover: file.filename });
+      await this.removeOldFile(venture.cover, './uploads/ventures/covers');
+      venture.cover = file.filename;
+      return await this.ventureRepository.save(venture);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private async removeOldFile(filename: string | undefined, path: string): Promise<void> {
+    try {
+      await fs.unlink(`${path}/${filename}`);
     } catch {
       throw new BadRequestException();
     }
@@ -156,8 +167,8 @@ export class VenturesService {
 
   async remove(id: string): Promise<void> {
     try {
-      await this.findOne(id);
-      await this.ventureRepository.softDelete(id);
+      const venture = await this.findOne(id);
+      await this.ventureRepository.softDelete(venture.id);
     } catch {
       throw new BadRequestException();
     }

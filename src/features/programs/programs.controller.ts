@@ -11,6 +11,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
+import { ProgramsReportService } from './programs-report.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { Program } from './entities/program.entity';
@@ -18,14 +19,18 @@ import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { Public } from '../../core/auth/decorators/public.decorator';
+import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 import { Indicator } from './entities/indicator.entity';
-import { CreateIndicatorDto } from './dto/create-indicator.dto';
+import { IndicatorDto } from './dto/indicator.dto';
+import { ProgramReport } from './types/program-report.type';
 
 @Controller('programs')
 export class ProgramsController {
-  constructor(private programsService: ProgramsService) {}
+  constructor(
+    private programsService: ProgramsService,
+    private programsReportService: ProgramsReportService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'programs', action: 'create' })
@@ -39,6 +44,12 @@ export class ProgramsController {
     return this.programsService.findPublished();
   }
 
+  @Get('report/:year')
+  @Public()
+  generateReport(@Param('year') year: number): Promise<ProgramReport[]> {
+    return this.programsReportService.generateReport(year);
+  }
+
   @Post('publish/:id')
   @UseRoles({ resource: 'programs', action: 'update' })
   togglePublish(@Param('id') id: string): Promise<Program> {
@@ -47,7 +58,7 @@ export class ProgramsController {
 
   @Post('indicators/:id')
   @UseRoles({ resource: 'programs', action: 'update' })
-  addIndicators(@Param('id') id: string, @Body() dto: CreateIndicatorDto[]): Promise<Indicator[]> {
+  addIndicators(@Param('id') id: string, @Body() dto: IndicatorDto): Promise<Indicator[]> {
     return this.programsService.addIndicators(id, dto);
   }
 

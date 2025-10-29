@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ProgramsService } from './programs.service';
+import { ProgramsReportService } from './programs-report.service';
 import { ProgramsController } from './programs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
@@ -10,6 +11,6 @@ import { Indicator } from './entities/indicator.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Program, Indicator]), CategoriesModule],
   controllers: [ProgramsController],
-  providers: [ProgramsService, ProgramSubscriber]
+  providers: [ProgramsService, ProgramsReportService, ProgramSubscriber]
 })
 export class ProgramsModule {}
