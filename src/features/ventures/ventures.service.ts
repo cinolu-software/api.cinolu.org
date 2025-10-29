@@ -81,12 +81,12 @@ export class VenturesService {
   }
 
   async findByUser(page: string, user: User): Promise<[Venture[], number]> {
-    const skip = (+page - 1) * 40;
+    const skip = (+(page || 1) - 1) * 40;
     try {
       return await this.ventureRepository.findAndCount({
         where: { owner: { id: user.id } },
         skip,
-        take: 30,
+        take: 40,
         order: { created_at: 'DESC' }
       });
     } catch {

@@ -57,7 +57,7 @@ export class VenturesController {
     return this.venturesService.togglePublish(slug);
   }
 
-  @Get('by-user')
+  @Get('by-user/paginated')
   findByUser(@Query('page') page: string, @CurrentUser() user: User): Promise<[Venture[], number]> {
     return this.venturesService.findByUser(page, user);
   }

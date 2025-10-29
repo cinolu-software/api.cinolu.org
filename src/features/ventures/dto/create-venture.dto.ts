@@ -1,41 +1,34 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class CreateVentureDto {
-  @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
   description: string;
-
-  @IsNotEmpty()
   problem_solved: string;
-
-  @IsNotEmpty()
   target_market: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   phone_number: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   website: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   linkedin_url: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   sector: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Transform(({ value }) => new Date(value))
   founded_at: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   location: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   stage: string;
 }
