@@ -40,7 +40,7 @@ export class ProgramsReportService {
     return {
       name: program.name,
       indicators: indicatorsReport,
-      performance: this.roundToTwoDecimals(globalPerformance)
+      performance: this.roundToDecimals(globalPerformance)
     };
   }
 
@@ -53,7 +53,7 @@ export class ProgramsReportService {
       name: indicator.name,
       target: indicator.target,
       achieved,
-      performance: this.roundToTwoDecimals(performance)
+      performance: this.roundToDecimals(performance)
     };
   }
 
@@ -76,7 +76,7 @@ export class ProgramsReportService {
     return totalPerformance / indicators.length;
   }
 
-  private roundToTwoDecimals(value: number): number {
-    return Math.round(value * 100) / 100;
+  private roundToDecimals(value: number): number {
+    return Math.round(value * 10) / 10;
   }
 }
