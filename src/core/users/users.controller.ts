@@ -20,7 +20,7 @@ import { UsersService } from './users.service';
 import CreateUserDto from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
-import { CurrentUser } from 'src/core/auth/decorators/current-user.decorator';
+import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { Public } from '../auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';

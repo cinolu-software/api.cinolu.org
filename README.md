@@ -104,7 +104,7 @@ Database and TypeORM helpers:
 - pnpm db:down — revert the last migration
 - pnpm db:seed — run seeders (builds first)
 
-Notes: these scripts use the project's TypeORM configuration at `src/core/database/orm.config.ts`.
+Notes: these scripts use the project's TypeORM configuration at `@/core/database/orm.config.ts`.
 
 ## Database
 
@@ -131,11 +131,11 @@ pnpm db:up
 pnpm db:seed
 ```
 
-Migrations live in `src/core/database/migrations/` and seeds in `src/core/database/seeds/`.
+Migrations live in `@/core/database/migrations/` and seeds in `@/core/database/seeds/`.
 
 ## Email templates
 
-Templates are in the `templates/` folder and use Handlebars. The mailer is configured in `src/core/email/email.module.ts`.
+Templates are in the `templates/` folder and use Handlebars. The mailer is configured in `@/core/email/email.module.ts`.
 
 ## Authentication
 
@@ -143,11 +143,11 @@ Templates are in the `templates/` folder and use Handlebars. The mailer is confi
 - Google OAuth sign-in: configure `GOOGLE_CLIENT_ID`, `GOOGLE_SECRET`, and `GOOGLE_REDIRECT_URI`
 - JWTs are signed with `JWT_SECRET`
 
-Session-based authentication uses `express-session`. Session cookie options are set in `src/main.ts`.
+Session-based authentication uses `express-session`. Session cookie options are set in `@/main.ts`.
 
 ## Swagger / API docs
 
-Swagger is set up in `src/main.ts` and served at `/docs` when the server is running.
+Swagger is set up in `@/main.ts` and served at `/docs` when the server is running.
 
 ## Testing
 
@@ -157,13 +157,13 @@ The project uses Jest for tests. To run tests:
 pnpm test
 ```
 
-Unit and e2e tests should be placed under `test/` or `src/**` using `.spec.ts` suffix.
+Unit and e2e tests should be placed under `test/` or `@/**` using `.spec.ts` suffix.
 
 ## Folder overview
 
 Top-level layout (important folders):
 
-- `src/` — source code
+- `@/` — source code
   - `core/` — core modules (auth, database, email, users)
   - `features/` — feature modules (blog, galleries, programs, ventures, stats, etc.)
   - `shared/` — shared decorators, interceptors, utils
@@ -174,7 +174,7 @@ Top-level layout (important folders):
 
 - Build the project: `pnpm build`
 - Ensure `NODE_ENV=production` and all environment variables are set on the host
-- Run `pnpm start:prod` (this executes `node dist/src/main`)
+- Run `pnpm start:prod` (this executes `node dist/@/main`)
 - For production, configure secure session cookies, and consider using a session store (redis) instead of the default in-memory store.
 
 ## Troubleshooting

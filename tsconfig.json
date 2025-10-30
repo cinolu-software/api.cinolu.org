@@ -18,9 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/common/*": ["src/common/*"],
+      "@/shared/*": ["src/shared/*"],
       "@/core/*": ["src/core/*"],
-      "@/features/*": ["src/features/*"]
+      "@/modules/*": ["src/modules/*"]
     }
   }
 }

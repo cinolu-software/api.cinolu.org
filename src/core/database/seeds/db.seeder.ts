@@ -2,20 +2,20 @@ import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
-import { User } from '../../users/entities/user.entity';
 import slugify from 'slugify';
-import { Program } from 'src/features/programs/entities/program.entity';
-import { Venture } from 'src/features/ventures/entities/venture.entity';
-import { Role } from 'src/core/users/roles/entities/role.entity';
-import { Article } from 'src/features/blog/articles/entities/article.entity';
-import { Tag } from 'src/features/blog/tags/entities/tag.entity';
-import { Comment } from 'src/features/blog/comments/entities/comment.entity';
 import { nanoid } from 'nanoid';
-import { Subprogram } from 'src/features/programs/subprograms/entities/subprogram.entity';
-import { EventCategory } from 'src/features/programs/subprograms/events/categories/entities/category.entity';
-import { ProjectCategory } from 'src/features/programs/subprograms/projects/categories/entities/category.entity';
-import { Project } from 'src/features/programs/subprograms/projects/entities/project.entity';
-import { Event } from 'src/features/programs/subprograms/events/entities/event.entity';
+import { User } from '@/core/users/entities/user.entity';
+import { Article } from '@/modules/blog/articles/entities/article.entity';
+import { Tag } from '@/modules/blog/tags/entities/tag.entity';
+import { Program } from '@/modules/programs/entities/program.entity';
+import { Subprogram } from '@/modules/programs/subprograms/entities/subprogram.entity';
+import { EventCategory } from '@/modules/programs/subprograms/events/categories/entities/category.entity';
+import { ProjectCategory } from '@/modules/programs/subprograms/projects/categories/entities/category.entity';
+import { Project } from '@/modules/programs/subprograms/projects/entities/project.entity';
+import { Venture } from '@/modules/ventures/entities/venture.entity';
+import { Event } from '@/modules/programs/subprograms/events/entities/event.entity';
+import { Role } from '@/core/users/roles/entities/role.entity';
+import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 
 export default class DbSeeder implements Seeder {
   async run(dataSource: DataSource) {

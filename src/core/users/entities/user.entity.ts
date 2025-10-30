@@ -1,10 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Role } from '../roles/entities/role.entity';
-import { Venture } from 'src/features/ventures/entities/venture.entity';
-import { AbstractEntity } from 'src/core/database/abstract.entity';
-import { Article } from 'src/features/blog/articles/entities/article.entity';
-import { Comment } from 'src/features/blog/comments/entities/comment.entity';
-import { Project } from 'src/features/programs/subprograms/projects/entities/project.entity';
+import { Venture } from '@/modules/ventures/entities/venture.entity';
+import { AbstractEntity } from '@/core/database/abstract.entity';
+import { Article } from '@/modules/blog/articles/entities/article.entity';
+import { Comment } from '@/modules/blog/comments/entities/comment.entity';
+import { Project } from '@/modules/programs/subprograms/projects/entities/project.entity';
 
 @Entity()
 export class User extends AbstractEntity {

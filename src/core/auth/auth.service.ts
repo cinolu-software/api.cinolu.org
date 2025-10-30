@@ -12,7 +12,7 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateWithGoogleDto } from './dto/sign-up-with-google.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { EVENTS, HTTP_MESSAGES, APP_CONSTANTS } from '../../common/constants/app.constants';
+import { EVENTS, HTTP_MESSAGES, APP_CONSTANTS } from '../../shared/constants/app.constants';
 
 @Injectable()
 export class AuthService {

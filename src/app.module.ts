@@ -10,16 +10,16 @@ import { AuthModule } from './core/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
 import { UsersModule } from './core/users/users.module';
-import { ProgramsModule } from './features/programs/programs.module';
-import { SubprogramsModule } from './features/programs/subprograms/subprograms.module';
-import { VenturesModule } from './features/ventures/ventures.module';
-import { BlogModule } from './features/blog/blog.module';
-import { HighlightsModule } from './features/highlights/highlights.module';
-import { StatsModule } from './features/stats/stats.module';
-import { GalleriesModule } from './features/galleries/galleries.module';
+import { ProgramsModule } from './modules/programs/programs.module';
+import { SubprogramsModule } from './modules/programs/subprograms/subprograms.module';
+import { VenturesModule } from './modules/ventures/ventures.module';
+import { BlogModule } from './modules/blog/blog.module';
+import { HighlightsModule } from './modules/highlights/highlights.module';
+import { StatsModule } from './modules/stats/stats.module';
+import { GalleriesModule } from './modules/galleries/galleries.module';
 import { RBAC_POLICY } from '@/core/auth/rbac-policy';
 import { AuthGuard } from '@/core/auth/guards/auth.guard';
-import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
+import { TransformInterceptor } from '@/shared/interceptors/transform.interceptor';
 
 @Module({
   imports: [

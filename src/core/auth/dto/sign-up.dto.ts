@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
-import { Match } from 'src/core/auth/decorators/match.decorator';
+import { Match } from '@/core/auth/decorators/match.decorator';
 
 export class SignUpDto {
   @IsEmail()
