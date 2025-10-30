@@ -120,12 +120,6 @@ export class ProjectsController {
     return this.projectsService.addCover(id, file);
   }
 
-  @Post('cover/remove/:id')
-  @UseRoles({ resource: 'projects', action: 'update' })
-  removeCover(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.removeCover(id);
-  }
-
   @Patch('highlight/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
   toggleHighlight(@Param('id') id: string): Promise<Project> {

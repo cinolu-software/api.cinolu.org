@@ -122,28 +122,11 @@ export class EventsService {
   async addCover(id: string, file: Express.Multer.File): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      await this.removeOldCover(event.cover);
-      event.cover = file.filename;
-      return await this.eventRepository.save(event);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async removeCover(id: string): Promise<Event> {
-    try {
-      const event = await this.findOne(id);
-      await this.removeOldCover(event.cover);
-      event.cover = null;
-      return await this.eventRepository.save(event);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async removeOldCover(coverFilename?: string | null): Promise<void> {
-    try {
-      await fs.unlink(`./uploads/events/${coverFilename}`);
+      await fs.unlink(`./uploads/events/${event.cover}`);
+      return await this.eventRepository.save({
+        ...event,
+        cover: file.filename
+      });
     } catch {
       throw new BadRequestException();
     }
