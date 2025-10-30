@@ -67,12 +67,8 @@ export class ProjectsService {
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .orderBy('p.updated_at', 'DESC');
-    if (q) {
-      query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
-    }
-    if (categories) {
-      query.andWhere('categories.id IN (:categories)', { categories });
-    }
+    if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
+    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(40).getManyAndCount();
   }
 
@@ -103,28 +99,11 @@ export class ProjectsService {
   async addCover(id: string, file: Express.Multer.File): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      await this.removeOldCover(project.cover);
-      project.cover = file.filename;
-      return await this.projectRepository.save(project);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async removeCover(id: string): Promise<Project> {
-    try {
-      const project = await this.findOne(id);
-      await this.removeOldCover(project.cover);
-      project.cover = null;
-      return await this.projectRepository.save(project);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async removeOldCover(coverFilename?: string | null): Promise<void> {
-    try {
-      await fs.unlink(`./uploads/projects/${coverFilename}`);
+      await fs.unlink(`./uploads/projects/${project.cover}`);
+      return await this.projectRepository.save({
+        ...project,
+        cover: file.filename
+      });
     } catch {
       throw new BadRequestException();
     }
