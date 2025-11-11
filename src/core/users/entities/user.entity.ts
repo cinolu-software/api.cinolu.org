@@ -1,10 +1,10 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Role } from '../roles/entities/role.entity';
-import { Venture } from '@/modules/ventures/entities/venture.entity';
+import { Venture } from '@/modules/ventures/core/entities/venture.entity';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
-import { Project } from '@/modules/programs/subprograms/projects/entities/project.entity';
+import { Project } from '@/modules/programs/projects/core/entities/project.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -57,9 +57,12 @@ export class User extends AbstractEntity {
   @JoinTable()
   roles: Role[];
 
-  @ManyToMany(() => Project)
+  @ManyToMany(() => Project, (project) => project.participants)
   @JoinTable()
-  projects: Project[];
+  participated_projects: Project[];
+
+  @ManyToOne(() => Project, (project) => project.project_manager)
+  managed_projects: Project[];
 
   @OneToMany(() => Article, (article) => article.author)
   articles: Article[];

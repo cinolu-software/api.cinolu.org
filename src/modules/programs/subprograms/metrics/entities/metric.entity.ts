@@ -1,8 +1,8 @@
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { Indicator } from '@/modules/programs/entities/indicator.entity';
+import { Indicator } from '@/modules/programs/core/entities/indicator.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { Project } from '../../projects/entities/project.entity';
-import { Event } from '../../events/entities/event.entity';
+import { Project } from '@/modules/programs/projects/core/entities/project.entity';
+import { Event } from '@/modules/programs/events/core/entities/event.entity';
 
 @Entity()
 export class Metric extends AbstractEntity {

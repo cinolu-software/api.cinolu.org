@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../../core/database/abstract.entity';
-import { Product } from '../../ventures/products/entities/product.entity';
-import { Venture } from '../../ventures/entities/venture.entity';
+import { Product } from '../../ventures/products/core/entities/product.entity';
+import { Venture } from '../../ventures/core/entities/venture.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
-import { Project } from '@/modules/programs/subprograms/projects/entities/project.entity';
-import { Event } from '@/modules/programs/subprograms/events/entities/event.entity';
+import { Project } from '@/modules/programs/projects/core/entities/project.entity';
+import { Event } from '@/modules/programs/events/core/entities/event.entity';
 
 @Entity()
 export class Gallery extends AbstractEntity {

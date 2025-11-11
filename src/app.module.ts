@@ -10,9 +10,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
 import { UsersModule } from './core/users/users.module';
-import { ProgramsModule } from './modules/programs/programs.module';
-import { SubprogramsModule } from './modules/programs/subprograms/subprograms.module';
-import { VenturesModule } from './modules/ventures/ventures.module';
+import { VenturesRootModule } from './modules/ventures/ventures-root.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { HighlightsModule } from './modules/highlights/highlights.module';
 import { StatsModule } from './modules/stats/stats.module';
@@ -20,6 +18,7 @@ import { GalleriesModule } from './modules/galleries/galleries.module';
 import { RBAC_POLICY } from '@/core/auth/rbac-policy';
 import { AuthGuard } from '@/core/auth/guards/auth.guard';
 import { TransformInterceptor } from '@/shared/interceptors/transform.interceptor';
+import { ProgramsModule } from './modules/programs/core/programs.module';
 
 @Module({
   imports: [
@@ -45,13 +44,12 @@ import { TransformInterceptor } from '@/shared/interceptors/transform.intercepto
     UsersModule,
     EmailModule,
     DatabaseModule,
-    SubprogramsModule,
-    ProgramsModule,
-    VenturesModule,
+    VenturesRootModule,
     BlogModule,
     StatsModule,
     HighlightsModule,
-    GalleriesModule
+    GalleriesModule,
+    ProgramsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

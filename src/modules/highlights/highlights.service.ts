@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { Program } from '../programs/entities/program.entity';
-import { Subprogram } from '../programs/subprograms/entities/subprogram.entity';
+import { Program } from '../programs/core/entities/program.entity';
+import { Subprogram } from '../programs/subprograms/core/entities/subprogram.entity';
 import { Article } from '../blog/articles/entities/article.entity';
-import { Project } from '../programs/subprograms/projects/entities/project.entity';
-import { Event } from '../programs/subprograms/events/entities/event.entity';
+import { Project } from '../programs/projects/core/entities/project.entity';
+import { Event } from '../programs/events/core/entities/event.entity';
 import { HighlightedItems } from './types/highlighted-items.type';
 
 @Injectable()
