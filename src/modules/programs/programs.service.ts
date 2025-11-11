@@ -43,7 +43,7 @@ export class ProgramsService {
   }
 
   private async diffIndicators(dto: IndicatorDto, programId: string): Promise<[Indicator[], Indicator[]]> {
-    const existingIndicators = await this.findIndicatorsByYear(programId, dto.year);
+    const existingIndicators = await this.findIndicatorsByYearAndCategory(programId, dto.year, dto.category);
     const existingIndicatorsMap = new Map(existingIndicators.map((i) => [i.name, i]));
     const newIndicatorNames = new Set(dto.metrics.flatMap((metric) => Object.keys(metric)));
     const indicatorsToDelete = existingIndicators.filter((i) => !newIndicatorNames.has(i.name));
@@ -65,6 +65,7 @@ export class ProgramsService {
             name,
             target,
             year: dto.year,
+            category: dto.category,
             program: { id: programId }
           })
         )
@@ -79,6 +80,7 @@ export class ProgramsService {
           const existing = existings.get(name);
           if (!existing) throw new BadRequestException();
           existing.target = target;
+          existing.category = dto.category;
           return existing;
         })
     );
@@ -87,6 +89,17 @@ export class ProgramsService {
   private async deleteIndicators(toDelete: Indicator[]): Promise<void> {
     if (!toDelete.length) return;
     await this.indicatorRepository.softRemove(toDelete);
+  }
+
+  private async findIndicatorsByYearAndCategory(
+    programId: string,
+    year: number,
+    category: string
+  ): Promise<Indicator[]> {
+    return await this.indicatorRepository.find({
+      where: { program: { id: programId }, year, category },
+      order: { created_at: 'ASC' }
+    });
   }
 
   async findPublished(): Promise<Program[]> {
@@ -129,16 +142,14 @@ export class ProgramsService {
   private groupIndicatorsByYear(indicators: Indicator[]): Record<string, Indicator[]> {
     return indicators.reduce((grouped: Record<string, Indicator[]>, indicator: Indicator) => {
       const year = String(indicator.year);
-      if (!grouped[year]) {
-        grouped[year] = [];
-      }
+      if (!grouped[year]) grouped[year] = [];
       grouped[year].push(indicator);
       return grouped;
     }, {});
   }
 
   async findIndicatorsByYear(programId: string, year: number): Promise<Indicator[]> {
-    try {
+    try { 
       return await this.indicatorRepository.find({
         where: { program: { id: programId }, year },
         order: { created_at: 'ASC' }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Program } from './entities/program.entity';
 import { Indicator } from './entities/indicator.entity';
-import { ProgramReport, IndicatorReport } from './types/program-report.type';
+import { ProgramReport, IndicatorReport, CategoryPerformance } from './types/program-report.type';
 
 @Injectable()
 export class ProgramsReportService {
@@ -26,32 +26,49 @@ export class ProgramsReportService {
       .createQueryBuilder('program')
       .leftJoinAndSelect('program.indicators', 'indicator')
       .leftJoinAndSelect('indicator.metrics', 'metric')
-      .where('program.is_published = :isPublished', { isPublished: true })
-      .andWhere('indicator.year = :year', { year })
-      .orderBy('program.name', 'ASC')
-      .addOrderBy('indicator.name', 'ASC')
+      .where('indicator.year = :year', { year })
       .getMany();
   }
 
   private mapProgramToReport(program: Program): ProgramReport {
     const indicatorsReport = program.indicators.map((indicator) => this.mapIndicatorToReport(indicator));
-    const globalPerformance = this.calculateGlobalPerformance(indicatorsReport);
-
+    const categoriesPerformance = this.groupIndicatorsByCategory(indicatorsReport);
     return {
       name: program.name,
-      indicators: indicatorsReport,
-      performance: this.roundToDecimals(globalPerformance)
+      categories: categoriesPerformance
     };
+  }
+
+  private groupIndicatorsByCategory(indicators: IndicatorReport[]): CategoryPerformance[] {
+    const grouped = indicators.reduce(
+      (acc, indicator) => {
+        const category = indicator.category || 'uncategorized';
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(indicator);
+        return acc;
+      },
+      {} as Record<string, IndicatorReport[]>
+    );
+    return Object.entries(grouped).map(([category, categoryIndicators]) => ({
+      category,
+      performance: this.roundToDecimals(this.calculateCategoryPerformance(categoryIndicators))
+    }));
+  }
+
+  private calculateCategoryPerformance(indicators: IndicatorReport[]): number {
+    if (indicators.length === 0) return 0;
+    const totalPerformance = indicators.reduce((sum, ind) => sum + ind.performance, 0);
+    return totalPerformance / indicators.length;
   }
 
   private mapIndicatorToReport(indicator: Indicator): IndicatorReport {
     const achieved = this.calculateTotalAchieved(indicator);
     const totalTarget = this.calculateTotalTarget(indicator);
     const performance = this.calculatePerformanceRate(achieved, totalTarget);
-
     return {
       name: indicator.name,
       target: indicator.target,
+      category: indicator.category,
       achieved,
       performance: this.roundToDecimals(performance)
     };
@@ -68,12 +85,6 @@ export class ProgramsReportService {
   private calculatePerformanceRate(achieved: number, target: number): number {
     if (target === 0) return 0;
     return (achieved / target) * 100;
-  }
-
-  private calculateGlobalPerformance(indicators: IndicatorReport[]): number {
-    if (indicators.length === 0) return 0;
-    const totalPerformance = indicators.reduce((sum, ind) => sum + ind.performance, 0);
-    return totalPerformance / indicators.length;
   }
 
   private roundToDecimals(value: number): number {
