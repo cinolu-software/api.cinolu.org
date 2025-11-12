@@ -31,7 +31,7 @@ export class CreateEventDto {
   @IsNotEmpty()
   ended_at: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   event_manager?: string;
 
   @IsNotEmpty()
