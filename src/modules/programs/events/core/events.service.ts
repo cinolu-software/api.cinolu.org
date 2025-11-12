@@ -137,7 +137,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program.program', 'gallery', 'metrics.indicator']
+        relations: ['categories', 'event_manager', 'program.program', 'gallery', 'metrics.indicator']
       });
     } catch {
       throw new NotFoundException();
@@ -148,7 +148,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'program', 'gallery']
+        relations: ['categories', 'event_manager', 'program', 'gallery']
       });
     } catch {
       throw new NotFoundException();

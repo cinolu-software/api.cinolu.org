@@ -122,7 +122,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'program.program', 'gallery', 'metrics.indicator']
+        relations: ['categories', 'project_manager', 'program.program', 'gallery', 'metrics.indicator']
       });
     } catch {
       throw new NotFoundException();
@@ -133,7 +133,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'gallery', 'metrics']
+        relations: ['categories', 'project_manager', 'gallery', 'metrics']
       });
     } catch {
       throw new NotFoundException();
