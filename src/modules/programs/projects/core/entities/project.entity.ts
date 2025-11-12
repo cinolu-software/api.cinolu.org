@@ -41,7 +41,8 @@ export class Project extends AbstractEntity {
   @Column({ type: 'int', nullable: true })
   duration_hours: number;
 
-  @OneToMany(() => User, (user) => user.managed_projects, { nullable: true })
+  @ManyToOne(() => User, (user) => user.managed_projects, { nullable: true })
+  @JoinColumn()
   project_manager: User;
 
   @Column({ type: 'text', nullable: true })

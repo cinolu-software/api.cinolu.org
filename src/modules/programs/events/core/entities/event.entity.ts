@@ -35,7 +35,8 @@ export class Event extends AbstractEntity {
   @Column({ type: 'int', nullable: true })
   duration_hours: number;
 
-  @OneToMany(() => User, (user) => user.managed_events, { nullable: true })
+  @ManyToOne(() => User, (user) => user.managed_events, { nullable: true })
+  @JoinColumn()
   event_manager: User;
 
   @Column({ type: 'text', nullable: true })

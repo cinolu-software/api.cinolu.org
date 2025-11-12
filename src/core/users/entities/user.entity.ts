@@ -66,10 +66,10 @@ export class User extends AbstractEntity {
   @JoinTable()
   participated_events: Event[];
 
-  @ManyToOne(() => Project, (project) => project.project_manager)
+  @OneToMany(() => Project, (project) => project.project_manager)
   managed_projects: Project[];
 
-  @ManyToOne(() => Event, (event) => event.event_manager)
+  @OneToMany(() => Event, (event) => event.event_manager)
   managed_events: Event[];
 
   @OneToMany(() => Article, (article) => article.author)
