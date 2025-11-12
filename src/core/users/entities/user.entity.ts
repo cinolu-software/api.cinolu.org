@@ -5,6 +5,7 @@ import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/programs/projects/core/entities/project.entity';
+import { Event } from '@/modules/programs/events/core/entities/event.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -61,8 +62,15 @@ export class User extends AbstractEntity {
   @JoinTable()
   participated_projects: Project[];
 
+  @ManyToMany(() => Event, (event) => event.participants)
+  @JoinTable()
+  participated_events: Event[];
+
   @ManyToOne(() => Project, (project) => project.project_manager)
   managed_projects: Project[];
+
+  @ManyToOne(() => Event, (event) => event.event_manager)
+  managed_events: Event[];
 
   @OneToMany(() => Article, (article) => article.author)
   articles: Article[];

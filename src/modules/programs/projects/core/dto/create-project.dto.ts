@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateProjectDto {
@@ -9,7 +9,17 @@ export class CreateProjectDto {
   description: string;
 
   @IsOptional()
-  form_link: string;
+  context?: string;
+
+  @IsOptional()
+  objectives?: string;
+
+  @IsOptional()
+  @IsInt()
+  duration_hours?: number;
+
+  @IsOptional()
+  selection_criteria?: string;
 
   @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
@@ -19,9 +29,13 @@ export class CreateProjectDto {
   @IsNotEmpty()
   ended_at: Date;
 
+  @IsOptional()
+  project_manager?: string;
+
   @IsNotEmpty()
   program: string;
 
   @IsArray()
+  @IsNotEmpty()
   categories: string[];
 }

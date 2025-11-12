@@ -1,18 +1,27 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateEventDto {
   @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()
-  description: string;
-
-  @IsString()
   place: string;
 
+  @IsNotEmpty()
+  description: string;
+
   @IsOptional()
-  form_link: string;
+  context?: string;
+
+  @IsOptional()
+  objectives?: string;
+
+  @IsOptional()
+  duration_hours?: number;
+
+  @IsOptional()
+  selection_criteria?: string;
 
   @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
@@ -21,6 +30,9 @@ export class CreateEventDto {
   @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
   ended_at: Date;
+
+  @IsNotEmpty()
+  event_manager?: string;
 
   @IsNotEmpty()
   program: string;

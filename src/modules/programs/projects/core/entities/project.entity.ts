@@ -47,9 +47,6 @@ export class Project extends AbstractEntity {
   @Column({ type: 'text', nullable: true })
   selection_criteria: string;
 
-  @Column({ type: 'text', nullable: true })
-  conclusion: string;
-
   @ManyToOne(() => Subprogram, (p) => p.projects)
   @JoinColumn()
   program: Subprogram;

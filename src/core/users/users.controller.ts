@@ -34,6 +34,11 @@ export class UsersController {
     return this.usersService.saveRefferalCode(user);
   }
 
+  @Get('find-staff')
+  async findStaff(): Promise<User[]> {
+    return this.usersService.findStaff();
+  }
+
   @Post('find-referrals')
   async findAllReferrals(@CurrentUser() user: User): Promise<[User[], number]> {
     return this.usersService.findAllReferrals(user);

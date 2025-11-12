@@ -25,6 +25,7 @@ export class ProjectsService {
     try {
       const project = this.projectRepository.create({
         ...dto,
+        project_manager: { id: dto.project_manager },
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
@@ -157,6 +158,7 @@ export class ProjectsService {
       return await this.projectRepository.save({
         ...project,
         ...dto,
+        project_manager: dto.project_manager ? { id: dto.project_manager } : project.project_manager,
         program: { id: dto.program },
         categories: dto?.categories.map((type) => ({ id: type })) || project.categories
       });

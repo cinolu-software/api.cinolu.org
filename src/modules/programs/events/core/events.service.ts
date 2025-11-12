@@ -25,6 +25,7 @@ export class EventsService {
     try {
       const event = this.eventRepository.create({
         ...dto,
+        event_manager: { id: dto.event_manager },
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
@@ -160,6 +161,7 @@ export class EventsService {
       return await this.eventRepository.save({
         ...event,
         ...dto,
+        event_manager: dto.event_manager ? { id: dto.event_manager } : event.event_manager,
         program: { id: dto.program },
         categories: dto?.categories.map((type) => ({ id: type })) || event.categories
       });

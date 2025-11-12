@@ -4,6 +4,7 @@ import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Subprogram } from '@/modules/programs/subprograms/core/entities/subprogram.entity';
 import { Metric } from '@/modules/programs/subprograms/metrics/entities/metric.entity';
+import { User } from '@/core/users/entities/user.entity';
 
 @Entity()
 export class Event extends AbstractEntity {
@@ -24,6 +25,21 @@ export class Event extends AbstractEntity {
 
   @Column({ type: 'longtext' })
   description: string;
+
+  @Column({ type: 'text', nullable: true })
+  context: string;
+
+  @Column({ type: 'text', nullable: true })
+  objectives: string;
+
+  @Column({ type: 'int', nullable: true })
+  duration_hours: number;
+
+  @OneToMany(() => User, (user) => user.managed_events, { nullable: true })
+  event_manager: User;
+
+  @Column({ type: 'text', nullable: true })
+  selection_criteria: string;
 
   @Column({ type: 'date' })
   started_at: Date;
@@ -47,4 +63,7 @@ export class Event extends AbstractEntity {
 
   @OneToMany(() => Metric, (metric) => metric.event)
   metrics: Metric[];
+
+  @ManyToMany(() => User, (user) => user.participated_events)
+  participants: User[];
 }

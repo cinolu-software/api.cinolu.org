@@ -46,6 +46,18 @@ export class UsersService {
     }
   }
 
+  async findStaff(): Promise<User[]> {
+    try {
+      const role = await this.rolesService.findByName('staff');
+      return await this.userRepository.find({
+        where: { roles: { id: role.id } },
+        relations: ['roles']
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async contactUs(dto: ContactSupportDto): Promise<void> {
     try {
       this.eventEmitter.emit('contact.support', dto);
@@ -98,7 +110,6 @@ export class UsersService {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
-
     const query = this.userRepository
       .createQueryBuilder('user')
       .loadRelationCountAndMap('user.referralsCount', 'user.referrals');
