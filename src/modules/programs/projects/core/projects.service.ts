@@ -16,9 +16,9 @@ import { MetricsService } from '@/modules/programs/subprograms/metrics/metrics.s
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
-    private readonly projectRepository: Repository<Project>,
-    private readonly galleryService: GalleriesService,
-    private readonly metricsService: MetricsService
+    private projectRepository: Repository<Project>,
+    private galleryService: GalleriesService,
+    private metricsService: MetricsService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
