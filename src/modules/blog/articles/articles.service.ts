@@ -97,11 +97,16 @@ export class ArticlesService {
 
   async findAll(dto: FilterArticlesDto): Promise<[Article[], number]> {
     try {
-      const { q, page } = dto;
-      const query = this.articlesRepository.createQueryBuilder('a');
+      const { q, page = 1, filter = 'all' } = dto;
+      const query = this.articlesRepository.createQueryBuilder('a').orderBy('a.created_at', 'DESC');
+      if (filter === 'published') query.andWhere('a.published_at IS NOT NULL AND a.published_at <= NOW()');
+      if (filter === 'drafts') query.andWhere('a.published_at IS NULL OR a.published_at > NOW()');
+      if (filter === 'highlighted') query.andWhere('a.is_highlighted = :isHighlighted', { isHighlighted: true });
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
-      if (page) query.skip((+page - 1) * 30).take(30);
-      return await query.orderBy('a.created_at', 'DESC').getManyAndCount();
+      return await query
+        .skip((+page - 1) * 30)
+        .take(30)
+        .getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
