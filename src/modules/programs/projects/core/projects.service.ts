@@ -62,12 +62,15 @@ export class ProjectsService {
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
-    const { page = 1, categories, q } = queryParams;
+    const { page = 1, categories, q, filter = 'all' } = queryParams;
     const skip = (+page - 1) * 40;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .orderBy('p.updated_at', 'DESC');
+    if (filter === 'published') query.andWhere('p.is_published = :isPublished', { isPublished: true });
+    if (filter === 'drafts') query.andWhere('p.is_published = :isPublished', { isPublished: false });
+    if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(40).getManyAndCount();
@@ -162,8 +165,7 @@ export class ProjectsService {
         program: { id: dto.program },
         categories: dto?.categories.map((type) => ({ id: type })) || project.categories
       });
-    } catch (e) {
-      console.error(e);
+    } catch {
       throw new BadRequestException();
     }
   }
