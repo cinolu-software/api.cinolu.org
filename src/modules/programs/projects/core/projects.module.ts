@@ -8,9 +8,16 @@ import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { MetricsModule } from '@/modules/programs/subprograms/metrics/metrics.module';
 import { Subprogram } from '@/modules/programs/subprograms/core/entities/subprogram.entity';
+import { PhasesModule } from '../phases/core/phases.module';
 
 @Module({
-  imports: [GalleriesModule, CategoriesModule, MetricsModule, TypeOrmModule.forFeature([Project, Subprogram])],
+  imports: [
+    GalleriesModule,
+    CategoriesModule,
+    PhasesModule,
+    MetricsModule,
+    TypeOrmModule.forFeature([Project, Subprogram])
+  ],
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectSubscriber],
   exports: [ProjectsService]
