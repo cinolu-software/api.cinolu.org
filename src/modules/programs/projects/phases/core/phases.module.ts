@@ -4,9 +4,10 @@ import { PhasesController } from './phases.controller';
 import { PhasesService } from './phases.service';
 import { Phase } from './entities/phase.entity';
 import { ResourcesModule } from '../resources/resources.module';
+import { FormsModule } from '../forms/forms.module';
 
 @Module({
-  imports: [ResourcesModule, TypeOrmModule.forFeature([Phase])],
+  imports: [ResourcesModule, FormsModule, TypeOrmModule.forFeature([Phase])],
   controllers: [PhasesController],
   providers: [PhasesService],
   exports: [PhasesService]

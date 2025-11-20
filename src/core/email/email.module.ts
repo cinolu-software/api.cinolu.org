@@ -32,6 +32,7 @@ config({
       }
     })
   ],
-  providers: [EmailService]
+  providers: [EmailService],
+  exports: [EmailService]
 })
 export class EmailModule {}

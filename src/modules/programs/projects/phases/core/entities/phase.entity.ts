@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Resource } from '../../resources/entities/resource.entity';
 import { Project } from '../../../core/entities/project.entity';
+import { PhaseForm } from '../../forms/entities/form.entity';
 
 @Entity()
 export class Phase extends AbstractEntity {
@@ -29,4 +30,7 @@ export class Phase extends AbstractEntity {
 
   @OneToMany(() => Resource, (r) => r.phase)
   resources: Resource[];
+
+  @OneToMany(() => PhaseForm, (form) => form.phase)
+  forms: PhaseForm[];
 }
