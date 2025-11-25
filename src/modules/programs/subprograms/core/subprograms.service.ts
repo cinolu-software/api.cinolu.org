@@ -26,9 +26,9 @@ export class SubprogramsService {
     }
   }
 
-  async findAll(): Promise<Subprogram[]> {
+  async findAll(programId: string): Promise<Subprogram[]> {
     return await this.subprogramRepository.find({
-      where: { is_published: true },
+      where: { is_published: true, program: { id: programId } },
       order: { updated_at: 'DESC' }
     });
   }
@@ -56,17 +56,14 @@ export class SubprogramsService {
     return await this.subprogramRepository.save(subprogram);
   }
 
-  async findAllPaginated(queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
+  async findAllPaginated(programId: string, queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
     const { page = 1, q } = queryParams;
     const query = this.subprogramRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.program', 'program')
-      .orderBy('p.updated_at', 'DESC');
-
-    if (q) {
-      query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
-    }
-
+      .orderBy('p.updated_at', 'DESC')
+      .where('p.program.id = :programId', { programId });
+    if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
     const skip = (+page - 1) * 10;
     return await query.skip(skip).take(10).getManyAndCount();
   }

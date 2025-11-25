@@ -59,16 +59,19 @@ export class SubprogramsController {
     return this.subprogramsService.findBySlug(slug);
   }
 
-  @Get('')
+  @Get('unpaginated/:id')
   @Public()
-  findAll(): Promise<Subprogram[]> {
-    return this.subprogramsService.findAll();
+  findAll(@Param('id') id: string): Promise<Subprogram[]> {
+    return this.subprogramsService.findAll(id);
   }
 
-  @Get('paginated')
+  @Get('paginated/:id')
   @UseRoles({ resource: 'subprograms', action: 'read' })
-  findAllPaginated(@Query() queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
-    return this.subprogramsService.findAllPaginated(queryParams);
+  findAllPaginated(
+    @Param('id') id: string,
+    @Query() queryParams: FilterSubprogramDto
+  ): Promise<[Subprogram[], number]> {
+    return this.subprogramsService.findAllPaginated(id, queryParams);
   }
 
   @Get(':id')
