@@ -18,13 +18,9 @@ export interface FormFieldOption {
 }
 
 export interface FormField {
-  id: string;
   label: string;
   type: FormFieldType;
   required: boolean;
-  description?: string;
   placeholder?: string;
-  helperText?: string;
   options?: FormFieldOption[];
-  validation?: Record<string, unknown>;
 }

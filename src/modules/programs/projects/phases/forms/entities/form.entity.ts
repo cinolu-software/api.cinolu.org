@@ -10,7 +10,7 @@ export class PhaseForm extends AbstractEntity {
   title: string;
 
   @Column({ type: 'text', nullable: true })
-  description?: string;
+  description: string;
 
   @Column({ type: 'json' })
   fields: FormField[];
