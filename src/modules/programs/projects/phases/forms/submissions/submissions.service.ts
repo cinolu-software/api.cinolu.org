@@ -7,7 +7,7 @@ import { UpdateSubmissionDto } from './dto/update-submission.dto';
 import { FormsService } from '../forms.service';
 
 @Injectable()
-export class FormSubmissionsService {
+export class SubmissionsService {
   constructor(
     @InjectRepository(Submission)
     private submissionRepository: Repository<Submission>,

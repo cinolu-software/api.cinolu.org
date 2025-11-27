@@ -2,13 +2,6 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 import { PhaseForm } from '../../entities/form.entity';
 
-export interface SubmissionResponse {
-  fieldId: string;
-  value?: string | number | boolean | string[] | number[] | null;
-  values?: Array<string | number | boolean>;
-  metadata?: Record<string, unknown>;
-}
-
 @Entity()
 export class Submission extends AbstractEntity {
   @ManyToOne(() => PhaseForm, (form) => form.submissions, { onDelete: 'CASCADE' })
@@ -16,10 +9,7 @@ export class Submission extends AbstractEntity {
   form: PhaseForm;
 
   @Column({ type: 'json' })
-  responses: SubmissionResponse[];
-
-  @Column({ type: 'json', nullable: true })
-  metadata?: Record<string, unknown>;
+  responses: { label: string; value: string }[];
 
   @Column({ nullable: true })
   submitted_by_name?: string;

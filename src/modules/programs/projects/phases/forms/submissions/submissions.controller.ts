@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
-import { FormSubmissionsService } from './submissions.service';
+import { SubmissionsService } from './submissions.service';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.dto';
 import { Submission } from './entities/submission.entity';
 
 @Controller('form-submissions')
-export class FormSubmissionsController {
-  constructor(private formSubmissionsService: FormSubmissionsService) {}
+export class SubmissionsController {
+  constructor(private formSubmissionsService: SubmissionsService) {}
 
   @Post()
   @Public()
