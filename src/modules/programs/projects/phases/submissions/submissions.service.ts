@@ -1,3 +1,4 @@
+import { User } from './../../../../../core/users/entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,13 +15,14 @@ export class SubmissionsService {
     private formsService: FormsService
   ) {}
 
-  async create(dto: CreateSubmissionDto): Promise<Submission> {
+  async create(user: User, dto: CreateSubmissionDto): Promise<Submission> {
     try {
-      const { formId: formId, ...submissionPayload } = dto;
-      const form = await this.formsService.findOne(formId);
       const submission = this.submissionRepository.create({
-        ...submissionPayload,
-        form
+        ...dto,
+        submitted_by_email: user?.email,
+        submitted_by_name: user?.name,
+        submitted_by_phone: user?.phone_number,
+        form: { id: dto.formId }
       });
       return await this.submissionRepository.save(submission);
     } catch {

@@ -5,6 +5,8 @@ import { SubmissionsService } from './submissions.service';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.dto';
 import { Submission } from './entities/submission.entity';
+import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { User } from '@/core/users/entities/user.entity';
 
 @Controller('form-submissions')
 export class SubmissionsController {
@@ -12,8 +14,8 @@ export class SubmissionsController {
 
   @Post()
   @Public()
-  create(@Body() dto: CreateSubmissionDto): Promise<Submission> {
-    return this.formSubmissionsService.create(dto);
+  create(@CurrentUser() user: User, @Body() dto: CreateSubmissionDto): Promise<Submission> {
+    return this.formSubmissionsService.create(user, dto);
   }
 
   @Get('form/:formId')
