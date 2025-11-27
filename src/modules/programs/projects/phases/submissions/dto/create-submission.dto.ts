@@ -1,7 +1,7 @@
 import { IsArray, IsOptional } from 'class-validator';
 
 export class CreateSubmissionDto {
-  form: string;
+  formId: string;
 
   @IsArray()
   responses: { label: string; value: string }[];
@@ -14,7 +14,4 @@ export class CreateSubmissionDto {
 
   @IsOptional()
   submitted_by_phone?: string;
-
-  @IsOptional()
-  note?: string;
 }

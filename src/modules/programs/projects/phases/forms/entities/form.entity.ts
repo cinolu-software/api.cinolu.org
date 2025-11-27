@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Phase } from '../../core/entities/phase.entity';
 import { FormField } from '../types/form-field.type';
-import { Submission } from '../submissions/entities/submission.entity';
+import { Submission } from '../../submissions/entities/submission.entity';
 
 @Entity()
 export class PhaseForm extends AbstractEntity {

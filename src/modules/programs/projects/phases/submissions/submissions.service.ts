@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Submission } from './entities/submission.entity';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.dto';
-import { FormsService } from '../forms.service';
+import { FormsService } from '../forms/forms.service';
 
 @Injectable()
 export class SubmissionsService {
@@ -16,7 +16,7 @@ export class SubmissionsService {
 
   async create(dto: CreateSubmissionDto): Promise<Submission> {
     try {
-      const { form: formId, ...submissionPayload } = dto;
+      const { formId: formId, ...submissionPayload } = dto;
       const form = await this.formsService.findOne(formId);
       const submission = this.submissionRepository.create({
         ...submissionPayload,
@@ -66,7 +66,7 @@ export class SubmissionsService {
   async update(id: string, dto: UpdateSubmissionDto): Promise<Submission> {
     try {
       const submission = await this.findOne(id);
-      const { form: formId, ...updatePayload } = dto;
+      const { formId: formId, ...updatePayload } = dto;
       Object.assign(submission, updatePayload);
       if (formId) submission.form = await this.formsService.findOne(formId);
       return await this.submissionRepository.save(submission);

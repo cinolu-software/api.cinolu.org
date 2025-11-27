@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { PhaseForm } from '../../entities/form.entity';
+import { PhaseForm } from '../../forms/entities/form.entity';
 
 @Entity()
 export class Submission extends AbstractEntity {
