@@ -24,10 +24,6 @@ export class FormFieldOptionDto {
 export class PhaseFormFieldDto {
   @IsString()
   @IsNotEmpty()
-  id: string;
-
-  @IsString()
-  @IsNotEmpty()
   label: string;
 
   @IsIn(Object.values(FormFieldType))
@@ -38,38 +34,13 @@ export class PhaseFormFieldDto {
 
   @IsOptional()
   @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsString()
   placeholder?: string;
-
-  @IsOptional()
-  @IsString()
-  helperText?: string;
-
-  @IsOptional()
-  validation?: Record<string, unknown>;
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => FormFieldOptionDto)
   options?: FormFieldOptionDto[];
-}
-
-export class PhaseFormSettingsDto {
-  @IsOptional()
-  @IsBoolean()
-  allowMultipleSubmissions?: boolean;
-
-  @IsOptional()
-  @IsString()
-  confirmationMessage?: string;
-
-  @IsOptional()
-  @IsString()
-  submissionNote?: string;
 }
 
 export class CreatePhaseFormDto {
@@ -80,10 +51,6 @@ export class CreatePhaseFormDto {
   @IsOptional()
   @IsString()
   description?: string;
-
-  @IsOptional()
-  @IsString()
-  welcome_message?: string;
 
   @IsOptional()
   @IsBoolean()
@@ -98,9 +65,4 @@ export class CreatePhaseFormDto {
   @ValidateNested({ each: true })
   @Type(() => PhaseFormFieldDto)
   fields: PhaseFormFieldDto[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => PhaseFormSettingsDto)
-  settings?: PhaseFormSettingsDto;
 }
