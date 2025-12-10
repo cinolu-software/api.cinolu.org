@@ -199,7 +199,7 @@ export class ProgramsService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Program> {
     try {
       const program = await this.findOne(id);
-      await this.removeOldLogo(program.logo);
+      if (program.logo) fs.unlink(`./uploads/programs/${program.logo}`);
       program.logo = file.filename;
       return await this.programRepository.save(program);
     } catch {

@@ -82,17 +82,9 @@ export class SubprogramsService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Subprogram> {
     try {
       const subprogram = await this.findOne(id);
-      await this.removeOldLogo(subprogram.logo);
+      if (subprogram.logo) await fs.unlink(`./uploads/subprograms/${subprogram.logo}`);
       subprogram.logo = file.filename;
       return await this.subprogramRepository.save(subprogram);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async removeOldLogo(logoFilename?: string): Promise<void> {
-    try {
-      await fs.unlink(`./uploads/subprograms/${logoFilename}`);
     } catch {
       throw new BadRequestException();
     }

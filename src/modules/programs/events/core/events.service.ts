@@ -134,7 +134,7 @@ export class EventsService {
   async addCover(id: string, file: Express.Multer.File): Promise<Event> {
     try {
       const event = await this.findOne(id);
-      await fs.unlink(`./uploads/events/${event.cover}`);
+      if (event.cover) fs.unlink(`./uploads/events/${event.cover}`);
       return await this.eventRepository.save({
         ...event,
         cover: file.filename

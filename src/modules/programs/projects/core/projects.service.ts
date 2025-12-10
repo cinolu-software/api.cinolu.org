@@ -103,7 +103,7 @@ export class ProjectsService {
   async addCover(id: string, file: Express.Multer.File): Promise<Project> {
     try {
       const project = await this.findOne(id);
-      await fs.unlink(`./uploads/projects/${project.cover}`);
+      if (project.cover) fs.unlink(`./uploads/projects/${project.cover}`);
       return await this.projectRepository.save({
         ...project,
         cover: file.filename
