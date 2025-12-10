@@ -31,6 +31,12 @@ export class SubprogramsController {
     return this.subprogramsService.create(dto);
   }
 
+  @Get('')
+  @Public()
+  findAll(): Promise<Subprogram[]> {
+    return this.subprogramsService.findAll();
+  }
+
   @Post('publish/:id')
   @UseRoles({ resource: 'subprograms', action: 'update' })
   togglePublish(@Param('id') id: string): Promise<Subprogram> {
@@ -61,8 +67,8 @@ export class SubprogramsController {
 
   @Get('unpaginated/:id')
   @Public()
-  findAll(@Param('id') id: string): Promise<Subprogram[]> {
-    return this.subprogramsService.findAll(id);
+  findUnpaginated(@Param('id') id: string): Promise<Subprogram[]> {
+    return this.subprogramsService.findUnpaginated(id);
   }
 
   @Get('paginated/:id')

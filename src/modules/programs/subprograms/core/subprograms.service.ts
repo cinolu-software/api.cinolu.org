@@ -27,9 +27,15 @@ export class SubprogramsService {
     }
   }
 
-  async findAll(programId: string): Promise<Subprogram[]> {
+  async findUnpaginated(programId: string): Promise<Subprogram[]> {
     return await this.subprogramRepository.find({
       where: { program: { id: programId } },
+      order: { updated_at: 'DESC' }
+    });
+  }
+
+  async findAll(): Promise<Subprogram[]> {
+    return await this.subprogramRepository.find({
       order: { updated_at: 'DESC' }
     });
   }
