@@ -15,6 +15,7 @@ export class SubprogramsService {
   ) {}
 
   async create(dto: CreateSubprogramDto): Promise<Subprogram> {
+    delete dto['id'];
     try {
       const subprogram = this.subprogramRepository.create({
         ...dto,
@@ -28,7 +29,7 @@ export class SubprogramsService {
 
   async findAll(programId: string): Promise<Subprogram[]> {
     return await this.subprogramRepository.find({
-      where: { is_published: true, program: { id: programId } },
+      where: { program: { id: programId } },
       order: { updated_at: 'DESC' }
     });
   }

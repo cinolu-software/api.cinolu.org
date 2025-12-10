@@ -15,6 +15,7 @@ export class CategoriesService {
 
   async create(dto: CreateCategoryDto): Promise<ProgramCategory> {
     try {
+      delete dto['id'];
       return await this.categoryRepository.save(dto);
     } catch {
       throw new BadRequestException();
