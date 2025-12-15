@@ -104,8 +104,8 @@ export class ArticlesService {
       if (filter === 'highlighted') query.andWhere('a.is_highlighted = :isHighlighted', { isHighlighted: true });
       if (q) query.andWhere('a.title LIKE :search OR a.content LIKE :search', { search: `%${q}%` });
       return await query
-        .skip((+page - 1) * 30)
-        .take(30)
+        .skip((+page - 1) * 20)
+        .take(20)
         .getManyAndCount();
     } catch {
       throw new BadRequestException();

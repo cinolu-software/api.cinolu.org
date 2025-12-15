@@ -171,7 +171,7 @@ export class ProgramsService {
     return await this.programRepository.save(program);
   }
 
-  async findAllPaginated(queryParams: FilterProgramsDto): Promise<[Program[], number]> {
+  async findFiltered(queryParams: FilterProgramsDto): Promise<[Program[], number]> {
     const { page = 1, q, filter = 'all' } = queryParams;
     const query = this.programRepository
       .createQueryBuilder('p')
@@ -202,14 +202,6 @@ export class ProgramsService {
       if (program.logo) fs.unlink(`./uploads/programs/${program.logo}`);
       program.logo = file.filename;
       return await this.programRepository.save(program);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async removeOldLogo(logoFilename?: string): Promise<void> {
-    try {
-      await fs.unlink(`./uploads/programs/${logoFilename}`);
     } catch {
       throw new BadRequestException();
     }

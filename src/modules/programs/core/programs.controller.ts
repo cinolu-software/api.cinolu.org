@@ -98,8 +98,8 @@ export class ProgramsController {
 
   @Get('paginated')
   @UseRoles({ resource: 'programs', action: 'read' })
-  findAllPaginated(@Query() queryParams: FilterProgramsDto): Promise<[Program[], number]> {
-    return this.programsService.findAllPaginated(queryParams);
+  findFiltered(@Query() queryParams: FilterProgramsDto): Promise<[Program[], number]> {
+    return this.programsService.findFiltered(queryParams);
   }
 
   @Get(':id')
