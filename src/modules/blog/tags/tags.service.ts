@@ -15,7 +15,6 @@ export class TagsService {
 
   async create(dto: CreateTagDto): Promise<Tag> {
     try {
-      delete dto['id'];
       const tag = this.tagRepository.create(dto);
       return await this.tagRepository.save(tag);
     } catch {

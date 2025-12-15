@@ -15,7 +15,6 @@ export class SubprogramsService {
   ) {}
 
   async create(dto: CreateSubprogramDto): Promise<Subprogram> {
-    delete dto['id'];
     try {
       const subprogram = this.subprogramRepository.create({
         ...dto,

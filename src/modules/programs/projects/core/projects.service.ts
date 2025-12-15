@@ -63,7 +63,7 @@ export class ProjectsService {
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     const { page = 1, categories, q, filter = 'all' } = queryParams;
-    const skip = (+page - 1) * 40;
+    const skip = (+page - 1) * 20;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
@@ -73,7 +73,7 @@ export class ProjectsService {
     if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
-    return await query.skip(skip).take(40).getManyAndCount();
+    return await query.skip(skip).take(20).getManyAndCount();
   }
 
   async findPublished(queryParams: FilterProjectsDto): Promise<[Project[], number]> {

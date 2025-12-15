@@ -12,22 +12,22 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateWithGoogleDto } from './dto/sign-up-with-google.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { EVENTS, HTTP_MESSAGES, APP_CONSTANTS } from '../../shared/constants/app.constants';
+import { EVENTS } from '../../shared/constants/app.constants';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly eventEmitter: EventEmitter2,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private usersService: UsersService,
+    private eventEmitter: EventEmitter2,
+    private jwtService: JwtService,
+    private configService: ConfigService
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.usersService.findByEmail(email);
-    if (!user) throw new UnauthorizedException(HTTP_MESSAGES.INVALID_CREDENTIALS);
+    if (!user) throw new UnauthorizedException('Les identifiants saisis sont invalides');
     const isPasswordValid = await this.verifyPassword(password, user.password);
-    if (!isPasswordValid) throw new UnauthorizedException(HTTP_MESSAGES.INVALID_CREDENTIALS);
+    if (!isPasswordValid) throw new UnauthorizedException('Les identifiants saisis sont invalides');
     return user;
   }
 
@@ -35,21 +35,21 @@ export class AuthService {
     try {
       return await this.usersService.findOrCreate(dto);
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
   }
 
   async signInWithGoogle(@Res() res: Response): Promise<void> {
     const frontendUri = this.configService.get<string>('FRONTEND_URI');
     if (!frontendUri) {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
     return res.redirect(frontendUri);
   }
 
   async signIn(@Req() req: Request): Promise<User> {
     if (!req.user) {
-      throw new UnauthorizedException(HTTP_MESSAGES.UNAUTHORIZED);
+      throw new UnauthorizedException('Non autorisé');
     }
     return req.user as User;
   }
@@ -59,7 +59,7 @@ export class AuthService {
       const user = await this.usersService.signUp(dto);
       return user;
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
   }
 
@@ -73,7 +73,7 @@ export class AuthService {
       const payload = await this.jwtService.verifyAsync(token, { secret });
       return await this.usersService.findOne(payload.sub);
     } catch {
-      throw new UnauthorizedException(HTTP_MESSAGES.UNAUTHORIZED);
+      throw new UnauthorizedException('Non autorisé');
     }
   }
 
@@ -97,7 +97,7 @@ export class AuthService {
     try {
       return await this.usersService.updateProfile(user, dto);
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
   }
 
@@ -106,19 +106,19 @@ export class AuthService {
       await this.usersService.updatePassword(currentUser.id, dto.password);
       return await this.usersService.findByEmail(currentUser.email);
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
   }
 
   async forgotPassword(dto: forgotPasswordDto): Promise<void> {
     try {
       const user = await this.usersService.findByEmail(dto.email);
-      const token = await this.generateToken(user, APP_CONSTANTS.TOKEN_EXPIRY.PASSWORD_RESET);
+      const token = await this.generateToken(user, '15m');
       const frontendUri = this.configService.get<string>('FRONTEND_URI');
       const link = `${frontendUri}/reset-password?token=${token}`;
       this.eventEmitter.emit(EVENTS.PASSWORD_RESET_REQUESTED, { user, link });
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Requête invalide');
     }
   }
 
@@ -131,7 +131,7 @@ export class AuthService {
       this.eventEmitter.emit(EVENTS.PASSWORD_RESET_COMPLETED, { user });
       return user;
     } catch {
-      throw new BadRequestException(HTTP_MESSAGES.BAD_REQUEST);
+      throw new BadRequestException('Mot de passe invalide');
     }
   }
 }

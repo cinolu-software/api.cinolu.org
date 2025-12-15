@@ -75,8 +75,6 @@ export class EventsService {
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .orderBy('e.ended_at', 'DESC');
-
-    // Apply filter based on status
     if (filter === 'published') {
       query.andWhere('e.is_published = :isPublished', { isPublished: true });
     } else if (filter === 'drafts') {
@@ -84,13 +82,11 @@ export class EventsService {
     } else if (filter === 'highlighted') {
       query.andWhere('e.is_highlighted = :isHighlighted', { isHighlighted: true });
     }
-    // 'all' filter doesn't add any conditions
-
     if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query
-      .skip((+page - 1) * 40)
-      .take(40)
+      .skip((+page - 1) * 20)
+      .take(20)
       .getManyAndCount();
   }
 

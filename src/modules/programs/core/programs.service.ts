@@ -15,9 +15,9 @@ type ProgramWithIndicators = Program & { indicators_grouped?: Record<string, Ind
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private readonly programRepository: Repository<Program>,
+    private programRepository: Repository<Program>,
     @InjectRepository(Indicator)
-    private readonly indicatorRepository: Repository<Indicator>
+    private indicatorRepository: Repository<Indicator>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {

@@ -15,7 +15,6 @@ export class CategoriesService {
 
   async create(dto: CreateCategoryDto): Promise<EventCategory> {
     try {
-      delete dto['id'];
       return await this.categoryRepository.save(dto);
     } catch {
       throw new BadRequestException();
@@ -31,8 +30,8 @@ export class CategoriesService {
     const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
     if (q) query.where('c.name LIKE :q', { q: `%${q}%` });
     return await query
-      .skip((+page - 1) * 40)
-      .take(40)
+      .skip((+page - 1) * 10)
+      .take(10)
       .getManyAndCount();
   }
 
