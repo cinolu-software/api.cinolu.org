@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from '../users/entities/user.entity';
+import { User } from '@/features/users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Public } from './decorators/public.decorator';
 

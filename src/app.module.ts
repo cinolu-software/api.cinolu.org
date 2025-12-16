@@ -9,16 +9,16 @@ import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
-import { UsersModule } from './core/users/users.module';
-import { VenturesRootModule } from './modules/ventures/ventures-root.module';
-import { BlogModule } from './modules/blog/blog.module';
-import { HighlightsModule } from './modules/highlights/highlights.module';
-import { StatsModule } from './modules/stats/stats.module';
-import { GalleriesModule } from './modules/galleries/galleries.module';
+import { UsersModule } from './features/users/users.module';
+import { VenturesRootModule } from './features/ventures/ventures-root.module';
+import { BlogModule } from './features/blog/blog.module';
+import { HighlightsModule } from './features/highlights/highlights.module';
+import { StatsModule } from './features/stats/stats.module';
+import { GalleriesModule } from './features/galleries/galleries.module';
 import { RBAC_POLICY } from '@/core/auth/rbac-policy';
 import { AuthGuard } from '@/core/auth/guards/auth.guard';
 import { TransformInterceptor } from '@/shared/interceptors/transform.interceptor';
-import { ProgramsModule } from './modules/programs/core/programs.module';
+import { ProgramsModule } from './features/programs/core/programs.module';
 
 @Module({
   imports: [

@@ -6,7 +6,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './session.serializer';
 import { EmailModule } from '../email/email.module';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '@/features/users/users.module';
 
 @Module({
   imports: [PassportModule, UsersModule, EmailModule],

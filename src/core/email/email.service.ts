@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
-import { User } from '../users/entities/user.entity';
-import { ContactSupportDto } from '../users/dto/contact-support.dto';
+import { User } from '@/features/users/entities/user.entity';
+import { ContactSupportDto } from '@/features/users/dto/contact-support.dto';
 
 interface ResetPasswordDto {
   user: User;
