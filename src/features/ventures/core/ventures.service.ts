@@ -14,8 +14,8 @@ import { GalleriesService } from '@/features/galleries/galleries.service';
 export class VenturesService {
   constructor(
     @InjectRepository(Venture)
-    private readonly ventureRepository: Repository<Venture>,
-    private readonly galleryService: GalleriesService
+    private ventureRepository: Repository<Venture>,
+    private galleryService: GalleriesService
   ) {}
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
@@ -138,7 +138,7 @@ export class VenturesService {
   async addLogo(id: string, file: Express.Multer.File): Promise<Venture> {
     try {
       const venture = await this.findOne(id);
-      await this.removeOldFile(venture.logo, './uploads/ventures/logos');
+      if (venture.logo) await fs.unlink(`./uploads/ventures/logos/${venture.logo}`);
       venture.logo = file.filename;
       return await this.ventureRepository.save(venture);
     } catch {
@@ -149,17 +149,9 @@ export class VenturesService {
   async addCover(id: string, file: Express.Multer.File): Promise<Venture> {
     try {
       const venture = await this.findOne(id);
-      await this.removeOldFile(venture.cover, './uploads/ventures/covers');
+      if (venture.cover) await fs.unlink(`./uploads/ventures/covers/${venture.cover}`);
       venture.cover = file.filename;
       return await this.ventureRepository.save(venture);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async removeOldFile(filename: string | undefined, path: string): Promise<void> {
-    try {
-      await fs.unlink(`${path}/${filename}`);
     } catch {
       throw new BadRequestException();
     }
