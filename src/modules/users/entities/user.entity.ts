@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { Role } from '../roles/entities/role.entity';
 import { Venture } from '@/modules/ventures/core/entities/venture.entity';
 import { AbstractEntity } from '@/core/database/abstract.entity';
@@ -6,6 +6,7 @@ import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
+import { Mentor } from '../mentors/entities/mentor.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -77,4 +78,7 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+
+  @OneToOne(() => Mentor, (mentor) => mentor.user)
+  mentor: Mentor;
 }
