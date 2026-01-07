@@ -9,16 +9,19 @@ import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
 import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
-import { UsersModule } from './features/users/users.module';
-import { VenturesRootModule } from './features/ventures/ventures-root.module';
-import { BlogModule } from './features/blog/blog.module';
-import { HighlightsModule } from './features/highlights/highlights.module';
-import { StatsModule } from './features/stats/stats.module';
-import { GalleriesModule } from './features/galleries/galleries.module';
-import { RBAC_POLICY } from '@/core/auth/rbac-policy';
-import { AuthGuard } from '@/core/auth/guards/auth.guard';
-import { TransformInterceptor } from '@/shared/interceptors/transform.interceptor';
-import { ProgramsModule } from './features/programs/core/programs.module';
+import { RBAC_POLICY } from './core/auth/rbac-policy';
+import { BlogModule } from './modules/blog/blog.module';
+import { EventsModule } from './modules/events/events.module';
+import { GalleriesModule } from './modules/galleries/galleries.module';
+import { HighlightsModule } from './modules/highlights/highlights.module';
+import { ProgramsModule } from './modules/programs/programs.module';
+import { ProjectsModule } from './modules/projects/projects.module';
+import { StatsModule } from './modules/stats/stats.module';
+import { SubprogramsModule } from './modules/subprograms/subprograms.module';
+import { UsersModule } from './modules/users/users.module';
+import { VenturesRootModule } from './modules/ventures/ventures-root.module';
+import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
+import { AuthGuard } from './core/auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -49,7 +52,10 @@ import { ProgramsModule } from './features/programs/core/programs.module';
     StatsModule,
     HighlightsModule,
     GalleriesModule,
-    ProgramsModule
+    ProgramsModule,
+    SubprogramsModule,
+    EventsModule,
+    ProjectsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

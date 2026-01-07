@@ -4,18 +4,18 @@
 // import { faker } from '@faker-js/faker';
 // import slugify from 'slugify';
 // import { nanoid } from 'nanoid';
-// import { User } from '@/features/users/entities/user.entity';
-// import { Article } from '@/features/blog/articles/entities/article.entity';
-// import { Tag } from '@/features/blog/tags/entities/tag.entity';
-// import { Program } from '@/features/programs/core/entities/program.entity';
-// import { Subprogram } from '@/features/programs/subprograms/core/entities/subprogram.entity';
-// import { EventCategory } from '@/features/programs/events/categories/entities/category.entity';
-// import { ProjectCategory } from '@/features/programs/projects/categories/entities/category.entity';
-// import { Project } from '@/features/programs/projects/core/entities/project.entity';
-// import { Venture } from '@/features/ventures/core/entities/venture.entity';
-// import { Event } from '@/features/programs/events/core/entities/event.entity';
-// import { Role } from '@/features/users/roles/entities/role.entity';
-// import { Comment } from '@/features/blog/comments/entities/comment.entity';
+// import { User } from '@/modules/users/entities/user.entity';
+// import { Article } from '@/modules/blog/articles/entities/article.entity';
+// import { Tag } from '@/modules/blog/tags/entities/tag.entity';
+// import { Program } from '@/modules/programs/core/entities/program.entity';
+// import { Subprogram } from '@/modules/programs/subprograms/core/entities/subprogram.entity';
+// import { EventCategory } from '@/modules/programs/events/categories/entities/category.entity';
+// import { ProjectCategory } from '@/modules/programs/projects/categories/entities/category.entity';
+// import { Project } from '@/modules/programs/projects/core/entities/project.entity';
+// import { Venture } from '@/modules/ventures/core/entities/venture.entity';
+// import { Event } from '@/modules/programs/events/core/entities/event.entity';
+// import { Role } from '@/modules/users/roles/entities/role.entity';
+// import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 
 // export default class DbSeeder implements Seeder {
 //   async run(dataSource: DataSource) {
