@@ -6,7 +6,7 @@ import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
-import { Mentor } from '../mentors/entities/mentor.entity';
+import { MentorProfile } from '@/modules/mentors/entities/mentor-profile.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -79,6 +79,6 @@ export class User extends AbstractEntity {
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
 
-  @OneToOne(() => Mentor, (mentor) => mentor.user)
-  mentor: Mentor;
+  @OneToOne(() => MentorProfile, (mp) => mp.owner)
+  mentor_profile: MentorProfile;
 }
