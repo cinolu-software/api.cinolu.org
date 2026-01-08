@@ -60,34 +60,17 @@ export class UsersService {
 
   async assignMentorRole(userId: string): Promise<User> {
     try {
-      // Find or create MENTOR role
       let mentorRole: Role;
       try {
         mentorRole = await this.rolesService.findByName('mentor');
       } catch {
-        // Role doesn't exist, create it
         mentorRole = await this.rolesService.create({ name: 'mentor' });
       }
-
-      // Get user with roles
-      const user = await this.userRepository.findOneOrFail({
-        where: { id: userId },
-        relations: ['roles']
-      });
-
-      // Check if user already has MENTOR role
-      const hasMentorRole = user.roles.some((role) => role.id === mentorRole.id);
-      if (hasMentorRole) {
-        return user;
-      }
-
-      // Add MENTOR role to user's roles
-      user.roles = [...user.roles, mentorRole];
-      await this.userRepository.save(user);
-
-      return await this.findOne(userId);
+      const user = await this.findOne(userId);
+      user.roles = [mentorRole];
+      return await this.userRepository.save(user);
     } catch {
-      throw new BadRequestException('Error assigning mentor role');
+      throw new BadRequestException();
     }
   }
 
@@ -184,7 +167,7 @@ export class UsersService {
         roles: [{ id: role.id }]
       });
     } catch {
-      throw new BadRequestException();
+      throw new BadRequestException("L'utilisateur existe déjà");
     }
   }
 
@@ -205,7 +188,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
-        relations: ['roles']
+        relations: ['roles', 'mentor_profile', 'mentor_profile.experiences', 'mentor_profile.expertises']
       });
       user['referralsCount'] = await this.userRepository.count({
         where: { referred_by: { id: user.id } }
