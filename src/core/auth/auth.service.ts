@@ -56,8 +56,7 @@ export class AuthService {
 
   async signUp(dto: SignUpDto): Promise<User> {
     try {
-      const user = await this.usersService.signUp(dto);
-      return user;
+      return await this.usersService.signUp(dto);
     } catch {
       throw new BadRequestException('Requête invalide');
     }
@@ -78,7 +77,7 @@ export class AuthService {
   }
 
   async verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-    return await bcrypt.compare(password, hashedPassword);
+    return await bcrypt.compare(password, hashedPassword || '');
   }
 
   async generateToken(user: User, expiresIn: number | string = '1d'): Promise<string> {
