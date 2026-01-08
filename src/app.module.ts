@@ -22,7 +22,7 @@ import { UsersModule } from './modules/users/users.module';
 import { VenturesRootModule } from './modules/ventures/ventures-root.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
 import { AuthGuard } from './core/auth/guards/auth.guard';
-import { MentorsProfileModule } from './modules/mentors/mentors-profiles.module';
+import { MentorProfileModule } from './modules/mentor-profiles/mentor-profiles.module';
 
 @Module({
   imports: [
@@ -57,7 +57,7 @@ import { MentorsProfileModule } from './modules/mentors/mentors-profiles.module'
     SubprogramsModule,
     EventsModule,
     ProjectsModule,
-    MentorsProfileModule
+    MentorProfileModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

@@ -6,7 +6,7 @@ import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
-import { MentorProfile } from '@/modules/mentors/entities/mentor-profile.entity';
+import { MentorProfile } from '@/modules/mentor-profiles/entities/mentor-profile.entity';
 
 @Entity()
 export class User extends AbstractEntity {

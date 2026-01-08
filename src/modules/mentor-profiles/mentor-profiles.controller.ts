@@ -10,7 +10,7 @@ import {
   UseInterceptors,
   Query
 } from '@nestjs/common';
-import { MentorsProfilesService } from './mentors-profiles.service';
+import { MentorProfilesService } from './mentor-profiles.service';
 import { CreateMentorProfileDto } from './dto/create-mentor-profile.dto';
 import { UpdateMentorProfileDto } from './dto/update-mentor-profile.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
@@ -22,13 +22,13 @@ import { FilterMentorsProfileDto } from './dto/filter-mentors-profiles.dto';
 import { UseRoles } from 'nest-access-control';
 import { User } from '../users/entities/user.entity';
 
-@Controller('mentors-profiles')
-export class MentorsProfileController {
-  constructor(private mentorsProfilesService: MentorsProfilesService) {}
+@Controller('mentor-profiles')
+export class MentorProfileController {
+  constructor(private mentorProfilesService: MentorProfilesService) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateMentorProfileDto): Promise<MentorProfile> {
-    return this.mentorsProfilesService.create(user, dto);
+    return this.mentorProfilesService.create(user, dto);
   }
 
   @Post('add-cv/:id')
@@ -44,48 +44,48 @@ export class MentorsProfileController {
     })
   )
   addCv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
-    return this.mentorsProfilesService.addCv(id, file);
+    return this.mentorProfilesService.addCv(id, file);
   }
 
   @Get('filtered')
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
   findFiltered(@Query() dto: FilterMentorsProfileDto): Promise<[MentorProfile[], number]> {
-    return this.mentorsProfilesService.findFiltered(dto);
+    return this.mentorProfilesService.findFiltered(dto);
   }
 
   @Patch('approve/:id')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   approve(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorsProfilesService.approve(id);
+    return this.mentorProfilesService.approve(id);
   }
 
   @Patch('reject/:id')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   reject(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorsProfilesService.reject(id);
+    return this.mentorProfilesService.reject(id);
   }
 
   @Get()
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
   findAll(): Promise<MentorProfile[]> {
-    return this.mentorsProfilesService.findAll();
+    return this.mentorProfilesService.findAll();
   }
 
   @Get(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
   findOne(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorsProfilesService.findOne(id);
+    return this.mentorProfilesService.findOne(id);
   }
 
   @Patch(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'update', possession: 'own' })
   update(@Param('id') id: string, @Body() dto: UpdateMentorProfileDto): Promise<MentorProfile> {
-    return this.mentorsProfilesService.update(id, dto);
+    return this.mentorProfilesService.update(id, dto);
   }
 
   @Delete(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
-    return this.mentorsProfilesService.remove(id);
+    return this.mentorProfilesService.remove(id);
   }
 }

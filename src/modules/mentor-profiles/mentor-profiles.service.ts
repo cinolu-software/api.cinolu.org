@@ -12,7 +12,7 @@ import { MentorStatus } from './enums/mentor.enum';
 import { ExperiencesService } from './experiences.service';
 
 @Injectable()
-export class MentorsProfilesService {
+export class MentorProfilesService {
   constructor(
     @InjectRepository(MentorProfile)
     private mentorProfileRepository: Repository<MentorProfile>,

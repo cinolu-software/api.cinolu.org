@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MentorsProfilesService } from './mentors-profiles.service';
-import { MentorsProfileController } from './mentors-profiles.controller';
+import { MentorProfilesService } from './mentor-profiles.service';
+import { MentorProfileController } from './mentor-profiles.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MentorProfile } from './entities/mentor-profile.entity';
 import { Experience } from './entities/experience.entity';
@@ -10,7 +10,7 @@ import { ExperiencesService } from './experiences.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MentorProfile, Experience]), ExpertisesModule, UsersModule],
-  controllers: [MentorsProfileController],
-  providers: [MentorsProfilesService, ExperiencesService]
+  controllers: [MentorProfileController],
+  providers: [MentorProfilesService, ExperiencesService]
 })
-export class MentorsProfileModule {}
+export class MentorProfileModule {}
