@@ -6,10 +6,9 @@ import { EmailModule } from '@/core/email/email.module';
 import { UsersService } from './users.service';
 import { RolesModule } from './roles/roles.module';
 import { UserSubscriber } from './subscribers/user.subscriber';
-import { MentorsModule } from './mentors/mentors.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), EmailModule, RolesModule, MentorsModule],
+  imports: [TypeOrmModule.forFeature([User]), EmailModule, RolesModule],
   controllers: [UsersController],
   providers: [UsersService, UserSubscriber],
   exports: [UsersService]
