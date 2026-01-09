@@ -7,7 +7,6 @@ export interface IAdminStats {
       staff: number;
       admin: number;
     };
-    active: number;
     newLast7Days: number;
     newLast30Days: number;
     withReferrals: number;

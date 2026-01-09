@@ -37,7 +37,6 @@ export class StatsService {
     const [
       totalUsers,
       usersByRole,
-      activeUsers,
       newUsersLast7Days,
       newUsersLast30Days,
       usersWithReferrals,
@@ -57,7 +56,6 @@ export class StatsService {
     ] = await Promise.all([
       this.#countTotalUsers(),
       this.#countUsersByRole(),
-      this.#countActiveUsers(),
       this.#countNewUsers(sevenDaysAgo),
       this.#countNewUsers(thirtyDaysAgo),
       this.#countUsersWithReferrals(),
@@ -80,7 +78,6 @@ export class StatsService {
       users: {
         total: totalUsers,
         byRole: usersByRole,
-        active: activeUsers,
         newLast7Days: newUsersLast7Days,
         newLast30Days: newUsersLast30Days,
         withReferrals: usersWithReferrals
@@ -153,14 +150,6 @@ export class StatsService {
       .getCount();
 
     return { user: userRole, mentor: mentorRole, staff: staffRole, admin: adminRole };
-  }
-
-  async #countActiveUsers(): Promise<number> {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return await this.dataSource.getRepository(User).count({
-      where: { updated_at: MoreThan(thirtyDaysAgo) }
-    });
   }
 
   async #countNewUsers(date: Date): Promise<number> {
