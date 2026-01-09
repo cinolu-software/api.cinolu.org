@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, MoreThan } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { User } from '@/modules/users/entities/user.entity';
 import { Venture } from '../ventures/core/entities/venture.entity';
 import { IUSerStats } from './types/user-stats.type';
@@ -9,11 +9,7 @@ import { Event } from '../events/entities/event.entity';
 import { Program } from '../programs/entities/program.entity';
 import { Subprogram } from '../subprograms/entities/subprogram.entity';
 import { Article } from '../blog/articles/entities/article.entity';
-import { Product } from '../ventures/products/core/entities/product.entity';
 import { Comment } from '../blog/comments/entities/comment.entity';
-import { Submission } from '../projects/phases/submissions/entities/submission.entity';
-import { Gallery } from '../galleries/entities/gallery.entity';
-import { Tag } from '../blog/tags/entities/tag.entity';
 import { MentorProfile } from '../mentor-profiles/entities/mentor-profile.entity';
 import { MentorStatus } from '../mentor-profiles/enums/mentor.enum';
 
@@ -37,50 +33,31 @@ export class StatsService {
     const [
       totalUsers,
       usersByRole,
-      newUsersLast7Days,
-      newUsersLast30Days,
-      usersWithReferrals,
       venturesStats,
       projectsStats,
       eventsStats,
       programsStats,
       subprogramsStats,
       articlesStats,
-      totalProducts,
       totalComments,
-      totalSubmissions,
-      totalGalleries,
-      totalTags,
-      mentorsStats,
-      recentActivity
+      mentorsStats
     ] = await Promise.all([
       this.#countTotalUsers(),
       this.#countUsersByRole(),
-      this.#countNewUsers(sevenDaysAgo),
-      this.#countNewUsers(thirtyDaysAgo),
-      this.#countUsersWithReferrals(),
       this.#getVenturesStats(),
       this.#getProjectsStats(),
       this.#getEventsStats(),
       this.#getProgramsStats(),
       this.#getSubprogramsStats(),
       this.#getArticlesStats(),
-      this.#countTotalProducts(),
       this.#countTotalComments(),
-      this.#countTotalSubmissions(),
-      this.#countTotalGalleries(),
-      this.#countTotalTags(),
-      this.#getMentorsStats(),
-      this.#getRecentActivity(sevenDaysAgo)
+      this.#getMentorsStats()
     ]);
 
     return {
       users: {
         total: totalUsers,
-        byRole: usersByRole,
-        newLast7Days: newUsersLast7Days,
-        newLast30Days: newUsersLast30Days,
-        withReferrals: usersWithReferrals
+        byRole: usersByRole
       },
       content: {
         ventures: venturesStats,
@@ -88,19 +65,12 @@ export class StatsService {
         events: eventsStats,
         programs: programsStats,
         subprograms: subprogramsStats,
-        articles: articlesStats,
-        products: {
-          total: totalProducts
-        }
+        articles: articlesStats
       },
       engagement: {
-        comments: totalComments,
-        submissions: totalSubmissions,
-        galleries: totalGalleries,
-        tags: totalTags
+        comments: totalComments
       },
-      mentors: mentorsStats,
-      recentActivity
+      mentors: mentorsStats
     };
   }
 
@@ -152,20 +122,6 @@ export class StatsService {
     return { user: userRole, mentor: mentorRole, staff: staffRole, admin: adminRole };
   }
 
-  async #countNewUsers(date: Date): Promise<number> {
-    return await this.dataSource.getRepository(User).count({
-      where: { created_at: MoreThan(date) }
-    });
-  }
-
-  async #countUsersWithReferrals(): Promise<number> {
-    return await this.dataSource
-      .getRepository(User)
-      .createQueryBuilder('user')
-      .where('user.referred_by IS NOT NULL')
-      .getCount();
-  }
-
   async #getVenturesStats(): Promise<{ total: number; published: number; unpublished: number }> {
     const [total, published] = await Promise.all([
       this.dataSource.getRepository(Venture).count(),
@@ -174,40 +130,22 @@ export class StatsService {
     return { total, published, unpublished: total - published };
   }
 
-  async #getProjectsStats(): Promise<{
-    total: number;
-    published: number;
-    unpublished: number;
-    withParticipants: number;
-  }> {
-    const [total, published, withParticipants] = await Promise.all([
+  async #getProjectsStats(): Promise<{ total: number; published: number; unpublished: number }> {
+    const [total, published] = await Promise.all([
       this.dataSource.getRepository(Project).count(),
       this.dataSource.getRepository(Project).count({ where: { is_published: true } }),
-      this.dataSource
-        .getRepository(Project)
-        .createQueryBuilder('project')
-        .innerJoin('project.participants', 'participant')
-        .getCount()
+      this.dataSource.getRepository(Project).createQueryBuilder('project').getCount()
     ]);
-    return { total, published, unpublished: total - published, withParticipants };
+    return { total, published, unpublished: total - published };
   }
 
-  async #getEventsStats(): Promise<{
-    total: number;
-    published: number;
-    unpublished: number;
-    withParticipants: number;
-  }> {
-    const [total, published, withParticipants] = await Promise.all([
+  async #getEventsStats(): Promise<{ total: number; published: number; unpublished: number }> {
+    const [total, published] = await Promise.all([
       this.dataSource.getRepository(Event).count(),
       this.dataSource.getRepository(Event).count({ where: { is_published: true } }),
-      this.dataSource
-        .getRepository(Event)
-        .createQueryBuilder('event')
-        .innerJoin('event.participants', 'participant')
-        .getCount()
+      this.dataSource.getRepository(Event).createQueryBuilder('event').getCount()
     ]);
-    return { total, published, unpublished: total - published, withParticipants };
+    return { total, published, unpublished: total - published };
   }
 
   async #getProgramsStats(): Promise<{ total: number; published: number; unpublished: number }> {
@@ -230,47 +168,24 @@ export class StatsService {
     total: number;
     published: number;
     unpublished: number;
-    highlighted: number;
   }> {
-    const [total, published, highlighted] = await Promise.all([
+    const [total, published] = await Promise.all([
       this.dataSource.getRepository(Article).count(),
       this.dataSource
         .getRepository(Article)
         .createQueryBuilder('article')
         .where('article.published_at IS NOT NULL')
         .andWhere('article.published_at <= :now', { now: new Date() })
-        .getCount(),
-      this.dataSource.getRepository(Article).count({ where: { is_highlighted: true } })
+        .getCount()
     ]);
-    return { total, published, unpublished: total - published, highlighted };
-  }
-
-  async #countTotalProducts(): Promise<number> {
-    return await this.dataSource.getRepository(Product).count();
+    return { total, published, unpublished: total - published };
   }
 
   async #countTotalComments(): Promise<number> {
     return await this.dataSource.getRepository(Comment).count();
   }
 
-  async #countTotalSubmissions(): Promise<number> {
-    return await this.dataSource.getRepository(Submission).count();
-  }
-
-  async #countTotalGalleries(): Promise<number> {
-    return await this.dataSource.getRepository(Gallery).count();
-  }
-
-  async #countTotalTags(): Promise<number> {
-    return await this.dataSource.getRepository(Tag).count();
-  }
-
-  async #getMentorsStats(): Promise<{
-    total: number;
-    pending: number;
-    approved: number;
-    rejected: number;
-  }> {
+  async #getMentorsStats(): Promise<{ total: number; pending: number; approved: number; rejected: number }> {
     const [total, pending, approved, rejected] = await Promise.all([
       this.dataSource.getRepository(MentorProfile).count(),
       this.dataSource.getRepository(MentorProfile).count({ where: { status: MentorStatus.PENDING } }),
@@ -278,28 +193,5 @@ export class StatsService {
       this.dataSource.getRepository(MentorProfile).count({ where: { status: MentorStatus.REJECTED } })
     ]);
     return { total, pending, approved, rejected };
-  }
-
-  async #getRecentActivity(date: Date): Promise<{
-    newUsersLast7Days: number;
-    newVenturesLast7Days: number;
-    newProjectsLast7Days: number;
-    newEventsLast7Days: number;
-    newArticlesLast7Days: number;
-  }> {
-    const [newUsers, newVentures, newProjects, newEvents, newArticles] = await Promise.all([
-      this.dataSource.getRepository(User).count({ where: { created_at: MoreThan(date) } }),
-      this.dataSource.getRepository(Venture).count({ where: { created_at: MoreThan(date) } }),
-      this.dataSource.getRepository(Project).count({ where: { created_at: MoreThan(date) } }),
-      this.dataSource.getRepository(Event).count({ where: { created_at: MoreThan(date) } }),
-      this.dataSource.getRepository(Article).count({ where: { created_at: MoreThan(date) } })
-    ]);
-    return {
-      newUsersLast7Days: newUsers,
-      newVenturesLast7Days: newVentures,
-      newProjectsLast7Days: newProjects,
-      newEventsLast7Days: newEvents,
-      newArticlesLast7Days: newArticles
-    };
   }
 }
