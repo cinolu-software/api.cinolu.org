@@ -58,16 +58,16 @@ export class UsersService {
     }
   }
 
-  async assignMentorRole(userId: string): Promise<User> {
+  async assignRole(userId: string, roleName: string): Promise<User> {
     try {
-      let mentorRole: Role;
+      let role: Role;
       try {
-        mentorRole = await this.rolesService.findByName('mentor');
+        role = await this.rolesService.findByName(roleName);
       } catch {
-        mentorRole = await this.rolesService.create({ name: 'mentor' });
+        role = await this.rolesService.create({ name: roleName });
       }
       const user = await this.findOne(userId);
-      user.roles = [mentorRole];
+      user.roles = [role];
       return await this.userRepository.save(user);
     } catch {
       throw new BadRequestException();
