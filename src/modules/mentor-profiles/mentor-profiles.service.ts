@@ -10,6 +10,7 @@ import { FilterMentorsProfileDto } from './dto/filter-mentors-profiles.dto';
 import { UsersService } from '../users/users.service';
 import { MentorStatus } from './enums/mentor.enum';
 import { ExperiencesService } from './experiences.service';
+import { Role } from '@/core/auth/enums/roles.enum';
 
 @Injectable()
 export class MentorProfilesService {
@@ -27,7 +28,7 @@ export class MentorProfilesService {
         owner: { id: user.id },
         expertises: dto.expertises ? dto.expertises.map((id) => ({ id })) : []
       });
-      if (dto.experiences && dto.experiences.length > 0) {
+      if (dto.experiences?.length) {
         await this.experiencesService.saveExperiences(mentorProfile.id, dto.experiences);
       }
       return await this.findOne(mentorProfile.id);
@@ -49,8 +50,11 @@ export class MentorProfilesService {
 
   async findFiltered(dto: FilterMentorsProfileDto): Promise<[MentorProfile[], number]> {
     const { q, page, status } = dto;
-    const query = this.mentorProfileRepository.createQueryBuilder('m');
-    if (q) query.andWhere('m.owner.name LIKE :search', { search: `%${q}%` });
+    const query = this.mentorProfileRepository
+      .createQueryBuilder('m')
+      .leftJoinAndSelect('m.owner', 'o')
+      .leftJoinAndSelect('m.expertises', 'expertises');
+    if (q) query.andWhere('o.name LIKE :search', { search: `%${q}%` });
     if (status) query.andWhere('m.status = :status', { status });
     if (page) query.skip((+page - 1) * 10).take(10);
     return await query.getManyAndCount();
@@ -66,7 +70,7 @@ export class MentorProfilesService {
     try {
       const mentorProfile = await this.findOne(id);
       await this.mentorProfileRepository.update(id, { status: MentorStatus.APPROVED });
-      await this.usersService.assignMentorRole(mentorProfile.owner.id);
+      await this.usersService.assignRole(mentorProfile.owner.id, Role.MENTOR);
       return await this.findOne(id);
     } catch {
       throw new BadRequestException();
@@ -75,8 +79,10 @@ export class MentorProfilesService {
 
   async reject(id: string): Promise<MentorProfile> {
     try {
+      const mentorProfile = await this.findOne(id);
       await this.mentorProfileRepository.update(id, { status: MentorStatus.REJECTED });
-      return this.findOne(id);
+      await this.usersService.assignRole(mentorProfile.owner.id, Role.USER);
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
