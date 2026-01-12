@@ -13,6 +13,7 @@ RBAC_POLICY.grant(Role.USER)
   .readAny([
     'stats',
     'users',
+    'expertises',
     'programs',
     'mentorsProfiles',
     'subprograms',
