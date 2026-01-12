@@ -92,7 +92,7 @@ export class MentorProfilesService {
     try {
       return await this.mentorProfileRepository.findOneOrFail({
         where: { id },
-        relations: ['experiences', 'expertises']
+        relations: ['experiences', 'expertises', 'owner']
       });
     } catch {
       throw new NotFoundException();
