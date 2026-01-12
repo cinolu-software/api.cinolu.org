@@ -52,9 +52,9 @@ export class MentorProfilesService {
     const { q, page, status } = dto;
     const query = this.mentorProfileRepository
       .createQueryBuilder('m')
-      .leftJoinAndSelect('m.owner', 'o')
+      .leftJoinAndSelect('m.owner', 'owner')
       .leftJoinAndSelect('m.expertises', 'expertises');
-    if (q) query.andWhere('o.name LIKE :search', { search: `%${q}%` });
+    if (q) query.andWhere('owner.name LIKE :search', { search: `%${q}%` });
     if (status) query.andWhere('m.status = :status', { status });
     if (page) query.skip((+page - 1) * 10).take(10);
     return await query.getManyAndCount();
