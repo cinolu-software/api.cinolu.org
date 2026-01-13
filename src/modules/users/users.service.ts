@@ -124,7 +124,7 @@ export class UsersService {
 
   async findAll(queryParams: FilterUsersDto): Promise<[User[], number]> {
     const { page = 1, q } = queryParams;
-    const take = 40;
+    const take = 20;
     const skip = (+page - 1) * take;
     const query = this.userRepository
       .createQueryBuilder('user')
