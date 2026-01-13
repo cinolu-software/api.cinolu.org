@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { AbstractEntity } from '../../../core/database/abstract.entity';
-import { Product } from '../../ventures/products/core/entities/product.entity';
-import { Venture } from '../../ventures/core/entities/venture.entity';
+import { Product } from '../../ventures/products/entities/product.entity';
+import { Venture } from '../../ventures/entities/venture.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';

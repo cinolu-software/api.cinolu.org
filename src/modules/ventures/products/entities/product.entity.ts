@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { Venture } from '../../../core/entities/venture.entity';
+import { Venture } from '../../entities/venture.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 
 @Entity()

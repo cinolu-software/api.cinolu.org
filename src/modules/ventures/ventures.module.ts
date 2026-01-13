@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { VenturesService } from './core/ventures.service';
-import { VenturesController } from './core/ventures.controller';
+import { VenturesService } from './ventures.service';
+import { VenturesController } from './ventures.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Venture } from './core/entities/venture.entity';
-import { VentureSubscriber } from './core/subscribers/venture.subscriber';
-import { ProductsRootModule } from './products/products-root.module';
-import { GalleriesModule } from '../galleries/galleries.module';
+import { Venture } from './entities/venture.entity';
+import { VentureSubscriber } from './subscribers/venture.subscriber';
+import { GalleriesModule } from '@/modules/galleries/galleries.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Venture]), ProductsRootModule, GalleriesModule],
+  imports: [TypeOrmModule.forFeature([Venture]), ProductsModule, GalleriesModule],
   controllers: [VenturesController],
   providers: [VenturesService, VentureSubscriber],
   exports: [VenturesService]

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { Role } from '../roles/entities/role.entity';
-import { Venture } from '@/modules/ventures/core/entities/venture.entity';
+import { Venture } from '@/modules/ventures/entities/venture.entity';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';

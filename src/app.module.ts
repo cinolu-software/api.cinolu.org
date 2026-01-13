@@ -19,10 +19,10 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { SubprogramsModule } from './modules/subprograms/subprograms.module';
 import { UsersModule } from './modules/users/users.module';
-import { VenturesRootModule } from './modules/ventures/ventures-root.module';
 import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorProfileModule } from './modules/mentor-profiles/mentor-profiles.module';
+import { VenturesModule } from './modules/ventures/ventures.module';
 
 @Module({
   imports: [
@@ -48,7 +48,7 @@ import { MentorProfileModule } from './modules/mentor-profiles/mentor-profiles.m
     UsersModule,
     EmailModule,
     DatabaseModule,
-    VenturesRootModule,
+    VenturesModule,
     BlogModule,
     StatsModule,
     HighlightsModule,

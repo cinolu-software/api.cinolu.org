@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { User } from '@/modules/users/entities/user.entity';
-import { Venture } from '../ventures/core/entities/venture.entity';
+import { Venture } from '../ventures/entities/venture.entity';
 import { IUSerStats } from './types/user-stats.type';
 import { IAdminStats } from './types/admin-stats.type';
 import { Project } from '../projects/entities/project.entity';
