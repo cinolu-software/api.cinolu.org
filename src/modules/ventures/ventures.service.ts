@@ -109,7 +109,7 @@ export class VenturesService {
     const { page = 1, q } = queryParams;
     const take = 40;
     const skip = (+page - 1) * take;
-    const query = this.ventureRepository.createQueryBuilder('venture');
+    const query = this.ventureRepository.createQueryBuilder('venture').leftJoinAndSelect('venture.owner', 'owner');
     if (q) query.where('venture.name LIKE :q OR venture.description LIKE :q', { q: `%${q}%` });
     return await query.orderBy('venture.created_at', 'DESC').skip(skip).take(take).getManyAndCount();
   }
