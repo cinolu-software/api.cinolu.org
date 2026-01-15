@@ -10,6 +10,7 @@ import { FilterMentorsProfileDto } from './dto/filter-mentors-profiles.dto';
 import { UsersService } from '../users/users.service';
 import { MentorStatus } from './enums/mentor.enum';
 import { ExperiencesService } from './experiences.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Role } from '@/core/auth/enums/roles.enum';
 
 @Injectable()
@@ -18,7 +19,8 @@ export class MentorProfilesService {
     @InjectRepository(MentorProfile)
     private mentorProfileRepository: Repository<MentorProfile>,
     private usersService: UsersService,
-    private experiencesService: ExperiencesService
+    private experiencesService: ExperiencesService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(user: User, dto: CreateMentorProfileDto): Promise<MentorProfile> {
@@ -71,7 +73,9 @@ export class MentorProfilesService {
       const mentorProfile = await this.findOne(id);
       await this.mentorProfileRepository.update(id, { status: MentorStatus.APPROVED });
       await this.usersService.assignRole(mentorProfile.owner.id, Role.MENTOR);
-      return await this.findOne(id);
+      const updatedProfile = await this.findOne(id);
+      this.eventEmitter.emit('mentor.approved', updatedProfile);
+      return updatedProfile;
     } catch {
       throw new BadRequestException();
     }
@@ -82,7 +86,9 @@ export class MentorProfilesService {
       const mentorProfile = await this.findOne(id);
       await this.mentorProfileRepository.update(id, { status: MentorStatus.REJECTED });
       await this.usersService.assignRole(mentorProfile.owner.id, Role.USER);
-      return await this.findOne(id);
+      const updatedProfile = await this.findOne(id);
+      this.eventEmitter.emit('mentor.rejected', updatedProfile);
+      return updatedProfile;
     } catch {
       throw new BadRequestException();
     }

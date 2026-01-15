@@ -3,6 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
 import { User } from '@/modules/users/entities/user.entity';
 import { ContactSupportDto } from '@/modules/users/dto/contact-support.dto';
+import { MentorProfile } from '@/modules/mentor-profiles/entities/mentor-profile.entity';
 
 interface ResetPasswordDto {
   user: User;
@@ -63,6 +64,34 @@ export class EmailService {
           <p><a href="${dto.invitationLink}" target="_blank" rel="noopener noreferrer">${dto.invitationLink}</a></p>
           <p>Merci pour votre contribution.</p>
         `
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('mentor.approved')
+  async sendMentorApprovalEmail(mentorProfile: MentorProfile): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: mentorProfile.owner.email,
+        subject: 'Votre profil de mentor a été approuvé!',
+        template: 'mentor-approved',
+        context: { mentorProfile }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('mentor.rejected')
+  async sendMentorRejectionEmail(mentorProfile: MentorProfile): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: mentorProfile.owner.email,
+        subject: 'Décision concernant votre profil de mentor',
+        template: 'mentor-rejected',
+        context: { mentorProfile }
       });
     } catch {
       throw new BadRequestException();
