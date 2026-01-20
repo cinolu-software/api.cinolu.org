@@ -19,7 +19,7 @@ import { ProjectsModule } from './modules/projects/projects.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { SubprogramsModule } from './modules/subprograms/subprograms.module';
 import { UsersModule } from './modules/users/users.module';
-import { TransformInterceptor } from './shared/interceptors/transform.interceptor';
+import { TransformInterceptor } from './core/interceptors/transform.interceptor';
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorProfileModule } from './modules/mentor-profiles/mentor-profiles.module';
 import { VenturesModule } from './modules/ventures/ventures.module';

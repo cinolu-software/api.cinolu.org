@@ -10,15 +10,6 @@ interface ResetPasswordDto {
   link: string;
 }
 
-interface PhaseReviewerInvitationDto {
-  email: string;
-  reviewerName?: string;
-  phaseName: string;
-  formTitle: string;
-  invitationLink: string;
-  invitedBy?: string;
-}
-
 @Injectable()
 export class EmailService {
   constructor(private mailerService: MailerService) {}
@@ -46,24 +37,6 @@ export class EmailService {
         subject: `One Stop Contact from ${dto.name}`,
         template: 'contact-us',
         context: { dto }
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async sendPhaseReviewerInvitation(dto: PhaseReviewerInvitationDto): Promise<void> {
-    try {
-      await this.mailerService.sendMail({
-        to: dto.email,
-        subject: `Invitation à évaluer la phase ${dto.phaseName}`,
-        html: `
-          <p>Bonjour ${dto.reviewerName ?? 'cher(ère) évaluateur(rice)'},</p>
-          <p>${dto.invitedBy ?? "L'équipe CINOLU"} vous invite à évaluer les candidatures du formulaire <strong>${dto.formTitle}</strong> de la phase <strong>${dto.phaseName}</strong>.</p>
-          <p>Utilisez le lien suivant pour accéder aux soumissions qui vous sont assignées :</p>
-          <p><a href="${dto.invitationLink}" target="_blank" rel="noopener noreferrer">${dto.invitationLink}</a></p>
-          <p>Merci pour votre contribution.</p>
-        `
       });
     } catch {
       throw new BadRequestException();

@@ -12,7 +12,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { UsersService } from '@/modules/users/users.service';
 import { CreateWithGoogleDto } from './dto/sign-up-with-google.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { EVENTS } from '../../shared/constants/app.constants';
+// import { EVENTS } from '../../shared/constants/app.constants';
 
 @Injectable()
 export class AuthService {
@@ -115,7 +115,7 @@ export class AuthService {
       const token = await this.generateToken(user, '15m');
       const frontendUri = this.configService.get<string>('FRONTEND_URI');
       const link = `${frontendUri}/reset-password?token=${token}`;
-      this.eventEmitter.emit(EVENTS.PASSWORD_RESET_REQUESTED, { user, link });
+      this.eventEmitter.emit('user.reset-password', { user, link });
     } catch {
       throw new BadRequestException('Requête invalide');
     }
@@ -127,7 +127,6 @@ export class AuthService {
       const secret = this.configService.get<string>('JWT_SECRET');
       const payload = await this.jwtService.verifyAsync(token, { secret });
       const user = await this.usersService.updatePassword(payload.sub, password);
-      this.eventEmitter.emit(EVENTS.PASSWORD_RESET_COMPLETED, { user });
       return user;
     } catch {
       throw new BadRequestException('Mot de passe invalide');
