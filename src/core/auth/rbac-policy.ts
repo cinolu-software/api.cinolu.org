@@ -6,8 +6,8 @@ export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 RBAC_POLICY.grant(Role.USER)
   .readOwn(['products', 'ventures'])
   .readAny(['opportunities'])
-  .updateOwn(['ventures', 'comments', 'products', 'mentorsProfiles', 'addCV', 'interests'])
-  .deleteOwn(['ventures', 'comments', 'products', 'mentorsProfiles'])
+  .updateOwn(['ventures', 'comments', 'products', 'mentors', 'addCV', 'interests'])
+  .deleteOwn(['ventures', 'comments', 'products', 'mentors'])
   .grant(Role.MENTOR)
   .extend(Role.USER)
   .grant(Role.STAFF)
@@ -16,7 +16,7 @@ RBAC_POLICY.grant(Role.USER)
     'users',
     'expertises',
     'programs',
-    'mentorsProfiles',
+    'mentors',
     'subprograms',
     'roles',
     'comments',
@@ -84,7 +84,7 @@ RBAC_POLICY.grant(Role.USER)
     'blogs',
     'ventures',
     'galleries',
-    'mentorsProfiles',
+    'mentors',
     'expertises',
     'opportunities'
   ])

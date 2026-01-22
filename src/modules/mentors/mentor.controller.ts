@@ -48,7 +48,7 @@ export class MentorsController {
   }
 
   @Get('filtered')
-  @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
+  @UseRoles({ resource: 'mentors', action: 'read' })
   findFiltered(@Query() dto: FilterMentorsDto): Promise<[MentorProfile[], number]> {
     return this.mentorsService.findFiltered(dto);
   }
@@ -71,25 +71,25 @@ export class MentorsController {
   }
 
   @Get()
-  @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
+  @UseRoles({ resource: 'mentors', action: 'read' })
   findAll(): Promise<MentorProfile[]> {
     return this.mentorsService.findAll();
   }
 
   @Get(':id')
-  @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
+  @UseRoles({ resource: 'mentors', action: 'read' })
   findOne(@Param('id') id: string): Promise<MentorProfile> {
     return this.mentorsService.findOne(id);
   }
 
   @Patch(':id')
-  @UseRoles({ resource: 'mentorsProfiles', action: 'update', possession: 'own' })
+  @UseRoles({ resource: 'mentors', action: 'update', possession: 'own' })
   update(@Param('id') id: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.update(id, dto);
   }
 
   @Delete(':id')
-  @UseRoles({ resource: 'mentorsProfiles', action: 'delete', possession: 'own' })
+  @UseRoles({ resource: 'mentors', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
     return this.mentorsService.remove(id);
   }

@@ -1,19 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { OpportunityTag } from './entities/opportunity-tag.entity';
-import { CreateOpportunityTagDto } from './dto/create-opportunity-tag.dto';
-import { UpdateOpportunityTagDto } from './dto/update-opportunity-tag.dto';
-import { FilterOpportunityTagsDto } from './dto/filter-opportunity-tags.dto';
+import { OpportunityTag } from './entities/tag.entity';
+import { CreateTagDto } from './dto/create-tag.dto';
+import { UpdateTagDto } from './dto/update-tag.dto';
+import { FilterTagsDto } from './dto/filter-tags.dto';
 
 @Injectable()
-export class OpportunityTagsService {
+export class TagsService {
   constructor(
     @InjectRepository(OpportunityTag)
     private tagRepository: Repository<OpportunityTag>
   ) {}
 
-  async create(dto: CreateOpportunityTagDto): Promise<OpportunityTag> {
+  async create(dto: CreateTagDto): Promise<OpportunityTag> {
     try {
       return await this.tagRepository.save(dto);
     } catch {
@@ -25,7 +25,7 @@ export class OpportunityTagsService {
     return await this.tagRepository.find();
   }
 
-  async findFiltered(dto: FilterOpportunityTagsDto): Promise<[OpportunityTag[], number]> {
+  async findFiltered(dto: FilterTagsDto): Promise<[OpportunityTag[], number]> {
     const { q, page } = dto;
     const query = this.tagRepository.createQueryBuilder('t');
     if (q) query.andWhere('t.name LIKE :q', { q: `%${q}%` });
@@ -43,7 +43,7 @@ export class OpportunityTagsService {
     }
   }
 
-  async update(id: string, dto: UpdateOpportunityTagDto): Promise<OpportunityTag> {
+  async update(id: string, dto: UpdateTagDto): Promise<OpportunityTag> {
     try {
       await this.tagRepository.update(id, dto);
       return await this.tagRepository.findOne({ where: { id } });

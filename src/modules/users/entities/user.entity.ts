@@ -8,7 +8,7 @@ import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
 import { Opportunity } from '@/modules/opportunities/entities/opportunity.entity';
-import { OpportunityTag } from '@/modules/opportunities/tags/entities/opportunity-tag.entity';
+import { OpportunityTag } from '@/modules/opportunities/tags/entities/tag.entity';
 
 @Entity()
 export class User extends AbstractEntity {

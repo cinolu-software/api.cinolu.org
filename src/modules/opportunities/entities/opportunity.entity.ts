@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { OpportunityTag } from '../tags/entities/opportunity-tag.entity';
+import { OpportunityTag } from '../tags/entities/tag.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { OpportunityAttachment } from './attachment.entity';
 
