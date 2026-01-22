@@ -167,7 +167,7 @@ export class UsersService {
         roles: [{ id: role.id }]
       });
     } catch {
-      throw new BadRequestException("L'utilisateur existe déjà");
+      throw new BadRequestException('Cet utilisateur existe déjà');
     }
   }
 

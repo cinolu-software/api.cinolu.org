@@ -57,8 +57,8 @@ export class AuthService {
   async signUp(dto: SignUpDto): Promise<User> {
     try {
       return await this.usersService.signUp(dto);
-    } catch {
-      throw new BadRequestException('Requête invalide');
+    } catch (error) {
+      throw new BadRequestException(error?.message);
     }
   }
 
