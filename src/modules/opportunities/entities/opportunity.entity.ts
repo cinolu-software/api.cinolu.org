@@ -9,6 +9,9 @@ export class Opportunity extends AbstractEntity {
   @Column()
   title: string;
 
+  @Column({ unique: true })
+  slug: string;
+
   @Column({ type: 'longtext' })
   description: string;
 

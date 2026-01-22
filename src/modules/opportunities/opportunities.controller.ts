@@ -51,6 +51,12 @@ export class OpportunitiesController {
     return this.opportunitiesService.findAll(filterDto);
   }
 
+  @Get('slug/:slug')
+  @Public()
+  findBySlug(@Param('slug') slug: string): Promise<Opportunity> {
+    return this.opportunitiesService.findBySlug(slug);
+  }
+
   @Get(':id')
   @Public()
   findOne(@Param('id') id: string): Promise<Opportunity> {

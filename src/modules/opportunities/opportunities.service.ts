@@ -87,6 +87,17 @@ export class OpportunitiesService {
     }
   }
 
+  async findBySlug(slug: string): Promise<Opportunity> {
+    try {
+      return await this.opportunityRepository.findOneOrFail({
+        where: { slug },
+        relations: ['tags', 'creator', 'attachments']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async findOne(id: string): Promise<Opportunity> {
     try {
       return await this.opportunityRepository.findOneOrFail({
