@@ -24,6 +24,7 @@ import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
+import { UpdateInterestsDto } from './dto/update-interests.dto';
 
 @Controller('users')
 export class UsersController {
@@ -99,6 +100,12 @@ export class UsersController {
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<User> {
     return this.usersService.uploadImage(user, file);
+  }
+
+  @Patch('interests')
+  @UseRoles({ resource: 'interests', action: 'update' })
+  updateInterests(@CurrentUser() user: User, @Body() dto: UpdateInterestsDto): Promise<User> {
+    return this.usersService.updateInterests(user, dto.interests);
   }
 
   @Delete(':id')

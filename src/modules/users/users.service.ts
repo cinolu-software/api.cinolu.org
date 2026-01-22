@@ -188,7 +188,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
-        relations: ['roles', 'mentor_profile', 'mentor_profile.experiences', 'mentor_profile.expertises']
+        relations: ['roles', 'interests']
       });
       user['referralsCount'] = await this.userRepository.count({
         where: { referred_by: { id: user.id } }
@@ -297,6 +297,20 @@ export class UsersService {
     try {
       await this.findOne(id);
       await this.userRepository.softDelete(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async updateInterests(user: User, tagIds: string[]): Promise<User> {
+    try {
+      const userWithInterests = await this.findOne(user.id);
+      delete userWithInterests.password;
+      await this.userRepository.save({
+        ...userWithInterests,
+        interests: tagIds.map((id) => ({ id }))
+      });
+      return await this.findByEmail(user.email);
     } catch {
       throw new BadRequestException();
     }

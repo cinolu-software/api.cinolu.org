@@ -3,7 +3,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { OnEvent } from '@nestjs/event-emitter';
 import { User } from '@/modules/users/entities/user.entity';
 import { ContactSupportDto } from '@/modules/users/dto/contact-support.dto';
-import { MentorProfile } from '@/modules/mentor-profiles/entities/mentor-profile.entity';
+import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
 
 interface ResetPasswordDto {
   user: User;

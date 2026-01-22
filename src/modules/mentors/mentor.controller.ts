@@ -10,25 +10,25 @@ import {
   UseInterceptors,
   Query
 } from '@nestjs/common';
-import { MentorProfilesService } from './mentor-profiles.service';
-import { CreateMentorProfileDto } from './dto/create-mentor-profile.dto';
-import { UpdateMentorProfileDto } from './dto/update-mentor-profile.dto';
+import { MentorsService } from './mentors.service';
+import { CreateMentorDto } from './dto/create-mentor.dto';
+import { UpdateMentorDto } from './dto/update-mentor.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
-import { MentorProfile } from './entities/mentor-profile.entity';
+import { MentorProfile } from './entities/mentor.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
-import { FilterMentorsProfileDto } from './dto/filter-mentors-profiles.dto';
+import { FilterMentorsDto } from './dto/filter-mentors.dto';
 import { UseRoles } from 'nest-access-control';
 import { User } from '../users/entities/user.entity';
 
-@Controller('mentor-profiles')
-export class MentorProfileController {
-  constructor(private mentorProfilesService: MentorProfilesService) {}
+@Controller('mentors')
+export class MentorsController {
+  constructor(private mentorsService: MentorsService) {}
 
   @Post()
-  create(@CurrentUser() user: User, @Body() dto: CreateMentorProfileDto): Promise<MentorProfile> {
-    return this.mentorProfilesService.create(user, dto);
+  create(@CurrentUser() user: User, @Body() dto: CreateMentorDto): Promise<MentorProfile> {
+    return this.mentorsService.create(user, dto);
   }
 
   @Post('add-cv/:id')
@@ -44,48 +44,53 @@ export class MentorProfileController {
     })
   )
   addCv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
-    return this.mentorProfilesService.addCv(id, file);
+    return this.mentorsService.addCv(id, file);
   }
 
   @Get('filtered')
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
-  findFiltered(@Query() dto: FilterMentorsProfileDto): Promise<[MentorProfile[], number]> {
-    return this.mentorProfilesService.findFiltered(dto);
+  findFiltered(@Query() dto: FilterMentorsDto): Promise<[MentorProfile[], number]> {
+    return this.mentorsService.findFiltered(dto);
   }
 
   @Patch('approve/:id')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   approve(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorProfilesService.approve(id);
+    return this.mentorsService.approve(id);
   }
 
   @Patch('reject/:id')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   reject(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorProfilesService.reject(id);
+    return this.mentorsService.reject(id);
+  }
+
+  @Get('for-me')
+  findForUser(@CurrentUser() user: User): Promise<MentorProfile[]> {
+    return this.mentorsService.findForUser(user);
   }
 
   @Get()
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
   findAll(): Promise<MentorProfile[]> {
-    return this.mentorProfilesService.findAll();
+    return this.mentorsService.findAll();
   }
 
   @Get(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'read' })
   findOne(@Param('id') id: string): Promise<MentorProfile> {
-    return this.mentorProfilesService.findOne(id);
+    return this.mentorsService.findOne(id);
   }
 
   @Patch(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'update', possession: 'own' })
-  update(@Param('id') id: string, @Body() dto: UpdateMentorProfileDto): Promise<MentorProfile> {
-    return this.mentorProfilesService.update(id, dto);
+  update(@Param('id') id: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
+    return this.mentorsService.update(id, dto);
   }
 
   @Delete(':id')
   @UseRoles({ resource: 'mentorsProfiles', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
-    return this.mentorProfilesService.remove(id);
+    return this.mentorsService.remove(id);
   }
 }

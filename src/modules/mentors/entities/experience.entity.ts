@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { MentorProfile } from './mentor-profile.entity';
+import { MentorProfile } from './mentor.entity';
 import { AbstractEntity } from '@/core/database/abstract.entity';
 
 @Entity()

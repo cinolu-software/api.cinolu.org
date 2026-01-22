@@ -10,8 +10,8 @@ import { Program } from '../programs/entities/program.entity';
 import { Subprogram } from '../subprograms/entities/subprogram.entity';
 import { Article } from '../blog/articles/entities/article.entity';
 import { Comment } from '../blog/comments/entities/comment.entity';
-import { MentorProfile } from '../mentor-profiles/entities/mentor-profile.entity';
-import { MentorStatus } from '../mentor-profiles/enums/mentor.enum';
+import { MentorProfile } from '../mentors/entities/mentor.entity';
+import { MentorStatus } from '../mentors/enums/mentor.enum';
 
 @Injectable()
 export class StatsService {

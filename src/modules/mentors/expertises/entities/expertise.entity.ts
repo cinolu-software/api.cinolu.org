@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { MentorProfile } from '../../entities/mentor-profile.entity';
+import { MentorProfile } from '../../entities/mentor.entity';
 
 @Entity()
 export class Expertise extends AbstractEntity {

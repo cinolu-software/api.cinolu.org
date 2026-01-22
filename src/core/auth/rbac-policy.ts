@@ -5,7 +5,8 @@ export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 
 RBAC_POLICY.grant(Role.USER)
   .readOwn(['products', 'ventures'])
-  .updateOwn(['ventures', 'comments', 'products', 'mentorsProfiles', 'addCV'])
+  .readAny(['opportunities'])
+  .updateOwn(['ventures', 'comments', 'products', 'mentorsProfiles', 'addCV', 'interests'])
   .deleteOwn(['ventures', 'comments', 'products', 'mentorsProfiles'])
   .grant(Role.MENTOR)
   .extend(Role.USER)
@@ -27,6 +28,7 @@ RBAC_POLICY.grant(Role.USER)
     'blogs',
     'ventures',
     'tags',
+    'opportunities',
     'exportUsersCSV'
   ])
   .createAny([
@@ -43,7 +45,8 @@ RBAC_POLICY.grant(Role.USER)
     'programCategories',
     'projectCategories',
     'projects',
-    'blogs'
+    'blogs',
+    'opportunities'
   ])
   .updateAny([
     'indicators',
@@ -62,7 +65,8 @@ RBAC_POLICY.grant(Role.USER)
     'ventures',
     'publishVenture',
     'mentorApplications',
-    'expertises'
+    'expertises',
+    'opportunities'
   ])
   .deleteAny([
     'indicators',
@@ -81,7 +85,8 @@ RBAC_POLICY.grant(Role.USER)
     'ventures',
     'galleries',
     'mentorsProfiles',
-    'expertises'
+    'expertises',
+    'opportunities'
   ])
   .grant(Role.ADMIN)
   .extend(Role.STAFF);

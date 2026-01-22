@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateMentorProfileDto } from './dto/create-mentor-profile.dto';
-import { UpdateMentorProfileDto } from './dto/update-mentor-profile.dto';
+import { CreateMentorDto } from './dto/create-mentor.dto';
+import { UpdateMentorDto } from './dto/update-mentor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MentorProfile } from './entities/mentor-profile.entity';
+import { MentorProfile } from './entities/mentor.entity';
 import { User } from '../users/entities/user.entity';
 import { promises as fs } from 'fs';
-import { FilterMentorsProfileDto } from './dto/filter-mentors-profiles.dto';
+import { FilterMentorsDto } from './dto/filter-mentors.dto';
 import { UsersService } from '../users/users.service';
 import { MentorStatus } from './enums/mentor.enum';
 import { ExperiencesService } from './experiences.service';
@@ -14,18 +14,18 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Role } from '@/core/auth/enums/roles.enum';
 
 @Injectable()
-export class MentorProfilesService {
+export class MentorsService {
   constructor(
     @InjectRepository(MentorProfile)
-    private mentorProfileRepository: Repository<MentorProfile>,
+    private mentorRepository: Repository<MentorProfile>,
     private usersService: UsersService,
     private experiencesService: ExperiencesService,
     private eventEmitter: EventEmitter2
   ) {}
 
-  async create(user: User, dto: CreateMentorProfileDto): Promise<MentorProfile> {
+  async create(user: User, dto: CreateMentorDto): Promise<MentorProfile> {
     try {
-      const mentorProfile = await this.mentorProfileRepository.save({
+      const mentorProfile = await this.mentorRepository.save({
         ...dto,
         owner: { id: user.id },
         expertises: dto.expertises ? dto.expertises.map((id) => ({ id })) : []
@@ -44,15 +44,15 @@ export class MentorProfilesService {
       const mentor = await this.findOne(id);
       if (mentor.cv) await fs.unlink(`./uploads/mentors/cvs/${mentor.cv}`);
       mentor.cv = file.filename;
-      return await this.mentorProfileRepository.save(mentor);
+      return await this.mentorRepository.save(mentor);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findFiltered(dto: FilterMentorsProfileDto): Promise<[MentorProfile[], number]> {
+  async findFiltered(dto: FilterMentorsDto): Promise<[MentorProfile[], number]> {
     const { q, page, status } = dto;
-    const query = this.mentorProfileRepository
+    const query = this.mentorRepository
       .createQueryBuilder('m')
       .leftJoinAndSelect('m.owner', 'owner')
       .leftJoinAndSelect('m.expertises', 'expertises');
@@ -63,7 +63,7 @@ export class MentorProfilesService {
   }
 
   async findAll(): Promise<MentorProfile[]> {
-    return await this.mentorProfileRepository.find({
+    return await this.mentorRepository.find({
       relations: ['owner', 'experiences', 'expertises']
     });
   }
@@ -71,7 +71,7 @@ export class MentorProfilesService {
   async approve(id: string): Promise<MentorProfile> {
     try {
       const mentorProfile = await this.findOne(id);
-      await this.mentorProfileRepository.update(id, { status: MentorStatus.APPROVED });
+      await this.mentorRepository.update(id, { status: MentorStatus.APPROVED });
       await this.usersService.assignRole(mentorProfile.owner.id, Role.MENTOR);
       const updatedProfile = await this.findOne(id);
       this.eventEmitter.emit('mentor.approved', updatedProfile);
@@ -84,7 +84,7 @@ export class MentorProfilesService {
   async reject(id: string): Promise<MentorProfile> {
     try {
       const mentorProfile = await this.findOne(id);
-      await this.mentorProfileRepository.update(id, { status: MentorStatus.REJECTED });
+      await this.mentorRepository.update(id, { status: MentorStatus.REJECTED });
       await this.usersService.assignRole(mentorProfile.owner.id, Role.USER);
       const updatedProfile = await this.findOne(id);
       this.eventEmitter.emit('mentor.rejected', updatedProfile);
@@ -94,9 +94,16 @@ export class MentorProfilesService {
     }
   }
 
+  async findForUser(user: User): Promise<MentorProfile[]> {
+    return await this.mentorRepository.find({
+      where: { owner: { id: user.id } },
+      relations: ['experiences', 'expertises']
+    });
+  }
+
   async findOne(id: string): Promise<MentorProfile> {
     try {
-      return await this.mentorProfileRepository.findOneOrFail({
+      return await this.mentorRepository.findOneOrFail({
         where: { id },
         relations: ['experiences', 'expertises', 'owner']
       });
@@ -105,13 +112,13 @@ export class MentorProfilesService {
     }
   }
 
-  async update(id: string, dto: UpdateMentorProfileDto): Promise<MentorProfile> {
+  async update(id: string, dto: UpdateMentorDto): Promise<MentorProfile> {
     try {
       const mentorProfile = await this.findOne(id);
       if (dto.experiences) {
         await this.experiencesService.saveExperiences(id, dto.experiences);
       }
-      return await this.mentorProfileRepository.save({
+      return await this.mentorRepository.save({
         ...mentorProfile,
         ...dto,
         expertises: dto?.expertises?.map((id) => ({ id })) || mentorProfile.expertises
@@ -124,7 +131,7 @@ export class MentorProfilesService {
   async remove(id: string): Promise<void> {
     try {
       await this.findOne(id);
-      await this.mentorProfileRepository.softDelete(id);
+      await this.mentorRepository.softDelete(id);
     } catch {
       throw new BadRequestException();
     }

@@ -21,8 +21,9 @@ import { SubprogramsModule } from './modules/subprograms/subprograms.module';
 import { UsersModule } from './modules/users/users.module';
 import { TransformInterceptor } from './core/interceptors/transform.interceptor';
 import { AuthGuard } from './core/auth/guards/auth.guard';
-import { MentorProfileModule } from './modules/mentor-profiles/mentor-profiles.module';
+import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
+import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
 
 @Module({
   imports: [
@@ -57,7 +58,8 @@ import { VenturesModule } from './modules/ventures/ventures.module';
     SubprogramsModule,
     EventsModule,
     ProjectsModule,
-    MentorProfileModule
+    MentorsModule,
+    OpportunitiesModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
