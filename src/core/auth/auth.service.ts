@@ -12,7 +12,6 @@ import { User } from '@/modules/users/entities/user.entity';
 import { UsersService } from '@/modules/users/users.service';
 import { CreateWithGoogleDto } from './dto/sign-up-with-google.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-// import { EVENTS } from '../../shared/constants/app.constants';
 
 @Injectable()
 export class AuthService {
