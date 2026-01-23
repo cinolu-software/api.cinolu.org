@@ -37,8 +37,6 @@ export class OpportunitiesService {
       const query = this.opportunityRepository
         .createQueryBuilder('opportunity')
         .leftJoinAndSelect('opportunity.tags', 'tags')
-        .where('opportunity.started_at <= NOW()')
-        .andWhere('opportunity.ended_at >= NOW()')
         .orderBy('opportunity.started_at', 'DESC');
       if (q) query.andWhere('(opportunity.title LIKE :q OR opportunity.description LIKE :q)', { q: `%${q}%` });
       return await query
@@ -56,8 +54,6 @@ export class OpportunitiesService {
       const query = this.opportunityRepository
         .createQueryBuilder('opportunity')
         .leftJoinAndSelect('opportunity.tags', 'tags')
-        .where('opportunity.started_at <= NOW()')
-        .andWhere('opportunity.ended_at >= NOW()')
         .orderBy('opportunity.started_at', 'DESC');
       const allOpportunities = await query.getMany();
       const matchingInterests = allOpportunities.filter((opp) => opp.tags.some((tag) => userTagIds.includes(tag.id)));
@@ -69,15 +65,13 @@ export class OpportunitiesService {
 
   async findAllForAdmin(dto: FilterOpportunitiesDto): Promise<[Opportunity[], number]> {
     try {
-      const { page = 1, q, filter = 'all' } = dto;
+      const { page = 1, q } = dto;
       const query = this.opportunityRepository
         .createQueryBuilder('opportunity')
         .leftJoinAndSelect('opportunity.tags', 'tags')
         .leftJoinAndSelect('opportunity.creator', 'creator')
         .orderBy('opportunity.created_at', 'DESC');
       if (q) query.andWhere('(opportunity.title LIKE :q OR opportunity.description LIKE :q)', { q: `%${q}%` });
-      if (filter === 'published') query.andWhere('opportunity.started_at <= NOW() AND opportunity.ended_at >= NOW()');
-      if (filter === 'drafts') query.andWhere('opportunity.started_at > NOW() OR opportunity.ended_at < NOW()');
       return await query
         .skip((+page - 1) * 20)
         .take(20)
