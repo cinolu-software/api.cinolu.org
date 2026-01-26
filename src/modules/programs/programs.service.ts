@@ -8,6 +8,7 @@ import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { IndicatorDto } from './dto/indicator.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 type ProgramWithIndicators = Program & { indicators_grouped?: Record<string, Indicator[]> };
 
@@ -17,7 +18,8 @@ export class ProgramsService {
     @InjectRepository(Program)
     private programRepository: Repository<Program>,
     @InjectRepository(Indicator)
-    private indicatorRepository: Repository<Indicator>
+    private indicatorRepository: Repository<Indicator>,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
@@ -26,7 +28,9 @@ export class ProgramsService {
         ...dto,
         category: { id: dto.category }
       });
-      return await this.programRepository.save(program);
+      const savedProgram = await this.programRepository.save(program);
+      this.eventEmitter.emit('activity.added', { activity: savedProgram, type: 'Programme' });
+      return savedProgram;
     } catch {
       throw new BadRequestException();
     }
