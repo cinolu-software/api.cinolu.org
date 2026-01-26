@@ -3,6 +3,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { config } from 'dotenv';
 import { EmailService } from './email.service';
+import { UsersModule } from '@/modules/users/users.module';
 
 config({
   path: '.env'
@@ -10,6 +11,7 @@ config({
 
 @Module({
   imports: [
+    UsersModule,
     MailerModule.forRoot({
       transport: {
         secure: true,

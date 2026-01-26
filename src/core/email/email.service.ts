@@ -4,6 +4,13 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { User } from '@/modules/users/entities/user.entity';
 import { ContactSupportDto } from '@/modules/users/dto/contact-support.dto';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
+import { Venture } from '@/modules/ventures/entities/venture.entity';
+import { Program } from '@/modules/programs/entities/program.entity';
+import { Event } from '@/modules/events/entities/event.entity';
+import { Project } from '@/modules/projects/entities/project.entity';
+import { Article } from '@/modules/blog/articles/entities/article.entity';
+import { Opportunity } from '@/modules/opportunities/entities/opportunity.entity';
+import { UsersService } from '@/modules/users/users.service';
 
 interface ResetPasswordDto {
   user: User;
@@ -12,7 +19,10 @@ interface ResetPasswordDto {
 
 @Injectable()
 export class EmailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    private usersService: UsersService
+  ) {}
 
   @OnEvent('user.reset-password')
   async resetEmail(dto: ResetPasswordDto): Promise<void> {
@@ -66,6 +76,130 @@ export class EmailService {
         template: 'mentor-rejected',
         context: { mentorProfile }
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('user.welcome')
+  async sendWelcomeEmail(user: User): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Bienvenue sur CINOLU',
+        template: 'welcome',
+        context: { user }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('mentor.application')
+  async sendMentorApplicationEmail(mentorProfile: MentorProfile): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: mentorProfile.owner.email,
+        subject: 'Candidature de mentor reçue',
+        template: 'mentor-application',
+        context: { mentorProfile }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('venture.created')
+  async sendBusinessCreatedEmail(venture: Venture): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: venture.owner.email,
+        subject: 'Entreprise créée avec succès',
+        template: 'business-created',
+        context: { venture }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('venture.approved')
+  async sendVentureApprovalEmail(venture: Venture): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: venture.owner.email,
+        subject: 'Votre entreprise a été approuvée!',
+        template: 'venture-approved',
+        context: { venture }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('venture.rejected')
+  async sendVentureRejectionEmail(venture: Venture): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: venture.owner.email,
+        subject: 'Décision concernant votre entreprise',
+        template: 'venture-rejected',
+        context: { venture }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('activity.added')
+  async sendActivityAddedEmail(payload: { activity: Program | Event | Project; type: string }): Promise<void> {
+    try {
+      const { activity, type } = payload;
+      const activityName = (activity as Program | Event | Project).name || '';
+      const activityDescription = (activity as Program | Event | Project).description || '';
+      const users = await this.usersService.findAllEmails();
+      for (const email of users) {
+        await this.mailerService.sendMail({
+          to: email,
+          subject: `Nouvelle activité ${type} ajoutée`,
+          template: 'activity-added',
+          context: { activityType: type, activityName, activityDescription }
+        });
+      }
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('article.published')
+  async sendArticlePublishedEmail(article: Article): Promise<void> {
+    try {
+      const users = await this.usersService.findAllEmails();
+      for (const email of users) {
+        await this.mailerService.sendMail({
+          to: email,
+          subject: `Nouvel article publié: ${article.title}`,
+          template: 'article-published',
+          context: { article }
+        });
+      }
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  @OnEvent('opportunity.published')
+  async sendOpportunityPublishedEmail(opportunity: Opportunity): Promise<void> {
+    try {
+      const users = await this.usersService.findAllEmails();
+      for (const email of users) {
+        await this.mailerService.sendMail({
+          to: email,
+          subject: `Nouvelle opportunité: ${opportunity.title}`,
+          template: 'opportunity-published',
+          context: { opportunity }
+        });
+      }
     } catch {
       throw new BadRequestException();
     }
