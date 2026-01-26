@@ -33,7 +33,9 @@ export class MentorsService {
       if (dto.experiences?.length) {
         await this.experiencesService.saveExperiences(mentorProfile.id, dto.experiences);
       }
-      return await this.findOne(mentorProfile.id);
+      const savedProfile = await this.findOne(mentorProfile.id);
+      this.eventEmitter.emit('mentor.application', savedProfile);
+      return savedProfile;
     } catch {
       throw new BadRequestException('Erreur lors de la création du profil de mentor');
     }

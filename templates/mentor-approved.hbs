@@ -6,10 +6,11 @@
   </head>
   <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>
     <table
-      style='max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>
+      style='max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'
+    >
       <tr>
         <td>
-          <div style='text-align: center; margin-bottom: 30px;'>
+          <div style='margin-bottom: 30px;'>
             <div style='font-size: 48px; color: #28a745; margin-bottom: 10px;'>✓</div>
             <h1 style='color: #28a745; margin: 0;'>Profil Approuvé!</h1>
           </div>
@@ -22,15 +23,20 @@
           <p style='color: #555555; font-size: 16px;'>
             Nous avons le plaisir de vous informer que votre profil de mentor a été
             <strong style='color: #28a745;'>approuvé</strong>
-            par notre équipe d'administration. Vous pouvez désormais bénéficier de tous les privilèges et fonctionnalités réservés aux mentors sur
+            par notre équipe d'administration. Vous pouvez désormais bénéficier de tous les privilèges et
+            fonctionnalités réservés aux mentors sur
             <strong>cinolu.org</strong>.
           </p>
 
-          <div style='background-color: #e8f5e9; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 4px;'>
+          <div
+            style='background-color: #e8f5e9; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 4px;'
+          >
             <p style='color: #2e7d32; margin: 0;'>
               <strong>Détails de votre profil :</strong><br />
-              Nom : {{mentorProfile.owner.name}}<br />
-              Domaines d'expertise : {{#each mentorProfile.expertises}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}<br />
+              Nom :
+              {{mentorProfile.owner.name}}<br />
+              Domaines d'expertise :
+              {{#each mentorProfile.expertises}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}<br />
               Statut : Approuvé
             </p>
           </div>
