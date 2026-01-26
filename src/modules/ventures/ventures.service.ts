@@ -9,22 +9,25 @@ import { CreateVentureDto } from './dto/create-venture.dto';
 import { UpdateVentureDto } from './dto/update-venture.dto';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class VenturesService {
   constructor(
     @InjectRepository(Venture)
     private ventureRepository: Repository<Venture>,
-    private galleryService: GalleriesService
+    private galleryService: GalleriesService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
     try {
-      const venture = this.ventureRepository.create({
+      const venture = await this.ventureRepository.save({
         ...dto,
         owner: { id: user.id }
       });
-      return await this.ventureRepository.save(venture);
+      this.eventEmitter.emit('venture.created', venture);
+      return await this.findOne(venture.id);
     } catch {
       throw new BadRequestException();
     }
@@ -76,8 +79,10 @@ export class VenturesService {
 
   async togglePublish(slug: string): Promise<Venture> {
     const venture = await this.findBySlug(slug);
-    venture.is_published = !venture.is_published;
-    return await this.ventureRepository.save(venture);
+    const updatedVenture = await this.ventureRepository.save({ ...venture, is_published: !venture.is_published });
+    if (updatedVenture.is_published) this.eventEmitter.emit('venture.approved', updatedVenture);
+    if (!updatedVenture.is_published) this.eventEmitter.emit('venture.rejected', updatedVenture);
+    return updatedVenture;
   }
 
   async findByUser(page: string, user: User): Promise<[Venture[], number]> {
@@ -118,7 +123,7 @@ export class VenturesService {
     try {
       return await this.ventureRepository.findOneOrFail({
         where: { id },
-        relations: ['gallery']
+        relations: ['gallery', 'owner']
       });
     } catch {
       throw new NotFoundException();

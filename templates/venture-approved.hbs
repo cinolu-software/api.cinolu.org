@@ -1,0 +1,75 @@
+<html lang='fr'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Entreprise Approuvée</title>
+  </head>
+  <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>
+    <table
+      style='max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'
+    >
+      <tr>
+        <td>
+          <div style='margin-bottom: 30px;'>
+            <div style='font-size: 48px; color: #28a745; margin-bottom: 10px;'>✓</div>
+            <h1 style='color: #28a745; margin: 0;'>Entreprise Approuvée!</h1>
+          </div>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Bonjour
+            <strong>{{venture.owner.name}}</strong>,
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Nous avons le plaisir de vous informer que votre entreprise
+            <strong>{{venture.name}}</strong>
+            a été
+            <strong style='color: #28a745;'>approuvée</strong>
+            et est maintenant publiée sur
+            <strong>cinolu.org</strong>.
+          </p>
+
+          <div
+            style='background-color: #e8f5e9; padding: 15px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 4px;'
+          >
+            <p style='color: #2e7d32; margin: 0;'>
+              <strong>Détails de votre entreprise :</strong><br />
+              Nom :
+              {{venture.name}}<br />
+              Statut : Publiée et visible sur la plateforme
+            </p>
+          </div>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Votre entreprise est maintenant visible par tous les utilisateurs de la plateforme, y compris les bailleurs de fonds et accompagnateurs. Vous pouvez continuer à enrichir votre profil en ajoutant des produits et des images.
+          </p>
+
+          <p style='text-align: center; margin: 30px 0;'>
+            <a
+              href='https://cinolu.org/ventures/{{venture.slug}}'
+              style='display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 30px; border-radius: 5px; text-decoration: none; font-size: 15px; font-weight: bold;'
+            >
+              Voir Mon Entreprise
+            </a>
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter à
+            <a href='mailto:wilfriedm@cinolu.org' style='color: #007BFF;'>wilfriedm@cinolu.org</a>
+          </p>
+
+          <p style='color: #555555; font-size: 16px;'>
+            Merci de faire partie de la communauté CINOLU et à bientôt sur
+            <strong>cinolu.org</strong>
+            !
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td style='text-align: center; padding-top: 20px;'>
+          <p style='color: #aaaaaa; font-size: 12px;'>&copy; 2026 cinolu.org. Tous droits réservés.</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
