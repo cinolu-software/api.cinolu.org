@@ -9,24 +9,27 @@ import { User } from '@/modules/users/entities/user.entity';
 import { promises as fs } from 'fs';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private articlesRepository: Repository<Article>,
-    private galleryService: GalleriesService
+    private galleryService: GalleriesService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateArticleDto, user: User): Promise<Article> {
     try {
-      const article = this.articlesRepository.create({
+      const article = await this.articlesRepository.save({
         ...dto,
         published_at: dto.published_at ? new Date(dto.published_at) : new Date(),
         tags: dto.tags.map((id) => ({ id })),
         author: user
       });
-      return await this.articlesRepository.save(article);
+      this.eventEmitter.emit('article.published', article);
+      return article;
     } catch {
       throw new BadRequestException();
     }
