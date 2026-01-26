@@ -55,7 +55,9 @@ export class AuthService {
 
   async signUp(dto: SignUpDto): Promise<User> {
     try {
-      return await this.usersService.signUp(dto);
+      const user = await this.usersService.signUp(dto);
+      this.eventEmitter.emit('user.welcome', user);
+      return user;
     } catch (error) {
       throw new BadRequestException(error?.message);
     }
