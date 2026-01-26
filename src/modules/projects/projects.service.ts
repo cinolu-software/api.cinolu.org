@@ -11,6 +11,7 @@ import { GalleriesService } from '@/modules/galleries/galleries.service';
 import { MetricDto } from '../subprograms/metrics/dto/metric.dto';
 import { Metric } from '../subprograms/metrics/entities/metric.entity';
 import { MetricsService } from '../subprograms/metrics/metrics.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProjectsService {
@@ -18,7 +19,8 @@ export class ProjectsService {
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
     private galleryService: GalleriesService,
-    private metricsService: MetricsService
+    private metricsService: MetricsService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -29,7 +31,9 @@ export class ProjectsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-      return await this.projectRepository.save(project);
+      const savedProject = await this.projectRepository.save(project);
+      this.eventEmitter.emit('activity.added', { activity: savedProject, type: 'Projet' });
+      return savedProject;
     } catch {
       throw new BadRequestException();
     }
