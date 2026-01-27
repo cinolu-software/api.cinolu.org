@@ -1,7 +1,6 @@
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { IsArray } from 'class-validator';
 
 export class UpdateInterestsDto {
   @IsArray()
-  @IsNotEmpty()
   interests: string[];
 }
