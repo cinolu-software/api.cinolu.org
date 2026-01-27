@@ -6,7 +6,7 @@ export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 RBAC_POLICY.grant(Role.USER)
   .readOwn(['products', 'ventures'])
   .readAny(['opportunities'])
-  .updateOwn(['ventures', 'comments', 'products', 'mentors', 'addCV', 'interests'])
+  .updateOwn(['ventures', 'comments', 'products', 'mentors', 'addCV'])
   .deleteOwn(['ventures', 'comments', 'products', 'mentors'])
   .grant(Role.MENTOR)
   .extend(Role.USER)
