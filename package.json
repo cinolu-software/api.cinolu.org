@@ -22,6 +22,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@langchain/core": "^1.1.17",
+    "@langchain/ollama": "^1.2.1",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^11.1.7",
     "@nestjs/config": "^4.0.2",
