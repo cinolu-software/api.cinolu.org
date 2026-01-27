@@ -23,14 +23,24 @@ import { FilterVenturesDto } from './dto/filter-ventures.dto';
 import { UseRoles } from 'nest-access-control';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Public } from '@/core/auth/decorators/public.decorator';
+import { AiVenturesService } from './ai-ventures.service';
+import { VentureDocument } from './entities/document.entity';
 
 @Controller('ventures')
 export class VenturesController {
-  constructor(private venturesService: VenturesService) {}
+  constructor(
+    private venturesService: VenturesService,
+    private aiVenturesService: AiVenturesService
+  ) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateVentureDto): Promise<Venture> {
     return this.venturesService.create(user, dto);
+  }
+
+  @Post('docs/:id')
+  generateDocuments(@Param('id') id: string): Promise<VentureDocument[]> {
+    return this.aiVenturesService.generateDocs(id);
   }
 
   @Get('published')

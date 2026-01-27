@@ -22,12 +22,13 @@ export class VenturesService {
 
   async create(user: User, dto: CreateVentureDto): Promise<Venture> {
     try {
-      const venture = await this.ventureRepository.save({
+      const savedVenture = await this.ventureRepository.save({
         ...dto,
         owner: { id: user.id }
       });
+      const venture = await this.findOne(savedVenture.id);
       this.eventEmitter.emit('venture.created', venture);
-      return await this.findOne(venture.id);
+      return venture;
     } catch {
       throw new BadRequestException();
     }
@@ -70,7 +71,7 @@ export class VenturesService {
     try {
       return await this.ventureRepository.findOneOrFail({
         where: { slug },
-        relations: ['gallery', 'products', 'products.gallery', 'owner']
+        relations: ['gallery', 'products', 'products.gallery', 'owner', 'documents']
       });
     } catch {
       throw new NotFoundException();
