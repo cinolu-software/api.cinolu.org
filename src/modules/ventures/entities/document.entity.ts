@@ -1,0 +1,16 @@
+import { AbstractEntity } from '@/core/database/abstract.entity';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Venture } from './venture.entity';
+
+@Entity()
+export class VentureDocument extends AbstractEntity {
+  @Column()
+  type: string;
+
+  @Column({ type: 'text' })
+  content: string;
+
+  @ManyToOne(() => Venture, (venture) => venture.id)
+  @JoinColumn({ name: 'venture_id' })
+  venture: Venture;
+}

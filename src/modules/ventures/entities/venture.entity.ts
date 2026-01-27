@@ -3,6 +3,7 @@ import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { VentureDocument } from './document.entity';
 
 @Entity()
 export class Venture extends AbstractEntity {
@@ -63,4 +64,7 @@ export class Venture extends AbstractEntity {
 
   @OneToMany(() => Gallery, (gallery) => gallery.venture)
   gallery: Gallery[];
+
+  @OneToMany(() => VentureDocument, (document) => document.venture)
+  documents: VentureDocument[];
 }
