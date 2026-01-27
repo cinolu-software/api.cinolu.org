@@ -81,6 +81,11 @@ export class UsersController {
     return this.usersService.findOneByEmail(email);
   }
 
+  @Patch('my-interests')
+  updateInterests(@CurrentUser() user: User, @Body() dto: UpdateInterestsDto): Promise<User> {
+    return this.usersService.updateInterests(user, dto.interests);
+  }
+
   @Patch(':id')
   @UseRoles({ resource: 'users', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
@@ -100,12 +105,6 @@ export class UsersController {
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<User> {
     return this.usersService.uploadImage(user, file);
-  }
-
-  @Patch('my-interests')
-  @UseRoles({ resource: 'interests', action: 'update' })
-  updateInterests(@CurrentUser() user: User, @Body() dto: UpdateInterestsDto): Promise<User> {
-    return this.usersService.updateInterests(user, dto.interests);
   }
 
   @Delete(':id')
