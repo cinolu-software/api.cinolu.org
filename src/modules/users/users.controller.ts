@@ -102,7 +102,7 @@ export class UsersController {
     return this.usersService.uploadImage(user, file);
   }
 
-  @Patch('interests')
+  @Patch('my-interests')
   @UseRoles({ resource: 'interests', action: 'update' })
   updateInterests(@CurrentUser() user: User, @Body() dto: UpdateInterestsDto): Promise<User> {
     return this.usersService.updateInterests(user, dto.interests);
