@@ -25,23 +25,14 @@ import { ContactSupportDto } from './dto/contact-support.dto';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 import { UpdateInterestsDto } from './dto/update-interests.dto';
-import { AiUsersService } from './ai-users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private usersService: UsersService,
-    private aiUsersService: AiUsersService
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   @Post('generate/referralCode')
   async generateRefferalLink(@CurrentUser() user: User): Promise<User> {
     return this.usersService.saveRefferalCode(user);
-  }
-
-  @Post('generate/joke')
-  async generateJoke(@CurrentUser() user: User): Promise<string> {
-    return this.aiUsersService.generateJoke(user);
   }
 
   @Get('find-staff')
