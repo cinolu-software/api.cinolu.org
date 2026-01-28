@@ -6,7 +6,6 @@ import { VenturesService } from './ventures.service';
 import { ChatOllama } from '@langchain/ollama';
 import { VentureDocument } from './entities/document.entity';
 import { ConfigService } from '@nestjs/config';
-import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AiVenturesService {
@@ -32,7 +31,6 @@ export class AiVenturesService {
     });
   }
 
-  @OnEvent('venture.generate-docs')
   async generateDocs(ventureId: string): Promise<VentureDocument[]> {
     const venture = await this.venturesService.findOne(ventureId);
     const inputs = this.DOCUMENT_KIT.map((doc) => ({
