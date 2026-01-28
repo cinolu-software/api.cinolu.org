@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AiAssistance1769507473878 implements MigrationInterface {
-    name = 'AiAssistance1769507473878'
+export class Init1769603121281 implements MigrationInterface {
+    name = 'Init1769603121281'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE \`venture_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`type\` varchar(255) NOT NULL, \`content\` text NOT NULL, \`venture_id\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`ALTER TABLE \`tag\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
+        await queryRunner.query(`CREATE TABLE \`venture_document\` (\`id\` varchar(36) NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`type\` varchar(255) NOT NULL, \`content\` text NOT NULL, \`ventureId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`ALTER TABLE \`role\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
+        await queryRunner.query(`ALTER TABLE \`tag\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`comment\` DROP FOREIGN KEY \`FK_c20404221e5c125a581a0d90c0e\``);
         await queryRunner.query(`ALTER TABLE \`comment\` DROP FOREIGN KEY \`FK_276779da446413a0d79598d4fbd\``);
         await queryRunner.query(`ALTER TABLE \`comment\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL`);
@@ -173,13 +173,13 @@ export class AiAssistance1769507473878 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`opportunity_attachment\` ADD CONSTRAINT \`FK_ece8a56319172b2dad655d4a621\` FOREIGN KEY (\`opportunityId\`) REFERENCES \`opportunity\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`opportunity\` ADD CONSTRAINT \`FK_34ede84c565bbb9e20be00cecb0\` FOREIGN KEY (\`creatorId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`user\` ADD CONSTRAINT \`FK_adc492faf309ebf60ca6425e183\` FOREIGN KEY (\`referredById\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE \`venture_document\` ADD CONSTRAINT \`FK_81d79d94a6d7a249e5e6cff2166\` FOREIGN KEY (\`ventureId\`) REFERENCES \`venture\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`venture\` ADD CONSTRAINT \`FK_6fbaf21ef151926c152487526d7\` FOREIGN KEY (\`ownerId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE \`venture_document\` ADD CONSTRAINT \`FK_fca6a7b32a5e1548e2e68e64eff\` FOREIGN KEY (\`venture_id\`) REFERENCES \`venture\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE \`venture_document\` DROP FOREIGN KEY \`FK_fca6a7b32a5e1548e2e68e64eff\``);
         await queryRunner.query(`ALTER TABLE \`venture\` DROP FOREIGN KEY \`FK_6fbaf21ef151926c152487526d7\``);
+        await queryRunner.query(`ALTER TABLE \`venture_document\` DROP FOREIGN KEY \`FK_81d79d94a6d7a249e5e6cff2166\``);
         await queryRunner.query(`ALTER TABLE \`user\` DROP FOREIGN KEY \`FK_adc492faf309ebf60ca6425e183\``);
         await queryRunner.query(`ALTER TABLE \`opportunity\` DROP FOREIGN KEY \`FK_34ede84c565bbb9e20be00cecb0\``);
         await queryRunner.query(`ALTER TABLE \`opportunity_attachment\` DROP FOREIGN KEY \`FK_ece8a56319172b2dad655d4a621\``);
@@ -346,8 +346,8 @@ export class AiAssistance1769507473878 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`comment\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`comment\` ADD CONSTRAINT \`FK_276779da446413a0d79598d4fbd\` FOREIGN KEY (\`authorId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE \`comment\` ADD CONSTRAINT \`FK_c20404221e5c125a581a0d90c0e\` FOREIGN KEY (\`articleId\`) REFERENCES \`article\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        await queryRunner.query(`ALTER TABLE \`role\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`ALTER TABLE \`tag\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
+        await queryRunner.query(`ALTER TABLE \`role\` CHANGE \`deleted_at\` \`deleted_at\` datetime(6) NULL DEFAULT 'NULL'`);
         await queryRunner.query(`DROP TABLE \`venture_document\``);
     }
 
