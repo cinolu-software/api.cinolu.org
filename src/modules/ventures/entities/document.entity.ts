@@ -10,7 +10,7 @@ export class VentureDocument extends AbstractEntity {
   @Column({ type: 'text' })
   content: string;
 
-  @ManyToOne(() => Venture, (venture) => venture.id)
-  @JoinColumn({ name: 'venture_id' })
+  @ManyToOne(() => Venture, (venture) => venture.documents)
+  @JoinColumn()
   venture: Venture;
 }
