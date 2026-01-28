@@ -27,6 +27,7 @@ export class VenturesService {
         owner: { id: user.id }
       });
       const venture = await this.findOne(savedVenture.id);
+      this.eventEmitter.emit('venture.generate-docs', venture.id);
       this.eventEmitter.emit('venture.created', venture);
       return venture;
     } catch {
