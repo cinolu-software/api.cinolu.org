@@ -205,7 +205,7 @@ export class UsersService {
       const roles = user.roles.map((role) => role.name);
       return { ...user, roles } as unknown as User;
     } catch {
-      throw new NotFoundException();
+      throw new NotFoundException("Cet utilisateur n'existe pas");
     }
   }
 
