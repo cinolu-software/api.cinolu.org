@@ -34,18 +34,16 @@ export class AiUsersService {
       ]
     ]);
     const chain = prompt.pipe(this.model);
-    const response = await chain.invoke([
-      {
-        name: user?.name,
-        biography: user?.biography ?? 'aucune biographie',
-        phone_number: user?.phone_number ?? 'non renseigné',
-        city: user?.city ?? 'une ville inconnue',
-        country: user?.country ?? 'un pays mystère',
-        gender: user?.gender ?? 'non spécifié',
-        birth_date: user?.birth_date ?? 'date inconnue',
-        instruction: 'Écris une blague courte en français, sympa et respectueuse.'
-      }
-    ]);
+    const response = await chain.invoke({
+      name: user?.name,
+      biography: user?.biography ?? 'aucune biographie',
+      phone_number: user?.phone_number ?? 'non renseigné',
+      city: user?.city ?? 'une ville inconnue',
+      country: user?.country ?? 'un pays mystère',
+      gender: user?.gender ?? 'non spécifié',
+      birth_date: user?.birth_date ?? 'date inconnue',
+      instruction: 'Écris une blague courte en français, sympa et respectueuse.'
+    });
     return response.content as string;
   }
 }
