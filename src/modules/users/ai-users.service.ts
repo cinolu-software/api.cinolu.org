@@ -18,6 +18,7 @@ export class AiUsersService {
 
   async generateJoke(user: User): Promise<string> {
     console.log(user);
+    return 'Onjour';
     const inputs = {
       name: user?.name ?? "Quelqu'un",
       biography: user?.biography ?? 'aucune biographie',
