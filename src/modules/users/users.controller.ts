@@ -39,9 +39,9 @@ export class UsersController {
     return this.usersService.saveRefferalCode(user);
   }
 
-  @Post('generate/joke')
-  async generateJoke(@CurrentUser() user: User): Promise<string> {
-    return this.aiUsersService.generateJoke(user);
+  @Post('generate/joke/:userId')
+  async generateJoke(@Param('userId') userId: string): Promise<string> {
+    return this.aiUsersService.generateJoke(userId);
   }
 
   @Get('find-staff')
