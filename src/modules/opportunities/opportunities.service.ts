@@ -9,6 +9,7 @@ import { OpportunityAttachment } from './entities/attachment.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { promises as fs } from 'fs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class OpportunitiesService {
@@ -17,6 +18,7 @@ export class OpportunitiesService {
     private opportunityRepository: Repository<Opportunity>,
     @InjectRepository(OpportunityAttachment)
     private attachmentRepository: Repository<OpportunityAttachment>,
+    private usersService: UsersService,
     private eventEmitter: EventEmitter2
   ) {}
 
@@ -51,8 +53,9 @@ export class OpportunitiesService {
     }
   }
 
-  async findForUser(user: User): Promise<[Opportunity[], number]> {
+  async findForUser(currentUser: User): Promise<[Opportunity[], number]> {
     try {
+      const user = await this.usersService.findOne(currentUser.id);
       const userTagIds = user.interests?.map((tag) => tag.id) || [];
       const query = this.opportunityRepository
         .createQueryBuilder('opportunity')
