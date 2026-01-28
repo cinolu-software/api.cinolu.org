@@ -17,18 +17,16 @@ export class AiUsersService {
   }
 
   async generateJoke(user: User): Promise<string> {
-    const inputs = [
-      {
-        name: user.name,
-        biography: user.biography,
-        phone_number: user.phone_number,
-        city: user.city,
-        country: user.country,
-        gender: user.gender,
-        birth_date: user.birth_date,
-        instruction: "Generate a joke based on the user's profile."
-      }
-    ];
+    const inputs = {
+      name: user.name,
+      biography: user.biography,
+      phone_number: user.phone_number,
+      city: user.city,
+      country: user.country,
+      gender: user.gender,
+      birth_date: user.birth_date,
+      instruction: "Generate a joke based on the user's profile."
+    };
     const prompt = ChatPromptTemplate.fromMessages([
       ['system', `You are a comedian. You are tasked with generating a joke based on the user's profile.`],
       [
@@ -42,7 +40,7 @@ export class AiUsersService {
         - Gender: {gender}
         - Birth Date: {birth_date}
         TASK: {instruction}
-        Write the response in the language of the provided User Profile (English or French).
+        Write the response in French.
         The joke should be short and to the point.`
       ]
     ]);
