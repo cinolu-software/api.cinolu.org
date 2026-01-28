@@ -30,7 +30,6 @@ export class AiUsersService {
           - Genre : {gender}
           - Date de naissance : {birth_date}
             TÂCHE : {instruction}
-          Écris une blague courte en français, sympa et respectueuse.
         `
       ]
     ]);
@@ -43,7 +42,7 @@ export class AiUsersService {
       country: user?.country ?? 'un pays mystère',
       gender: user?.gender ?? 'non spécifié',
       birth_date: user?.birth_date ?? 'date inconnue',
-      instruction: 'Generate a joke based on the user profile'
+      instruction: 'Écris une blague courte en français, sympa et respectueuse.'
     });
     return response.content as string;
   }

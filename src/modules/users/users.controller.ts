@@ -41,6 +41,8 @@ export class UsersController {
 
   @Post('generate/joke')
   async generateJoke(@CurrentUser() user: User): Promise<string> {
+    console.log(user);
+    return 'Onjour';
     return this.aiUsersService.generateJoke(user);
   }
 
