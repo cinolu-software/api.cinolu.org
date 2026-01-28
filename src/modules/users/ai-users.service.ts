@@ -35,7 +35,7 @@ export class AiUsersService {
     ]);
     const chain = prompt.pipe(this.model);
     const response = await chain.invoke({
-      name: user?.name ?? "Quelqu'un",
+      name: user?.name,
       biography: user?.biography ?? 'aucune biographie',
       phone_number: user?.phone_number ?? 'non renseigné',
       city: user?.city ?? 'une ville inconnue',
