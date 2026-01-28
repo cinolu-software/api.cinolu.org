@@ -25,7 +25,7 @@ export class AiVenturesService {
     configService: ConfigService
   ) {
     this.model = new ChatOllama({
-      model: 'llama3.2:1b',
+      model: 'llama3.2',
       temperature: 0.5,
       baseUrl: configService.get('OLLAMA_BASE_URL')
     });
