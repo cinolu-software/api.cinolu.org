@@ -11,7 +11,7 @@ export class AiUsersService {
   constructor(configService: ConfigService) {
     this.model = new ChatOllama({
       model: 'llama3.2:1b',
-      temperature: 0.5,
+      temperature: 0.7,
       baseUrl: configService.get('OLLAMA_BASE_URL')
     });
   }
