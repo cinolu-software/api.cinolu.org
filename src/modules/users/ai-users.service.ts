@@ -8,43 +8,45 @@ import { User } from './entities/user.entity';
 export class AiUsersService {
   private model: ChatOllama;
 
-  constructor(configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.model = new ChatOllama({
       model: 'llama3.2:1b',
       temperature: 0.7,
-      baseUrl: configService.get('OLLAMA_BASE_URL')
+      baseUrl: this.configService.get<string>('OLLAMA_BASE_URL')
     });
   }
 
   async generateJoke(user: User): Promise<string> {
+    console.log(user);
     const inputs = {
-      name: user.name,
-      biography: user.biography,
-      phone_number: user.phone_number,
-      city: user.city,
-      country: user.country,
-      gender: user.gender,
-      birth_date: user.birth_date,
-      instruction: "Generate a joke based on the user's profile."
+      name: user?.name ?? "Quelqu'un",
+      biography: user?.biography ?? 'aucune biographie',
+      phone_number: user?.phone_number ?? 'non renseigné',
+      city: user?.city ?? 'une ville inconnue',
+      country: user?.country ?? 'un pays mystère',
+      gender: user?.gender ?? 'non spécifié',
+      birth_date: user?.birth_date ?? 'date inconnue',
+      instruction: 'Generate a joke based on the user profile'
     };
     const prompt = ChatPromptTemplate.fromMessages([
-      ['system', `You are a comedian. You are tasked with generating a joke based on the user's profile.`],
+      ['system', 'Tu es un humoriste professionnel. Tu génères des blagues courtes et intelligentes.'],
       [
         'human',
-        `USER PROFILE:
-        - Name: {name}
-        - Biography: {biography}
-        - Phone Number: {phone_number}
-        - City: {city}
-        - Country: {country}
-        - Gender: {gender}
-        - Birth Date: {birth_date}
-        TASK: {instruction}
-        Write the response in French.
-        The joke should be short and to the point.`
+        `
+          PROFIL UTILISATEUR :
+          - Nom : {name}
+          - Biographie : {biography}
+          - Ville : {city}
+          - Pays : {country}
+          - Genre : {gender}
+          - Date de naissance : {birth_date}
+            TÂCHE : {instruction}
+          Écris une blague courte en français, sympa et respectueuse.
+        `
       ]
     ]);
     const chain = prompt.pipe(this.model);
-    return (await chain.invoke(inputs)) as unknown as string;
+    const response = await chain.invoke(inputs);
+    return response.content as string;
   }
 }
