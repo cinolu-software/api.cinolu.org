@@ -17,18 +17,6 @@ export class AiUsersService {
   }
 
   async generateJoke(user: User): Promise<string> {
-    console.log(user);
-    return 'Onjour';
-    const inputs = {
-      name: user?.name ?? "Quelqu'un",
-      biography: user?.biography ?? 'aucune biographie',
-      phone_number: user?.phone_number ?? 'non renseigné',
-      city: user?.city ?? 'une ville inconnue',
-      country: user?.country ?? 'un pays mystère',
-      gender: user?.gender ?? 'non spécifié',
-      birth_date: user?.birth_date ?? 'date inconnue',
-      instruction: 'Generate a joke based on the user profile'
-    };
     const prompt = ChatPromptTemplate.fromMessages([
       ['system', 'Tu es un humoriste professionnel. Tu génères des blagues courtes et intelligentes.'],
       [
@@ -47,7 +35,16 @@ export class AiUsersService {
       ]
     ]);
     const chain = prompt.pipe(this.model);
-    const response = await chain.invoke(inputs);
+    const response = await chain.invoke({
+      name: user?.name ?? "Quelqu'un",
+      biography: user?.biography ?? 'aucune biographie',
+      phone_number: user?.phone_number ?? 'non renseigné',
+      city: user?.city ?? 'une ville inconnue',
+      country: user?.country ?? 'un pays mystère',
+      gender: user?.gender ?? 'non spécifié',
+      birth_date: user?.birth_date ?? 'date inconnue',
+      instruction: 'Generate a joke based on the user profile'
+    });
     return response.content as string;
   }
 }
