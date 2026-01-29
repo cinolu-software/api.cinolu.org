@@ -41,7 +41,7 @@ export class UsersController {
   }
 
   @Get('find-referred-users')
-  async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<User[]> {
+  async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<[User[], number]> {
     return this.usersService.refferedUsers(page, user);
   }
 

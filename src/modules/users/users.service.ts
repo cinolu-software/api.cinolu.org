@@ -104,11 +104,11 @@ export class UsersService {
     }
   }
 
-  async refferedUsers(page: number, user: User): Promise<User[]> {
+  async refferedUsers(page: number, user: User): Promise<[User[], number]> {
     try {
       const take = 20;
       const skip = (+page - 1) * take;
-      return await this.userRepository.find({
+      return await this.userRepository.findAndCount({
         where: { referred_by: { id: user.id } },
         order: { created_at: 'DESC' },
         skip,
