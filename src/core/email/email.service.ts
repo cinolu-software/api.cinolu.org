@@ -204,4 +204,19 @@ export class EmailService {
       throw new BadRequestException();
     }
   }
+
+  @OnEvent('user.referral-signup')
+  async sendReferralSignupEmail(payload: { referredBy: User; newUser: User }): Promise<void> {
+    try {
+      const { referredBy, newUser } = payload;
+      await this.mailerService.sendMail({
+        to: referredBy.email,
+        subject: 'Un nouvel utilisateur a rejoint CINOLU grâce à votre lien de parrainage',
+        template: 'referral-signup',
+        context: { referredBy, newUser }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
 }
