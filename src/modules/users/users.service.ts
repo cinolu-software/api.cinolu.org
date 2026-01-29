@@ -104,6 +104,21 @@ export class UsersService {
     }
   }
 
+  async refferedUsers(page: number, user: User): Promise<User[]> {
+    try {
+      const take = 20;
+      const skip = (+page - 1) * take;
+      return await this.userRepository.find({
+        where: { referred_by: { id: user.id } },
+        order: { created_at: 'DESC' },
+        skip,
+        take
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async findEntrepreneurs(): Promise<User[]> {
     try {
       const query = this.userRepository
@@ -149,11 +164,10 @@ export class UsersService {
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
-  async findAllReferrals(user: User): Promise<[User[], number]> {
+  async refferedBy(referral_code: string): Promise<User> {
     try {
-      return await this.userRepository.findAndCount({
-        where: { referred_by: { id: user.id } },
-        order: { created_at: 'DESC' }
+      return await this.userRepository.findOne({
+        where: { referral_code }
       });
     } catch {
       throw new BadRequestException();
@@ -164,17 +178,17 @@ export class UsersService {
     try {
       const role = await this.rolesService.findByName('user');
       let referredBy: User | null = null;
-      if (dto.referral_code) {
-        referredBy = await this.userRepository.findOne({
-          where: { referral_code: dto.referral_code }
-        });
-      }
-      return await this.userRepository.save({
+      if (dto.referral_code) referredBy = await this.refferedBy(dto.referral_code);
+      const newUser = await this.userRepository.save({
         ...dto,
         referred_by: referredBy ? { id: referredBy.id } : null,
         referral_code: this.generateRefferalCode(),
         roles: [{ id: role.id }]
       });
+      if (referredBy) {
+        this.eventEmitter.emit('user.referral-signup', { referredBy, newUser });
+      }
+      return newUser;
     } catch {
       throw new BadRequestException('Cet utilisateur existe déjà');
     }

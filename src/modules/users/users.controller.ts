@@ -40,9 +40,9 @@ export class UsersController {
     return this.usersService.findStaff();
   }
 
-  @Post('find-referrals')
-  async findAllReferrals(@CurrentUser() user: User): Promise<[User[], number]> {
-    return this.usersService.findAllReferrals(user);
+  @Get('find-referred-users')
+  async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<User[]> {
+    return this.usersService.refferedUsers(page, user);
   }
 
   @Post('')
