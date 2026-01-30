@@ -7,8 +7,6 @@ import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
-import { Opportunity } from '@/modules/opportunities/entities/opportunity.entity';
-import { OpportunityTag } from '@/modules/opportunities/tags/entities/tag.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -83,11 +81,4 @@ export class User extends AbstractEntity {
 
   @OneToOne(() => MentorProfile, (mp) => mp.owner)
   mentor_profile: MentorProfile;
-
-  @ManyToMany(() => OpportunityTag)
-  @JoinTable()
-  interests: OpportunityTag[];
-
-  @OneToMany(() => Opportunity, (opportunity) => opportunity.creator)
-  created_opportunities: Opportunity[];
 }

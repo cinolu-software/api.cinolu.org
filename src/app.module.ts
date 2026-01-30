@@ -23,7 +23,6 @@ import { TransformInterceptor } from './core/interceptors/transform.interceptor'
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
-import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
 import { UsersImportModule } from './modules/users-import/users-import.module';
 
 @Module({
@@ -60,7 +59,6 @@ import { UsersImportModule } from './modules/users-import/users-import.module';
     EventsModule,
     ProjectsModule,
     MentorsModule,
-    OpportunitiesModule,
     UsersImportModule
   ],
   providers: [

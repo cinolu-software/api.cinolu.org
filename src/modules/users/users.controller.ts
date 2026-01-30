@@ -24,7 +24,6 @@ import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
-import { UpdateInterestsDto } from './dto/update-interests.dto';
 
 @Controller('users')
 export class UsersController {
@@ -79,11 +78,6 @@ export class UsersController {
   @UseRoles({ resource: 'users', action: 'read' })
   findOneByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findOneByEmail(email);
-  }
-
-  @Patch('my-interests')
-  updateInterests(@CurrentUser() user: User, @Body() dto: UpdateInterestsDto): Promise<User> {
-    return this.usersService.updateInterests(user, dto.interests);
   }
 
   @Patch(':id')

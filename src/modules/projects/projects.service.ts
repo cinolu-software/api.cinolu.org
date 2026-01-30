@@ -63,6 +63,7 @@ export class ProjectsService {
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
+      .loadRelationCountAndMap('p.participantsCount', 'p.participants')
       .orderBy('p.updated_at', 'DESC');
     if (filter === 'published') query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (filter === 'drafts') query.andWhere('p.is_published = :isPublished', { isPublished: false });
@@ -124,7 +125,6 @@ export class ProjectsService {
         .leftJoinAndSelect('p.project_manager', 'project_manager')
         .leftJoinAndSelect('p.program', 'program')
         .leftJoinAndSelect('p.gallery', 'gallery')
-        .loadRelationCountAndMap('p.participantsCount', 'p.participants')
         .getOne();
     } catch {
       throw new NotFoundException();

@@ -145,13 +145,6 @@ export class UsersService {
       .createQueryBuilder('user')
       .loadRelationCountAndMap('user.referralsCount', 'user.referrals');
     if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
-    const subQuery = this.userRepository
-      .createQueryBuilder('user2')
-      .leftJoin('user2.referrals', 'referrals2')
-      .select('COUNT(referrals2.id)', 'count')
-      .where('user2.id = user.id')
-      .getQuery();
-    query.addSelect(`(${subQuery})`, 'referralsCountTemp').orderBy('referralsCountTemp', 'DESC');
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
@@ -189,7 +182,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles', 'interests']
+        relations: ['roles']
       });
       const roles = user.roles.map((role) => role.name);
       return { ...user, roles } as unknown as User;
@@ -202,7 +195,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
-        relations: ['roles', 'interests']
+        relations: ['roles']
       });
       user['referralsCount'] = await this.userRepository.count({
         where: { referred_by: { id: user.id } }
@@ -311,20 +304,6 @@ export class UsersService {
     try {
       await this.findOne(id);
       await this.userRepository.softDelete(id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async updateInterests(user: User, tagIds: string[]): Promise<User> {
-    try {
-      const userWithInterests = await this.findOne(user.id);
-      delete userWithInterests.password;
-      await this.userRepository.save({
-        ...userWithInterests,
-        interests: tagIds.map((id) => ({ id }))
-      });
-      return await this.findByEmail(user.email);
     } catch {
       throw new BadRequestException();
     }
