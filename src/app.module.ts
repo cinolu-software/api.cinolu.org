@@ -23,7 +23,6 @@ import { TransformInterceptor } from './core/interceptors/transform.interceptor'
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
-import { UsersImportModule } from './modules/users-import/users-import.module';
 
 @Module({
   imports: [
@@ -58,8 +57,7 @@ import { UsersImportModule } from './modules/users-import/users-import.module';
     SubprogramsModule,
     EventsModule,
     ProjectsModule,
-    MentorsModule,
-    UsersImportModule
+    MentorsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
