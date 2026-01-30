@@ -4,7 +4,6 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
-import { Phase } from '../phases/entities/phase.entity';
 
 @Entity()
 export class Project extends AbstractEntity {
@@ -61,7 +60,4 @@ export class Project extends AbstractEntity {
 
   @ManyToMany(() => User, (user) => user.participated_projects)
   participants: User[];
-
-  @OneToMany(() => Phase, (phase) => phase.project)
-  phases: Phase[];
 }
