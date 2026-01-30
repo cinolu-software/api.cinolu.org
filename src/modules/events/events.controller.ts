@@ -21,8 +21,6 @@ import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { MetricDto } from '../subprograms/metrics/dto/metric.dto';
-import { Metric } from '../subprograms/metrics/entities/metric.entity';
 
 @Controller('events')
 export class EventsController {
@@ -38,12 +36,6 @@ export class EventsController {
   @UseRoles({ resource: 'events', action: 'read' })
   findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(queryParams);
-  }
-
-  @Post('metrics/:id')
-  @UseRoles({ resource: 'events', action: 'update' })
-  addMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
-    return this.eventsService.addMetrics(id, dto);
   }
 
   @Get('find-recent')

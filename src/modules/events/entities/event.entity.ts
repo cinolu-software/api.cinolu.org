@@ -3,7 +3,6 @@ import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
-import { Metric } from '@/modules/subprograms/metrics/entities/metric.entity';
 import { EventCategory } from '../categories/entities/category.entity';
 
 @Entity()
@@ -61,9 +60,6 @@ export class Event extends AbstractEntity {
 
   @OneToMany(() => Gallery, (gallery) => gallery.event)
   gallery: Gallery[];
-
-  @OneToMany(() => Metric, (metric) => metric.event)
-  metrics: Metric[];
 
   @ManyToMany(() => User, (user) => user.participated_events)
   participants: User[];

@@ -3,23 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { promises as fs } from 'fs';
 import { Program } from './entities/program.entity';
-import { Indicator } from './entities/indicator.entity';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
-import { IndicatorDto } from './dto/indicator.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-
-type ProgramWithIndicators = Program & { indicators_grouped?: Record<string, Indicator[]> };
 
 @Injectable()
 export class ProgramsService {
   constructor(
     @InjectRepository(Program)
-    private programRepository: Repository<Program>,
-    @InjectRepository(Indicator)
-    private indicatorRepository: Repository<Indicator>,
-    private eventEmitter: EventEmitter2
+    private programRepository: Repository<Program>
   ) {}
 
   async create(dto: CreateProgramDto): Promise<Program> {
@@ -28,82 +20,10 @@ export class ProgramsService {
         ...dto,
         category: { id: dto.category }
       });
-      const savedProgram = await this.programRepository.save(program);
-      this.eventEmitter.emit('activity.added', { activity: savedProgram, type: 'Programme' });
-      return savedProgram;
+      return await this.programRepository.save(program);
     } catch {
       throw new BadRequestException();
     }
-  }
-
-  async addIndicators(programId: string, dto: IndicatorDto): Promise<Indicator[]> {
-    try {
-      const [indicatorsToSave, indicatorsToDelete] = await this.diffIndicators(dto, programId);
-      await this.deleteIndicators(indicatorsToDelete);
-      return await this.indicatorRepository.save(indicatorsToSave);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  private async diffIndicators(dto: IndicatorDto, programId: string): Promise<[Indicator[], Indicator[]]> {
-    const existingIndicators = await this.findIndicatorsByYearAndCategory(programId, dto.year, dto.category);
-    const existingIndicatorsMap = new Map(existingIndicators.map((i) => [i.name, i]));
-    const newIndicatorNames = new Set(dto.metrics.flatMap((metric) => Object.keys(metric)));
-    const indicatorsToDelete = existingIndicators.filter((i) => !newIndicatorNames.has(i.name));
-    const indicatorsToAdd = this.createNewIndicatorsFromMetrics(dto, existingIndicatorsMap, programId);
-    const indicatorsToUpdate = this.updateExistingIndicatorsFromMetrics(dto, existingIndicatorsMap);
-    return [[...indicatorsToUpdate, ...indicatorsToAdd], indicatorsToDelete];
-  }
-
-  private createNewIndicatorsFromMetrics(
-    dto: IndicatorDto,
-    existings: Map<string, Indicator>,
-    programId: string
-  ): Indicator[] {
-    return dto.metrics.flatMap((metric) =>
-      Object.entries(metric)
-        .filter(([name]) => !existings.has(name))
-        .map(([name, target]) =>
-          this.indicatorRepository.create({
-            name,
-            target,
-            year: dto.year,
-            category: dto.category,
-            program: { id: programId }
-          })
-        )
-    );
-  }
-
-  private updateExistingIndicatorsFromMetrics(dto: IndicatorDto, existings: Map<string, Indicator>): Indicator[] {
-    return dto.metrics.flatMap((metric) =>
-      Object.entries(metric)
-        .filter(([name]) => existings.has(name))
-        .map(([name, target]) => {
-          const existing = existings.get(name);
-          if (!existing) throw new BadRequestException();
-          existing.target = target;
-          existing.category = dto.category;
-          return existing;
-        })
-    );
-  }
-
-  private async deleteIndicators(toDelete: Indicator[]): Promise<void> {
-    if (!toDelete.length) return;
-    await this.indicatorRepository.softRemove(toDelete);
-  }
-
-  private async findIndicatorsByYearAndCategory(
-    programId: string,
-    year: number,
-    category: string
-  ): Promise<Indicator[]> {
-    return await this.indicatorRepository.find({
-      where: { program: { id: programId }, year, category },
-      order: { created_at: 'ASC' }
-    });
   }
 
   async findPublished(): Promise<Program[]> {
@@ -122,41 +42,11 @@ export class ProgramsService {
     });
   }
 
-  async findBySlug(slug: string): Promise<ProgramWithIndicators> {
+  async findBySlug(slug: string): Promise<Program> {
     try {
-      const program = await this.programRepository.findOneOrFail({
+      return await this.programRepository.findOneOrFail({
         where: { slug },
         relations: ['category', 'subprograms']
-      });
-      const indicators = await this.findProgramIndicators(program.id);
-      const indicators_grouped = this.groupIndicatorsByYear(indicators);
-      return { ...program, indicators_grouped };
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  private async findProgramIndicators(programId: string): Promise<Indicator[]> {
-    return await this.indicatorRepository.find({
-      where: { program: { id: programId } },
-      order: { year: 'ASC', created_at: 'ASC' }
-    });
-  }
-
-  private groupIndicatorsByYear(indicators: Indicator[]): Record<string, Indicator[]> {
-    return indicators.reduce((grouped: Record<string, Indicator[]>, indicator: Indicator) => {
-      const year = String(indicator.year);
-      if (!grouped[year]) grouped[year] = [];
-      grouped[year].push(indicator);
-      return grouped;
-    }, {});
-  }
-
-  async findIndicatorsByYear(programId: string, year: number): Promise<Indicator[]> {
-    try {
-      return await this.indicatorRepository.find({
-        where: { program: { id: programId }, year },
-        order: { created_at: 'ASC' }
       });
     } catch {
       throw new NotFoundException();

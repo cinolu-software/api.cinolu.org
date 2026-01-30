@@ -21,8 +21,6 @@ import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { MetricDto } from '../subprograms/metrics/dto/metric.dto';
-import { Metric } from '../subprograms/metrics/entities/metric.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -32,12 +30,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'create' })
   create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
-  }
-
-  @Post('metrics/:id')
-  @UseRoles({ resource: 'projects', action: 'update' })
-  addMetrics(@Param('id') id: string, @Body() dto: MetricDto[]): Promise<Metric[]> {
-    return this.projectsService.addMetrics(id, dto);
   }
 
   @Get('')

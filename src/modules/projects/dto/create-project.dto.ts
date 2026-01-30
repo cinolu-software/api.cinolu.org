@@ -1,4 +1,4 @@
-import { IsArray, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateProjectDto {
@@ -15,7 +15,7 @@ export class CreateProjectDto {
   objectives?: string;
 
   @IsOptional()
-  @IsInt()
+  @Transform(({ value }) => (value ? +value : null))
   duration_hours?: number;
 
   @IsOptional()

@@ -8,19 +8,13 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
-import { MetricsService } from '../subprograms/metrics/metrics.service';
-import { MetricDto } from '../subprograms/metrics/dto/metric.dto';
-import { Metric } from '../subprograms/metrics/entities/metric.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
-    private galleryService: GalleriesService,
-    private metricsService: MetricsService,
-    private eventEmitter: EventEmitter2
+    private galleryService: GalleriesService
   ) {}
 
   async create(dto: CreateEventDto): Promise<Event> {
@@ -31,17 +25,7 @@ export class EventsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-      const savedEvent = await this.eventRepository.save(event);
-      this.eventEmitter.emit('activity.added', { activity: savedEvent, type: 'Événement' });
-      return savedEvent;
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async addMetrics(eventId: string, dto: MetricDto[]): Promise<Metric[]> {
-    try {
-      return await this.metricsService.addMetrics('event', eventId, dto);
+      return await this.eventRepository.save(event);
     } catch {
       throw new BadRequestException();
     }
@@ -148,7 +132,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'event_manager', 'program.program', 'gallery', 'metrics.indicator']
+        relations: ['categories', 'event_manager', 'program.program', 'gallery']
       });
     } catch {
       throw new NotFoundException();

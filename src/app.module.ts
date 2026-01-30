@@ -24,6 +24,7 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { OpportunitiesModule } from './modules/opportunities/opportunities.module';
+import { UsersImportModule } from './modules/users-import/users-import.module';
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { OpportunitiesModule } from './modules/opportunities/opportunities.modul
     EventsModule,
     ProjectsModule,
     MentorsModule,
-    OpportunitiesModule
+    OpportunitiesModule,
+    UsersImportModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

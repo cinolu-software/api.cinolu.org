@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/database/abstract.entity';
-import { Indicator } from './indicator.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { ProgramCategory } from '../categories/entities/category.entity';
 
@@ -30,7 +29,4 @@ export class Program extends AbstractEntity {
   @ManyToOne(() => ProgramCategory, (category) => category.programs)
   @JoinColumn()
   category: ProgramCategory;
-
-  @OneToMany(() => Indicator, (i) => i.program)
-  indicators: Indicator[];
 }

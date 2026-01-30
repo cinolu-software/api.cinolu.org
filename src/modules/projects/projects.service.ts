@@ -8,19 +8,13 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
-import { MetricDto } from '../subprograms/metrics/dto/metric.dto';
-import { Metric } from '../subprograms/metrics/entities/metric.entity';
-import { MetricsService } from '../subprograms/metrics/metrics.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    private galleryService: GalleriesService,
-    private metricsService: MetricsService,
-    private eventEmitter: EventEmitter2
+    private galleryService: GalleriesService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -31,9 +25,7 @@ export class ProjectsService {
         program: { id: dto.program },
         categories: dto.categories.map((id) => ({ id }))
       });
-      const savedProject = await this.projectRepository.save(project);
-      this.eventEmitter.emit('activity.added', { activity: savedProject, type: 'Projet' });
-      return savedProject;
+      return await this.projectRepository.save(project);
     } catch {
       throw new BadRequestException();
     }
@@ -117,20 +109,23 @@ export class ProjectsService {
     }
   }
 
-  async addMetrics(projectId: string, dto: MetricDto[]): Promise<Metric[]> {
-    try {
-      return await this.metricsService.addMetrics('project', projectId, dto);
-    } catch {
-      throw new BadRequestException();
-    }
+  async findByName(name: string): Promise<Project | null> {
+    return await this.projectRepository.findOne({
+      where: { name }
+    });
   }
 
   async findBySlug(slug: string): Promise<Project> {
     try {
-      return await this.projectRepository.findOneOrFail({
-        where: { slug },
-        relations: ['categories', 'project_manager', 'program.program', 'gallery', 'metrics.indicator']
-      });
+      return await this.projectRepository
+        .createQueryBuilder('p')
+        .where('p.slug = :slug', { slug })
+        .leftJoinAndSelect('p.categories', 'categories')
+        .leftJoinAndSelect('p.project_manager', 'project_manager')
+        .leftJoinAndSelect('p.program', 'program')
+        .leftJoinAndSelect('p.gallery', 'gallery')
+        .loadRelationCountAndMap('p.participantsCount', 'p.participants')
+        .getOne();
     } catch {
       throw new NotFoundException();
     }
@@ -140,7 +135,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'project_manager', 'gallery', 'metrics']
+        relations: ['categories', 'project_manager', 'gallery']
       });
     } catch {
       throw new NotFoundException();

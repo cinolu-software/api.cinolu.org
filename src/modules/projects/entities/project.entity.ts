@@ -3,7 +3,6 @@ import { AbstractEntity } from '@/core/database/abstract.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
-import { Metric } from '@/modules/subprograms/metrics/entities/metric.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
 
@@ -59,9 +58,6 @@ export class Project extends AbstractEntity {
 
   @OneToMany(() => Gallery, (gallery) => gallery.project)
   gallery: Gallery[];
-
-  @OneToMany(() => Metric, (metric) => metric.project)
-  metrics: Metric[];
 
   @ManyToMany(() => User, (user) => user.participated_projects)
   participants: User[];
