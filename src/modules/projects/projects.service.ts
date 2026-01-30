@@ -123,7 +123,8 @@ export class ProjectsService {
         .where('p.slug = :slug', { slug })
         .leftJoinAndSelect('p.categories', 'categories')
         .leftJoinAndSelect('p.project_manager', 'project_manager')
-        .leftJoinAndSelect('p.program', 'program')
+        .leftJoinAndSelect('p.program', 'subprogram')
+        .leftJoinAndSelect('subprogram.program', 'program')
         .leftJoinAndSelect('p.gallery', 'gallery')
         .getOne();
     } catch {
