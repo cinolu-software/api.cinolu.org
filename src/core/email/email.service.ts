@@ -5,12 +5,6 @@ import { User } from '@/modules/users/entities/user.entity';
 import { ContactSupportDto } from '@/modules/users/dto/contact-support.dto';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
 import { Venture } from '@/modules/ventures/entities/venture.entity';
-import { Program } from '@/modules/programs/entities/program.entity';
-import { Event } from '@/modules/events/entities/event.entity';
-import { Project } from '@/modules/projects/entities/project.entity';
-import { Article } from '@/modules/blog/articles/entities/article.entity';
-import { Opportunity } from '@/modules/opportunities/entities/opportunity.entity';
-import { UsersService } from '@/modules/users/users.service';
 
 interface ResetPasswordDto {
   user: User;
@@ -19,10 +13,7 @@ interface ResetPasswordDto {
 
 @Injectable()
 export class EmailService {
-  constructor(
-    private mailerService: MailerService,
-    private usersService: UsersService
-  ) {}
+  constructor(private mailerService: MailerService) {}
 
   @OnEvent('user.reset-password')
   async resetEmail(dto: ResetPasswordDto): Promise<void> {
@@ -146,60 +137,6 @@ export class EmailService {
         template: 'venture-rejected',
         context: { venture }
       });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  @OnEvent('activity.added')
-  async sendActivityAddedEmail(payload: { activity: Program | Event | Project; type: string }): Promise<void> {
-    try {
-      const { activity, type } = payload;
-      const activityName = (activity as Program | Event | Project).name || '';
-      const activityDescription = (activity as Program | Event | Project).description || '';
-      const users = await this.usersService.findAllEmails();
-      for (const email of users) {
-        await this.mailerService.sendMail({
-          to: email,
-          subject: `Nouvelle activité ${type} ajoutée`,
-          template: 'activity-added',
-          context: { activityType: type, activityName, activityDescription }
-        });
-      }
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  @OnEvent('article.published')
-  async sendArticlePublishedEmail(article: Article): Promise<void> {
-    try {
-      const users = await this.usersService.findAllEmails();
-      for (const email of users) {
-        await this.mailerService.sendMail({
-          to: email,
-          subject: `Nouvel article publié: ${article.title}`,
-          template: 'article-published',
-          context: { article }
-        });
-      }
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  @OnEvent('opportunity.published')
-  async sendOpportunityPublishedEmail(opportunity: Opportunity): Promise<void> {
-    try {
-      const users = await this.usersService.findAllEmails();
-      for (const email of users) {
-        await this.mailerService.sendMail({
-          to: email,
-          subject: `Nouvelle opportunité: ${opportunity.title}`,
-          template: 'opportunity-published',
-          context: { opportunity }
-        });
-      }
     } catch {
       throw new BadRequestException();
     }

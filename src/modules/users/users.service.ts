@@ -46,15 +46,6 @@ export class UsersService {
     }
   }
 
-  async findAllEmails(): Promise<string[]> {
-    try {
-      const users = await this.userRepository.find({ select: ['email'] });
-      return users.map((user) => user.email);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async findStaff(): Promise<User[]> {
     try {
       const role = await this.rolesService.findByName('staff');

@@ -8,7 +8,6 @@ import { Opportunity } from './entities/opportunity.entity';
 import { OpportunityAttachment } from './entities/attachment.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { promises as fs } from 'fs';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -18,19 +17,16 @@ export class OpportunitiesService {
     private opportunityRepository: Repository<Opportunity>,
     @InjectRepository(OpportunityAttachment)
     private attachmentRepository: Repository<OpportunityAttachment>,
-    private usersService: UsersService,
-    private eventEmitter: EventEmitter2
+    private usersService: UsersService
   ) {}
 
   async create(dto: CreateOpportunityDto, creator: User): Promise<Opportunity> {
     try {
-      const opportunity = await this.opportunityRepository.save({
+      return await this.opportunityRepository.save({
         ...dto,
         tags: dto.tags.map((id) => ({ id })),
         creator: { id: creator.id }
       });
-      this.eventEmitter.emit('opportunity.published', opportunity);
-      return opportunity;
     } catch {
       throw new BadRequestException();
     }
