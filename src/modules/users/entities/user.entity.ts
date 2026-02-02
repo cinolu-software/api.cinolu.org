@@ -7,6 +7,7 @@ import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Event } from '@/modules/events/entities/event.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
+import { Phase } from '@/modules/projects/phases/entities/phase.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -62,6 +63,10 @@ export class User extends AbstractEntity {
   @ManyToMany(() => Project, (project) => project.participants)
   @JoinTable()
   participated_projects: Project[];
+
+  @ManyToMany(() => Phase, (phase) => phase.participants)
+  @JoinTable()
+  participated_phases: Phase[];
 
   @ManyToMany(() => Event, (event) => event.participants)
   @JoinTable()
