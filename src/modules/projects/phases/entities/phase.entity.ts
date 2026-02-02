@@ -20,7 +20,7 @@ export class Phase extends AbstractEntity {
   @Column()
   ended_at: Date;
 
-  @ManyToOne(() => Project, (project) => project.phases, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Project, (project) => project.phases)
   @JoinColumn()
   project: Project;
 

@@ -68,7 +68,8 @@ export class PhasesService {
 
   async remove(id: string): Promise<void> {
     try {
-      await this.phaseRepository.delete(id);
+      const phase = await this.phaseRepository.findOneOrFail({ where: { id } });
+      await this.phaseRepository.softDelete(phase.id);
     } catch {
       throw new BadRequestException();
     }
