@@ -1,5 +1,5 @@
 import { User } from '@/modules/users/entities/user.entity';
-import { AbstractEntity } from '@/core/database/abstract.entity';
+import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Product } from '../products/entities/product.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';

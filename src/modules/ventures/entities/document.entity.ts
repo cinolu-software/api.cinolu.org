@@ -1,4 +1,4 @@
-import { AbstractEntity } from '@/core/database/abstract.entity';
+import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Venture } from './venture.entity';
 

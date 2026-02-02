@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
-import { DatabaseModule } from './core/database/database.module';
 import { EmailModule } from './core/email/email.module';
 import { RBAC_POLICY } from './core/auth/rbac-policy';
 import { BlogModule } from './modules/blog/blog.module';
@@ -23,6 +22,7 @@ import { TransformInterceptor } from './core/interceptors/transform.interceptor'
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -44,10 +44,23 @@ import { VenturesModule } from './modules/ventures/ventures.module';
         signOptions: { expiresIn: '1d' }
       })
     }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configServie: ConfigService) => ({
+        type: 'mariadb',
+        port: +configServie.get('DB_PORT'),
+        host: configServie.get('DB_HOST'),
+        username: configServie.get('DB_USERNAME'),
+        subscribers: ['dist/**/*.subscriber.js'],
+        password: configServie.get('DB_PASSWORD'),
+        database: configServie.get('DB_NAME'),
+        synchronize: false,
+        autoLoadEntities: true
+      })
+    }),
     AuthModule,
     UsersModule,
     EmailModule,
-    DatabaseModule,
     VenturesModule,
     BlogModule,
     StatsModule,
