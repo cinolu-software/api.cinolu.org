@@ -14,6 +14,7 @@ RBAC_POLICY.grant(Role.USER)
   .readAny([
     'stats',
     'users',
+    'phases',
     'expertises',
     'programs',
     'mentors',
@@ -34,6 +35,7 @@ RBAC_POLICY.grant(Role.USER)
   .createAny([
     'indicators',
     'users',
+    'phases',
     'expertises',
     'programs',
     'comments',
@@ -41,6 +43,7 @@ RBAC_POLICY.grant(Role.USER)
     'roles',
     'tags',
     'subprograms',
+    'phases',
     'eventCategories',
     'programCategories',
     'projectCategories',
@@ -51,6 +54,7 @@ RBAC_POLICY.grant(Role.USER)
   .updateAny([
     'indicators',
     'users',
+    'phases',
     'programs',
     'subprograms',
     'events',
@@ -71,6 +75,7 @@ RBAC_POLICY.grant(Role.USER)
   .deleteAny([
     'indicators',
     'users',
+    'phases',
     'programs',
     'subprograms',
     'events',
