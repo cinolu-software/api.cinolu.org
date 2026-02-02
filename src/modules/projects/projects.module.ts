@@ -6,9 +6,11 @@ import { ProjectsController } from './projects.controller';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { CategoriesModule } from './categories/categories.module';
+import { PhasesModule } from './phases/phases.module';
+import { UsersModule } from '@/modules/users/users.module';
 
 @Module({
-  imports: [GalleriesModule, CategoriesModule, TypeOrmModule.forFeature([Project])],
+  imports: [GalleriesModule, PhasesModule, CategoriesModule, UsersModule, TypeOrmModule.forFeature([Project])],
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectSubscriber],
   exports: [ProjectsService]

@@ -2,19 +2,30 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { promises as fs } from 'fs';
+import { Readable } from 'stream';
+import { parse } from 'fast-csv';
 import { Project } from './entities/project.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { User } from '@/modules/users/entities/user.entity';
+import { Phase } from './phases/entities/phase.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
+import { UsersService } from '@/modules/users/users.service';
+
+export interface ParticipantsGroupedByPhaseDto {
+  phases: { phase: Phase; participants: User[] }[];
+  unassigned: User[];
+}
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    private galleryService: GalleriesService
+    private galleryService: GalleriesService,
+    private usersService: UsersService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -29,6 +40,52 @@ export class ProjectsService {
     } catch {
       throw new BadRequestException();
     }
+  }
+
+  private parseParticipantsCsv(buffer: Buffer): Promise<{ name: string; email: string; phone_number?: string }[]> {
+    return new Promise((resolve, reject) => {
+      const rows: { name: string; email: string; phone_number?: string }[] = [];
+      const stream = Readable.from(buffer.toString());
+      stream
+        .pipe(parse({ headers: true }))
+        .on('data', (row: Record<string, string>) => {
+          const name = (row.Name ?? row.name ?? '').trim();
+          const email = (row.Email ?? row.email ?? '').trim();
+          const phone_number = (row['Phone Number'] ?? row.phone_number ?? '').trim() || undefined;
+          if (name && email) rows.push({ name, email, phone_number });
+        })
+        .on('end', () => resolve(rows))
+        .on('error', reject);
+    });
+  }
+
+  async addParticipantsFromCsv(id: string, file: Express.Multer.File) {
+    const project = await this.projectRepository.findOneOrFail({
+      where: { id },
+      relations: ['participants']
+    });
+    if (!file.buffer) {
+      throw new BadRequestException('CSV file buffer is required (use multipart with file field)');
+    }
+    const rows = await this.parseParticipantsCsv(file.buffer);
+    if (rows.length === 0) {
+      throw new BadRequestException('CSV has no valid rows (name and email required)');
+    }
+    let createdCount = 0;
+    const userIds = new Set<string>(project.participants?.map((p) => p.id) ?? []);
+    for (const row of rows) {
+      const { user, created } = await this.usersService.findOrCreateParticipant(row);
+      if (!userIds.has(user.id)) {
+        userIds.add(user.id);
+        if (created) createdCount += 1;
+      }
+    }
+    const participants = await this.usersService.findByIds([...userIds]);
+    await this.projectRepository.save({
+      ...project,
+      participants
+    });
+    return { added: participants.length, created: createdCount };
   }
 
   async addGallery(id: string, file: Express.Multer.File): Promise<void> {
@@ -110,12 +167,6 @@ export class ProjectsService {
     }
   }
 
-  async findByName(name: string): Promise<Project | null> {
-    return await this.projectRepository.findOne({
-      where: { name }
-    });
-  }
-
   async findBySlug(slug: string): Promise<Project> {
     try {
       return await this.projectRepository
@@ -124,8 +175,9 @@ export class ProjectsService {
         .leftJoinAndSelect('p.categories', 'categories')
         .leftJoinAndSelect('p.project_manager', 'project_manager')
         .leftJoinAndSelect('p.program', 'subprogram')
-        .leftJoinAndSelect('subprogram.program', 'program')
+        .leftJoinAndSelect('p.phases', 'phases')
         .leftJoinAndSelect('p.gallery', 'gallery')
+        .leftJoinAndSelect('p.participants', 'participants')
         .getOne();
     } catch {
       throw new NotFoundException();
@@ -141,6 +193,30 @@ export class ProjectsService {
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  async getParticipants(id: string): Promise<User[]> {
+    const project = await this.projectRepository.findOneOrFail({
+      where: { id },
+      relations: ['participants']
+    });
+    return project.participants ?? [];
+  }
+
+  async getParticipantsGroupedByPhase(id: string): Promise<ParticipantsGroupedByPhaseDto> {
+    const project = await this.projectRepository.findOneOrFail({
+      where: { id },
+      relations: ['participants', 'phases', 'phases.participants']
+    });
+    const allParticipants = project.participants ?? [];
+    const assignedUserIds = new Set<string>();
+    const phasesWithParticipants: { phase: Phase; participants: User[] }[] = (project.phases ?? []).map((phase) => {
+      const participants = phase.participants ?? [];
+      participants.forEach((u) => assignedUserIds.add(u.id));
+      return { phase, participants };
+    });
+    const unassigned = allParticipants.filter((u) => !assignedUserIds.has(u.id));
+    return { phases: phasesWithParticipants, unassigned };
   }
 
   async highlight(id: string): Promise<Project> {

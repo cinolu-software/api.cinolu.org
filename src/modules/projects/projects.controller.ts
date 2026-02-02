@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Post,
@@ -11,16 +12,17 @@ import {
   Query
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { diskStorage, memoryStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
-import { ProjectsService } from './projects.service';
+import { ProjectsService, ParticipantsGroupedByPhaseDto } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { User } from '@/modules/users/entities/user.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -60,6 +62,36 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
+  }
+
+  @Get(':id/participants/grouped-by-phase')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  getParticipantsGroupedByPhase(@Param('id') id: string): Promise<ParticipantsGroupedByPhaseDto> {
+    return this.projectsService.getParticipantsGroupedByPhase(id);
+  }
+
+  @Get(':id/participants')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  getParticipants(@Param('id') id: string): Promise<User[]> {
+    return this.projectsService.getParticipants(id);
+  }
+
+  @Post(':id/participants/csv')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['text/csv', 'application/csv', 'text/plain'];
+        const isCsv = allowed.includes(file.mimetype) || file.originalname?.toLowerCase().endsWith('.csv');
+        cb(null, !!isCsv);
+      },
+      limits: { fileSize: 2 * 1024 * 1024 }
+    })
+  )
+  addParticipantsFromCsv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('CSV file is required (field name: file)');
+    return this.projectsService.addParticipantsFromCsv(id, file);
   }
 
   @Post('gallery/:id')
