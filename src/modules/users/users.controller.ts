@@ -35,6 +35,7 @@ export class UsersController {
   }
 
   @Get('find-staff')
+  @UseRoles({ resource: 'users', action: 'read' })
   async findStaff(): Promise<User[]> {
     return this.usersService.findStaff();
   }

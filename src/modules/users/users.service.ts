@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { promises as fs } from 'fs';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import UpdateProfileDto from '@/core/auth/dto/update-profile.dto';
 import CreateUserDto from './dto/create-user.dto';
@@ -41,6 +41,16 @@ export class UsersService {
         csvStream.write({ Name: user.name, Email: user.email, 'Phone Number': user.phone_number });
       });
       csvStream.end();
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findByIds(ids: string[]): Promise<User[]> {
+    try {
+      return await this.userRepository.find({
+        where: { id: In(ids) }
+      });
     } catch {
       throw new BadRequestException();
     }
@@ -216,6 +226,38 @@ export class UsersService {
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  async findOneByEmailOptional(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { email: email.trim().toLowerCase() },
+      relations: ['roles']
+    });
+  }
+
+  async findOrCreateParticipant(payload: {
+    name: string;
+    email: string;
+    phone_number?: string;
+  }): Promise<{ user: User; created: boolean }> {
+    const normalizedEmail = payload.email.trim().toLowerCase();
+    const existing = await this.findOneByEmailOptional(normalizedEmail);
+    if (existing) {
+      return { user: existing, created: false };
+    }
+    const role = await this.rolesService.findByName('user');
+    const defaultPassword = 'user1234';
+    const newUser = await this.userRepository.save({
+      name: payload.name.trim(),
+      email: normalizedEmail,
+      phone_number: payload.phone_number?.trim() ?? null,
+      password: defaultPassword,
+      referral_code: this.generateRefferalCode(),
+      roles: [role]
+    });
+    const user = await this.findOne(newUser.id);
+    this.eventEmitter.emit('user.welcome-with-credentials', { user, password: defaultPassword });
+    return { user, created: true };
   }
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
