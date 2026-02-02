@@ -86,6 +86,21 @@ export class EmailService {
     }
   }
 
+  @OnEvent('user.welcome-with-credentials')
+  async sendWelcomeWithCredentialsEmail(payload: { user: User; password: string }): Promise<void> {
+    try {
+      const { user, password } = payload;
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Bienvenue sur CINOLU - Vos identifiants de connexion',
+        template: 'welcome-with-credentials',
+        context: { user, password }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   @OnEvent('mentor.application')
   async sendMentorApplicationEmail(mentorProfile: MentorProfile): Promise<void> {
     try {
