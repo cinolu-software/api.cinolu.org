@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator';
 
 export class CreatePhaseDto {
   @IsString()
@@ -15,7 +15,4 @@ export class CreatePhaseDto {
   @IsDate()
   @Transform(({ value }) => new Date(value))
   ended_at: Date;
-
-  @IsNotEmpty()
-  projectId: string;
 }
