@@ -15,11 +15,24 @@ export class PhasesService {
     private readonly usersService: UsersService
   ) {}
 
-  async create(dto: CreatePhaseDto): Promise<Phase> {
+  async create(projectId: string, dto: CreatePhaseDto): Promise<Phase> {
     try {
-      return await this.phaseRepository.save(dto);
+      return await this.phaseRepository.save({
+        ...dto,
+        project: { id: projectId }
+      });
     } catch {
       throw new BadRequestException();
+    }
+  }
+
+  async findByProject(projectId: string): Promise<Phase[]> {
+    try {
+      return await this.phaseRepository.find({
+        where: { project: { id: projectId } }
+      });
+    } catch {
+      throw new NotFoundException();
     }
   }
 
@@ -60,7 +73,8 @@ export class PhasesService {
 
   async update(id: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
     try {
-      return await this.phaseRepository.save({ ...updatePhaseDto, id });
+      await this.phaseRepository.update(id, updatePhaseDto);
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
