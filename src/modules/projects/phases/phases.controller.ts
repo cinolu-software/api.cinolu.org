@@ -11,10 +11,16 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 export class PhasesController {
   constructor(private readonly phasesService: PhasesService) {}
 
-  @Post()
+  @Post(':id')
   @UseRoles({ resource: 'phases', action: 'create' })
-  create(@Body() createPhaseDto: CreatePhaseDto): Promise<Phase> {
-    return this.phasesService.create(createPhaseDto);
+  create(@Param('id') id: string, @Body() dto: CreatePhaseDto): Promise<Phase> {
+    return this.phasesService.create(id, dto);
+  }
+
+  @Get(':id')
+  @UseRoles({ resource: 'phases', action: 'read' })
+  findByProject(@Param('id') id: string): Promise<Phase[]> {
+    return this.phasesService.findByProject(id);
   }
 
   @Post('group-participants')
@@ -31,8 +37,8 @@ export class PhasesController {
 
   @Patch(':id')
   @UseRoles({ resource: 'phases', action: 'update' })
-  update(@Param('id') id: string, @Body() updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
-    return this.phasesService.update(id, updatePhaseDto);
+  update(@Param('id') id: string, @Body() dto: UpdatePhaseDto): Promise<Phase> {
+    return this.phasesService.update(id, dto);
   }
 
   @Delete(':id')
