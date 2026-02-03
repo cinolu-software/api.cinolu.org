@@ -47,17 +47,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configServie: ConfigService) => ({
-        type: 'mysql',
+        type: 'mariadb',
         port: +configServie.get('DB_PORT'),
         host: configServie.get('DB_HOST'),
-        username: configServie.get('DB_USERNAME'),
-        subscribers: ['dist/**/*.subscriber.js'],
-        charset: 'utf8mb4',
-        collation: 'utf8mb4_unicode_ci',
         password: configServie.get('DB_PASSWORD'),
         database: configServie.get('DB_NAME'),
-        synchronize: false,
-        autoLoadEntities: true
+        username: configServie.get('DB_USERNAME'),
+        subscribers: ['dist/**/*.subscriber.js'],
+        entities: ['dist/**/*.entity.js'],
+        autoLoadEntities: false,
+        synchronize: false
       })
     }),
     AuthModule,
