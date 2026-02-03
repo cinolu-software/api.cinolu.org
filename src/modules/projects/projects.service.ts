@@ -210,7 +210,7 @@ export class ProjectsService {
     });
     const allParticipants = project.participants ?? [];
     const assignedUserIds = new Set<string>();
-    const phasesWithParticipants: { phase: Phase; participants: User[] }[] = (project.phases ?? []).map((phase) => {
+    const phasesWithParticipants = (project.phases ?? []).map((phase) => {
       const participants = phase.participants ?? [];
       participants.forEach((u) => assignedUserIds.add(u.id));
       return { phase, participants };
