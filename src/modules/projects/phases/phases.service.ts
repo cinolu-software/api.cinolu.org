@@ -26,16 +26,6 @@ export class PhasesService {
     }
   }
 
-  async findByProject(projectId: string): Promise<Phase[]> {
-    try {
-      return await this.phaseRepository.find({
-        where: { project: { id: projectId } }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
   async groupParticipants(dto: GroupParticipantsDto): Promise<Phase> {
     try {
       const phase = await this.phaseRepository.findOneOrFail({

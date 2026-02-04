@@ -10,22 +10,16 @@ import { UseRoles } from 'nest-access-control';
 export class PhasesController {
   constructor(private readonly phasesService: PhasesService) {}
 
-  @Post(':id')
-  @UseRoles({ resource: 'phases', action: 'create' })
-  create(@Param('id') id: string, @Body() dto: CreatePhaseDto): Promise<Phase> {
-    return this.phasesService.create(id, dto);
-  }
-
-  @Get(':id')
-  @UseRoles({ resource: 'phases', action: 'read' })
-  findByProject(@Param('id') id: string): Promise<Phase[]> {
-    return this.phasesService.findByProject(id);
-  }
-
   @Post('group-participants')
   @UseRoles({ resource: 'phases', action: 'update' })
   groupParticipants(@Body() dto: GroupParticipantsDto): Promise<Phase> {
     return this.phasesService.groupParticipants(dto);
+  }
+
+  @Post(':id')
+  @UseRoles({ resource: 'phases', action: 'create' })
+  create(@Param('id') id: string, @Body() dto: CreatePhaseDto): Promise<Phase> {
+    return this.phasesService.create(id, dto);
   }
 
   @Get(':id')
