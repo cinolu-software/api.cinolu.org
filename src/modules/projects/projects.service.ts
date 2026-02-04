@@ -219,7 +219,7 @@ export class ProjectsService {
     return { phases: phasesWithParticipants, unassigned };
   }
 
-  async highlight(id: string): Promise<Project> {
+  async showcase(id: string): Promise<Project> {
     const project = await this.findOne(id);
     project.is_highlighted = !project.is_highlighted;
     return await this.projectRepository.save(project);
