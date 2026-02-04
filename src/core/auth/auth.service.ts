@@ -43,11 +43,6 @@ export class AuthService {
     return res.redirect(frontendUri);
   }
 
-  async adminSignInWithGoogle(@Res() res: Response): Promise<void> {
-    const frontendUri = this.configService.get<string>('ADMIN_FRONTEND_URI');
-    return res.redirect(frontendUri);
-  }
-
   async signIn(@Req() req: Request): Promise<User> {
     if (!req.user) {
       throw new UnauthorizedException('Non autorisé');

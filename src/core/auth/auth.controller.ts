@@ -41,13 +41,6 @@ export class AuthController {
     return this.authService.signInWithGoogle(res);
   }
 
-  @Get('admin/google/redirect')
-  @Public()
-  @UseGuards(GoogleAuthGuard)
-  adminGoogleAuthRedirect(@Res() res: Response): Promise<void> {
-    return this.authService.adminSignInWithGoogle(res);
-  }
-
   @Post('sign-out')
   signOut(@Req() req: Request) {
     return this.authService.signOut(req);
