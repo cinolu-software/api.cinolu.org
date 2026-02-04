@@ -76,7 +76,7 @@ export class ProjectsService {
     return { added: participants.length, created: createdCount };
   }
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
+  async addImage(id: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.findOne(id);
       const galleryDto = {
@@ -89,7 +89,7 @@ export class ProjectsService {
     }
   }
 
-  async removeGallery(id: string): Promise<void> {
+  async removeImage(id: string): Promise<void> {
     try {
       await this.galleryService.remove(id);
     } catch {
@@ -157,10 +157,11 @@ export class ProjectsService {
 
   async findBySlug(slug: string): Promise<Project> {
     try {
-      return await this.projectRepository.findOneOrFail({
+      const project = await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'project_manager', 'program', 'gallery', 'participants']
+        relations: ['categories', 'project_manager', 'program', 'gallery', 'participants', 'phases']
       });
+      return project;
     } catch {
       throw new NotFoundException();
     }

@@ -101,13 +101,13 @@ export class ProjectsController {
     })
   )
   addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.projectsService.addGallery(id, file);
+    return this.projectsService.addImage(id, file);
   }
 
   @Delete('gallery/remove/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
   removeGallery(@Param('id') id: string): Promise<void> {
-    return this.projectsService.removeGallery(id);
+    return this.projectsService.removeImage(id);
   }
 
   @Get('gallery/:slug')
