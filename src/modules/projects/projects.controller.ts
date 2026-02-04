@@ -147,7 +147,7 @@ export class ProjectsController {
   @Patch('highlight/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
   toggleHighlight(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.highlight(id);
+    return this.projectsService.showcase(id);
   }
 
   @Patch(':id')
