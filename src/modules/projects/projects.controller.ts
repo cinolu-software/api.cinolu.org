@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
-import { ProjectsService, ParticipantsGroupedByPhaseDto } from './projects.service';
+import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
@@ -62,12 +62,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
-  }
-
-  @Get(':id/participants/grouped-by-phase')
-  @UseRoles({ resource: 'projects', action: 'read' })
-  getParticipantsGroupedByPhase(@Param('id') id: string): Promise<ParticipantsGroupedByPhaseDto> {
-    return this.projectsService.getParticipantsGroupedByPhase(id);
   }
 
   @Get(':id/participants')

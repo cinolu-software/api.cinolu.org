@@ -7,17 +7,11 @@ import { parse } from 'fast-csv';
 import { Project } from './entities/project.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
-import { Phase } from './phases/entities/phase.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { GalleriesService } from '@/modules/galleries/galleries.service';
 import { UsersService } from '@/modules/users/users.service';
-
-export interface ParticipantsGroupedByPhaseDto {
-  phases: { phase: Phase; participants: User[] }[];
-  unassigned: User[];
-}
 
 @Injectable()
 export class ProjectsService {
@@ -64,13 +58,7 @@ export class ProjectsService {
       where: { id },
       relations: ['participants']
     });
-    if (!file.buffer) {
-      throw new BadRequestException('CSV file buffer is required (use multipart with file field)');
-    }
     const rows = await this.parseParticipantsCsv(file.buffer);
-    if (rows.length === 0) {
-      throw new BadRequestException('CSV has no valid rows (name and email required)');
-    }
     let createdCount = 0;
     const userIds = new Set<string>(project.participants?.map((p) => p.id) ?? []);
     for (const row of rows) {
@@ -169,16 +157,10 @@ export class ProjectsService {
 
   async findBySlug(slug: string): Promise<Project> {
     try {
-      return await this.projectRepository
-        .createQueryBuilder('p')
-        .where('p.slug = :slug', { slug })
-        .leftJoinAndSelect('p.categories', 'categories')
-        .leftJoinAndSelect('p.project_manager', 'project_manager')
-        .leftJoinAndSelect('p.program', 'subprogram')
-        .leftJoinAndSelect('p.phases', 'phases')
-        .leftJoinAndSelect('p.gallery', 'gallery')
-        .leftJoinAndSelect('p.participants', 'participants')
-        .getOne();
+      return await this.projectRepository.findOneOrFail({
+        where: { slug },
+        relations: ['categories', 'project_manager', 'program', 'gallery', 'participants']
+      });
     } catch {
       throw new NotFoundException();
     }
@@ -201,22 +183,6 @@ export class ProjectsService {
       relations: ['participants']
     });
     return project.participants ?? [];
-  }
-
-  async getParticipantsGroupedByPhase(id: string): Promise<ParticipantsGroupedByPhaseDto> {
-    const project = await this.projectRepository.findOneOrFail({
-      where: { id },
-      relations: ['participants', 'phases', 'phases.participants']
-    });
-    const allParticipants = project.participants ?? [];
-    const assignedUserIds = new Set<string>();
-    const phasesWithParticipants = (project.phases ?? []).map((phase) => {
-      const participants = phase.participants ?? [];
-      participants.forEach((u) => assignedUserIds.add(u.id));
-      return { phase, participants };
-    });
-    const unassigned = allParticipants.filter((u) => !assignedUserIds.has(u.id));
-    return { phases: phasesWithParticipants, unassigned };
   }
 
   async showcase(id: string): Promise<Project> {
