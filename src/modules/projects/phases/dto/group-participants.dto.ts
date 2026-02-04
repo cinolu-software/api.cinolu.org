@@ -1,6 +1,6 @@
 import { IsArray, IsString } from 'class-validator';
 
-export class GroupUsersPhaseDto {
+export class GroupParticipantsDto {
   @IsArray()
   @IsString({ each: true })
   ids: string[];
