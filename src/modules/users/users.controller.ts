@@ -40,6 +40,12 @@ export class UsersController {
     return this.usersService.findStaff();
   }
 
+  @Get('find-ambassadors')
+  @Public()
+  findAmbassadors(@Query() params: FilterUsersDto): Promise<[User[], number]> {
+    return this.usersService.findAmbassadors(params);
+  }
+
   @Get('find-referred-users')
   async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<[User[], number]> {
     return this.usersService.refferedUsers(page, user);

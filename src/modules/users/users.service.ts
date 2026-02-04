@@ -15,7 +15,7 @@ import { SignUpDto } from '@/core/auth/dto/sign-up.dto';
 import { CreateWithGoogleDto } from '@/core/auth/dto/sign-up-with-google.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { nanoid } from 'nanoid';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -109,12 +109,14 @@ export class UsersService {
     try {
       const take = 20;
       const skip = (+page - 1) * take;
-      return await this.userRepository.findAndCount({
-        where: { referred_by: { id: user.id } },
-        order: { created_at: 'DESC' },
-        skip,
-        take
-      });
+      return await this.userRepository
+        .createQueryBuilder('u')
+        .loadRelationCountAndMap('u.referralsCount', 'u.referrals')
+        .where('u.referred_by.id = :id', { id: user.id })
+        .orderBy('u.created_at', 'DESC')
+        .skip(skip)
+        .take(take)
+        .getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
@@ -144,7 +146,7 @@ export class UsersService {
   }
 
   private generateRefferalCode(): string {
-    return nanoid(12);
+    return randomBytes(9).toString('base64url');
   }
 
   async findAll(queryParams: FilterUsersDto): Promise<[User[], number]> {
@@ -152,9 +154,24 @@ export class UsersService {
     const take = 50;
     const skip = (+page - 1) * take;
     const query = this.userRepository
-      .createQueryBuilder('user')
-      .loadRelationCountAndMap('user.referralsCount', 'user.referrals');
-    if (q) query.where('user.name LIKE :q OR user.email LIKE :q', { q: `%${q}%` });
+      .createQueryBuilder('u')
+      .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
+    if (q) query.where('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
+    return await query.skip(skip).take(take).getManyAndCount();
+  }
+
+  async findAmbassadors(queryParams: FilterUsersDto): Promise<[User[], number]> {
+    const { page = 1, q } = queryParams;
+    const take = 50;
+    const skip = (+page - 1) * take;
+    const query = this.userRepository
+      .createQueryBuilder('u')
+      .leftJoin('u.referrals', 'r')
+      .addSelect('COUNT(r.id)', 'referralsCount')
+      .groupBy('u.id')
+      .having('COUNT(r.id) > 0')
+      .orderBy('referralsCount', 'DESC');
+    if (q) query.andWhere('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
     return await query.skip(skip).take(take).getManyAndCount();
   }
 
