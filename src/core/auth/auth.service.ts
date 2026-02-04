@@ -40,9 +40,11 @@ export class AuthService {
 
   async signInWithGoogle(@Res() res: Response): Promise<void> {
     const frontendUri = this.configService.get<string>('FRONTEND_URI');
-    if (!frontendUri) {
-      throw new BadRequestException('Requête invalide');
-    }
+    return res.redirect(frontendUri);
+  }
+
+  async adminSignInWithGoogle(@Res() res: Response): Promise<void> {
+    const frontendUri = this.configService.get<string>('ADMIN_FRONTEND_URI');
     return res.redirect(frontendUri);
   }
 
