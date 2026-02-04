@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
-import { GroupUsersPhaseDto } from './dto/group-users-phase.dto';
+import { GroupParticipantsDto } from './dto/group-participants.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Phase } from './entities/phase.entity';
@@ -36,7 +36,7 @@ export class PhasesService {
     }
   }
 
-  async groupParticipants(dto: GroupUsersPhaseDto): Promise<Phase> {
+  async groupParticipants(dto: GroupParticipantsDto): Promise<Phase> {
     try {
       const phase = await this.phaseRepository.findOneOrFail({
         where: { id: dto.phaseId },
@@ -52,20 +52,12 @@ export class PhasesService {
     }
   }
 
-  async findBySlug(slug: string): Promise<Phase> {
-    try {
-      return await this.phaseRepository.findOneOrFail({
-        where: { slug },
-        relations: ['participants']
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
   async findOne(id: string): Promise<Phase> {
     try {
-      return await this.phaseRepository.findOneOrFail({ where: { id } });
+      return await this.phaseRepository.findOneOrFail({
+        where: { id },
+        relations: ['participants']
+      });
     } catch {
       throw new NotFoundException();
     }

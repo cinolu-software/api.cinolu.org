@@ -2,10 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PhasesService } from './phases.service';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
-import { GroupUsersPhaseDto } from './dto/group-users-phase.dto';
+import { GroupParticipantsDto } from './dto/group-participants.dto';
 import { Phase } from './entities/phase.entity';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('phases')
 export class PhasesController {
@@ -25,14 +24,14 @@ export class PhasesController {
 
   @Post('group-participants')
   @UseRoles({ resource: 'phases', action: 'update' })
-  groupParticipants(@Body() dto: GroupUsersPhaseDto): Promise<Phase> {
+  groupParticipants(@Body() dto: GroupParticipantsDto): Promise<Phase> {
     return this.phasesService.groupParticipants(dto);
   }
 
-  @Get(':slug')
-  @Public()
-  findBySlug(@Param('slug') slug: string): Promise<Phase> {
-    return this.phasesService.findBySlug(slug);
+  @Get(':id')
+  @UseRoles({ resource: 'phases', action: 'read' })
+  findOne(@Param('id') id: string): Promise<Phase> {
+    return this.phasesService.findOne(id);
   }
 
   @Patch(':id')
