@@ -22,7 +22,6 @@ import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { User } from '@/modules/users/entities/user.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -62,12 +61,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
-  }
-
-  @Get(':id/participants')
-  @UseRoles({ resource: 'projects', action: 'read' })
-  getParticipants(@Param('id') id: string): Promise<User[]> {
-    return this.projectsService.getParticipants(id);
   }
 
   @Post(':id/participants/csv')

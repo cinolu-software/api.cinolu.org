@@ -6,7 +6,6 @@ import { Readable } from 'stream';
 import { parse } from 'fast-csv';
 import { Project } from './entities/project.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { User } from '@/modules/users/entities/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
@@ -159,7 +158,15 @@ export class ProjectsService {
     try {
       const project = await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'project_manager', 'program', 'gallery', 'participants', 'phases']
+        relations: [
+          'categories',
+          'project_manager',
+          'program',
+          'gallery',
+          'participants',
+          'phases',
+          'phases.participants'
+        ]
       });
       return project;
     } catch {
@@ -176,14 +183,6 @@ export class ProjectsService {
     } catch {
       throw new NotFoundException();
     }
-  }
-
-  async getParticipants(id: string): Promise<User[]> {
-    const project = await this.projectRepository.findOneOrFail({
-      where: { id },
-      relations: ['participants']
-    });
-    return project.participants ?? [];
   }
 
   async showcase(id: string): Promise<Project> {
