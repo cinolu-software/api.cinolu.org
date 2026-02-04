@@ -82,7 +82,7 @@ export class UsersController {
   }
 
   @Get(':email')
-  @UseRoles({ resource: 'users', action: 'read' })
+  @Public()
   findOneByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findOneByEmail(email);
   }
