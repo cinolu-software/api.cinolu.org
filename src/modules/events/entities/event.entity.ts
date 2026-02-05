@@ -4,6 +4,7 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
+import { EventParticipation } from './participation.entity';
 
 @Entity()
 export class Event extends AbstractEntity {
@@ -61,6 +62,6 @@ export class Event extends AbstractEntity {
   @OneToMany(() => Gallery, (gallery) => gallery.event)
   gallery: Gallery[];
 
-  @ManyToMany(() => User, (user) => user.participated_events)
-  participants: User[];
+  @OneToMany(() => EventParticipation, (participation) => participation.event)
+  participations: EventParticipation[];
 }
