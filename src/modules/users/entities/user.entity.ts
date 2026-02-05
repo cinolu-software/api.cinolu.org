@@ -5,9 +5,10 @@ import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
+import { ProjectParticipation } from '@/modules/projects/entities/participation.entity';
 import { Event } from '@/modules/events/entities/event.entity';
+import { EventParticipation } from '@/modules/events/entities/participation.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
-import { Phase } from '@/modules/projects/phases/entities/phase.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -60,17 +61,11 @@ export class User extends AbstractEntity {
   @JoinTable()
   roles: Role[];
 
-  @ManyToMany(() => Project, (project) => project.participants)
-  @JoinTable()
-  participated_projects: Project[];
+  @OneToMany(() => ProjectParticipation, (participation) => participation.user)
+  project_participations: ProjectParticipation[];
 
-  @ManyToMany(() => Phase, (phase) => phase.participants)
-  @JoinTable()
-  participated_phases: Phase[];
-
-  @ManyToMany(() => Event, (event) => event.participants)
-  @JoinTable()
-  participated_events: Event[];
+  @OneToMany(() => EventParticipation, (participation) => participation.user)
+  event_participations: EventParticipation[];
 
   @OneToMany(() => Project, (project) => project.project_manager)
   managed_projects: Project[];

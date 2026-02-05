@@ -16,6 +16,7 @@ import { CreateWithGoogleDto } from '@/core/auth/dto/sign-up-with-google.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { randomBytes } from 'crypto';
+import { CreateFromCsvDto } from './dto/create-from-csv.dto';
 
 @Injectable()
 export class UsersService {
@@ -243,35 +244,21 @@ export class UsersService {
     }
   }
 
-  async findOneByEmailOptional(email: string): Promise<User | null> {
-    return await this.userRepository.findOne({
-      where: { email: email.trim().toLowerCase() },
+  async findOrCreateParticipant(dto: CreateFromCsvDto): Promise<User> {
+    const normalizedEmail = dto.email.trim().toLowerCase();
+    const existing = await this.userRepository.findOne({
+      where: { email: normalizedEmail },
       relations: ['roles']
     });
-  }
-
-  async findOrCreateParticipant(payload: {
-    name: string;
-    email: string;
-    phone_number?: string;
-  }): Promise<{ user: User; created: boolean }> {
-    const normalizedEmail = payload.email.trim().toLowerCase();
-    const existing = await this.findOneByEmailOptional(normalizedEmail);
-    if (existing) {
-      return { user: existing, created: false };
-    }
+    if (existing) return existing;
     const role = await this.rolesService.findByName('user');
-    const defaultPassword = 'user1234';
-    const newUser = await this.userRepository.save({
-      name: payload.name.trim(),
+    return await this.userRepository.save({
+      ...dto,
       email: normalizedEmail,
-      phone_number: payload.phone_number?.trim() ?? null,
-      password: defaultPassword,
+      password: 'user1234',
       referral_code: this.generateRefferalCode(),
       roles: [role]
     });
-    const user = await this.findOne(newUser.id);
-    return { user, created: true };
   }
 
   async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
