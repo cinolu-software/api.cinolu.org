@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { promises as fs } from 'fs';
 import { Event } from './entities/event.entity';
+import { EventParticipation } from './entities/participation.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { User } from '@/modules/users/entities/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { FilterEventsDto } from './dto/filter-events.dto';
@@ -14,6 +16,8 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
+    @InjectRepository(EventParticipation)
+    private participationRepository: Repository<EventParticipation>,
     private galleryService: GalleriesService
   ) {}
 
@@ -132,7 +136,14 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'event_manager', 'program.program', 'gallery']
+        relations: [
+          'categories',
+          'event_manager',
+          'program.program',
+          'gallery',
+          'participations',
+          'participations.user'
+        ]
       });
     } catch {
       throw new NotFoundException();
@@ -143,7 +154,7 @@ export class EventsService {
     try {
       return await this.eventRepository.findOneOrFail({
         where: { id },
-        relations: ['categories', 'event_manager', 'program', 'gallery']
+        relations: ['categories', 'event_manager', 'program', 'gallery', 'participations', 'participations.user']
       });
     } catch {
       throw new NotFoundException();
@@ -172,5 +183,45 @@ export class EventsService {
     } catch {
       throw new BadRequestException();
     }
+  }
+
+  async participate(eventId: string, user: User): Promise<Event> {
+    const existing = await this.participationRepository.findOne({
+      where: { event: { id: eventId }, user: { id: user.id } }
+    });
+    if (existing) {
+      throw new BadRequestException('You are already participating in this event');
+    }
+    await this.participationRepository.save({
+      user: { id: user.id },
+      event: { id: eventId }
+    });
+    return this.eventRepository.findOneOrFail({
+      where: { id: eventId },
+      relations: ['categories', 'event_manager', 'participations', 'participations.user']
+    });
+  }
+
+  async leave(eventId: string, user: User): Promise<void> {
+    const participation = await this.participationRepository.findOne({
+      where: { event: { id: eventId }, user: { id: user.id } }
+    });
+    if (!participation) {
+      throw new NotFoundException('You are not participating in this event');
+    }
+    await this.participationRepository.remove(participation);
+  }
+
+  async findParticipations(eventId: string): Promise<EventParticipation[]> {
+    const event = await this.eventRepository
+      .findOneOrFail({
+        where: { id: eventId },
+        relations: ['participations', 'participations.user']
+      })
+      .catch(() => {
+        throw new NotFoundException('Event not found');
+      });
+
+    return event.participations ?? [];
   }
 }

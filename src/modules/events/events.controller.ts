@@ -20,7 +20,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
+import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { EventParticipation } from './entities/participation.entity';
 
 @Controller('events')
 export class EventsController {
@@ -60,6 +63,24 @@ export class EventsController {
   @UseRoles({ resource: 'events', action: 'read' })
   findOne(@Param('id') id: string): Promise<Event> {
     return this.eventsService.findOne(id);
+  }
+
+  @Post(':id/participate')
+  @UseRoles({ resource: 'events', action: 'update' })
+  participate(@Param('id') id: string, @CurrentUser() user: User): Promise<Event> {
+    return this.eventsService.participate(id, user);
+  }
+
+  @Delete(':id/participate')
+  @UseRoles({ resource: 'events', action: 'update' })
+  leave(@Param('id') id: string, @CurrentUser() user: User): Promise<void> {
+    return this.eventsService.leave(id, user);
+  }
+
+  @Get(':id/participations')
+  @UseRoles({ resource: 'events', action: 'read' })
+  findParticipations(@Param('id') id: string): Promise<EventParticipation[]> {
+    return this.eventsService.findParticipations(id);
   }
 
   @Post('publish/:id')
