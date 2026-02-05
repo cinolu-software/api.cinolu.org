@@ -1,7 +1,7 @@
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
-import { User } from '@/modules/users/entities/user.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
+import { ProjectParticipation } from '@/modules/projects/entities/participation.entity';
 
 @Entity()
 export class Phase extends AbstractEntity {
@@ -24,6 +24,6 @@ export class Phase extends AbstractEntity {
   @JoinColumn()
   project: Project;
 
-  @ManyToMany(() => User, (user) => user.participated_phases)
-  participants: User[];
+  @ManyToMany(() => ProjectParticipation, (participation) => participation.phase)
+  participations: ProjectParticipation[];
 }

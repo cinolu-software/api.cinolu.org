@@ -2,19 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PhasesService } from './phases.service';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
-import { GroupParticipantsDto } from './dto/group-participants.dto';
+import { MoveParticipantsDto } from './dto/move-participants.dto';
 import { Phase } from './entities/phase.entity';
 import { UseRoles } from 'nest-access-control';
 
 @Controller('phases')
 export class PhasesController {
-  constructor(private readonly phasesService: PhasesService) {}
-
-  @Post('group-participants')
-  @UseRoles({ resource: 'phases', action: 'update' })
-  groupParticipants(@Body() dto: GroupParticipantsDto): Promise<Phase> {
-    return this.phasesService.groupParticipants(dto);
-  }
+  constructor(private phasesService: PhasesService) {}
 
   @Post(':id')
   @UseRoles({ resource: 'phases', action: 'create' })
@@ -26,6 +20,18 @@ export class PhasesController {
   @UseRoles({ resource: 'phases', action: 'read' })
   findOne(@Param('id') id: string): Promise<Phase> {
     return this.phasesService.findOne(id);
+  }
+
+  @Post('move-participants')
+  @UseRoles({ resource: 'phases', action: 'update' })
+  moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {
+    return this.phasesService.moveParticipants(dto);
+  }
+
+  @Post('remove-participants')
+  @UseRoles({ resource: 'phases', action: 'update' })
+  removeParticipantsFromPhase(@Body() dto: MoveParticipantsDto): Promise<void> {
+    return this.phasesService.removeParticipantsFromPhase(dto);
   }
 
   @Patch(':id')
