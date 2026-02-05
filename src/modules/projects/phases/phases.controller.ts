@@ -22,6 +22,12 @@ export class PhasesController {
     return this.phasesService.findOne(id);
   }
 
+  @Get('all/:id')
+  @UseRoles({ resource: 'phases', action: 'read' })
+  findAll(@Param('id') id: string): Promise<Phase[]> {
+    return this.phasesService.findAll(id);
+  }
+
   @Post('move-participants')
   @UseRoles({ resource: 'phases', action: 'update' })
   moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {

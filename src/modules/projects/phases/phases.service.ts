@@ -47,6 +47,12 @@ export class PhasesService {
     }
   }
 
+  async findAll(id: string): Promise<Phase[]> {
+    return await this.phaseRepository.find({
+      where: { project: { id } }
+    });
+  }
+
   async remove(id: string): Promise<void> {
     try {
       const phase = await this.phaseRepository.findOneOrFail({ where: { id } });
