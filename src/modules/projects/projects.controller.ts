@@ -15,11 +15,14 @@ import { diskStorage, memoryStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ParticipateProjectDto } from './dto/participate.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
+import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 
 @Controller('projects')
@@ -56,10 +59,22 @@ export class ProjectsController {
     return this.projectsService.findBySlug(slug);
   }
 
+  @Get(':id/participations')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  findParticipations(@Param('id') id: string) {
+    return this.projectsService.findParticipations(id);
+  }
+
   @Get(':id')
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
+  }
+
+  @Post(':id/participate')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  participate(@Param('id') id: string, @CurrentUser() user: User, @Body() dto: ParticipateProjectDto): Promise<void> {
+    return this.projectsService.participate(id, user, dto);
   }
 
   @Post(':id/participants/csv')
