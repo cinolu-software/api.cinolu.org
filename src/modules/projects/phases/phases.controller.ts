@@ -28,13 +28,13 @@ export class PhasesController {
     return this.phasesService.findAll(id);
   }
 
-  @Post('move-participants')
+  @Post('move/participants')
   @UseRoles({ resource: 'phases', action: 'update' })
   moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.phasesService.moveParticipants(dto);
   }
 
-  @Post('remove-participants')
+  @Post('remove/participants')
   @UseRoles({ resource: 'phases', action: 'update' })
   removeParticipantsFromPhase(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.phasesService.removeParticipantsFromPhase(dto);
