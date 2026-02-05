@@ -166,13 +166,11 @@ export class UsersService {
     const skip = (+page - 1) * take;
     const query = this.userRepository
       .createQueryBuilder('u')
-      .leftJoin('u.referrals', 'r')
-      .addSelect('COUNT(r.id)', 'referralsCount')
-      .groupBy('u.id')
-      .having('COUNT(r.id) > 0')
-      .orderBy('referralsCount', 'DESC');
+      .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
     if (q) query.andWhere('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
-    return await query.skip(skip).take(take).getManyAndCount();
+    const users = await query.skip(skip).take(take).getMany();
+    const filteredUsers = users.filter((user) => user['referralsCount'] > 0);
+    return [filteredUsers, filteredUsers.length];
   }
 
   async refferedBy(referral_code: string): Promise<User> {
