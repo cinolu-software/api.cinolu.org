@@ -167,17 +167,7 @@ export class ProjectsService {
     try {
       const project = await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: [
-          'categories',
-          'project_manager',
-          'program',
-          'gallery',
-          'participations',
-          'participations.user',
-          'participations.venture',
-          'participations.phase',
-          'phases'
-        ]
+        relations: ['categories', 'project_manager', 'program', 'gallery', 'phases']
       });
       return project;
     } catch {
