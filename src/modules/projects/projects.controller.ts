@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   Post,
@@ -77,7 +76,6 @@ export class ProjectsController {
     })
   )
   addParticipantsFromCsv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-    if (!file) throw new BadRequestException('CSV file is required (field name: file)');
     return this.projectsService.addParticipantsFromCsv(id, file);
   }
 
