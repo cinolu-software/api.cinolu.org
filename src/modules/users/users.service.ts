@@ -273,7 +273,6 @@ export class UsersService {
       roles: [role]
     });
     const user = await this.findOne(newUser.id);
-    this.eventEmitter.emit('user.welcome-with-credentials', { user, password: defaultPassword });
     return { user, created: true };
   }
 
