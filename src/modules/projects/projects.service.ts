@@ -76,6 +76,7 @@ export class ProjectsService {
       });
       if (!existing) {
         await this.participationRepository.save({
+          created_at: project.started_at,
           user: { id: userId },
           project: { id },
           venture: null
@@ -167,7 +168,7 @@ export class ProjectsService {
     try {
       const project = await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'project_manager', 'program', 'gallery', 'phases']
+        relations: ['categories', 'project_manager', 'program', 'gallery']
       });
       return project;
     } catch {
