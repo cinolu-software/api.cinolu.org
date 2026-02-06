@@ -46,6 +46,12 @@ export class UsersController {
     return this.usersService.findAmbassadors(params);
   }
 
+  @Get('find-ambassadors/:email')
+  @Public()
+  findAmbassadorByEmail(@Param('email') email: string): Promise<User> {
+    return this.usersService.findAmbassadorByEmail(email);
+  }
+
   @Get('find-referred-users')
   async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<[User[], number]> {
     return this.usersService.refferedUsers(page, user);

@@ -176,6 +176,17 @@ export class UsersService {
     return [filteredUsers, filteredUsers.length];
   }
 
+  async findAmbassadorByEmail(email: string): Promise<User> {
+    try {
+      return await this.userRepository.findOneOrFail({
+        where: { email },
+        relations: ['ventures', 'ventures.gallery', 'ventures.products', 'ventures.products.gallery']
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   async refferedBy(referral_code: string): Promise<User> {
     try {
       return await this.userRepository.findOne({
