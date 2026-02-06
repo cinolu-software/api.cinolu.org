@@ -170,7 +170,9 @@ export class UsersService {
       .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
     if (q) query.andWhere('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
     const users = await query.skip(skip).take(take).getMany();
-    const filteredUsers = users.filter((user) => user['referralsCount'] > 0);
+    const filteredUsers = users
+      .filter((user) => user['referralsCount'] > 0)
+      .sort((a, b) => b['referralsCount'] - a['referralsCount']);
     return [filteredUsers, filteredUsers.length];
   }
 
