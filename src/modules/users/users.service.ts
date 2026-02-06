@@ -178,10 +178,15 @@ export class UsersService {
 
   async findAmbassadorByEmail(email: string): Promise<User> {
     try {
-      return await this.userRepository.findOneOrFail({
-        where: { email },
-        relations: ['ventures', 'ventures.gallery', 'ventures.products', 'ventures.products.gallery']
-      });
+      return await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.ventures', 'ventures')
+        .loadRelationCountAndMap('user.referralsCount', 'user.referrals')
+        .leftJoinAndSelect('ventures.gallery', 'gallery')
+        .leftJoinAndSelect('ventures.products', 'products')
+        .leftJoinAndSelect('products.gallery', 'productsGallery')
+        .where('user.email = :email', { email })
+        .getOneOrFail();
     } catch {
       throw new NotFoundException();
     }
