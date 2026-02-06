@@ -5,14 +5,12 @@ export interface IAdminStatsGeneral {
   totalVentures: number;
 }
 
-/** Project or event item with participation count for a given year */
 export interface IParticipationItem {
   id: string;
   name: string;
   participations: number;
 }
 
-/** Subprogram with its projects, events and participation counts */
 export interface ISubprogramParticipations {
   id: string;
   name: string;
@@ -21,7 +19,6 @@ export interface ISubprogramParticipations {
   events: IParticipationItem[];
 }
 
-/** Program with its subprograms and participation counts at each level */
 export interface IProgramParticipations {
   id: string;
   name: string;
