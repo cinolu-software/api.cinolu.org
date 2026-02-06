@@ -63,29 +63,37 @@ export class PhasesService {
   }
 
   async moveParticipants(dto: MoveParticipantsDto): Promise<void> {
-    const phase = await this.phaseRepository.findOneOrFail({
-      where: { id: dto.phaseId }
-    });
-    const participations = await this.participationRepository.find({
-      where: { id: In(dto.ids) },
-      relations: ['phase']
-    });
-    for (const p of participations) {
-      const alreadyInPhase = p.phase?.some((ph) => ph.id === phase.id);
-      if (alreadyInPhase) continue;
-      p.phase = [...(p.phase ?? []), phase];
-      await this.participationRepository.save(p);
+    try {
+      const phase = await this.phaseRepository.findOneOrFail({
+        where: { id: dto.phaseId }
+      });
+      const participations = await this.participationRepository.find({
+        where: { id: In(dto.ids) },
+        relations: ['phase']
+      });
+      for (const p of participations) {
+        const alreadyInPhase = p.phase?.some((ph) => ph.id === phase.id);
+        if (alreadyInPhase) continue;
+        p.phase = [...(p.phase ?? []), phase];
+        await this.participationRepository.save(p);
+      }
+    } catch {
+      throw new BadRequestException();
     }
   }
 
   async removeParticipantsFromPhase(dto: MoveParticipantsDto): Promise<void> {
-    const participations = await this.participationRepository.find({
-      where: { id: In(dto.ids) },
-      relations: ['phase']
-    });
-    for (const p of participations) {
-      p.phase = (p.phase ?? []).filter((ph) => ph.id !== dto.phaseId);
-      await this.participationRepository.save(p);
+    try {
+      const participations = await this.participationRepository.find({
+        where: { id: In(dto.ids) },
+        relations: ['phase']
+      });
+      for (const p of participations) {
+        p.phase = (p.phase ?? []).filter((ph) => ph.id !== dto.phaseId);
+        await this.participationRepository.save(p);
+      }
+    } catch {
+      throw new BadRequestException();
     }
   }
 }
