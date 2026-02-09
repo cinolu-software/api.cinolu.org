@@ -23,7 +23,6 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -72,8 +71,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     SubprogramsModule,
     EventsModule,
     ProjectsModule,
-    MentorsModule,
-    NotificationsModule
+    MentorsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

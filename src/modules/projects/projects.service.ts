@@ -208,15 +208,13 @@ export class ProjectsService {
     });
   }
 
-  async findParticipantUserIdsByProgram(programId: string): Promise<string[]> {
+  async findParticipantUserIdsByPhase(phaseId: string): Promise<string[]> {
     try {
       const rows = await this.participationRepository
         .createQueryBuilder('pp')
         .select('DISTINCT pp.userId', 'userId')
-        .innerJoin('pp.project', 'project')
-        .innerJoin('project.program', 'subprogram')
-        .innerJoin('subprogram.program', 'program')
-        .where('program.id = :programId', { programId })
+        .innerJoin('pp.phase', 'phase')
+        .where('phase.id = :phaseId', { phaseId })
         .getRawMany<{ userId: string }>();
       return rows.map((row) => row.userId);
     } catch {
