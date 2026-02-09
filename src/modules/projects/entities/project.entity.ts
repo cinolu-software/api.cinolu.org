@@ -6,7 +6,6 @@ import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
 import { ProjectParticipation } from './participation.entity';
-import { Notification } from '@/modules/notifications/entities/notification.entity';
 
 @Entity()
 export class Project extends AbstractEntity {
@@ -66,7 +65,4 @@ export class Project extends AbstractEntity {
 
   @OneToMany(() => Phase, (phase) => phase.project)
   phases: Phase[];
-
-  @OneToMany(() => Notification, (notification) => notification.project)
-  notifications: Notification[];
 }
