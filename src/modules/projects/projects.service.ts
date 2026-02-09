@@ -42,6 +42,14 @@ export class ProjectsService {
     }
   }
 
+  async findParticipants(projectId: string): Promise<{ userId: string }[]> {
+    return await this.participationRepository
+      .createQueryBuilder('pp')
+      .select('DISTINCT pp.userId', 'userId')
+      .where('pp.projectId = :projectId', { projectId })
+      .getRawMany<{ userId: string }>();
+  }
+
   private parseParticipantsCsv(buffer: Buffer): Promise<{ name: string; email: string; phone_number?: string }[]> {
     return new Promise((resolve, reject) => {
       const rows: { name: string; email: string; phone_number?: string }[] = [];
@@ -66,9 +74,13 @@ export class ProjectsService {
     });
     const rows = await this.parseParticipantsCsv(file.buffer);
     const userIds = new Set<string>(project.participations?.map((p) => p.user.id) ?? []);
+    const newParticipantIds: string[] = [];
     for (const row of rows) {
       const user = await this.usersService.findOrCreateParticipant(row);
-      if (!userIds.has(user.id)) userIds.add(user.id);
+      if (!userIds.has(user.id)) {
+        userIds.add(user.id);
+        newParticipantIds.push(user.id);
+      }
     }
     for (const userId of userIds) {
       const existing = await this.participationRepository.findOne({
@@ -196,6 +208,22 @@ export class ProjectsService {
     });
   }
 
+  async findParticipantUserIdsByProgram(programId: string): Promise<string[]> {
+    try {
+      const rows = await this.participationRepository
+        .createQueryBuilder('pp')
+        .select('DISTINCT pp.userId', 'userId')
+        .innerJoin('pp.project', 'project')
+        .innerJoin('project.program', 'subprogram')
+        .innerJoin('subprogram.program', 'program')
+        .where('program.id = :programId', { programId })
+        .getRawMany<{ userId: string }>();
+      return rows.map((row) => row.userId);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async showcase(id: string): Promise<Project> {
     const project = await this.findOne(id);
     project.is_highlighted = !project.is_highlighted;
@@ -234,7 +262,7 @@ export class ProjectsService {
 
   async participate(projectId: string, user: User, dto: ParticipateProjectDto): Promise<void> {
     try {
-      await this.findOne(dto.projectId);
+      await this.findOne(projectId);
       const venture = await this.venturesService.findOne(dto.ventureId);
       await this.participationRepository.save({
         user: { id: user.id },

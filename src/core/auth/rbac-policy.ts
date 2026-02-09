@@ -4,9 +4,9 @@ import { Role } from './enums/roles.enum';
 export const RBAC_POLICY: RolesBuilder = new RolesBuilder();
 
 RBAC_POLICY.grant(Role.USER)
-  .readOwn(['products', 'ventures'])
+  .readOwn(['products', 'ventures', 'notifications'])
   .readAny(['opportunities'])
-  .updateOwn(['ventures', 'comments', 'products', 'mentors', 'addCV'])
+  .updateOwn(['ventures', 'comments', 'products', 'mentors', 'addCV', 'notifications'])
   .deleteOwn(['ventures', 'comments', 'products', 'mentors'])
   .grant(Role.MENTOR)
   .extend(Role.USER)
@@ -30,7 +30,8 @@ RBAC_POLICY.grant(Role.USER)
     'ventures',
     'tags',
     'opportunities',
-    'exportUsersCSV'
+    'exportUsersCSV',
+    'notifications'
   ])
   .createAny([
     'indicators',
@@ -49,7 +50,8 @@ RBAC_POLICY.grant(Role.USER)
     'projectCategories',
     'projects',
     'blogs',
-    'opportunities'
+    'opportunities',
+    'notifications'
   ])
   .updateAny([
     'indicators',
