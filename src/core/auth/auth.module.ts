@@ -5,13 +5,13 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './session.serializer';
-import { EmailModule } from '../email/email.module';
 import { UsersModule } from '@/modules/users/users.module';
+import { AuthEmailService } from './auth-email.service';
 
 @Module({
-  imports: [PassportModule, UsersModule, EmailModule],
+  imports: [PassportModule, UsersModule],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, SessionSerializer, GoogleStrategy],
+  providers: [AuthService, LocalStrategy, SessionSerializer, GoogleStrategy, AuthEmailService],
   exports: [AuthService]
 })
 export class AuthModule {}

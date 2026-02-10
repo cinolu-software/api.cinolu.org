@@ -11,10 +11,17 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Public } from './decorators/public.decorator';
+import { ContactSupportDto } from './dto/contact-support.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Post('contact-us')
+  @Public()
+  async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
+    await this.authService.contactUs(dto);
+  }
 
   @Post('sign-up')
   @Public()
