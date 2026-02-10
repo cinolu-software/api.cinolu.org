@@ -21,7 +21,6 @@ import CreateUserDto from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
-import { ContactSupportDto } from './dto/contact-support.dto';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 
@@ -67,12 +66,6 @@ export class UsersController {
   @UseRoles({ resource: 'exportUsersCSV', action: 'read' })
   async exportCSV(@Query() params: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersService.exportCSV(params, res);
-  }
-
-  @Post('contact-us')
-  @Public()
-  async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
-    await this.usersService.contactUs(dto);
   }
 
   @Get('')

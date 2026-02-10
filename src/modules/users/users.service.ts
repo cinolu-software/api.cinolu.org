@@ -13,7 +13,6 @@ import { format } from 'fast-csv';
 import { Response } from 'express';
 import { SignUpDto } from '@/core/auth/dto/sign-up.dto';
 import { CreateWithGoogleDto } from '@/core/auth/dto/sign-up-with-google.dto';
-import { ContactSupportDto } from './dto/contact-support.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { randomBytes } from 'crypto';
 import { CreateFromCsvDto } from './dto/create-from-csv.dto';
@@ -80,14 +79,6 @@ export class UsersService {
       const user = await this.findOne(userId);
       user.roles = [role];
       return await this.userRepository.save(user);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async contactUs(dto: ContactSupportDto): Promise<void> {
-    try {
-      this.eventEmitter.emit('contact.support', dto);
     } catch {
       throw new BadRequestException();
     }
