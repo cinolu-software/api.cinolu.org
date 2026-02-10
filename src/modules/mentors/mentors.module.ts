@@ -7,10 +7,11 @@ import { Experience } from './entities/experience.entity';
 import { ExpertisesModule } from './expertises/expertises.module';
 import { UsersModule } from '../users/users.module';
 import { ExperiencesService } from './experiences.service';
+import { MentorEmailService } from './mentor-email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MentorProfile, Experience]), ExpertisesModule, UsersModule],
   controllers: [MentorsController],
-  providers: [MentorsService, ExperiencesService]
+  providers: [MentorsService, ExperiencesService, MentorEmailService]
 })
 export class MentorsModule {}
