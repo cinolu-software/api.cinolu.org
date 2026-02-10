@@ -4,7 +4,9 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { Notification } from './entities/notification.entity';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class NotificationsEmailService {
   constructor(private mailerService: MailerService) {}
 

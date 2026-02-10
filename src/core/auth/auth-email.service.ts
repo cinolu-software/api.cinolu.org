@@ -1,9 +1,11 @@
 import { User } from '@/modules/users/entities/user.entity';
-import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ContactSupportDto } from './dto/contact-support.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class AuthEmailService {
   constructor(private mailerService: MailerService) {}
 

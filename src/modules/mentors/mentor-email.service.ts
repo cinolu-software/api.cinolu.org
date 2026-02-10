@@ -2,7 +2,9 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { MentorProfile } from './entities/mentor.entity';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MentorEmailService {
   constructor(private mailerService: MailerService) {}
 
