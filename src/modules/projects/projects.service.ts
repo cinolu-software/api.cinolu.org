@@ -15,6 +15,9 @@ import { GalleriesService } from '@/modules/galleries/galleries.service';
 import { UsersService } from '@/modules/users/users.service';
 import { VenturesService } from '@/modules/ventures/ventures.service';
 import { ParticipateProjectDto } from './dto/participate.dto';
+import { NotifyParticipantsDto } from './dto/notify-participants.dto';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
+import { Notification } from '../notifications/entities/notification.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -25,7 +28,8 @@ export class ProjectsService {
     private participationRepository: Repository<ProjectParticipation>,
     private galleryService: GalleriesService,
     private usersService: UsersService,
-    private venturesService: VenturesService
+    private venturesService: VenturesService,
+    private notificationsService: NotificationsService
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -208,15 +212,32 @@ export class ProjectsService {
     });
   }
 
-  async findParticipantUserIdsByPhase(phaseId: string): Promise<string[]> {
+  async findParticipantsIds(phaseId: string): Promise<string[]> {
     try {
       const rows = await this.participationRepository
         .createQueryBuilder('pp')
         .select('DISTINCT pp.userId', 'userId')
+        .innerJoin('pp.project', 'project')
         .innerJoin('pp.phase', 'phase')
         .where('phase.id = :phaseId', { phaseId })
         .getRawMany<{ userId: string }>();
       return rows.map((row) => row.userId);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async notifyParticipants(projectId: string, dto: NotifyParticipantsDto): Promise<Notification> {
+    try {
+      await this.findOne(projectId);
+      let userIds: string[] = [];
+      if (dto.phase_id) {
+        userIds = await this.findParticipantsIds(dto.phase_id);
+      } else {
+        const participants = await this.findParticipants(projectId);
+        userIds = participants.map((row) => row.userId);
+      }
+      return await this.notificationsService.create(userIds, dto);
     } catch {
       throw new BadRequestException();
     }
@@ -230,8 +251,10 @@ export class ProjectsService {
 
   async togglePublish(id: string): Promise<Project> {
     const project = await this.findOne(id);
-    project.is_published = !project.is_published;
-    return await this.projectRepository.save(project);
+    return await this.projectRepository.save({
+      ...project,
+      is_published: !project.is_published
+    });
   }
 
   async update(id: string, dto: UpdateProjectDto): Promise<Project> {
@@ -240,8 +263,8 @@ export class ProjectsService {
       return await this.projectRepository.save({
         ...project,
         ...dto,
-        project_manager: dto.project_manager ? { id: dto.project_manager } : project.project_manager,
-        program: { id: dto.program },
+        project_manager: { id: dto?.project_manager ?? project.project_manager.id },
+        program: { id: dto?.program ?? project.program.id },
         categories: dto?.categories.map((type) => ({ id: type })) || project.categories
       });
     } catch {

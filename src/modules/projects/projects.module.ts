@@ -10,6 +10,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { PhasesModule } from './phases/phases.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { VenturesModule } from '@/modules/ventures/ventures.module';
+import { NotificationsModule } from '@/modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { VenturesModule } from '@/modules/ventures/ventures.module';
     CategoriesModule,
     UsersModule,
     VenturesModule,
+    NotificationsModule,
     TypeOrmModule.forFeature([Project, ProjectParticipation])
   ],
   controllers: [ProjectsController],

@@ -19,11 +19,13 @@ import { ParticipateProjectDto } from './dto/participate.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
+import { NotifyParticipantsDto } from './dto/notify-participants.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { Notification } from '../notifications/entities/notification.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -92,6 +94,12 @@ export class ProjectsController {
   )
   addParticipantsFromCsv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
     return this.projectsService.addParticipantsFromCsv(id, file);
+  }
+
+  @Post(':id/notify')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  notifyParticipants(@Param('id') id: string, @Body() dto: NotifyParticipantsDto): Promise<Notification> {
+    return this.projectsService.notifyParticipants(id, dto);
   }
 
   @Post('gallery/:id')
