@@ -61,26 +61,30 @@ import { MailerModule } from '@nestjs-modules/mailer';
         synchronize: false
       })
     }),
-    MailerModule.forRoot({
-      transport: {
-        secure: true,
-        host: process.env.MAIL_HOST,
-        port: +process.env.MAIL_PORT,
-        auth: {
-          user: process.env.MAIL_USERNAME,
-          pass: process.env.MAIL_PASSWORD
-        }
-      },
-      defaults: {
-        from: `Support CINOLU <${process.env.MAIL_USERNAME}>`
-      },
-      template: {
-        dir: process.cwd() + '/templates/',
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true
-        }
-      }
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('MAIL_HOST'),
+          port: +configService.get('MAIL_PORT'),
+          auth: {
+            user: configService.get('MAIL_USERNAME'),
+            pass: configService.get('MAIL_PASSWORD')
+          }
+        },
+        defaults: {
+          from: `Support CINOLU <${configService.get('MAIL_USERNAME')}>`
+        },
+        template: {
+          dir: process.cwd() + '/templates/',
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true
+          }
+        },
+        isGlobal: true
+      })
     }),
     AuthModule,
     UsersModule,
