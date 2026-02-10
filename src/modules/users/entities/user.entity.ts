@@ -9,6 +9,7 @@ import { ProjectParticipation } from '@/modules/projects/entities/participation.
 import { Event } from '@/modules/events/entities/event.entity';
 import { EventParticipation } from '@/modules/events/entities/participation.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
+import { Notification } from '@/modules/notifications/entities/notification.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -81,4 +82,10 @@ export class User extends AbstractEntity {
 
   @OneToOne(() => MentorProfile, (mp) => mp.owner)
   mentor_profile: MentorProfile;
+
+  @OneToMany(() => Notification, (notification) => notification.sender)
+  sent_notifications: Notification[];
+
+  @ManyToMany(() => Notification, (notification) => notification.recipients)
+  received_notifications: Notification[];
 }
