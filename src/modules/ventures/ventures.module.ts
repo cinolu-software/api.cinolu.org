@@ -7,11 +7,12 @@ import { VentureSubscriber } from './subscribers/venture.subscriber';
 import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { ProductsModule } from './products/products.module';
 import { VentureDocument } from './entities/document.entity';
+import { VenturesEmailService } from './ventures-email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Venture, VentureDocument]), ProductsModule, GalleriesModule],
   controllers: [VenturesController],
-  providers: [VenturesService, VentureSubscriber],
+  providers: [VenturesService, VenturesEmailService, VentureSubscriber],
   exports: [VenturesService]
 })
 export class VenturesModule {}
