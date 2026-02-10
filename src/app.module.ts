@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
-import { EmailModule } from './core/email/email.module';
 import { RBAC_POLICY } from './core/auth/rbac-policy';
 import { BlogModule } from './modules/blog/blog.module';
 import { EventsModule } from './modules/events/events.module';
@@ -23,6 +22,9 @@ import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -59,9 +61,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         synchronize: false
       })
     }),
+    MailerModule.forRoot({
+      transport: {
+        secure: true,
+        host: process.env.MAIL_HOST,
+        port: +process.env.MAIL_PORT,
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD
+        }
+      },
+      defaults: {
+        from: `Support CINOLU <${process.env.MAIL_USERNAME}>`
+      },
+      template: {
+        dir: process.cwd() + '/templates/',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true
+        }
+      }
+    }),
     AuthModule,
     UsersModule,
-    EmailModule,
     VenturesModule,
     BlogModule,
     StatsModule,
@@ -71,7 +93,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     SubprogramsModule,
     EventsModule,
     ProjectsModule,
-    MentorsModule
+    MentorsModule,
+    NotificationsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
