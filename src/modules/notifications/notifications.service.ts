@@ -26,7 +26,7 @@ export class NotificationsService {
       const uniqueUserIds = [...new Set(userIds)];
       const recipients = await this.usersService.findByIds(uniqueUserIds);
       const savedNotification = await this.notificationsRepository.save({ ...dto, recipients });
-      const notification = await this.findOneWithRecipients(savedNotification.id);
+      const notification = await this.findOne(savedNotification.id);
       this.eventEmitter.emit('notification.created', notification);
       return notification;
     } catch {
@@ -37,7 +37,8 @@ export class NotificationsService {
   async findOne(id: string): Promise<Notification> {
     try {
       return await this.notificationsRepository.findOneOrFail({
-        where: { id }
+        where: { id },
+        relations: ['recipients', 'sender', 'attachments']
       });
     } catch {
       throw new BadRequestException();
@@ -46,11 +47,12 @@ export class NotificationsService {
 
   async update(id: string, dto: UpdateNotificationDto): Promise<Notification> {
     try {
-      const notification = await this.findOneWithRecipients(id);
+      const notification = await this.findOne(id);
       this.notificationsRepository.merge(notification, dto);
       const savedNotification = await this.notificationsRepository.save(notification);
-      this.eventEmitter.emit('notification.updated', savedNotification);
-      return savedNotification;
+      const withRelations = await this.findOne(savedNotification.id);
+      this.eventEmitter.emit('notification.updated', withRelations);
+      return withRelations;
     } catch {
       throw new BadRequestException();
     }
@@ -125,12 +127,5 @@ export class NotificationsService {
     } catch {
       throw new BadRequestException();
     }
-  }
-
-  private async findOneWithRecipients(id: string): Promise<Notification> {
-    return await this.notificationsRepository.findOneOrFail({
-      where: { id },
-      relations: ['recipients', 'sender']
-    });
   }
 }

@@ -1,6 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { Notification } from './entities/notification.entity';
 
 export class NotificationsEmailService {
@@ -24,6 +26,15 @@ export class NotificationsEmailService {
     try {
       const recipients = (notification.recipients || []).map((recipient) => recipient.email).filter(Boolean);
       if (!recipients.length) return;
+
+      const attachmentFiles = (notification.attachments || [])
+        .map((attachment) => {
+          const filePath = join(process.cwd(), 'uploads', 'notifications', attachment.filename);
+          if (!existsSync(filePath)) return null;
+          return { filename: attachment.filename, path: filePath };
+        })
+        .filter((a): a is { filename: string; path: string } => a !== null);
+
       await this.mailerService.sendMail({
         to: recipients,
         subject: `${subjectPrefix} : ${notification.title}`,
@@ -32,7 +43,8 @@ export class NotificationsEmailService {
           notification,
           action,
           actionLabel: action === 'created' ? 'Nouvelle notification' : 'Notification mise a jour'
-        }
+        },
+        ...(attachmentFiles.length && { attachments: attachmentFiles })
       });
     } catch {
       throw new BadRequestException();
