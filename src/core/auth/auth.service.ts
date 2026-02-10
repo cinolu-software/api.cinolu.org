@@ -12,6 +12,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { UsersService } from '@/modules/users/users.service';
 import { CreateWithGoogleDto } from './dto/sign-up-with-google.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { ContactSupportDto } from './dto/contact-support.dto';
 
 @Injectable()
 export class AuthService {
@@ -116,6 +117,14 @@ export class AuthService {
       this.eventEmitter.emit('user.reset-password', { user, link });
     } catch {
       throw new BadRequestException('Requête invalide');
+    }
+  }
+
+  async contactUs(dto: ContactSupportDto): Promise<void> {
+    try {
+      this.eventEmitter.emit('contact.support', dto);
+    } catch {
+      throw new BadRequestException();
     }
   }
 
