@@ -2,13 +2,12 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification } from './entities/notification.entity';
-import { User } from '@/modules/users/entities/user.entity';
 import { NotificationAttachment } from './entities/attachment.entity';
-import { UsersService } from '../users/users.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { promises as fs } from 'fs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { NotificationStatus } from './types/notification-status.enum';
 
 @Injectable()
 export class NotificationsService {
@@ -17,28 +16,46 @@ export class NotificationsService {
     private notificationsRepository: Repository<Notification>,
     @InjectRepository(NotificationAttachment)
     private attachmentsRepository: Repository<NotificationAttachment>,
-    private usersService: UsersService,
     private eventEmitter: EventEmitter2
   ) {}
 
-  async create(userIds: string[], dto: CreateNotificationDto): Promise<Notification> {
+  async create(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
     try {
-      const uniqueUserIds = [...new Set(userIds)];
-      const recipients = await this.usersService.findByIds(uniqueUserIds);
-      const savedNotification = await this.notificationsRepository.save({ ...dto, recipients });
+      const savedNotification = await this.notificationsRepository.save({
+        ...dto,
+        project: { id: projectId },
+        sender: { id: senderId },
+        phase: dto.phase_id ? { id: dto.phase_id } : null
+      });
       const notification = await this.findOne(savedNotification.id);
-      this.eventEmitter.emit('notification.created', notification);
       return notification;
     } catch {
       throw new BadRequestException();
     }
   }
 
+  async sendNotification(id: string): Promise<Notification> {
+    try {
+      await this.notificationsRepository.update(id, { status: NotificationStatus.SENT });
+      return await this.findOne(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findAllByProject(projectId: string): Promise<Notification[]> {
+    return await this.notificationsRepository.find({
+      where: { project: { id: projectId } },
+      relations: ['phase', 'sender', 'attachments'],
+      order: { created_at: 'DESC' }
+    });
+  }
+
   async findOne(id: string): Promise<Notification> {
     try {
       return await this.notificationsRepository.findOneOrFail({
         where: { id },
-        relations: ['recipients', 'sender', 'attachments']
+        relations: ['phase', 'sender', 'attachments', 'project']
       });
     } catch {
       throw new BadRequestException();
@@ -58,14 +75,6 @@ export class NotificationsService {
     }
   }
 
-  async findByUser(user: User): Promise<Notification[]> {
-    return await this.notificationsRepository.find({
-      where: { recipients: { id: user.id } },
-      relations: ['attachments'],
-      order: { created_at: 'DESC' }
-    });
-  }
-
   async markRead(id: string): Promise<Notification> {
     try {
       const notification = await this.notificationsRepository.findOneOrFail({
@@ -82,17 +91,17 @@ export class NotificationsService {
     }
   }
 
-  async addAttachment(id: string, file: Express.Multer.File): Promise<NotificationAttachment> {
+  async addAttachments(id: string, files: Express.Multer.File[]): Promise<NotificationAttachment[]> {
     try {
       const notification = await this.notificationsRepository.findOneOrFail({
         where: { id }
       });
-      const attachment = this.attachmentsRepository.create({
+      const attachments = files.map((file) => ({
         filename: file.filename,
         mimetype: file.mimetype,
         notification: { id: notification.id }
-      });
-      return await this.attachmentsRepository.save(attachment);
+      }));
+      return await this.attachmentsRepository.save(attachments);
     } catch {
       throw new BadRequestException();
     }

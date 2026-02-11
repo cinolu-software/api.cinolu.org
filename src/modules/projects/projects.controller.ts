@@ -19,13 +19,13 @@ import { ParticipateProjectDto } from './dto/participate.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
-import { NotifyParticipantsDto } from './dto/notify-participants.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Notification } from '../notifications/entities/notification.entity';
+import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -96,10 +96,20 @@ export class ProjectsController {
     return this.projectsService.addParticipantsFromCsv(id, file);
   }
 
-  @Post(':id/notify')
+  @Post(':id/notification')
   @UseRoles({ resource: 'projects', action: 'update' })
-  notifyParticipants(@Param('id') id: string, @Body() dto: NotifyParticipantsDto): Promise<Notification> {
-    return this.projectsService.notifyParticipants(id, dto);
+  createNotification(
+    @Param('id') id: string,
+    @CurrentUser() user: User,
+    @Body() dto: CreateNotificationDto
+  ): Promise<Notification> {
+    return this.projectsService.createNotification(id, user, dto);
+  }
+
+  @Post('notify/:notificationId')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  sendNotification(@Param('notificationId') id: string): Promise<Notification> {
+    return this.projectsService.sendNotification(id);
   }
 
   @Post('gallery/:id')

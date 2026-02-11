@@ -5,7 +5,7 @@ import { MentorProfile } from './entities/mentor.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class MentorEmailService {
+export class MentorsEmail {
   constructor(private mailerService: MailerService) {}
 
   @OnEvent('mentor.approved')

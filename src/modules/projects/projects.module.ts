@@ -3,6 +3,7 @@ import { ProjectsService } from './projects.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { ProjectParticipation } from './entities/participation.entity';
+import { Phase } from './phases/entities/phase.entity';
 import { ProjectsController } from './projects.controller';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { GalleriesModule } from '@/modules/galleries/galleries.module';
@@ -20,7 +21,7 @@ import { NotificationsModule } from '@/modules/notifications/notifications.modul
     UsersModule,
     VenturesModule,
     NotificationsModule,
-    TypeOrmModule.forFeature([Project, ProjectParticipation])
+    TypeOrmModule.forFeature([Project, ProjectParticipation, Phase])
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectSubscriber],

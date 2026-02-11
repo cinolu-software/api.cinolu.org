@@ -5,7 +5,7 @@ import { Venture } from './entities/venture.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class VenturesEmailService {
+export class VenturesEmail {
   constructor(private mailerService: MailerService) {}
 
   @OnEvent('venture.created')

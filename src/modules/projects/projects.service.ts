@@ -15,9 +15,10 @@ import { GalleriesService } from '@/modules/galleries/galleries.service';
 import { UsersService } from '@/modules/users/users.service';
 import { VenturesService } from '@/modules/ventures/ventures.service';
 import { ParticipateProjectDto } from './dto/participate.dto';
-import { NotifyParticipantsDto } from './dto/notify-participants.dto';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { Notification } from '../notifications/entities/notification.entity';
+import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProjectsService {
@@ -29,7 +30,8 @@ export class ProjectsService {
     private galleryService: GalleriesService,
     private usersService: UsersService,
     private venturesService: VenturesService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -44,14 +46,6 @@ export class ProjectsService {
     } catch {
       throw new BadRequestException();
     }
-  }
-
-  async findParticipants(projectId: string): Promise<{ userId: string }[]> {
-    return await this.participationRepository
-      .createQueryBuilder('pp')
-      .select('DISTINCT pp.userId', 'userId')
-      .where('pp.projectId = :projectId', { projectId })
-      .getRawMany<{ userId: string }>();
   }
 
   private parseParticipantsCsv(buffer: Buffer): Promise<{ name: string; email: string; phone_number?: string }[]> {
@@ -212,32 +206,57 @@ export class ProjectsService {
     });
   }
 
-  async findParticipantsIds(phaseId: string): Promise<string[]> {
+  async findParticipantsByProject(projectId: string): Promise<User[]> {
+    await this.findOne(projectId);
+    const participations = await this.participationRepository.find({
+      where: { project: { id: projectId } },
+      relations: ['user']
+    });
+    const seen = new Set<string>();
+    return participations
+      .map((p) => p.user)
+      .filter((u) => {
+        if (seen.has(u.id)) return false;
+        seen.add(u.id);
+        return true;
+      });
+  }
+
+  async findParticipantsByPhase(phaseId: string): Promise<User[]> {
+    const participations = await this.participationRepository.find({
+      where: { phase: { id: phaseId } },
+      relations: ['user']
+    });
+    const seen = new Set<string>();
+    return participations
+      .map((p) => p.user)
+      .filter((u) => {
+        if (seen.has(u.id)) return false;
+        seen.add(u.id);
+        return true;
+      });
+  }
+
+  async createNotification(projectId: string, user: User, dto: CreateNotificationDto): Promise<Notification> {
     try {
-      const rows = await this.participationRepository
-        .createQueryBuilder('pp')
-        .select('DISTINCT pp.userId', 'userId')
-        .innerJoin('pp.project', 'project')
-        .innerJoin('pp.phase', 'phase')
-        .where('phase.id = :phaseId', { phaseId })
-        .getRawMany<{ userId: string }>();
-      return rows.map((row) => row.userId);
+      await this.findOne(projectId);
+      return await this.notificationsService.create(projectId, user.id, dto);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async notifyParticipants(projectId: string, dto: NotifyParticipantsDto): Promise<Notification> {
+  async sendNotification(id: string): Promise<Notification> {
     try {
-      await this.findOne(projectId);
-      let userIds: string[] = [];
-      if (dto.phase_id) {
-        userIds = await this.findParticipantsIds(dto.phase_id);
+      const notification = await this.notificationsService.findOne(id);
+      let recipients: User[] = [];
+      if (notification.phase) {
+        recipients = await this.findParticipantsByPhase(notification.phase.id);
       } else {
-        const participants = await this.findParticipants(projectId);
-        userIds = participants.map((row) => row.userId);
+        recipients = await this.findParticipantsByProject(notification.project.id);
       }
-      return await this.notificationsService.create(userIds, dto);
+      this.eventEmitter.emit('notify.participants', notification.project, recipients, notification.attachments);
+      return await this.notificationsService.sendNotification(id);
     } catch {
       throw new BadRequestException();
     }

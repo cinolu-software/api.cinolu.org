@@ -85,7 +85,4 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Notification, (notification) => notification.sender)
   sent_notifications: Notification[];
-
-  @ManyToMany(() => Notification, (notification) => notification.recipients)
-  received_notifications: Notification[];
 }

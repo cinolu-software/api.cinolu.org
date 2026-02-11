@@ -6,7 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AuthEmailService {
+export class AuthEmail {
   constructor(private mailerService: MailerService) {}
 
   @OnEvent('user.welcome')
