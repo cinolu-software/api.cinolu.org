@@ -8,6 +8,7 @@ import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { promises as fs } from 'fs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationStatus } from './types/notification-status.enum';
+import { FilterNotificationsDto } from './dto/filter-notifications.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -43,12 +44,26 @@ export class NotificationsService {
     }
   }
 
-  async findAllByProject(projectId: string): Promise<Notification[]> {
-    return await this.notificationsRepository.find({
-      where: { project: { id: projectId } },
-      relations: ['phase', 'sender', 'attachments'],
-      order: { created_at: 'DESC' }
-    });
+  async findAllByProject(projectId: string, filters: FilterNotificationsDto): Promise<[Notification[], number]> {
+    try {
+      const { phaseId, page = 1, status } = filters;
+      const query = this.notificationsRepository
+        .createQueryBuilder('n')
+        .leftJoinAndSelect('n.phase', 'phase')
+        .leftJoinAndSelect('n.sender', 'sender')
+        .leftJoinAndSelect('n.attachments', 'attachments')
+        .leftJoinAndSelect('n.project', 'project')
+        .orderBy('n.created_at', 'DESC')
+        .where('n.projectId = :projectId', { projectId });
+      if (phaseId) query.andWhere('n.phaseId = :phaseId', { phaseId });
+      if (status) query.andWhere('n.status = :status', { status });
+      return await query
+        .skip((+page - 1) * 10)
+        .take(10)
+        .getManyAndCount();
+    } catch {
+      throw new BadRequestException();
+    }
   }
 
   async findOne(id: string): Promise<Notification> {

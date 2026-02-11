@@ -24,6 +24,6 @@ export class Phase extends AbstractEntity {
   @JoinColumn()
   project: Project;
 
-  @ManyToMany(() => ProjectParticipation, (participation) => participation.phase)
+  @ManyToMany(() => ProjectParticipation, (participation) => participation.phases)
   participations: ProjectParticipation[];
 }

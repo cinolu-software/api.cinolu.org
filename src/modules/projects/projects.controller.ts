@@ -26,6 +26,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Notification } from '../notifications/entities/notification.entity';
 import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { ProjectParticipation } from './entities/participation.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -110,6 +111,12 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'update' })
   sendNotification(@Param('notificationId') id: string): Promise<Notification> {
     return this.projectsService.sendNotification(id);
+  }
+
+  @Get('user/participations')
+  @UseRoles({ resource: 'projects', action: 'read' })
+  findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
+    return this.projectsService.findUserParticipations(user.id);
   }
 
   @Post('gallery/:id')

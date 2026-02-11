@@ -69,12 +69,12 @@ export class PhasesService {
       });
       const participations = await this.participationRepository.find({
         where: { id: In(dto.ids) },
-        relations: ['phase']
+        relations: ['phases']
       });
       for (const p of participations) {
-        const alreadyInPhase = p.phase?.some((ph) => ph.id === phase.id);
+        const alreadyInPhase = p.phases?.some((ph) => ph.id === phase.id);
         if (alreadyInPhase) continue;
-        p.phase = [...(p.phase ?? []), phase];
+        p.phases = [...(p.phases ?? []), phase];
         await this.participationRepository.save(p);
       }
     } catch {
@@ -86,10 +86,10 @@ export class PhasesService {
     try {
       const participations = await this.participationRepository.find({
         where: { id: In(dto.ids) },
-        relations: ['phase']
+        relations: ['phases']
       });
       for (const p of participations) {
-        p.phase = (p.phase ?? []).filter((ph) => ph.id !== dto.phaseId);
+        p.phases = (p.phases ?? []).filter((ph) => ph.id !== dto.phaseId);
         await this.participationRepository.save(p);
       }
     } catch {

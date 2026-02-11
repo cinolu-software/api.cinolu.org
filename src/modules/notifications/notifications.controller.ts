@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
+  UseInterceptors
+} from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { Notification } from './entities/notification.entity';
 import { UseRoles } from 'nest-access-control';
@@ -7,6 +18,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { NotificationAttachment } from './entities/attachment.entity';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { FilterNotificationsDto } from './dto/filter-notifications.dto';
 
 @Controller('notifications')
 export class NotificationsController {
@@ -14,8 +26,8 @@ export class NotificationsController {
 
   @Get('project/:id')
   @UseRoles({ resource: 'projects', action: 'read' })
-  findAllByProject(@Param('id') id: string): Promise<Notification[]> {
-    return this.notificationsService.findAllByProject(id);
+  findAllByProject(@Param('id') id: string, @Query() query: FilterNotificationsDto): Promise<[Notification[], number]> {
+    return this.notificationsService.findAllByProject(id, query);
   }
 
   @Patch(':id/read')

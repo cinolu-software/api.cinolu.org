@@ -1,5 +1,7 @@
+import { NotificationStatus } from '../types/notification-status.enum';
+
 export class FilterNotificationsDto {
-  phaseId: string;
+  phaseId?: string | null;
   page: string | null;
-  q: string | null;
+  status?: NotificationStatus | null;
 }

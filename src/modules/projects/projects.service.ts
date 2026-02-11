@@ -122,7 +122,7 @@ export class ProjectsService {
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
-    const { page = 1, categories, q, filter = 'all' } = queryParams;
+    const { page = 1, categories, q, filter = 'all', status } = queryParams;
     const skip = (+page - 1) * 20;
     const query = this.projectRepository
       .createQueryBuilder('p')
@@ -132,9 +132,19 @@ export class ProjectsService {
     if (filter === 'published') query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (filter === 'drafts') query.andWhere('p.is_published = :isPublished', { isPublished: false });
     if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
+    if (status === 'past') query.andWhere('p.ended_at < NOW()');
+    if (status === 'current') query.andWhere('p.started_at <= NOW() AND p.ended_at >= NOW()');
+    if (status === 'future') query.andWhere('p.started_at > NOW()');
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(20).getManyAndCount();
+  }
+
+  async findUserParticipations(userId: string): Promise<ProjectParticipation[]> {
+    return await this.participationRepository.find({
+      where: { user: { id: userId } },
+      relations: ['project', 'phases', 'venture']
+    });
   }
 
   async findPublished(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
@@ -224,7 +234,7 @@ export class ProjectsService {
 
   async findParticipantsByPhase(phaseId: string): Promise<User[]> {
     const participations = await this.participationRepository.find({
-      where: { phase: { id: phaseId } },
+      where: { phases: { id: phaseId } },
       relations: ['user']
     });
     const seen = new Set<string>();
@@ -255,7 +265,7 @@ export class ProjectsService {
       } else {
         recipients = await this.findParticipantsByProject(notification.project.id);
       }
-      this.eventEmitter.emit('notify.participants', notification.project, recipients, notification.attachments);
+      this.eventEmitter.emit('notify.participants', recipients, notification);
       return await this.notificationsService.sendNotification(id);
     } catch {
       throw new BadRequestException();
