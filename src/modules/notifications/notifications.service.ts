@@ -49,7 +49,7 @@ export class NotificationsService {
       const { phaseId, page = 1, status } = filters;
       const query = this.notificationsRepository
         .createQueryBuilder('n')
-        .leftJoinAndSelect('n.phase', 'phase')
+        .leftJoinAndSelect('n.phases', 'phases')
         .leftJoinAndSelect('n.sender', 'sender')
         .leftJoinAndSelect('n.attachments', 'attachments')
         .leftJoinAndSelect('n.project', 'project')
@@ -70,7 +70,7 @@ export class NotificationsService {
     try {
       return await this.notificationsRepository.findOneOrFail({
         where: { id },
-        relations: ['phase', 'sender', 'attachments', 'project']
+        relations: ['phases', 'sender', 'attachments', 'project']
       });
     } catch {
       throw new BadRequestException();
