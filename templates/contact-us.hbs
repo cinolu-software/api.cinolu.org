@@ -5,38 +5,33 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <title>New Contact Support Message</title>
   </head>
-  <body style='margin: 0; padding: 24px; background-color: #f2f4f7; font-family: Arial, sans-serif; color: #1f2937;'>
-    <table
-      role='presentation'
-      style='width: 100%; max-width: 640px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08); overflow: hidden;'
-    >
+  <body style='margin: 0; padding: 28px; background-color: #f5f7f4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; color: #374151; -webkit-font-smoothing: antialiased;'>
+    <table role='presentation' style='width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(47, 77, 39, 0.06); overflow: hidden;'>
       <tr>
-        <td style='padding: 24px 28px; background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);'>
-          <h1 style='margin: 0; font-size: 22px; color: #ffffff;'>New Contact Support Message</h1>
-          <p style='margin: 8px 0 0; color: #dbeafe; font-size: 14px;'>CINOLU</p>
+        <td style='padding: 28px 32px; background-color: #2f4d27;'>
+          <p style='margin: 0; font-size: 13px; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;'>CINOLU</p>
+          <h1 style='margin: 10px 0 0; font-size: 22px; font-weight: 600; color: #ffffff; letter-spacing: -0.02em;'>New Contact Support Message</h1>
         </td>
       </tr>
       <tr>
-        <td style='padding: 28px;'>
-          <p style='margin: 0 0 16px; font-size: 15px; color: #475569; line-height: 1.6;'>
+        <td style='padding: 32px;'>
+          <p style='margin: 0 0 20px; font-size: 16px; color: #4b5563; line-height: 1.6;'>
             A new support message was submitted via the contact form.
           </p>
-          <div
-            style='background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; padding: 16px; border-radius: 8px; margin: 16px 0 20px;'
-          >
-            <p style='margin: 0 0 8px; font-size: 14px; color: #0f172a; font-weight: bold;'>Contact details</p>
-            <p style='margin: 0 0 8px; font-size: 14px; color: #334155;'><strong>Name:</strong> {{dto.name}}</p>
-            <p style='margin: 0 0 8px; font-size: 14px; color: #334155;'><strong>Email:</strong> {{dto.email}}</p>
-            <p style='margin: 0 0 8px; font-size: 14px; color: #334155;'><strong>Phone Number:</strong> {{dto.phone_number}}</p>
-            <p style='margin: 0; font-size: 14px; color: #334155;'><strong>Country:</strong> {{dto.country}}</p>
+          <div style='background-color: #f0f5ef; border-radius: 12px; border-left: 4px solid #2f4d27; padding: 20px; margin: 20px 0 24px;'>
+            <p style='margin: 0 0 12px; font-size: 14px; color: #2f4d27; font-weight: 600;'>Contact details</p>
+            <p style='margin: 0 0 8px; font-size: 15px; color: #4b5563;'><strong>Name:</strong> {{dto.name}}</p>
+            <p style='margin: 0 0 8px; font-size: 15px; color: #4b5563;'><strong>Email:</strong> {{dto.email}}</p>
+            <p style='margin: 0 0 8px; font-size: 15px; color: #4b5563;'><strong>Phone Number:</strong> {{dto.phone_number}}</p>
+            <p style='margin: 0; font-size: 15px; color: #4b5563;'><strong>Country:</strong> {{dto.country}}</p>
           </div>
-          <p style='margin: 0 0 8px; font-size: 14px; color: #0f172a; font-weight: bold;'>Message</p>
-          <p style='margin: 0; font-size: 15px; color: #475569; line-height: 1.6; white-space: pre-line;'>{{dto.message}}</p>
+          <p style='margin: 0 0 8px; font-size: 14px; color: #2f4d27; font-weight: 600;'>Message</p>
+          <p style='margin: 0; font-size: 15px; color: #4b5563; line-height: 1.6; white-space: pre-line;'>{{dto.message}}</p>
         </td>
       </tr>
       <tr>
-        <td style='padding: 18px 28px; background-color: #f8fafc; text-align: center;'>
-          <p style='margin: 0; font-size: 12px; color: #94a3b8;'>&copy; 2026 cinolu.org. All rights reserved.</p>
+        <td style='padding: 20px 32px; background-color: #f0f5ef; text-align: center;'>
+          <p style='margin: 0; font-size: 12px; color: #6b7280;'>&copy; 2026 cinolu.org. All rights reserved.</p>
         </td>
       </tr>
     </table>

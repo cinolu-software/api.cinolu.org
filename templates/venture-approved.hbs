@@ -3,60 +3,49 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>Entreprise approuvée</title>
+    <title>Entreprise approuvée</title>
   </head>
-  <body style='margin: 0; padding: 24px; background-color: #f2f4f7; font-family: Arial, sans-serif; color: #1f2937;'>
-    <table
-      role='presentation'
-      style='width: 100%; max-width: 640px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08); overflow: hidden;'
-    >
+  <body style='margin: 0; padding: 28px; background-color: #f5f7f4; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; color: #374151; -webkit-font-smoothing: antialiased;'>
+    <table role='presentation' style='width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(47, 77, 39, 0.06); overflow: hidden;'>
       <tr>
-        <td style='padding: 24px 28px; background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);'>
-          <h1 style='margin: 0; font-size: 22px; color: #ffffff;'>Entreprise approuvée</h1>
-          <p style='margin: 8px 0 0; color: #dbeafe; font-size: 14px;'>CINOLU</p>
+        <td style='padding: 28px 32px; background-color: #2f4d27;'>
+          <p style='margin: 0; font-size: 13px; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;'>CINOLU</p>
+          <h1 style='margin: 10px 0 0; font-size: 22px; font-weight: 600; color: #ffffff; letter-spacing: -0.02em;'>Entreprise approuvée</h1>
         </td>
       </tr>
       <tr>
-        <td style='padding: 28px;'>
-          <p style='margin: 0 0 16px; font-size: 28px; line-height: 1;'>✓</p>
-          <p style='margin: 0 0 16px; font-size: 15px; color: #475569; line-height: 1.6;'>
-            Bonjour <strong>{{venture.owner.name}}</strong>,
+        <td style='padding: 32px;'>
+          <p style='margin: 0 0 20px; font-size: 28px; line-height: 1;'>✓</p>
+          <p style='margin: 0 0 16px; font-size: 16px; color: #4b5563; line-height: 1.6;'>
+            Bonjour <strong style='color: #2f4d27;'>{{venture.owner.name}}</strong>,
           </p>
-          <p style='margin: 0 0 16px; font-size: 15px; color: #475569; line-height: 1.6;'>
-            Nous avons le plaisir de vous informer que votre entreprise <strong>{{venture.name}}</strong> a été <strong style='color: #16a34a;'>approuvée</strong> et est maintenant publiée sur <strong>cinolu.org</strong>.
+          <p style='margin: 0 0 16px; font-size: 16px; color: #4b5563; line-height: 1.6;'>
+            Nous avons le plaisir de vous informer que votre entreprise <strong>{{venture.name}}</strong> a été <strong style='color: #2f4d27;'>approuvée</strong> et est maintenant publiée sur <strong>cinolu.org</strong>.
           </p>
-          <div
-            style='background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; padding: 16px; border-radius: 8px; margin: 16px 0 20px;'
-          >
-            <p style='margin: 0 0 8px; font-size: 14px; color: #0f172a; font-weight: bold;'>Détails de votre entreprise</p>
-            <p style='margin: 0; font-size: 14px; color: #334155; line-height: 1.6;'>
+          <div style='background-color: #f0f5ef; border-radius: 12px; border-left: 4px solid #2f4d27; padding: 20px; margin: 20px 0 24px;'>
+            <p style='margin: 0 0 8px; font-size: 14px; color: #2f4d27; font-weight: 600;'>Détails de votre entreprise</p>
+            <p style='margin: 0; font-size: 15px; color: #4b5563; line-height: 1.6;'>
               Nom : {{venture.name}}<br />
-              Statut : Publiée et visible sur la plateforme
+              Statut : Publiée et visible sur la plateforme
             </p>
           </div>
-          <p style='margin: 0 0 20px; font-size: 15px; color: #475569; line-height: 1.6;'>
-            Votre entreprise est maintenant visible par tous les utilisateurs de la plateforme, y compris les bailleurs de fonds et accompagnateurs. Vous pouvez continuer à enrichir votre profil en ajoutant des produits et des images.
+          <p style='margin: 0 0 24px; font-size: 16px; color: #4b5563; line-height: 1.6;'>
+            Votre entreprise est maintenant visible par tous les utilisateurs de la plateforme, y compris les bailleurs de fonds et accompagnateurs. Vous pouvez continuer à enrichir votre profil en ajoutant des produits et des images.
           </p>
-          <p style='text-align: center; margin: 24px 0 8px;'>
-            <a
-              href='https://cinolu.org/ventures/{{venture.slug}}'
-              style='display: inline-block; background-color: #1d4ed8; color: #ffffff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: bold;'
-            >
-              Voir mon entreprise
-            </a>
+          <p style='text-align: center; margin: 28px 0 12px;'>
+            <a href='https://cinolu.org/ventures/{{venture.slug}}' style='display: inline-block; background-color: #2f4d27; color: #ffffff !important; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 600;'>Voir mon entreprise</a>
           </p>
-          <p style='margin: 16px 0 0; font-size: 15px; color: #475569; line-height: 1.6;'>
-            Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter à
-            <a href='mailto:wilfriedm@cinolu.org' style='color: #1d4ed8; text-decoration: none;'>wilfriedm@cinolu.org</a>.
+          <p style='margin: 20px 0 0; font-size: 15px; color: #6b7280; line-height: 1.6;'>
+            Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter à <a href='mailto:wilfriedm@cinolu.org' style='color: #2f4d27; text-decoration: none; font-weight: 500;'>wilfriedm@cinolu.org</a>.
           </p>
-          <p style='margin: 16px 0 0; font-size: 15px; color: #475569; line-height: 1.6;'>
-            Merci de faire partie de la communauté CINOLU et à bientôt sur <strong>cinolu.org</strong> !
+          <p style='margin: 20px 0 0; font-size: 16px; color: #4b5563; line-height: 1.6;'>
+            Merci de faire partie de la communauté CINOLU et à bientôt sur <strong>cinolu.org</strong> !
           </p>
         </td>
       </tr>
       <tr>
-        <td style='padding: 18px 28px; background-color: #f8fafc; text-align: center;'>
-          <p style='margin: 0; font-size: 12px; color: #94a3b8;'>&copy; 2026 cinolu.org. Tous droits réservés.</p>
+        <td style='padding: 20px 32px; background-color: #f0f5ef; text-align: center;'>
+          <p style='margin: 0; font-size: 12px; color: #6b7280;'>&copy; 2026 cinolu.org. Tous droits réservés.</p>
         </td>
       </tr>
     </table>
