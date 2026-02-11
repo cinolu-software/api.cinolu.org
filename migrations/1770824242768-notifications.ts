@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Notifications1770823482390 implements MigrationInterface {
-    name = 'Notifications1770823482390'
+export class Notifications1770824242768 implements MigrationInterface {
+    name = 'Notifications1770824242768'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`notification_attachment\` (\`id\` uuid NOT NULL, \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`deleted_at\` datetime(6) NULL, \`filename\` varchar(255) NOT NULL, \`mimetype\` varchar(255) NULL, \`notificationId\` uuid NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
