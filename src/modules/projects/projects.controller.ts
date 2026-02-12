@@ -62,6 +62,16 @@ export class ProjectsController {
     return this.projectsService.findBySlug(slug);
   }
 
+  @Post(':id/participate')
+  participate(@Param('id') id: string, @CurrentUser() user: User, @Body() dto: ParticipateProjectDto): Promise<void> {
+    return this.projectsService.participate(id, user, dto);
+  }
+
+  @Get('user/participations')
+  findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
+    return this.projectsService.findUserParticipations(user.id);
+  }
+
   @Get(':id/participations')
   @UseRoles({ resource: 'projects', action: 'read' })
   findParticipations(@Param('id') id: string) {
@@ -72,11 +82,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'read' })
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id);
-  }
-
-  @Post(':id/participate')
-  participate(@Param('id') id: string, @CurrentUser() user: User, @Body() dto: ParticipateProjectDto): Promise<void> {
-    return this.projectsService.participate(id, user, dto);
   }
 
   @Post(':id/participants/csv')
@@ -110,11 +115,6 @@ export class ProjectsController {
   @UseRoles({ resource: 'projects', action: 'update' })
   sendNotification(@Param('id') id: string): Promise<Notification> {
     return this.projectsService.sendNotification(id);
-  }
-
-  @Get('user/participations')
-  findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
-    return this.projectsService.findUserParticipations(user.id);
   }
 
   @Post('gallery/:id')
