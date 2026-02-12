@@ -49,7 +49,7 @@ export class NotificationsService {
       const { phaseId, page = 1, status } = filters;
       const query = this.notificationsRepository
         .createQueryBuilder('n')
-        .leftJoinAndSelect('n.phases', 'phases')
+        .leftJoinAndSelect('n.phase', 'phase')
         .leftJoinAndSelect('n.sender', 'sender')
         .leftJoinAndSelect('n.attachments', 'attachments')
         .leftJoinAndSelect('n.project', 'project')
@@ -144,10 +144,8 @@ export class NotificationsService {
 
   async remove(id: string): Promise<void> {
     try {
-      const notification = await this.notificationsRepository.findOneOrFail({
-        where: { id }
-      });
-      await this.notificationsRepository.softDelete(notification);
+      await this.findOne(id);
+      await this.notificationsRepository.softDelete(id);
     } catch {
       throw new BadRequestException();
     }
