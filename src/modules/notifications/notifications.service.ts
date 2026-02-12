@@ -22,14 +22,12 @@ export class NotificationsService {
 
   async create(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
     try {
-      const savedNotification = await this.notificationsRepository.save({
+      return await this.notificationsRepository.save({
         ...dto,
         project: { id: projectId },
         sender: { id: senderId },
         phase: dto.phase_id ? { id: dto.phase_id } : null
       });
-      const notification = await this.findOne(savedNotification.id);
-      return notification;
     } catch {
       throw new BadRequestException();
     }
