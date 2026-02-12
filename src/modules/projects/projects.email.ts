@@ -14,8 +14,8 @@ export class ProjectsEmailService {
   @OnEvent('notify.participants')
   async notifyParticipants(recipients: User[], notification: Notification): Promise<void> {
     try {
-      const rcp = (recipients || []).map((recipient) => recipient.email).filter(Boolean);
-      if (!rcp.length) return;
+      const list = (recipients || []).filter((r) => r?.email);
+      if (!list.length) return;
       const attachmentFiles = (notification.attachments || [])
         .map((attachment) => {
           const filePath = join(process.cwd(), 'uploads', 'notifications', attachment.filename);
@@ -23,15 +23,18 @@ export class ProjectsEmailService {
           return { filename: attachment.filename, path: filePath };
         })
         .filter((a): a is { filename: string; path: string } => a !== null);
-      await this.mailerService.sendMail({
-        to: rcp,
-        subject: `${notification.project.name} — ${notification.title}`,
-        template: 'project-notification',
-        context: { recipients, notification },
-        ...(attachmentFiles.length && { attachments: attachmentFiles })
-      });
-    } catch (e) {
-      console.error(e);
+      const subject = `${notification.project.name} — ${notification.title}`;
+      const attachments = attachmentFiles.length ? attachmentFiles : undefined;
+      for (const recipient of list) {
+        await this.mailerService.sendMail({
+          to: recipient.email,
+          subject,
+          template: 'project-notification',
+          context: { recipient, notification },
+          ...(attachments && { attachments })
+        });
+      }
+    } catch {
       throw new BadRequestException();
     }
   }
