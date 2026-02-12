@@ -70,7 +70,7 @@ export class NotificationsService {
     try {
       return await this.notificationsRepository.findOneOrFail({
         where: { id },
-        relations: ['phases', 'sender', 'attachments', 'project']
+        relations: ['phase', 'sender', 'attachments', 'project']
       });
     } catch {
       throw new BadRequestException();
