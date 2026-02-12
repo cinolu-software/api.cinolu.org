@@ -75,7 +75,6 @@ export class ProjectsController {
   }
 
   @Post(':id/participate')
-  @UseRoles({ resource: 'projects', action: 'update' })
   participate(@Param('id') id: string, @CurrentUser() user: User, @Body() dto: ParticipateProjectDto): Promise<void> {
     return this.projectsService.participate(id, user, dto);
   }
@@ -107,14 +106,13 @@ export class ProjectsController {
     return this.projectsService.createNotification(id, user, dto);
   }
 
-  @Post('notify/:notificationId')
+  @Post('notify/:id')
   @UseRoles({ resource: 'projects', action: 'update' })
-  sendNotification(@Param('notificationId') id: string): Promise<Notification> {
+  sendNotification(@Param('id') id: string): Promise<Notification> {
     return this.projectsService.sendNotification(id);
   }
 
   @Get('user/participations')
-  @UseRoles({ resource: 'projects', action: 'read' })
   findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
     return this.projectsService.findUserParticipations(user.id);
   }
