@@ -250,7 +250,8 @@ export class ProjectsService {
   async createNotification(projectId: string, user: User, dto: CreateNotificationDto): Promise<Notification> {
     try {
       await this.findOne(projectId);
-      return await this.notificationsService.create(projectId, user.id, dto);
+      const notification = await this.notificationsService.create(projectId, user.id, dto);
+      return this.notificationsService.findOne(notification.id);
     } catch {
       throw new BadRequestException();
     }
