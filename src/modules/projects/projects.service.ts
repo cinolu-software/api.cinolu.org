@@ -131,7 +131,6 @@ export class ProjectsService {
       .orderBy('p.updated_at', 'DESC');
     if (filter === 'published') query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (filter === 'drafts') query.andWhere('p.is_published = :isPublished', { isPublished: false });
-    if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query.skip(skip).take(20).getManyAndCount();
