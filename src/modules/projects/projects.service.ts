@@ -139,7 +139,7 @@ export class ProjectsService {
   async findUserParticipations(userId: string): Promise<ProjectParticipation[]> {
     return await this.participationRepository.find({
       where: { user: { id: userId } },
-      relations: ['project', 'phases', 'venture']
+      relations: ['project', 'project.phases', 'phases', 'venture']
     });
   }
 
