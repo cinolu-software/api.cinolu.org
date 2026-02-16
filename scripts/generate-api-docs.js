@@ -194,19 +194,19 @@ function parseDtos(files) {
         const name = member.name.getText(sf);
         const type = member.type ? member.type.getText(sf) : 'any';
         const optional = !!member.questionToken;
-        const decorators = decoratorsOf(member).map((d) => {
-          const n = decName(d);
-          if (!n) return null;
-          const args = decArgs(d, sf);
-          return `@${n}${args.length ? `(${args.join(', ')})` : ''}`;
-        }).filter(Boolean);
+        const decorators = decoratorsOf(member)
+          .map((d) => {
+            const n = decName(d);
+            if (!n) return null;
+            const args = decArgs(d, sf);
+            return `@${n}${args.length ? `(${args.join(', ')})` : ''}`;
+          })
+          .filter(Boolean);
 
         fields.push({ name, type, optional, decorators });
       }
 
-      const heritage = (node.heritageClauses || [])
-        .flatMap((h) => h.types.map((t) => t.getText(sf)))
-        .join(', ');
+      const heritage = (node.heritageClauses || []).flatMap((h) => h.types.map((t) => t.getText(sf))).join(', ');
 
       out.push({
         moduleName: moduleName(file),
@@ -230,9 +230,7 @@ function parseDtos(files) {
           decorators: []
         }));
 
-      const heritage = (node.heritageClauses || [])
-        .flatMap((h) => h.types.map((t) => t.getText(sf)))
-        .join(', ');
+      const heritage = (node.heritageClauses || []).flatMap((h) => h.types.map((t) => t.getText(sf))).join(', ');
 
       out.push({
         moduleName: moduleName(file),
@@ -282,17 +280,21 @@ function render(controllers, dtos) {
       lines.push('');
       lines.push(`Source: \`${c.filePath}\``);
       lines.push('');
-      lines.push('| Method | Path | Auth | Roles | Params | Query | Body | Files |');
-      lines.push('|---|---|---|---|---|---|---|---|');
+      lines.push('| Method | Path | Auth | Params | Query | Body | Files |');
+      lines.push('|---|---|---|---|---|---|---|');
 
       for (const r of c.routes) {
         const roles = r.roles.length ? r.roles.map(esc).join('<br>') : '-';
         const params = r.params.length ? r.params.map((p) => `\`${esc(p.name)}: ${esc(p.type)}\``).join('<br>') : '-';
         const query = r.query.length ? r.query.map((q) => `\`${esc(q.name)}: ${esc(q.type)}\``).join('<br>') : '-';
         const body = r.body.length ? r.body.map((b) => `\`${esc(b.name)}: ${esc(b.type)}\``).join('<br>') : '-';
-        const filesIn = r.filesIn.length ? r.filesIn.map((f) => `\`${esc(f.name)}\` (${esc(f.kind)})`).join('<br>') : '-';
+        const filesIn = r.filesIn.length
+          ? r.filesIn.map((f) => `\`${esc(f.name)}\` (${esc(f.kind)})`).join('<br>')
+          : '-';
 
-        lines.push(`| ${r.method} | \`${esc(r.path)}\` | ${r.isPublic ? 'Public' : 'Protected'} | ${roles} | ${params} | ${query} | ${body} | ${filesIn} |`);
+        lines.push(
+          `| ${r.method} | \`${esc(r.path)}\` | ${r.isPublic ? 'Public' : 'Protected'}  | ${params} | ${query} | ${body} | ${filesIn} |`
+        );
       }
       lines.push('');
     }

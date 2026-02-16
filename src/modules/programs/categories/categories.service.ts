@@ -7,10 +7,10 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
-export class CategoriesService {
+export class ProgramCategoriesService {
   constructor(
     @InjectRepository(ProgramCategory)
-    private categoryRepository: Repository<ProgramCategory>
+    private readonly categoryRepository: Repository<ProgramCategory>
   ) {}
 
   async create(dto: CreateCategoryDto): Promise<ProgramCategory> {
@@ -25,7 +25,7 @@ export class CategoriesService {
     return await this.categoryRepository.find();
   }
 
-  async findAllPaginated(queryParams: QueryParams): Promise<[ProgramCategory[], number]> {
+  async findPaginated(queryParams: QueryParams): Promise<[ProgramCategory[], number]> {
     const { page = 1, q } = queryParams;
     const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
     if (q) query.where('c.name LIKE :q', { q: `%${q}%` });

@@ -7,7 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { QueryParams } from './utils/query-params.type';
 
 @Injectable()
-export class CategoriesService {
+export class EventCategoriesService {
   constructor(
     @InjectRepository(EventCategory)
     private categoryRepository: Repository<EventCategory>

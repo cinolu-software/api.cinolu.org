@@ -107,9 +107,9 @@ These are controller base paths defined via `@Controller(...)`.
 
 - Auth: `/auth`
 - Users: `/users`, `/roles`
-- Projects: `/projects`, `/projects/categories`, `/phases`
-- Events: `/events`, `/events/categories`
-- Programs: `/programs`, `/programs/categories`, `/subprograms`
+- Projects: `/projects`, `/project-categories`, `/phases`
+- Events: `/events`, `/event-categories`
+- Programs: `/programs`, `/program-categories`, `/subprograms`
 - Mentors: `/mentors`, `/expertises`
 - Ventures: `/ventures`, `/products`
 - Blog: `/articles`, `/tags`, `/comments`
@@ -126,3 +126,26 @@ Regenerate it after API changes with:
 ```bash
 node scripts/generate-api-docs.js
 ```
+
+## Category Routes (Conflict-Free)
+
+Category routes use dedicated top-level prefixes to avoid collisions with dynamic routes like `/programs/:programId`:
+
+- Program categories: `/program-categories`
+- Project categories: `/project-categories`
+- Event categories: `/event-categories`
+
+Each category module exposes the same endpoints:
+
+- `GET /<category-prefix>`
+- `GET /<category-prefix>/paginated?page=<number>&q=<string>`
+- `GET /<category-prefix>/:id`
+- `POST /<category-prefix>`
+- `PATCH /<category-prefix>/:id`
+- `DELETE /<category-prefix>/:id`
+
+Params:
+
+- `id`: category UUID
+- `page` (query, optional): page number
+- `q` (query, optional): text filter by category name

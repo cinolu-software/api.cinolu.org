@@ -7,7 +7,7 @@ import { Phase } from './phases/entities/phase.entity';
 import { ProjectsController } from './projects.controller';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { GalleriesModule } from '@/modules/galleries/galleries.module';
-import { CategoriesModule } from './categories/categories.module';
+import { ProjectCategoriesModule } from './categories/categories.module';
 import { PhasesModule } from './phases/phases.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { VenturesModule } from '@/modules/ventures/ventures.module';
@@ -18,7 +18,7 @@ import { ProjectsEmailService } from './projects.email';
   imports: [
     GalleriesModule,
     PhasesModule,
-    CategoriesModule,
+    ProjectCategoriesModule,
     UsersModule,
     VenturesModule,
     NotificationsModule,

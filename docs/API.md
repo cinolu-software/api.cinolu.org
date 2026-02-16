@@ -16,19 +16,19 @@ Generated from source code in `src/core/auth` and `src/modules`.
 
 Source: `src/core/auth/auth.controller.ts`
 
-| Method | Path                    | Auth      | Roles | Params | Query | Body                      | Files |
-| ------ | ----------------------- | --------- | ----- | ------ | ----- | ------------------------- | ----- |
-| POST   | `/auth/support/contact` | Public    | -     | -      | -     | `body: ContactSupportDto` | -     |
-| POST   | `/auth/signup`          | Public    | -     | -      | -     | `body: SignUpDto`         | -     |
-| POST   | `/auth/signin`          | Public    | -     | -      | -     | -                         | -     |
-| GET    | `/auth/google`          | Public    | -     | -      | -     | -                         | -     |
-| GET    | `/auth/google/callback` | Public    | -     | -      | -     | -                         | -     |
-| POST   | `/auth/signout`         | Protected | -     | -      | -     | -                         | -     |
-| GET    | `/auth/me`              | Protected | -     | -      | -     | -                         | -     |
-| PATCH  | `/auth/me`              | Protected | -     | -      | -     | `body: UpdateProfileDto`  | -     |
-| PATCH  | `/auth/me/password`     | Protected | -     | -      | -     | `body: UpdatePasswordDto` | -     |
-| POST   | `/auth/password/forgot` | Public    | -     | -      | -     | `body: ForgotPasswordDto` | -     |
-| POST   | `/auth/password/reset`  | Public    | -     | -      | -     | `body: ResetPasswordDto`  | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/auth/support/contact` | Public  | - | - | `body: ContactSupportDto` | - |
+| POST | `/auth/signup` | Public  | - | - | `body: SignUpDto` | - |
+| POST | `/auth/signin` | Public  | - | - | - | - |
+| GET | `/auth/google` | Public  | - | - | - | - |
+| GET | `/auth/google/callback` | Public  | - | - | - | - |
+| POST | `/auth/signout` | Protected  | - | - | - | - |
+| GET | `/auth/me` | Protected  | - | - | - | - |
+| PATCH | `/auth/me` | Protected  | - | - | `body: UpdateProfileDto` | - |
+| PATCH | `/auth/me/password` | Protected  | - | - | `body: UpdatePasswordDto` | - |
+| POST | `/auth/password/forgot` | Public  | - | - | `body: ForgotPasswordDto` | - |
+| POST | `/auth/password/reset` | Public  | - | - | `body: ResetPasswordDto` | - |
 
 ### Blog
 
@@ -36,87 +36,87 @@ Source: `src/core/auth/auth.controller.ts`
 
 Source: `src/modules/blog/articles/articles.controller.ts`
 
-| Method | Path                              | Auth      | Roles                                   | Params              | Query                               | Body                     | Files                                    |
-| ------ | --------------------------------- | --------- | --------------------------------------- | ------------------- | ----------------------------------- | ------------------------ | ---------------------------------------- |
-| POST   | `/articles`                       | Protected | { resource: 'blogs', action: 'create' } | -                   | -                                   | `body: CreateArticleDto` | -                                        |
-| GET    | `/articles/recent`                | Public    | -                                       | -                   | -                                   | -                        | -                                        |
-| GET    | `/articles`                       | Protected | { resource: 'blogs', action: 'read' }   | -                   | `(query object): FilterArticlesDto` | -                        | -                                        |
-| POST   | `/articles/:articleId/gallery`    | Protected | { resource: 'blogs', action: 'update' } | `articleId: string` | -                                   | -                        | `file` (single)<br>`image` (multipart)   |
-| DELETE | `/articles/gallery/:galleryId`    | Protected | { resource: 'blogs', action: 'update' } | `galleryId: string` | -                                   | -                        | -                                        |
-| GET    | `/articles/by-slug/:slug/gallery` | Public    | -                                       | `slug: string`      | -                                   | -                        | -                                        |
-| POST   | `/articles/:articleId/cover`      | Protected | { resource: 'blogs', action: 'update' } | `articleId: string` | -                                   | -                        | `file` (single)<br>`article` (multipart) |
-| GET    | `/articles/published`             | Public    | -                                       | -                   | `(query object): FilterArticlesDto` | -                        | -                                        |
-| PATCH  | `/articles/:articleId/publish`    | Protected | { resource: 'blogs', action: 'update' } | `articleId: string` | -                                   | -                        | -                                        |
-| GET    | `/articles/by-slug/:slug`         | Public    | -                                       | `slug: string`      | -                                   | -                        | -                                        |
-| GET    | `/articles/:articleId`            | Protected | { resource: 'blogs', action: 'read' }   | `articleId: string` | -                                   | -                        | -                                        |
-| PATCH  | `/articles/:articleId/highlight`  | Protected | { resource: 'blogs', action: 'update' } | `articleId: string` | -                                   | -                        | -                                        |
-| PATCH  | `/articles/:articleId`            | Protected | { resource: 'blogs', action: 'update' } | `articleId: string` | -                                   | `body: UpdateArticleDto` | -                                        |
-| DELETE | `/articles/:articleId`            | Protected | { resource: 'blogs', action: 'delete' } | `articleId: string` | -                                   | -                        | -                                        |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/articles` | Protected  | - | - | `body: CreateArticleDto` | - |
+| GET | `/articles/recent` | Public  | - | - | - | - |
+| GET | `/articles` | Protected  | - | `(query object): FilterArticlesDto` | - | - |
+| POST | `/articles/:articleId/gallery` | Protected  | `articleId: string` | - | - | `file` (single)<br>`image` (multipart) |
+| DELETE | `/articles/gallery/:galleryId` | Protected  | `galleryId: string` | - | - | - |
+| GET | `/articles/by-slug/:slug/gallery` | Public  | `slug: string` | - | - | - |
+| POST | `/articles/:articleId/cover` | Protected  | `articleId: string` | - | - | `file` (single)<br>`article` (multipart) |
+| GET | `/articles/published` | Public  | - | `(query object): FilterArticlesDto` | - | - |
+| PATCH | `/articles/:articleId/publish` | Protected  | `articleId: string` | - | - | - |
+| GET | `/articles/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| GET | `/articles/:articleId` | Protected  | `articleId: string` | - | - | - |
+| PATCH | `/articles/:articleId/highlight` | Protected  | `articleId: string` | - | - | - |
+| PATCH | `/articles/:articleId` | Protected  | `articleId: string` | - | `body: UpdateArticleDto` | - |
+| DELETE | `/articles/:articleId` | Protected  | `articleId: string` | - | - | - |
 
 #### CommentsController (`/comments`)
 
 Source: `src/modules/blog/comments/comments.controller.ts`
 
-| Method | Path                         | Auth      | Roles                                      | Params         | Query                               | Body                     | Files |
-| ------ | ---------------------------- | --------- | ------------------------------------------ | -------------- | ----------------------------------- | ------------------------ | ----- |
-| POST   | `/comments`                  | Protected | -                                          | -              | -                                   | `body: CreateCommentDto` | -     |
-| GET    | `/comments`                  | Protected | { resource: 'comments', action: 'read' }   | -              | -                                   | -                        | -     |
-| GET    | `/comments/by-article/:slug` | Public    | -                                          | `slug: string` | `(query object): FilterCommentsDto` | -                        | -     |
-| GET    | `/comments/:id`              | Protected | { resource: 'comments', action: 'read' }   | `id: string`   | -                                   | -                        | -     |
-| PATCH  | `/comments/:id`              | Protected | { resource: 'comments', action: 'update' } | `id: string`   | -                                   | `body: UpdateCommentDto` | -     |
-| DELETE | `/comments/:id`              | Protected | { resource: 'comments', action: 'delete' } | `id: string`   | -                                   | -                        | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/comments` | Protected  | - | - | `body: CreateCommentDto` | - |
+| GET | `/comments` | Protected  | - | - | - | - |
+| GET | `/comments/by-article/:slug` | Public  | `slug: string` | `(query object): FilterCommentsDto` | - | - |
+| GET | `/comments/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/comments/:id` | Protected  | `id: string` | - | `body: UpdateCommentDto` | - |
+| DELETE | `/comments/:id` | Protected  | `id: string` | - | - | - |
 
 #### TagsController (`/tags`)
 
 Source: `src/modules/blog/tags/tags.controller.ts`
 
-| Method | Path              | Auth      | Roles                                  | Params       | Query                           | Body                 | Files |
-| ------ | ----------------- | --------- | -------------------------------------- | ------------ | ------------------------------- | -------------------- | ----- |
-| POST   | `/tags`           | Protected | { resource: 'tags', action: 'create' } | -            | -                               | `body: CreateTagDto` | -     |
-| GET    | `/tags/paginated` | Protected | { resource: 'tags', action: 'read' }   | -            | `(query object): FilterTagsDto` | -                    | -     |
-| GET    | `/tags`           | Public    | -                                      | -            | -                               | -                    | -     |
-| GET    | `/tags/:id`       | Protected | { resource: 'tags', action: 'read' }   | `id: string` | -                               | -                    | -     |
-| PATCH  | `/tags/:id`       | Protected | { resource: 'tags', action: 'update' } | `id: string` | -                               | `body: UpdateTagDto` | -     |
-| DELETE | `/tags/:id`       | Protected | { resource: 'tags', action: 'update' } | `id: string` | -                               | -                    | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/tags` | Protected  | - | - | `body: CreateTagDto` | - |
+| GET | `/tags/paginated` | Protected  | - | `(query object): FilterTagsDto` | - | - |
+| GET | `/tags` | Public  | - | - | - | - |
+| GET | `/tags/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/tags/:id` | Protected  | `id: string` | - | `body: UpdateTagDto` | - |
+| DELETE | `/tags/:id` | Protected  | `id: string` | - | - | - |
 
 ### Events
 
-#### CategoriesController (`/events/categories`)
+#### EventCategoriesController (`/event-categories`)
 
 Source: `src/modules/events/categories/categories.controller.ts`
 
-| Method | Path                           | Auth      | Roles                                             | Params       | Query                         | Body                      | Files |
-| ------ | ------------------------------ | --------- | ------------------------------------------------- | ------------ | ----------------------------- | ------------------------- | ----- |
-| POST   | `/events/categories`           | Protected | { resource: 'eventCategories', action: 'create' } | -            | -                             | `body: CreateCategoryDto` | -     |
-| GET    | `/events/categories`           | Public    | -                                                 | -            | -                             | -                         | -     |
-| GET    | `/events/categories/paginated` | Protected | { resource: 'eventCategories', action: 'read' }   | -            | `(query object): QueryParams` | -                         | -     |
-| GET    | `/events/categories/:id`       | Protected | { resource: 'eventCategories', action: 'read' }   | `id: string` | -                             | -                         | -     |
-| PATCH  | `/events/categories/:id`       | Protected | { resource: 'eventCategories', action: 'update' } | `id: string` | -                             | `body: UpdateCategoryDto` | -     |
-| DELETE | `/events/categories/:id`       | Protected | { resource: 'eventCategories', action: 'delete' } | `id: string` | -                             | -                         | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/event-categories` | Protected  | - | - | `body: CreateCategoryDto` | - |
+| GET | `/event-categories` | Public  | - | - | - | - |
+| GET | `/event-categories/paginated` | Protected  | - | `(query object): QueryParams` | - | - |
+| GET | `/event-categories/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/event-categories/:id` | Protected  | `id: string` | - | `body: UpdateCategoryDto` | - |
+| DELETE | `/event-categories/:id` | Protected  | `id: string` | - | - | - |
 
 #### EventsController (`/events`)
 
 Source: `src/modules/events/events.controller.ts`
 
-| Method | Path                              | Auth      | Roles                                    | Params              | Query                             | Body                   | Files                                  |
-| ------ | --------------------------------- | --------- | ---------------------------------------- | ------------------- | --------------------------------- | ---------------------- | -------------------------------------- |
-| POST   | `/events`                         | Protected | { resource: 'events', action: 'create' } | -                   | -                                 | `body: CreateEventDto` | -                                      |
-| GET    | `/events`                         | Protected | { resource: 'events', action: 'read' }   | -                   | `(query object): FilterEventsDto` | -                      | -                                      |
-| GET    | `/events/recent`                  | Public    | -                                        | -                   | -                                 | -                      | -                                      |
-| GET    | `/events/published`               | Public    | -                                        | -                   | `(query object): FilterEventsDto` | -                      | -                                      |
-| GET    | `/events/by-slug/:slug`           | Public    | -                                        | `slug: string`      | -                                 | -                      | -                                      |
-| GET    | `/events/:eventId`                | Protected | { resource: 'events', action: 'read' }   | `eventId: string`   | -                                 | -                      | -                                      |
-| POST   | `/events/:eventId/participate`    | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | -                                      |
-| DELETE | `/events/:eventId/participate`    | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | -                                      |
-| GET    | `/events/:eventId/participations` | Protected | { resource: 'events', action: 'read' }   | `eventId: string`   | -                                 | -                      | -                                      |
-| PATCH  | `/events/:eventId/publish`        | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | -                                      |
-| POST   | `/events/:eventId/gallery`        | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | `file` (single)<br>`image` (multipart) |
-| DELETE | `/events/gallery/:galleryId`      | Protected | { resource: 'events', action: 'update' } | `galleryId: string` | -                                 | -                      | -                                      |
-| GET    | `/events/by-slug/:slug/gallery`   | Public    | -                                        | `slug: string`      | -                                 | -                      | -                                      |
-| POST   | `/events/:eventId/cover`          | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | `file` (single)<br>`cover` (multipart) |
-| PATCH  | `/events/:eventId/highlight`      | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | -                      | -                                      |
-| PATCH  | `/events/:eventId`                | Protected | { resource: 'events', action: 'update' } | `eventId: string`   | -                                 | `body: UpdateEventDto` | -                                      |
-| DELETE | `/events/:eventId`                | Protected | { resource: 'events', action: 'delete' } | `eventId: string`   | -                                 | -                      | -                                      |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/events` | Protected  | - | - | `body: CreateEventDto` | - |
+| GET | `/events` | Protected  | - | `(query object): FilterEventsDto` | - | - |
+| GET | `/events/recent` | Public  | - | - | - | - |
+| GET | `/events/published` | Public  | - | `(query object): FilterEventsDto` | - | - |
+| GET | `/events/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| GET | `/events/:eventId` | Protected  | `eventId: string` | - | - | - |
+| POST | `/events/:eventId/participate` | Protected  | `eventId: string` | - | - | - |
+| DELETE | `/events/:eventId/participate` | Protected  | `eventId: string` | - | - | - |
+| GET | `/events/:eventId/participations` | Protected  | `eventId: string` | - | - | - |
+| PATCH | `/events/:eventId/publish` | Protected  | `eventId: string` | - | - | - |
+| POST | `/events/:eventId/gallery` | Protected  | `eventId: string` | - | - | `file` (single)<br>`image` (multipart) |
+| DELETE | `/events/gallery/:galleryId` | Protected  | `galleryId: string` | - | - | - |
+| GET | `/events/by-slug/:slug/gallery` | Public  | `slug: string` | - | - | - |
+| POST | `/events/:eventId/cover` | Protected  | `eventId: string` | - | - | `file` (single)<br>`cover` (multipart) |
+| PATCH | `/events/:eventId/highlight` | Protected  | `eventId: string` | - | - | - |
+| PATCH | `/events/:eventId` | Protected  | `eventId: string` | - | `body: UpdateEventDto` | - |
+| DELETE | `/events/:eventId` | Protected  | `eventId: string` | - | - | - |
 
 ### Highlights
 
@@ -124,9 +124,9 @@ Source: `src/modules/events/events.controller.ts`
 
 Source: `src/modules/highlights/highlights.controller.ts`
 
-| Method | Path          | Auth   | Roles | Params | Query | Body | Files |
-| ------ | ------------- | ------ | ----- | ------ | ----- | ---- | ----- |
-| GET    | `/highlights` | Public | -     | -      | -     | -    | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| GET | `/highlights` | Public  | - | - | - | - |
 
 ### Mentors
 
@@ -134,31 +134,31 @@ Source: `src/modules/highlights/highlights.controller.ts`
 
 Source: `src/modules/mentors/expertises/expertises.controller.ts`
 
-| Method | Path                    | Auth      | Roles                                        | Params       | Query                                 | Body                       | Files |
-| ------ | ----------------------- | --------- | -------------------------------------------- | ------------ | ------------------------------------- | -------------------------- | ----- |
-| POST   | `/expertises`           | Protected | { resource: 'expertises', action: 'create' } | -            | -                                     | `body: CreateExpertiseDto` | -     |
-| GET    | `/expertises/paginated` | Protected | { resource: 'expertises', action: 'read' }   | -            | `(query object): FilterExpertisesDto` | -                          | -     |
-| GET    | `/expertises`           | Protected | -                                            | -            | -                                     | -                          | -     |
-| GET    | `/expertises/:id`       | Protected | { resource: 'expertises', action: 'read' }   | `id: string` | -                                     | -                          | -     |
-| PATCH  | `/expertises/:id`       | Protected | { resource: 'expertises', action: 'update' } | `id: string` | -                                     | `body: UpdateExpertiseDto` | -     |
-| DELETE | `/expertises/:id`       | Protected | { resource: 'expertises', action: 'delete' } | `id: string` | -                                     | -                          | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/expertises` | Protected  | - | - | `body: CreateExpertiseDto` | - |
+| GET | `/expertises/paginated` | Protected  | - | `(query object): FilterExpertisesDto` | - | - |
+| GET | `/expertises` | Protected  | - | - | - | - |
+| GET | `/expertises/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/expertises/:id` | Protected  | `id: string` | - | `body: UpdateExpertiseDto` | - |
+| DELETE | `/expertises/:id` | Protected  | `id: string` | - | - | - |
 
 #### MentorsController (`/mentors`)
 
 Source: `src/modules/mentors/mentors.controller.ts`
 
-| Method | Path                         | Auth      | Roles                                                        | Params             | Query                              | Body                    | Files                               |
-| ------ | ---------------------------- | --------- | ------------------------------------------------------------ | ------------------ | ---------------------------------- | ----------------------- | ----------------------------------- |
-| POST   | `/mentors`                   | Protected | -                                                            | -                  | -                                  | `body: CreateMentorDto` | -                                   |
-| POST   | `/mentors/:mentorId/cv`      | Protected | { resource: 'addCV', action: 'update', possession: 'own' }   | `mentorId: string` | -                                  | -                       | `file` (single)<br>`cv` (multipart) |
-| GET    | `/mentors/paginated`         | Protected | { resource: 'mentors', action: 'read' }                      | -                  | `(query object): FilterMentorsDto` | -                       | -                                   |
-| PATCH  | `/mentors/:mentorId/approve` | Protected | { resource: 'mentorApplications', action: 'update' }         | `mentorId: string` | -                                  | -                       | -                                   |
-| PATCH  | `/mentors/:mentorId/reject`  | Protected | { resource: 'mentorApplications', action: 'update' }         | `mentorId: string` | -                                  | -                       | -                                   |
-| GET    | `/mentors/me`                | Protected | -                                                            | -                  | -                                  | -                       | -                                   |
-| GET    | `/mentors`                   | Protected | { resource: 'mentors', action: 'read' }                      | -                  | -                                  | -                       | -                                   |
-| GET    | `/mentors/:mentorId`         | Protected | { resource: 'mentors', action: 'read' }                      | `mentorId: string` | -                                  | -                       | -                                   |
-| PATCH  | `/mentors/:mentorId`         | Protected | { resource: 'mentors', action: 'update', possession: 'own' } | `mentorId: string` | -                                  | `body: UpdateMentorDto` | -                                   |
-| DELETE | `/mentors/:mentorId`         | Protected | { resource: 'mentors', action: 'delete', possession: 'own' } | `mentorId: string` | -                                  | -                       | -                                   |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/mentors` | Protected  | - | - | `body: CreateMentorDto` | - |
+| POST | `/mentors/:mentorId/cv` | Protected  | `mentorId: string` | - | - | `file` (single)<br>`cv` (multipart) |
+| GET | `/mentors/paginated` | Protected  | - | `(query object): FilterMentorsDto` | - | - |
+| PATCH | `/mentors/:mentorId/approve` | Protected  | `mentorId: string` | - | - | - |
+| PATCH | `/mentors/:mentorId/reject` | Protected  | `mentorId: string` | - | - | - |
+| GET | `/mentors/me` | Protected  | - | - | - | - |
+| GET | `/mentors` | Protected  | - | - | - | - |
+| GET | `/mentors/:mentorId` | Protected  | `mentorId: string` | - | - | - |
+| PATCH | `/mentors/:mentorId` | Protected  | `mentorId: string` | - | `body: UpdateMentorDto` | - |
+| DELETE | `/mentors/:mentorId` | Protected  | `mentorId: string` | - | - | - |
 
 ### Notifications
 
@@ -166,102 +166,102 @@ Source: `src/modules/mentors/mentors.controller.ts`
 
 Source: `src/modules/notifications/notifications.controller.ts`
 
-| Method | Path                                         | Auth      | Roles                                           | Params                   | Query                                    | Body                          | Files                                           |
-| ------ | -------------------------------------------- | --------- | ----------------------------------------------- | ------------------------ | ---------------------------------------- | ----------------------------- | ----------------------------------------------- |
-| GET    | `/notifications/project/:projectId`          | Protected | { resource: 'projects', action: 'read' }        | `projectId: string`      | `(query object): FilterNotificationsDto` | -                             | -                                               |
-| PATCH  | `/notifications/:notificationId/read`        | Protected | { resource: 'notifications', action: 'update' } | `notificationId: string` | -                                        | -                             | -                                               |
-| PATCH  | `/notifications/:notificationId`             | Protected | { resource: 'notifications', action: 'update' } | `notificationId: string` | -                                        | `body: UpdateNotificationDto` | -                                               |
-| POST   | `/notifications/:notificationId/attachments` | Protected | { resource: 'notifications', action: 'update' } | `notificationId: string` | -                                        | -                             | `files` (multiple)<br>`attachments` (multipart) |
-| DELETE | `/notifications/:notificationId`             | Protected | { resource: 'notifications', action: 'delete' } | `notificationId: string` | -                                        | -                             | -                                               |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| GET | `/notifications/project/:projectId` | Protected  | `projectId: string` | `(query object): FilterNotificationsDto` | - | - |
+| PATCH | `/notifications/:notificationId/read` | Protected  | `notificationId: string` | - | - | - |
+| PATCH | `/notifications/:notificationId` | Protected  | `notificationId: string` | - | `body: UpdateNotificationDto` | - |
+| POST | `/notifications/:notificationId/attachments` | Protected  | `notificationId: string` | - | - | `files` (multiple)<br>`attachments` (multipart) |
+| DELETE | `/notifications/:notificationId` | Protected  | `notificationId: string` | - | - | - |
 
 ### Programs
 
-#### CategoriesController (`/programs/categories`)
+#### ProgramCategoriesController (`/program-categories`)
 
 Source: `src/modules/programs/categories/categories.controller.ts`
 
-| Method | Path                             | Auth      | Roles                                               | Params       | Query                         | Body                      | Files |
-| ------ | -------------------------------- | --------- | --------------------------------------------------- | ------------ | ----------------------------- | ------------------------- | ----- |
-| POST   | `/programs/categories`           | Protected | { resource: 'programCategories', action: 'create' } | -            | -                             | `body: CreateCategoryDto` | -     |
-| GET    | `/programs/categories`           | Public    | -                                                   | -            | -                             | -                         | -     |
-| GET    | `/programs/categories/paginated` | Protected | { resource: 'programCategories', action: 'read' }   | -            | `(query object): QueryParams` | -                         | -     |
-| GET    | `/programs/categories/:id`       | Protected | { resource: 'programCategories', action: 'read' }   | `id: string` | -                             | -                         | -     |
-| PATCH  | `/programs/categories/:id`       | Protected | { resource: 'programCategories', action: 'update' } | `id: string` | -                             | `body: UpdateCategoryDto` | -     |
-| DELETE | `/programs/categories/:id`       | Protected | { resource: 'programCategories', action: 'delete' } | `id: string` | -                             | -                         | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| GET | `/program-categories` | Public  | - | - | - | - |
+| POST | `/program-categories` | Protected  | - | - | `body: CreateCategoryDto` | - |
+| GET | `/program-categories/paginated` | Protected  | - | `(query object): QueryParams` | - | - |
+| GET | `/program-categories/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/program-categories/:id` | Protected  | `id: string` | - | `body: UpdateCategoryDto` | - |
+| DELETE | `/program-categories/:id` | Protected  | `id: string` | - | - | - |
 
 #### ProgramsController (`/programs`)
 
 Source: `src/modules/programs/programs.controller.ts`
 
-| Method | Path                             | Auth      | Roles                                      | Params              | Query                               | Body                     | Files                                 |
-| ------ | -------------------------------- | --------- | ------------------------------------------ | ------------------- | ----------------------------------- | ------------------------ | ------------------------------------- |
-| POST   | `/programs`                      | Protected | { resource: 'programs', action: 'create' } | -                   | -                                   | `body: CreateProgramDto` | -                                     |
-| GET    | `/programs/published`            | Public    | -                                          | -                   | -                                   | -                        | -                                     |
-| PATCH  | `/programs/:programId/publish`   | Protected | { resource: 'programs', action: 'update' } | `programId: string` | -                                   | -                        | -                                     |
-| POST   | `/programs/:programId/logo`      | Protected | { resource: 'programs', action: 'update' } | `programId: string` | -                                   | -                        | `file` (single)<br>`logo` (multipart) |
-| GET    | `/programs/by-slug/:slug`        | Public    | -                                          | `slug: string`      | -                                   | -                        | -                                     |
-| GET    | `/programs`                      | Public    | -                                          | -                   | -                                   | -                        | -                                     |
-| GET    | `/programs/paginated`            | Protected | { resource: 'programs', action: 'read' }   | -                   | `(query object): FilterProgramsDto` | -                        | -                                     |
-| GET    | `/programs/:programId`           | Protected | { resource: 'programs', action: 'update' } | `programId: string` | -                                   | -                        | -                                     |
-| PATCH  | `/programs/:programId/highlight` | Protected | { resource: 'programs', action: 'update' } | `programId: string` | -                                   | -                        | -                                     |
-| PATCH  | `/programs/:programId`           | Protected | { resource: 'programs', action: 'update' } | `programId: string` | -                                   | `body: UpdateProgramDto` | -                                     |
-| DELETE | `/programs/:programId`           | Protected | { resource: 'programs', action: 'delete' } | `programId: string` | -                                   | -                        | -                                     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/programs` | Protected  | - | - | `body: CreateProgramDto` | - |
+| GET | `/programs/published` | Public  | - | - | - | - |
+| PATCH | `/programs/:programId/publish` | Protected  | `programId: string` | - | - | - |
+| POST | `/programs/:programId/logo` | Protected  | `programId: string` | - | - | `file` (single)<br>`logo` (multipart) |
+| GET | `/programs/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| GET | `/programs` | Public  | - | - | - | - |
+| GET | `/programs/paginated` | Protected  | - | `(query object): FilterProgramsDto` | - | - |
+| GET | `/programs/:programId` | Protected  | `programId: string` | - | - | - |
+| PATCH | `/programs/:programId/highlight` | Protected  | `programId: string` | - | - | - |
+| PATCH | `/programs/:programId` | Protected  | `programId: string` | - | `body: UpdateProgramDto` | - |
+| DELETE | `/programs/:programId` | Protected  | `programId: string` | - | - | - |
 
 ### Projects
-
-#### CategoriesController (`/projects/categories`)
-
-Source: `src/modules/projects/categories/categories.controller.ts`
-
-| Method | Path                             | Auth      | Roles                                               | Params       | Query                         | Body                      | Files |
-| ------ | -------------------------------- | --------- | --------------------------------------------------- | ------------ | ----------------------------- | ------------------------- | ----- |
-| POST   | `/projects/categories`           | Protected | { resource: 'projectCategories', action: 'create' } | -            | -                             | `body: CreateCategoryDto` | -     |
-| GET    | `/projects/categories`           | Public    | -                                                   | -            | -                             | -                         | -     |
-| GET    | `/projects/categories/paginated` | Protected | { resource: 'projectCategories', action: 'read' }   | -            | `(query object): QueryParams` | -                         | -     |
-| GET    | `/projects/categories/:id`       | Protected | { resource: 'projectCategories', action: 'read' }   | `id: string` | -                             | -                         | -     |
-| PATCH  | `/projects/categories/:id`       | Protected | { resource: 'projectCategories', action: 'update' } | `id: string` | -                             | `body: UpdateCategoryDto` | -     |
-| DELETE | `/projects/categories/:id`       | Protected | { resource: 'projectCategories', action: 'delete' } | `id: string` | -                             | -                         | -     |
 
 #### PhasesController (`/phases`)
 
 Source: `src/modules/projects/phases/phases.controller.ts`
 
-| Method | Path                          | Auth      | Roles                                    | Params              | Query | Body                        | Files |
-| ------ | ----------------------------- | --------- | ---------------------------------------- | ------------------- | ----- | --------------------------- | ----- |
-| POST   | `/phases/:projectId`          | Protected | { resource: 'phases', action: 'create' } | `projectId: string` | -     | `body: CreatePhaseDto`      | -     |
-| GET    | `/phases/:phaseId`            | Protected | { resource: 'phases', action: 'read' }   | `phaseId: string`   | -     | -                           | -     |
-| GET    | `/phases/project/:projectId`  | Protected | { resource: 'phases', action: 'read' }   | `projectId: string` | -     | -                           | -     |
-| POST   | `/phases/participants/move`   | Protected | { resource: 'phases', action: 'update' } | -                   | -     | `body: MoveParticipantsDto` | -     |
-| POST   | `/phases/participants/remove` | Protected | { resource: 'phases', action: 'update' } | -                   | -     | `body: MoveParticipantsDto` | -     |
-| PATCH  | `/phases/:phaseId`            | Protected | { resource: 'phases', action: 'update' } | `phaseId: string`   | -     | `body: UpdatePhaseDto`      | -     |
-| DELETE | `/phases/:phaseId`            | Protected | { resource: 'phases', action: 'delete' } | `phaseId: string`   | -     | -                           | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/phases/:projectId` | Protected  | `projectId: string` | - | `body: CreatePhaseDto` | - |
+| GET | `/phases/:phaseId` | Protected  | `phaseId: string` | - | - | - |
+| GET | `/phases/project/:projectId` | Protected  | `projectId: string` | - | - | - |
+| POST | `/phases/participants/move` | Protected  | - | - | `body: MoveParticipantsDto` | - |
+| POST | `/phases/participants/remove` | Protected  | - | - | `body: MoveParticipantsDto` | - |
+| PATCH | `/phases/:phaseId` | Protected  | `phaseId: string` | - | `body: UpdatePhaseDto` | - |
+| DELETE | `/phases/:phaseId` | Protected  | `phaseId: string` | - | - | - |
+
+#### ProjectCategoriesController (`/project-categories`)
+
+Source: `src/modules/projects/categories/categories.controller.ts`
+
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/project-categories` | Protected  | - | - | `body: CreateCategoryDto` | - |
+| GET | `/project-categories` | Public  | - | - | - | - |
+| GET | `/project-categories/paginated` | Protected  | - | `(query object): QueryParams` | - | - |
+| GET | `/project-categories/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/project-categories/:id` | Protected  | `id: string` | - | `body: UpdateCategoryDto` | - |
+| DELETE | `/project-categories/:id` | Protected  | `id: string` | - | - | - |
 
 #### ProjectsController (`/projects`)
 
 Source: `src/modules/projects/projects.controller.ts`
 
-| Method | Path                                           | Auth      | Roles                                      | Params                   | Query                               | Body                          | Files                                  |
-| ------ | ---------------------------------------------- | --------- | ------------------------------------------ | ------------------------ | ----------------------------------- | ----------------------------- | -------------------------------------- |
-| POST   | `/projects`                                    | Protected | { resource: 'projects', action: 'create' } | -                        | -                                   | `body: CreateProjectDto`      | -                                      |
-| GET    | `/projects`                                    | Protected | { resource: 'projects', action: 'read' }   | -                        | `(query object): FilterProjectsDto` | -                             | -                                      |
-| GET    | `/projects/recent`                             | Public    | -                                          | -                        | -                                   | -                             | -                                      |
-| GET    | `/projects/published`                          | Public    | -                                          | -                        | `(query object): FilterProjectsDto` | -                             | -                                      |
-| GET    | `/projects/by-slug/:slug`                      | Public    | -                                          | `slug: string`           | -                                   | -                             | -                                      |
-| POST   | `/projects/:projectId/participate`             | Protected | -                                          | `projectId: string`      | -                                   | `body: ParticipateProjectDto` | -                                      |
-| GET    | `/projects/me/participations`                  | Protected | -                                          | -                        | -                                   | -                             | -                                      |
-| GET    | `/projects/:projectId/participations`          | Protected | { resource: 'projects', action: 'read' }   | `projectId: string`      | -                                   | -                             | -                                      |
-| GET    | `/projects/:projectId`                         | Protected | { resource: 'projects', action: 'read' }   | `projectId: string`      | -                                   | -                             | -                                      |
-| POST   | `/projects/:projectId/participants/import-csv` | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | -                             | `file` (single)                        |
-| POST   | `/projects/:projectId/notifications`           | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | `body: CreateNotificationDto` | -                                      |
-| POST   | `/projects/notifications/:notificationId/send` | Protected | { resource: 'projects', action: 'update' } | `notificationId: string` | -                                   | -                             | -                                      |
-| POST   | `/projects/:projectId/gallery`                 | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | -                             | `file` (single)<br>`image` (multipart) |
-| DELETE | `/projects/gallery/:galleryId`                 | Protected | { resource: 'projects', action: 'update' } | `galleryId: string`      | -                                   | -                             | -                                      |
-| GET    | `/projects/by-slug/:slug/gallery`              | Public    | -                                          | `slug: string`           | -                                   | -                             | -                                      |
-| PATCH  | `/projects/:projectId/publish`                 | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | -                             | -                                      |
-| POST   | `/projects/:projectId/cover`                   | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | -                             | `file` (single)<br>`cover` (multipart) |
-| PATCH  | `/projects/:projectId/highlight`               | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | -                             | -                                      |
-| PATCH  | `/projects/:projectId`                         | Protected | { resource: 'projects', action: 'update' } | `projectId: string`      | -                                   | `body: UpdateProjectDto`      | -                                      |
-| DELETE | `/projects/:projectId`                         | Protected | { resource: 'projects', action: 'delete' } | `projectId: string`      | -                                   | -                             | -                                      |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/projects` | Protected  | - | - | `body: CreateProjectDto` | - |
+| GET | `/projects` | Protected  | - | `(query object): FilterProjectsDto` | - | - |
+| GET | `/projects/recent` | Public  | - | - | - | - |
+| GET | `/projects/published` | Public  | - | `(query object): FilterProjectsDto` | - | - |
+| GET | `/projects/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| POST | `/projects/:projectId/participate` | Protected  | `projectId: string` | - | `body: ParticipateProjectDto` | - |
+| GET | `/projects/me/participations` | Protected  | - | - | - | - |
+| GET | `/projects/:projectId/participations` | Protected  | `projectId: string` | - | - | - |
+| GET | `/projects/:projectId` | Protected  | `projectId: string` | - | - | - |
+| POST | `/projects/:projectId/participants/import-csv` | Protected  | `projectId: string` | - | - | `file` (single) |
+| POST | `/projects/:projectId/notifications` | Protected  | `projectId: string` | - | `body: CreateNotificationDto` | - |
+| POST | `/projects/notifications/:notificationId/send` | Protected  | `notificationId: string` | - | - | - |
+| POST | `/projects/:projectId/gallery` | Protected  | `projectId: string` | - | - | `file` (single)<br>`image` (multipart) |
+| DELETE | `/projects/gallery/:galleryId` | Protected  | `galleryId: string` | - | - | - |
+| GET | `/projects/by-slug/:slug/gallery` | Public  | `slug: string` | - | - | - |
+| PATCH | `/projects/:projectId/publish` | Protected  | `projectId: string` | - | - | - |
+| POST | `/projects/:projectId/cover` | Protected  | `projectId: string` | - | - | `file` (single)<br>`cover` (multipart) |
+| PATCH | `/projects/:projectId/highlight` | Protected  | `projectId: string` | - | - | - |
+| PATCH | `/projects/:projectId` | Protected  | `projectId: string` | - | `body: UpdateProjectDto` | - |
+| DELETE | `/projects/:projectId` | Protected  | `projectId: string` | - | - | - |
 
 ### Stats
 
@@ -269,11 +269,11 @@ Source: `src/modules/projects/projects.controller.ts`
 
 Source: `src/modules/stats/stats.controller.ts`
 
-| Method | Path                      | Auth      | Roles                                 | Params         | Query | Body | Files |
-| ------ | ------------------------- | --------- | ------------------------------------- | -------------- | ----- | ---- | ----- |
-| GET    | `/stats/me`               | Protected | -                                     | -              | -     | -    | -     |
-| GET    | `/stats/admin/overview`   | Protected | { resource: 'stats', action: 'read' } | -              | -     | -    | -     |
-| GET    | `/stats/admin/year/:year` | Public    | -                                     | `year: number` | -     | -    | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| GET | `/stats/me` | Protected  | - | - | - | - |
+| GET | `/stats/admin/overview` | Protected  | - | - | - | - |
+| GET | `/stats/admin/year/:year` | Public  | `year: number` | - | - | - |
 
 ### Subprograms
 
@@ -281,19 +281,19 @@ Source: `src/modules/stats/stats.controller.ts`
 
 Source: `src/modules/subprograms/subprograms.controller.ts`
 
-| Method | Path                                        | Auth      | Roles                                         | Params                 | Query                                 | Body                        | Files                                 |
-| ------ | ------------------------------------------- | --------- | --------------------------------------------- | ---------------------- | ------------------------------------- | --------------------------- | ------------------------------------- |
-| POST   | `/subprograms`                              | Protected | { resource: 'subprograms', action: 'create' } | -                      | -                                     | `body: CreateSubprogramDto` | -                                     |
-| GET    | `/subprograms`                              | Public    | -                                             | -                      | -                                     | -                           | -                                     |
-| PATCH  | `/subprograms/:subprogramId/publish`        | Protected | { resource: 'subprograms', action: 'update' } | `subprogramId: string` | -                                     | -                           | -                                     |
-| POST   | `/subprograms/:subprogramId/logo`           | Protected | { resource: 'subprograms', action: 'update' } | `subprogramId: string` | -                                     | -                           | `file` (single)<br>`logo` (multipart) |
-| GET    | `/subprograms/by-slug/:slug`                | Public    | -                                             | `slug: string`         | -                                     | -                           | -                                     |
-| GET    | `/subprograms/program/:programId`           | Public    | -                                             | `programId: string`    | -                                     | -                           | -                                     |
-| GET    | `/subprograms/program/:programId/paginated` | Protected | { resource: 'subprograms', action: 'read' }   | `programId: string`    | `(query object): FilterSubprogramDto` | -                           | -                                     |
-| GET    | `/subprograms/:subprogramId`                | Protected | { resource: 'subprograms', action: 'update' } | `subprogramId: string` | -                                     | -                           | -                                     |
-| PATCH  | `/subprograms/:subprogramId/highlight`      | Protected | { resource: 'subprograms', action: 'update' } | `subprogramId: string` | -                                     | -                           | -                                     |
-| PATCH  | `/subprograms/:subprogramId`                | Protected | { resource: 'subprograms', action: 'update' } | `subprogramId: string` | -                                     | `body: UpdateSubprogramDto` | -                                     |
-| DELETE | `/subprograms/:subprogramId`                | Protected | { resource: 'subprograms', action: 'delete' } | `subprogramId: string` | -                                     | -                           | -                                     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/subprograms` | Protected  | - | - | `body: CreateSubprogramDto` | - |
+| GET | `/subprograms` | Public  | - | - | - | - |
+| PATCH | `/subprograms/:subprogramId/publish` | Protected  | `subprogramId: string` | - | - | - |
+| POST | `/subprograms/:subprogramId/logo` | Protected  | `subprogramId: string` | - | - | `file` (single)<br>`logo` (multipart) |
+| GET | `/subprograms/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| GET | `/subprograms/program/:programId` | Public  | `programId: string` | - | - | - |
+| GET | `/subprograms/program/:programId/paginated` | Protected  | `programId: string` | `(query object): FilterSubprogramDto` | - | - |
+| GET | `/subprograms/:subprogramId` | Protected  | `subprogramId: string` | - | - | - |
+| PATCH | `/subprograms/:subprogramId/highlight` | Protected  | `subprogramId: string` | - | - | - |
+| PATCH | `/subprograms/:subprogramId` | Protected  | `subprogramId: string` | - | `body: UpdateSubprogramDto` | - |
+| DELETE | `/subprograms/:subprogramId` | Protected  | `subprogramId: string` | - | - | - |
 
 ### Users
 
@@ -301,34 +301,34 @@ Source: `src/modules/subprograms/subprograms.controller.ts`
 
 Source: `src/modules/users/roles/roles.controller.ts`
 
-| Method | Path               | Auth      | Roles                                   | Params       | Query                            | Body                  | Files |
-| ------ | ------------------ | --------- | --------------------------------------- | ------------ | -------------------------------- | --------------------- | ----- |
-| POST   | `/roles`           | Protected | { resource: 'roles', action: 'create' } | -            | -                                | `body: CreateRoleDto` | -     |
-| GET    | `/roles/paginated` | Protected | { resource: 'roles', action: 'read' }   | -            | `(query object): FilterRolesDto` | -                     | -     |
-| GET    | `/roles`           | Protected | { resource: 'roles', action: 'read' }   | -            | -                                | -                     | -     |
-| GET    | `/roles/:id`       | Protected | { resource: 'roles', action: 'read' }   | `id: string` | -                                | -                     | -     |
-| PATCH  | `/roles/:id`       | Protected | { resource: 'roles', action: 'update' } | `id: string` | -                                | `body: UpdateRoleDto` | -     |
-| DELETE | `/roles/:id`       | Protected | { resource: 'roles', action: 'delete' } | `id: string` | -                                | -                     | -     |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/roles` | Protected  | - | - | `body: CreateRoleDto` | - |
+| GET | `/roles/paginated` | Protected  | - | `(query object): FilterRolesDto` | - | - |
+| GET | `/roles` | Protected  | - | - | - | - |
+| GET | `/roles/:id` | Protected  | `id: string` | - | - | - |
+| PATCH | `/roles/:id` | Protected  | `id: string` | - | `body: UpdateRoleDto` | - |
+| DELETE | `/roles/:id` | Protected  | `id: string` | - | - | - |
 
 #### UsersController (`/users`)
 
 Source: `src/modules/users/users.controller.ts`
 
-| Method | Path                            | Auth      | Roles                                          | Params           | Query                            | Body                  | Files                                    |
-| ------ | ------------------------------- | --------- | ---------------------------------------------- | ---------------- | -------------------------------- | --------------------- | ---------------------------------------- |
-| POST   | `/users/referral-code/generate` | Protected | -                                              | -                | -                                | -                     | -                                        |
-| GET    | `/users/staff`                  | Protected | { resource: 'users', action: 'read' }          | -                | -                                | -                     | -                                        |
-| GET    | `/users/ambassadors`            | Public    | -                                              | -                | `(query object): FilterUsersDto` | -                     | -                                        |
-| GET    | `/users/ambassadors/:email`     | Public    | -                                              | `email: string`  | -                                | -                     | -                                        |
-| GET    | `/users/me/referred-users`      | Protected | -                                              | -                | `page: number`                   | -                     | -                                        |
-| POST   | `/users`                        | Protected | { resource: 'users', action: 'create' }        | -                | -                                | `body: CreateUserDto` | -                                        |
-| GET    | `/users/export/users.csv`       | Protected | { resource: 'exportUsersCSV', action: 'read' } | -                | `(query object): FilterUsersDto` | -                     | -                                        |
-| GET    | `/users`                        | Protected | { resource: 'users', action: 'read' }          | -                | `(query object): FilterUsersDto` | -                     | -                                        |
-| GET    | `/users/entrepreneurs`          | Public    | -                                              | -                | -                                | -                     | -                                        |
-| GET    | `/users/:email`                 | Public    | -                                              | `email: string`  | -                                | -                     | -                                        |
-| PATCH  | `/users/:userId`                | Protected | { resource: 'users', action: 'update' }        | `userId: string` | -                                | `body: UpdateUserDto` | -                                        |
-| POST   | `/users/me/profile-image`       | Protected | -                                              | -                | -                                | -                     | `file` (single)<br>`profile` (multipart) |
-| DELETE | `/users/:userId`                | Protected | { resource: 'users', action: 'delete' }        | `userId: string` | -                                | -                     | -                                        |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/users/referral-code/generate` | Protected  | - | - | - | - |
+| GET | `/users/staff` | Protected  | - | - | - | - |
+| GET | `/users/ambassadors` | Public  | - | `(query object): FilterUsersDto` | - | - |
+| GET | `/users/ambassadors/:email` | Public  | `email: string` | - | - | - |
+| GET | `/users/me/referred-users` | Protected  | - | `page: number` | - | - |
+| POST | `/users` | Protected  | - | - | `body: CreateUserDto` | - |
+| GET | `/users/export/users.csv` | Protected  | - | `(query object): FilterUsersDto` | - | - |
+| GET | `/users` | Protected  | - | `(query object): FilterUsersDto` | - | - |
+| GET | `/users/entrepreneurs` | Public  | - | - | - | - |
+| GET | `/users/:email` | Public  | `email: string` | - | - | - |
+| PATCH | `/users/:userId` | Protected  | `userId: string` | - | `body: UpdateUserDto` | - |
+| POST | `/users/me/profile-image` | Protected  | - | - | - | `file` (single)<br>`profile` (multipart) |
+| DELETE | `/users/:userId` | Protected  | `userId: string` | - | - | - |
 
 ### Ventures
 
@@ -336,38 +336,38 @@ Source: `src/modules/users/users.controller.ts`
 
 Source: `src/modules/ventures/products/products.controller.ts`
 
-| Method | Path                              | Auth      | Roles                                                         | Params              | Query                               | Body                     | Files                                  |
-| ------ | --------------------------------- | --------- | ------------------------------------------------------------- | ------------------- | ----------------------------------- | ------------------------ | -------------------------------------- |
-| POST   | `/products`                       | Protected | -                                                             | -                   | -                                   | `body: CreateProductDto` | -                                      |
-| POST   | `/products/:productId/gallery`    | Protected | { resource: 'products', action: 'update', possession: 'own' } | `productId: string` | -                                   | -                        | `file` (single)<br>`image` (multipart) |
-| DELETE | `/products/gallery/:galleryId`    | Protected | { resource: 'products', action: 'update', possession: 'own' } | `galleryId: string` | -                                   | -                        | -                                      |
-| GET    | `/products/by-slug/:slug/gallery` | Public    | -                                                             | `slug: string`      | -                                   | -                        | -                                      |
-| GET    | `/products/me`                    | Protected | { resource: 'products', action: 'read', possession: 'own' }   | -                   | `(query object): FilterProductsDto` | -                        | -                                      |
-| GET    | `/products/by-slug/:slug`         | Public    | -                                                             | `slug: string`      | -                                   | -                        | -                                      |
-| PATCH  | `/products/by-slug/:slug`         | Protected | { resource: 'products', action: 'update', possession: 'own' } | `slug: string`      | -                                   | `body: UpdateProductDto` | -                                      |
-| DELETE | `/products/:id`                   | Protected | { resource: 'products', action: 'delete', possession: 'own' } | `id: string`        | -                                   | -                        | -                                      |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/products` | Protected  | - | - | `body: CreateProductDto` | - |
+| POST | `/products/:productId/gallery` | Protected  | `productId: string` | - | - | `file` (single)<br>`image` (multipart) |
+| DELETE | `/products/gallery/:galleryId` | Protected  | `galleryId: string` | - | - | - |
+| GET | `/products/by-slug/:slug/gallery` | Public  | `slug: string` | - | - | - |
+| GET | `/products/me` | Protected  | - | `(query object): FilterProductsDto` | - | - |
+| GET | `/products/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| PATCH | `/products/by-slug/:slug` | Protected  | `slug: string` | - | `body: UpdateProductDto` | - |
+| DELETE | `/products/:id` | Protected  | `id: string` | - | - | - |
 
 #### VenturesController (`/ventures`)
 
 Source: `src/modules/ventures/ventures.controller.ts`
 
-| Method | Path                              | Auth      | Roles                                                         | Params              | Query                               | Body                     | Files                                  |
-| ------ | --------------------------------- | --------- | ------------------------------------------------------------- | ------------------- | ----------------------------------- | ------------------------ | -------------------------------------- |
-| POST   | `/ventures`                       | Protected | -                                                             | -                   | -                                   | `body: CreateVentureDto` | -                                      |
-| GET    | `/ventures/published`             | Public    | -                                                             | -                   | -                                   | -                        | -                                      |
-| GET    | `/ventures`                       | Protected | { resource: 'ventures', action: 'read', possession: 'any' }   | -                   | `(query object): FilterVenturesDto` | -                        | -                                      |
-| GET    | `/ventures/by-slug/:slug`         | Public    | -                                                             | `slug: string`      | -                                   | -                        | -                                      |
-| PATCH  | `/ventures/by-slug/:slug/publish` | Protected | { resource: 'publishVenture', action: 'update' }              | `slug: string`      | -                                   | -                        | -                                      |
-| GET    | `/ventures/me/paginated`          | Protected | -                                                             | -                   | `page: string`                      | -                        | -                                      |
-| GET    | `/ventures/me`                    | Protected | -                                                             | -                   | -                                   | -                        | -                                      |
-| POST   | `/ventures/:ventureId/gallery`    | Protected | { resource: 'ventures', action: 'update', possession: 'own' } | `ventureId: string` | -                                   | -                        | `file` (single)<br>`image` (multipart) |
-| DELETE | `/ventures/gallery/:galleryId`    | Protected | { resource: 'ventures', action: 'update', possession: 'own' } | `galleryId: string` | -                                   | -                        | -                                      |
-| GET    | `/ventures/by-slug/:slug/gallery` | Public    | -                                                             | `slug: string`      | -                                   | -                        | -                                      |
-| POST   | `/ventures/:ventureId/logo`       | Protected | { resource: 'ventures', action: 'update', possession: 'own' } | `ventureId: string` | -                                   | -                        | `file` (single)<br>`logo` (multipart)  |
-| POST   | `/ventures/:ventureId/cover`      | Protected | { resource: 'ventures', action: 'update', possession: 'own' } | `ventureId: string` | -                                   | -                        | `file` (single)<br>`cover` (multipart) |
-| GET    | `/ventures/:ventureId`            | Protected | -                                                             | `ventureId: string` | -                                   | -                        | -                                      |
-| PATCH  | `/ventures/:slug`                 | Protected | { resource: 'ventures', action: 'update', possession: 'own' } | `slug: string`      | -                                   | `body: UpdateVentureDto` | -                                      |
-| DELETE | `/ventures/:id`                   | Protected | { resource: 'ventures', action: 'delete', possession: 'own' } | `id: string`        | -                                   | -                        | -                                      |
+| Method | Path | Auth | Params | Query | Body | Files |
+|---|---|---|---|---|---|---|
+| POST | `/ventures` | Protected  | - | - | `body: CreateVentureDto` | - |
+| GET | `/ventures/published` | Public  | - | - | - | - |
+| GET | `/ventures` | Protected  | - | `(query object): FilterVenturesDto` | - | - |
+| GET | `/ventures/by-slug/:slug` | Public  | `slug: string` | - | - | - |
+| PATCH | `/ventures/by-slug/:slug/publish` | Protected  | `slug: string` | - | - | - |
+| GET | `/ventures/me/paginated` | Protected  | - | `page: string` | - | - |
+| GET | `/ventures/me` | Protected  | - | - | - | - |
+| POST | `/ventures/:ventureId/gallery` | Protected  | `ventureId: string` | - | - | `file` (single)<br>`image` (multipart) |
+| DELETE | `/ventures/gallery/:galleryId` | Protected  | `galleryId: string` | - | - | - |
+| GET | `/ventures/by-slug/:slug/gallery` | Public  | `slug: string` | - | - | - |
+| POST | `/ventures/:ventureId/logo` | Protected  | `ventureId: string` | - | - | `file` (single)<br>`logo` (multipart) |
+| POST | `/ventures/:ventureId/cover` | Protected  | `ventureId: string` | - | - | `file` (single)<br>`cover` (multipart) |
+| GET | `/ventures/:ventureId` | Protected  | `ventureId: string` | - | - | - |
+| PATCH | `/ventures/:slug` | Protected  | `slug: string` | - | `body: UpdateVentureDto` | - |
+| DELETE | `/ventures/:id` | Protected  | `id: string` | - | - | - |
 
 ## DTO Reference
 
@@ -378,98 +378,98 @@ Source: `src/modules/ventures/ventures.controller.ts`
 Source: `src/core/auth/dto/contact-support.dto.ts`
 Type: `interface`
 
-| Field          | Type     | Required | Validation / Transform decorators |
-| -------------- | -------- | -------- | --------------------------------- |
-| `email`        | `string` | Yes      | -                                 |
-| `name`         | `string` | Yes      | -                                 |
-| `country`      | `string` | Yes      | -                                 |
-| `phone_number` | `string` | Yes      | -                                 |
-| `message`      | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | - |
+| `name` | `string` | Yes | - |
+| `country` | `string` | Yes | - |
+| `phone_number` | `string` | Yes | - |
+| `message` | `string` | Yes | - |
 
 #### CreateWithGoogleDto
 
 Source: `src/core/auth/dto/sign-up-with-google.dto.ts`
 Type: `class`
 
-| Field          | Type     | Required | Validation / Transform decorators |
-| -------------- | -------- | -------- | --------------------------------- |
-| `name`         | `string` | Yes      | -                                 |
-| `email`        | `string` | Yes      | -                                 |
-| `google_image` | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | - |
+| `email` | `string` | Yes | - |
+| `google_image` | `string` | Yes | - |
 
 #### ForgotPasswordDto
 
 Source: `src/core/auth/dto/forgot-password.dto.ts`
 Type: `class`
 
-| Field   | Type     | Required | Validation / Transform decorators |
-| ------- | -------- | -------- | --------------------------------- |
-| `email` | `string` | Yes      | @IsEmail                          |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | @IsEmail |
 
 #### ResetPasswordDto
 
 Source: `src/core/auth/dto/reset-password.dto.ts`
 Type: `class`
 
-| Field              | Type     | Required | Validation / Transform decorators |
-| ------------------ | -------- | -------- | --------------------------------- |
-| `token`            | `string` | Yes      | @IsNotEmpty                       |
-| `password`         | `string` | Yes      | @MinLength(6)                     |
-| `password_confirm` | `string` | Yes      | @Match('password')                |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `token` | `string` | Yes | @IsNotEmpty |
+| `password` | `string` | Yes | @MinLength(6) |
+| `password_confirm` | `string` | Yes | @Match('password') |
 
 #### SignInDto
 
 Source: `src/core/auth/dto/sign-in.dto.ts`
 Type: `class`
 
-| Field      | Type     | Required | Validation / Transform decorators |
-| ---------- | -------- | -------- | --------------------------------- |
-| `email`    | `string` | Yes      | @IsNotEmpty                       |
-| `password` | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | @IsNotEmpty |
+| `password` | `string` | Yes | @IsNotEmpty |
 
 #### SignUpDto
 
 Source: `src/core/auth/dto/sign-up.dto.ts`
 Type: `class`
 
-| Field              | Type     | Required | Validation / Transform decorators                         |
-| ------------------ | -------- | -------- | --------------------------------------------------------- |
-| `email`            | `string` | Yes      | @IsEmail                                                  |
-| `name`             | `string` | Yes      | @IsNotEmpty                                               |
-| `phone_number`     | `string` | Yes      | @IsNotEmpty                                               |
-| `gender`           | `string` | Yes      | @IsNotEmpty                                               |
-| `birth_date`       | `Date`   | Yes      | @IsNotEmpty                                               |
-| `country`          | `string` | Yes      | @IsNotEmpty                                               |
-| `password`         | `string` | Yes      | @MinLength(6)                                             |
-| `password_confirm` | `string` | Yes      | @Match('password', { message: 'Passwords do not match' }) |
-| `referral_code`    | `string` | Yes      | @IsOptional                                               |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | @IsEmail |
+| `name` | `string` | Yes | @IsNotEmpty |
+| `phone_number` | `string` | Yes | @IsNotEmpty |
+| `gender` | `string` | Yes | @IsNotEmpty |
+| `birth_date` | `Date` | Yes | @IsNotEmpty |
+| `country` | `string` | Yes | @IsNotEmpty |
+| `password` | `string` | Yes | @MinLength(6) |
+| `password_confirm` | `string` | Yes | @Match('password', { message: 'Passwords do not match' }) |
+| `referral_code` | `string` | Yes | @IsOptional |
 
 #### UpdatePasswordDto
 
 Source: `src/core/auth/dto/update-password.dto.ts`
 Type: `class`
 
-| Field              | Type     | Required | Validation / Transform decorators |
-| ------------------ | -------- | -------- | --------------------------------- |
-| `password`         | `string` | Yes      | @MinLength(6)                     |
-| `password_confirm` | `string` | Yes      | @IsNotEmpty<br>@Match('password') |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `password` | `string` | Yes | @MinLength(6) |
+| `password_confirm` | `string` | Yes | @IsNotEmpty<br>@Match('password') |
 
 #### UpdateProfileDto
 
 Source: `src/core/auth/dto/update-profile.dto.ts`
 Type: `class`
 
-| Field          | Type       | Required | Validation / Transform decorators |
-| -------------- | ---------- | -------- | --------------------------------- |
-| `email`        | `string`   | Yes      | @IsEmail                          |
-| `name`         | `string`   | Yes      | @IsNotEmpty                       |
-| `phone_number` | `string`   | Yes      | @IsNotEmpty                       |
-| `gender`       | `string`   | Yes      | @IsNotEmpty                       |
-| `city`         | `string`   | Yes      | @IsNotEmpty                       |
-| `birth_date`   | `Date`     | Yes      | @IsNotEmpty                       |
-| `country`      | `string`   | Yes      | @IsNotEmpty                       |
-| `biography`    | `string`   | Yes      | @IsOptional                       |
-| `roles`        | `string[]` | Yes      | @IsOptional                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | @IsEmail |
+| `name` | `string` | Yes | @IsNotEmpty |
+| `phone_number` | `string` | Yes | @IsNotEmpty |
+| `gender` | `string` | Yes | @IsNotEmpty |
+| `city` | `string` | Yes | @IsNotEmpty |
+| `birth_date` | `Date` | Yes | @IsNotEmpty |
+| `country` | `string` | Yes | @IsNotEmpty |
+| `biography` | `string` | Yes | @IsOptional |
+| `roles` | `string[]` | Yes | @IsOptional |
 
 ### Blog
 
@@ -478,61 +478,61 @@ Type: `class`
 Source: `src/modules/blog/articles/dto/create-article.dto.ts`
 Type: `class`
 
-| Field          | Type       | Required | Validation / Transform decorators |
-| -------------- | ---------- | -------- | --------------------------------- |
-| `published_at` | `string`   | Yes      | @IsOptional                       |
-| `title`        | `string`   | Yes      | @IsNotEmpty                       |
-| `content`      | `string`   | Yes      | @IsNotEmpty                       |
-| `tags`         | `string[]` | Yes      | @IsArray                          |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `published_at` | `string` | Yes | @IsOptional |
+| `title` | `string` | Yes | @IsNotEmpty |
+| `content` | `string` | Yes | @IsNotEmpty |
+| `tags` | `string[]` | Yes | @IsArray |
 
 #### CreateCommentDto
 
 Source: `src/modules/blog/comments/dto/create-comment.dto.ts`
 Type: `class`
 
-| Field       | Type     | Required | Validation / Transform decorators |
-| ----------- | -------- | -------- | --------------------------------- |
-| `articleId` | `string` | Yes      | @IsNotEmpty                       |
-| `content`   | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `articleId` | `string` | Yes | @IsNotEmpty |
+| `content` | `string` | Yes | @IsNotEmpty |
 
 #### CreateTagDto
 
 Source: `src/modules/blog/tags/dto/create-tag.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators |
-| ------ | -------- | -------- | --------------------------------- |
-| `name` | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
 
 #### FilterArticlesDto
 
 Source: `src/modules/blog/articles/dto/filter-articles.dto.ts`
 Type: `interface`
 
-| Field    | Type                                                | Required | Validation / Transform decorators |
-| -------- | --------------------------------------------------- | -------- | --------------------------------- |
-| `page`   | `string \| null`                                    | Yes      | -                                 |
-| `q`      | `string \| null`                                    | Yes      | -                                 |
-| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
+| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No | - |
 
 #### FilterCommentsDto
 
 Source: `src/modules/blog/comments/dto/filter-comments.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
 
 #### FilterTagsDto
 
 Source: `src/modules/blog/tags/dto/filter-tags.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `q`    | `string \| null` | Yes      | -                                 |
-| `page` | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `q` | `string \| null` | Yes | - |
+| `page` | `string \| null` | Yes | - |
 
 #### UpdateArticleDto
 
@@ -565,50 +565,50 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/events/categories/dto/create-category.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators |
-| ------ | -------- | -------- | --------------------------------- |
-| `name` | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
 
 #### CreateEventDto
 
 Source: `src/modules/events/dto/create-event.dto.ts`
 Type: `class`
 
-| Field                | Type       | Required | Validation / Transform decorators                         |
-| -------------------- | ---------- | -------- | --------------------------------------------------------- |
-| `name`               | `string`   | Yes      | @IsNotEmpty                                               |
-| `place`              | `string`   | Yes      | @IsNotEmpty                                               |
-| `description`        | `string`   | Yes      | @IsNotEmpty                                               |
-| `context`            | `string`   | No       | @IsOptional                                               |
-| `objectives`         | `string`   | No       | @IsOptional                                               |
-| `duration_hours`     | `number`   | No       | @IsOptional                                               |
-| `selection_criteria` | `string`   | No       | @IsOptional                                               |
-| `started_at`         | `Date`     | Yes      | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
-| `ended_at`           | `Date`     | Yes      | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
-| `event_manager`      | `string`   | No       | @IsOptional                                               |
-| `program`            | `string`   | Yes      | @IsNotEmpty                                               |
-| `categories`         | `string[]` | Yes      | @IsNotEmpty                                               |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
+| `place` | `string` | Yes | @IsNotEmpty |
+| `description` | `string` | Yes | @IsNotEmpty |
+| `context` | `string` | No | @IsOptional |
+| `objectives` | `string` | No | @IsOptional |
+| `duration_hours` | `number` | No | @IsOptional |
+| `selection_criteria` | `string` | No | @IsOptional |
+| `started_at` | `Date` | Yes | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
+| `ended_at` | `Date` | Yes | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
+| `event_manager` | `string` | No | @IsOptional |
+| `program` | `string` | Yes | @IsNotEmpty |
+| `categories` | `string[]` | Yes | @IsNotEmpty |
 
 #### FilterEventsDto
 
 Source: `src/modules/events/dto/filter-events.dto.ts`
 Type: `interface`
 
-| Field        | Type                                                | Required | Validation / Transform decorators |
-| ------------ | --------------------------------------------------- | -------- | --------------------------------- |
-| `page`       | `string \| null`                                    | Yes      | -                                 |
-| `q`          | `string \| null`                                    | Yes      | -                                 |
-| `categories` | `string[]`                                          | Yes      | -                                 |
-| `filter`     | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
+| `categories` | `string[]` | Yes | - |
+| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No | - |
 
 #### ParticipateEventDto
 
 Source: `src/modules/events/dto/participate-event.dto.ts`
 Type: `class`
 
-| Field        | Type     | Required | Validation / Transform decorators |
-| ------------ | -------- | -------- | --------------------------------- |
-| `venture_id` | `string` | No       | @IsOptional<br>@IsUUID            |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `venture_id` | `string` | No | @IsOptional<br>@IsUUID |
 
 #### UpdateCategoryDto
 
@@ -633,9 +633,9 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/galleries/dto/add-gallery.dto.ts`
 Type: `interface`
 
-| Field   | Type     | Required | Validation / Transform decorators |
-| ------- | -------- | -------- | --------------------------------- |
-| `image` | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `image` | `string` | Yes | - |
 
 ### Mentors
 
@@ -644,55 +644,55 @@ Type: `interface`
 Source: `src/modules/mentors/dto/create-experience.dto.ts`
 Type: `class`
 
-| Field          | Type      | Required | Validation / Transform decorators                         |
-| -------------- | --------- | -------- | --------------------------------------------------------- |
-| `id`           | `string`  | No       | @IsOptional<br>@IsString                                  |
-| `company_name` | `string`  | Yes      | -                                                         |
-| `job_title`    | `string`  | Yes      | -                                                         |
-| `is_current`   | `boolean` | Yes      | -                                                         |
-| `start_date`   | `Date`    | Yes      | @Transform(({ value }) => new Date(value))                |
-| `end_date`     | `Date`    | No       | @Transform(({ value }) => new Date(value))<br>@IsOptional |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `id` | `string` | No | @IsOptional<br>@IsString |
+| `company_name` | `string` | Yes | - |
+| `job_title` | `string` | Yes | - |
+| `is_current` | `boolean` | Yes | - |
+| `start_date` | `Date` | Yes | @Transform(({ value }) => new Date(value)) |
+| `end_date` | `Date` | No | @Transform(({ value }) => new Date(value))<br>@IsOptional |
 
 #### CreateExpertiseDto
 
 Source: `src/modules/mentors/expertises/dto/create-expertise.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators |
-| ------ | -------- | -------- | --------------------------------- |
-| `name` | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | - |
 
 #### CreateMentorDto
 
 Source: `src/modules/mentors/dto/create-mentor.dto.ts`
 Type: `class`
 
-| Field              | Type                    | Required | Validation / Transform decorators                                               |
-| ------------------ | ----------------------- | -------- | ------------------------------------------------------------------------------- |
-| `years_experience` | `number`                | Yes      | -                                                                               |
-| `expertises`       | `string[]`              | Yes      | -                                                                               |
-| `experiences`      | `CreateExperienceDto[]` | Yes      | @IsArray<br>@ValidateNested({ each: true })<br>@Type(() => CreateExperienceDto) |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `years_experience` | `number` | Yes | - |
+| `expertises` | `string[]` | Yes | - |
+| `experiences` | `CreateExperienceDto[]` | Yes | @IsArray<br>@ValidateNested({ each: true })<br>@Type(() => CreateExperienceDto) |
 
 #### FilterExpertisesDto
 
 Source: `src/modules/mentors/expertises/dto/filter-expertises.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
-| `q`    | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
 
 #### FilterMentorsDto
 
 Source: `src/modules/mentors/dto/filter-mentors.dto.ts`
 Type: `interface`
 
-| Field    | Type                   | Required | Validation / Transform decorators |
-| -------- | ---------------------- | -------- | --------------------------------- |
-| `page`   | `string \| null`       | Yes      | -                                 |
-| `q`      | `string \| null`       | Yes      | -                                 |
-| `status` | `MentorStatus \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
+| `status` | `MentorStatus \| null` | Yes | - |
 
 #### UpdateExpertiseDto
 
@@ -717,22 +717,22 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/notifications/dto/create-notification.dto.ts`
 Type: `class`
 
-| Field      | Type     | Required | Validation / Transform decorators |
-| ---------- | -------- | -------- | --------------------------------- |
-| `title`    | `string` | Yes      | @IsNotEmpty                       |
-| `body`     | `string` | Yes      | @IsNotEmpty                       |
-| `phase_id` | `string` | No       | @IsOptional                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `title` | `string` | Yes | @IsNotEmpty |
+| `body` | `string` | Yes | @IsNotEmpty |
+| `phase_id` | `string` | No | @IsOptional |
 
 #### FilterNotificationsDto
 
 Source: `src/modules/notifications/dto/filter-notifications.dto.ts`
 Type: `class`
 
-| Field     | Type                         | Required | Validation / Transform decorators |
-| --------- | ---------------------------- | -------- | --------------------------------- |
-| `phaseId` | `string \| null`             | No       | -                                 |
-| `page`    | `string \| null`             | Yes      | -                                 |
-| `status`  | `NotificationStatus \| null` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `phaseId` | `string \| null` | No | - |
+| `page` | `string \| null` | Yes | - |
+| `status` | `NotificationStatus \| null` | No | - |
 
 #### UpdateNotificationDto
 
@@ -749,31 +749,31 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/programs/categories/dto/create-category.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators |
-| ------ | -------- | -------- | --------------------------------- |
-| `name` | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
 
 #### CreateProgramDto
 
 Source: `src/modules/programs/dto/create-program.dto.ts`
 Type: `class`
 
-| Field         | Type     | Required | Validation / Transform decorators |
-| ------------- | -------- | -------- | --------------------------------- |
-| `name`        | `string` | Yes      | -                                 |
-| `description` | `string` | Yes      | -                                 |
-| `category`    | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | - |
+| `description` | `string` | Yes | - |
+| `category` | `string` | Yes | - |
 
 #### FilterProgramsDto
 
 Source: `src/modules/programs/dto/filter-programs.dto.ts`
 Type: `interface`
 
-| Field    | Type                                                | Required | Validation / Transform decorators |
-| -------- | --------------------------------------------------- | -------- | --------------------------------- |
-| `page`   | `string \| null`                                    | Yes      | -                                 |
-| `q`      | `string \| null`                                    | Yes      | -                                 |
-| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
+| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No | - |
 
 #### UpdateCategoryDto
 
@@ -798,72 +798,72 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/projects/categories/dto/create-category.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators                  |
-| ------ | -------- | -------- | -------------------------------------------------- |
-| `name` | `string` | Yes      | @IsNotEmpty({ message: 'Le nom est obligatoire' }) |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty({ message: 'Le nom est obligatoire' }) |
 
 #### CreatePhaseDto
 
 Source: `src/modules/projects/phases/dto/create-phase.dto.ts`
 Type: `class`
 
-| Field         | Type     | Required | Validation / Transform decorators                     |
-| ------------- | -------- | -------- | ----------------------------------------------------- |
-| `name`        | `string` | Yes      | @IsString                                             |
-| `description` | `string` | Yes      | @IsString                                             |
-| `started_at`  | `Date`   | Yes      | @IsDate<br>@Transform(({ value }) => new Date(value)) |
-| `ended_at`    | `Date`   | Yes      | @IsDate<br>@Transform(({ value }) => new Date(value)) |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsString |
+| `description` | `string` | Yes | @IsString |
+| `started_at` | `Date` | Yes | @IsDate<br>@Transform(({ value }) => new Date(value)) |
+| `ended_at` | `Date` | Yes | @IsDate<br>@Transform(({ value }) => new Date(value)) |
 
 #### CreateProjectDto
 
 Source: `src/modules/projects/dto/create-project.dto.ts`
 Type: `class`
 
-| Field                | Type       | Required | Validation / Transform decorators                                 |
-| -------------------- | ---------- | -------- | ----------------------------------------------------------------- |
-| `name`               | `string`   | Yes      | @IsNotEmpty                                                       |
-| `description`        | `string`   | Yes      | @IsNotEmpty                                                       |
-| `context`            | `string`   | No       | @IsOptional                                                       |
-| `objectives`         | `string`   | No       | @IsOptional                                                       |
-| `duration_hours`     | `number`   | No       | @IsOptional<br>@Transform(({ value }) => (value ? +value : null)) |
-| `selection_criteria` | `string`   | No       | @IsOptional                                                       |
-| `started_at`         | `Date`     | Yes      | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty         |
-| `ended_at`           | `Date`     | Yes      | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty         |
-| `project_manager`    | `string`   | No       | @IsOptional                                                       |
-| `program`            | `string`   | Yes      | @IsNotEmpty                                                       |
-| `categories`         | `string[]` | Yes      | @IsArray<br>@IsNotEmpty                                           |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
+| `description` | `string` | Yes | @IsNotEmpty |
+| `context` | `string` | No | @IsOptional |
+| `objectives` | `string` | No | @IsOptional |
+| `duration_hours` | `number` | No | @IsOptional<br>@Transform(({ value }) => (value ? +value : null)) |
+| `selection_criteria` | `string` | No | @IsOptional |
+| `started_at` | `Date` | Yes | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
+| `ended_at` | `Date` | Yes | @Transform(({ value }) => new Date(value))<br>@IsNotEmpty |
+| `project_manager` | `string` | No | @IsOptional |
+| `program` | `string` | Yes | @IsNotEmpty |
+| `categories` | `string[]` | Yes | @IsArray<br>@IsNotEmpty |
 
 #### FilterProjectsDto
 
 Source: `src/modules/projects/dto/filter-projects.dto.ts`
 Type: `interface`
 
-| Field        | Type                                                | Required | Validation / Transform decorators |
-| ------------ | --------------------------------------------------- | -------- | --------------------------------- |
-| `page`       | `string \| null`                                    | No       | -                                 |
-| `q`          | `string \| null`                                    | No       | -                                 |
-| `categories` | `string[] \| string`                                | No       | -                                 |
-| `status`     | `'past' \| 'current' \| 'future' \| null`           | No       | -                                 |
-| `filter`     | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | No | - |
+| `q` | `string \| null` | No | - |
+| `categories` | `string[] \| string` | No | - |
+| `status` | `'past' \| 'current' \| 'future' \| null` | No | - |
+| `filter` | `'all' \| 'published' \| 'drafts' \| 'highlighted'` | No | - |
 
 #### MoveParticipantsDto
 
 Source: `src/modules/projects/phases/dto/move-participants.dto.ts`
 Type: `class`
 
-| Field     | Type       | Required | Validation / Transform decorators     |
-| --------- | ---------- | -------- | ------------------------------------- |
-| `ids`     | `string[]` | Yes      | @IsArray<br>@IsString({ each: true }) |
-| `phaseId` | `string`   | Yes      | @IsUUID                               |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `ids` | `string[]` | Yes | @IsArray<br>@IsString({ each: true }) |
+| `phaseId` | `string` | Yes | @IsUUID |
 
 #### ParticipateProjectDto
 
 Source: `src/modules/projects/dto/participate.dto.ts`
 Type: `class`
 
-| Field       | Type     | Required | Validation / Transform decorators |
-| ----------- | -------- | -------- | --------------------------------- |
-| `ventureId` | `string` | No       | @IsOptional<br>@IsUUID            |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `ventureId` | `string` | No | @IsOptional<br>@IsUUID |
 
 #### UpdateCategoryDto
 
@@ -896,21 +896,21 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/subprograms/dto/create-subprogram.dto.ts`
 Type: `class`
 
-| Field         | Type     | Required | Validation / Transform decorators |
-| ------------- | -------- | -------- | --------------------------------- |
-| `name`        | `string` | Yes      | @IsNotEmpty                       |
-| `description` | `string` | Yes      | @IsNotEmpty                       |
-| `programId`   | `string` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty |
+| `description` | `string` | Yes | @IsNotEmpty |
+| `programId` | `string` | Yes | @IsNotEmpty |
 
 #### FilterSubprogramDto
 
 Source: `src/modules/subprograms/dto/filter-subprogram.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
-| `q`    | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
 
 #### UpdateSubprogramDto
 
@@ -927,57 +927,57 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/users/dto/create-from-csv.dto.ts`
 Type: `class`
 
-| Field          | Type     | Required | Validation / Transform decorators |
-| -------------- | -------- | -------- | --------------------------------- |
-| `name`         | `string` | Yes      | -                                 |
-| `email`        | `string` | Yes      | -                                 |
-| `phone_number` | `string` | No       | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | - |
+| `email` | `string` | Yes | - |
+| `phone_number` | `string` | No | - |
 
 #### CreateRoleDto
 
 Source: `src/modules/users/roles/dto/create-role.dto.ts`
 Type: `class`
 
-| Field  | Type     | Required | Validation / Transform decorators                          |
-| ------ | -------- | -------- | ---------------------------------------------------------- |
-| `name` | `string` | Yes      | @IsNotEmpty({ message: 'Le nom du rôle est obligatoire' }) |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | @IsNotEmpty({ message: 'Le nom du rôle est obligatoire' }) |
 
 #### CreateUserDto
 
 Source: `src/modules/users/dto/create-user.dto.ts`
 Type: `class`
 
-| Field          | Type       | Required | Validation / Transform decorators |
-| -------------- | ---------- | -------- | --------------------------------- |
-| `email`        | `string`   | Yes      | @IsEmail                          |
-| `name`         | `string`   | Yes      | @IsNotEmpty                       |
-| `phone_number` | `string`   | Yes      | @IsNotEmpty                       |
-| `gender`       | `string`   | Yes      | @IsNotEmpty                       |
-| `city`         | `string`   | Yes      | @IsNotEmpty                       |
-| `birth_date`   | `Date`     | Yes      | @IsNotEmpty                       |
-| `country`      | `string`   | Yes      | @IsNotEmpty                       |
-| `biography`    | `string`   | Yes      | @IsOptional                       |
-| `roles`        | `string[]` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `email` | `string` | Yes | @IsEmail |
+| `name` | `string` | Yes | @IsNotEmpty |
+| `phone_number` | `string` | Yes | @IsNotEmpty |
+| `gender` | `string` | Yes | @IsNotEmpty |
+| `city` | `string` | Yes | @IsNotEmpty |
+| `birth_date` | `Date` | Yes | @IsNotEmpty |
+| `country` | `string` | Yes | @IsNotEmpty |
+| `biography` | `string` | Yes | @IsOptional |
+| `roles` | `string[]` | Yes | @IsNotEmpty |
 
 #### FilterRolesDto
 
 Source: `src/modules/users/roles/dto/filter-roles.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
-| `q`    | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
 
 #### FilterUsersDto
 
 Source: `src/modules/users/dto/filter-users.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
-| `q`    | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
 
 #### UpdateRoleDto
 
@@ -1002,51 +1002,51 @@ No direct fields in this class (mapped/composed DTO).
 Source: `src/modules/ventures/products/dto/create-product.dto.ts`
 Type: `class`
 
-| Field         | Type     | Required | Validation / Transform decorators |
-| ------------- | -------- | -------- | --------------------------------- |
-| `ventureId`   | `string` | Yes      | @IsNotEmpty                       |
-| `name`        | `string` | Yes      | @IsNotEmpty                       |
-| `description` | `string` | Yes      | @IsNotEmpty                       |
-| `price`       | `number` | Yes      | @IsNotEmpty                       |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `ventureId` | `string` | Yes | @IsNotEmpty |
+| `name` | `string` | Yes | @IsNotEmpty |
+| `description` | `string` | Yes | @IsNotEmpty |
+| `price` | `number` | Yes | @IsNotEmpty |
 
 #### CreateVentureDto
 
 Source: `src/modules/ventures/dto/create-venture.dto.ts`
 Type: `class`
 
-| Field            | Type     | Required | Validation / Transform decorators                         |
-| ---------------- | -------- | -------- | --------------------------------------------------------- |
-| `name`           | `string` | Yes      | -                                                         |
-| `description`    | `string` | Yes      | -                                                         |
-| `problem_solved` | `string` | Yes      | -                                                         |
-| `target_market`  | `string` | Yes      | -                                                         |
-| `email`          | `string` | Yes      | @IsOptional                                               |
-| `phone_number`   | `string` | Yes      | @IsOptional                                               |
-| `website`        | `string` | Yes      | @IsOptional                                               |
-| `linkedin_url`   | `string` | Yes      | @IsOptional                                               |
-| `sector`         | `string` | Yes      | @IsOptional                                               |
-| `founded_at`     | `Date`   | Yes      | @IsOptional<br>@Transform(({ value }) => new Date(value)) |
-| `location`       | `string` | Yes      | @IsOptional                                               |
-| `stage`          | `string` | Yes      | @IsOptional                                               |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `name` | `string` | Yes | - |
+| `description` | `string` | Yes | - |
+| `problem_solved` | `string` | Yes | - |
+| `target_market` | `string` | Yes | - |
+| `email` | `string` | Yes | @IsOptional |
+| `phone_number` | `string` | Yes | @IsOptional |
+| `website` | `string` | Yes | @IsOptional |
+| `linkedin_url` | `string` | Yes | @IsOptional |
+| `sector` | `string` | Yes | @IsOptional |
+| `founded_at` | `Date` | Yes | @IsOptional<br>@Transform(({ value }) => new Date(value)) |
+| `location` | `string` | Yes | @IsOptional |
+| `stage` | `string` | Yes | @IsOptional |
 
 #### FilterProductsDto
 
 Source: `src/modules/ventures/products/dto/filter-products.dto.ts`
 Type: `interface`
 
-| Field  | Type     | Required | Validation / Transform decorators |
-| ------ | -------- | -------- | --------------------------------- |
-| `page` | `string` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string` | Yes | - |
 
 #### FilterVenturesDto
 
 Source: `src/modules/ventures/dto/filter-ventures.dto.ts`
 Type: `interface`
 
-| Field  | Type             | Required | Validation / Transform decorators |
-| ------ | ---------------- | -------- | --------------------------------- |
-| `page` | `string \| null` | Yes      | -                                 |
-| `q`    | `string \| null` | Yes      | -                                 |
+| Field | Type | Required | Validation / Transform decorators |
+|---|---|---|---|
+| `page` | `string \| null` | Yes | - |
+| `q` | `string \| null` | Yes | - |
 
 #### UpdateProductDto
 
