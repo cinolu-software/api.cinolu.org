@@ -27,10 +27,10 @@ export class PhasesService {
     }
   }
 
-  async findOne(id: string): Promise<Phase> {
+  async findOne(phaseId: string): Promise<Phase> {
     try {
       return await this.phaseRepository.findOneOrFail({
-        where: { id },
+        where: { id: phaseId },
         relations: ['participations', 'participations.user']
       });
     } catch {
@@ -38,24 +38,24 @@ export class PhasesService {
     }
   }
 
-  async update(id: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
+  async update(phaseId: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
     try {
-      await this.phaseRepository.update(id, updatePhaseDto);
-      return await this.findOne(id);
+      await this.phaseRepository.update(phaseId, updatePhaseDto);
+      return await this.findOne(phaseId);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findAll(id: string): Promise<Phase[]> {
+  async findAll(projectId: string): Promise<Phase[]> {
     return await this.phaseRepository.find({
-      where: { project: { id } }
+      where: { project: { id: projectId } }
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(phaseId: string): Promise<void> {
     try {
-      const phase = await this.phaseRepository.findOneOrFail({ where: { id } });
+      const phase = await this.phaseRepository.findOneOrFail({ where: { id: phaseId } });
       await this.phaseRepository.softDelete(phase.id);
     } catch {
       throw new BadRequestException();

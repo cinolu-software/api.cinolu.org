@@ -7,11 +7,11 @@ import { User } from '@/modules/users/entities/user.entity';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../core/auth/decorators/public.decorator';
+import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateCommentDto): Promise<Comment> {
@@ -24,7 +24,7 @@ export class CommentsController {
     return this.commentsService.findAll();
   }
 
-  @Get('article/:slug')
+  @Get('by-article/:slug')
   @Public()
   findByArticle(@Param('slug') slug: string, @Query() dto: FilterCommentsDto): Promise<[Comment[], number]> {
     return this.commentsService.findByArticle(slug, dto);

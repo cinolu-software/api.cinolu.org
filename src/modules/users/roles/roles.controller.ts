@@ -8,9 +8,9 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('roles')
 export class RolesController {
-  constructor(private rolesService: RolesService) {}
+  constructor(private readonly rolesService: RolesService) {}
 
-  @Post('')
+  @Post()
   @UseRoles({ resource: 'roles', action: 'create' })
   create(@Body() dto: CreateRoleDto): Promise<Role> {
     return this.rolesService.create(dto);
@@ -18,11 +18,11 @@ export class RolesController {
 
   @Get('paginated')
   @UseRoles({ resource: 'roles', action: 'read' })
-  findAllPaginated(@Query() queryParams: FilterRolesDto): Promise<[Role[], number]> {
-    return this.rolesService.findAllPaginated(queryParams);
+  findPaginated(@Query() query: FilterRolesDto): Promise<[Role[], number]> {
+    return this.rolesService.findAllPaginated(query);
   }
 
-  @Get('')
+  @Get()
   @UseRoles({ resource: 'roles', action: 'read' })
   findAll(): Promise<Role[]> {
     return this.rolesService.findAll();

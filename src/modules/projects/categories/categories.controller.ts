@@ -7,7 +7,7 @@ import { QueryParams } from './utils/query-params.type';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 
-@Controller('project-categories')
+@Controller('projects/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -25,7 +25,7 @@ export class CategoriesController {
 
   @Get('paginated')
   @UseRoles({ resource: 'projectCategories', action: 'read' })
-  findAllPaginated(@Query() query: QueryParams): Promise<[Category[], number]> {
+  findPaginated(@Query() query: QueryParams): Promise<[Category[], number]> {
     return this.categoriesService.findAllPaginated(query);
   }
 

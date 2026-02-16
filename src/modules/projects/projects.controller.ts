@@ -24,67 +24,71 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { Notification } from '../notifications/entities/notification.entity';
-import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { Notification } from '@/modules/notifications/entities/notification.entity';
+import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
 import { ProjectParticipation } from './entities/participation.entity';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private projectsService: ProjectsService) {}
+  constructor(private readonly projectsService: ProjectsService) {}
 
-  @Post('')
+  @Post()
   @UseRoles({ resource: 'projects', action: 'create' })
   create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
   }
 
-  @Get('')
+  @Get()
   @UseRoles({ resource: 'projects', action: 'read' })
-  findAll(@Query() qp: FilterProjectsDto): Promise<[Project[], number]> {
-    return this.projectsService.findAll(qp);
+  findAll(@Query() query: FilterProjectsDto): Promise<[Project[], number]> {
+    return this.projectsService.findAll(query);
   }
 
-  @Get('find-recent')
+  @Get('recent')
   @Public()
   findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
   }
 
-  @Get('find-published')
+  @Get('published')
   @Public()
-  findPublished(@Query() queryParams: FilterProjectsDto): Promise<[Project[], number]> {
-    return this.projectsService.findPublished(queryParams);
+  findPublished(@Query() query: FilterProjectsDto): Promise<[Project[], number]> {
+    return this.projectsService.findPublished(query);
   }
 
-  @Get('slug/:slug')
+  @Get('by-slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Project> {
     return this.projectsService.findBySlug(slug);
   }
 
-  @Post(':id/participate')
-  participate(@Param('id') id: string, @CurrentUser() user: User, @Body() dto: ParticipateProjectDto): Promise<void> {
-    return this.projectsService.participate(id, user, dto);
+  @Post(':projectId/participate')
+  participate(
+    @Param('projectId') projectId: string,
+    @CurrentUser() user: User,
+    @Body() dto: ParticipateProjectDto
+  ): Promise<void> {
+    return this.projectsService.participate(projectId, user, dto);
   }
 
-  @Get('user/participations')
+  @Get('me/participations')
   findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
     return this.projectsService.findUserParticipations(user.id);
   }
 
-  @Get(':id/participations')
+  @Get(':projectId/participations')
   @UseRoles({ resource: 'projects', action: 'read' })
-  findParticipations(@Param('id') id: string) {
-    return this.projectsService.findParticipations(id);
+  findParticipations(@Param('projectId') projectId: string): Promise<ProjectParticipation[]> {
+    return this.projectsService.findParticipations(projectId);
   }
 
-  @Get(':id')
+  @Get(':projectId')
   @UseRoles({ resource: 'projects', action: 'read' })
-  findOne(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.findOne(id);
+  findOne(@Param('projectId') projectId: string): Promise<Project> {
+    return this.projectsService.findOne(projectId);
   }
 
-  @Post(':id/participants/csv')
+  @Post(':projectId/participants/import-csv')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
     FileInterceptor('file', {
@@ -97,27 +101,27 @@ export class ProjectsController {
       limits: { fileSize: 2 * 1024 * 1024 }
     })
   )
-  addParticipantsFromCsv(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-    return this.projectsService.addParticipantsFromCsv(id, file);
+  addParticipantsFromCsv(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.projectsService.addParticipantsFromCsv(projectId, file);
   }
 
-  @Post(':id/notification')
+  @Post(':projectId/notifications')
   @UseRoles({ resource: 'projects', action: 'update' })
   createNotification(
-    @Param('id') id: string,
+    @Param('projectId') projectId: string,
     @CurrentUser() user: User,
     @Body() dto: CreateNotificationDto
   ): Promise<Notification> {
-    return this.projectsService.createNotification(id, user, dto);
+    return this.projectsService.createNotification(projectId, user, dto);
   }
 
-  @Post('notify/:id')
+  @Post('notifications/:notificationId/send')
   @UseRoles({ resource: 'projects', action: 'update' })
-  sendNotification(@Param('id') id: string): Promise<Notification> {
-    return this.projectsService.sendNotification(id);
+  sendNotification(@Param('notificationId') notificationId: string): Promise<Notification> {
+    return this.projectsService.sendNotification(notificationId);
   }
 
-  @Post('gallery/:id')
+  @Post(':projectId/gallery')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -129,29 +133,29 @@ export class ProjectsController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.projectsService.addImage(id, file);
+  addGallery(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.projectsService.addImage(projectId, file);
   }
 
-  @Delete('gallery/remove/:id')
+  @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'projects', action: 'update' })
-  removeGallery(@Param('id') id: string): Promise<void> {
-    return this.projectsService.removeImage(id);
+  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+    return this.projectsService.removeImage(galleryId);
   }
 
-  @Get('gallery/:slug')
+  @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
     return this.projectsService.findGallery(slug);
   }
 
-  @Post('publish/:id')
+  @Patch(':projectId/publish')
   @UseRoles({ resource: 'projects', action: 'update' })
-  togglePublish(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.togglePublish(id);
+  togglePublish(@Param('projectId') projectId: string): Promise<Project> {
+    return this.projectsService.togglePublish(projectId);
   }
 
-  @Post('cover/:id')
+  @Post(':projectId/cover')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
     FileInterceptor('cover', {
@@ -163,25 +167,25 @@ export class ProjectsController {
       })
     })
   )
-  addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
-    return this.projectsService.addCover(id, file);
+  addCover(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
+    return this.projectsService.addCover(projectId, file);
   }
 
-  @Patch('highlight/:id')
+  @Patch(':projectId/highlight')
   @UseRoles({ resource: 'projects', action: 'update' })
-  toggleHighlight(@Param('id') id: string): Promise<Project> {
-    return this.projectsService.showcase(id);
+  toggleHighlight(@Param('projectId') projectId: string): Promise<Project> {
+    return this.projectsService.toggleHighlight(projectId);
   }
 
-  @Patch(':id')
+  @Patch(':projectId')
   @UseRoles({ resource: 'projects', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdateProjectDto): Promise<Project> {
-    return this.projectsService.update(id, dto);
+  update(@Param('projectId') projectId: string, @Body() dto: UpdateProjectDto): Promise<Project> {
+    return this.projectsService.update(projectId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':projectId')
   @UseRoles({ resource: 'projects', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.projectsService.remove(id);
+  remove(@Param('projectId') projectId: string): Promise<void> {
+    return this.projectsService.remove(projectId);
   }
 }

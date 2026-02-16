@@ -16,22 +16,36 @@ import { UsersService } from '@/modules/users/users.service';
 import { VenturesService } from '@/modules/ventures/ventures.service';
 import { ParticipateProjectDto } from './dto/participate.dto';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
-import { Notification } from '../notifications/entities/notification.entity';
-import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { Notification } from '@/modules/notifications/entities/notification.entity';
+import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProjectsService {
+  private static readonly DEFAULT_PAGE_SIZE = 20;
+  private static readonly PUBLISHED_PAGE_SIZE = 40;
+
+  private mapUniqueUsers(participations: ProjectParticipation[]): User[] {
+    const seen = new Set<string>();
+    return participations
+      .map((p) => p.user)
+      .filter((user) => {
+        if (seen.has(user.id)) return false;
+        seen.add(user.id);
+        return true;
+      });
+  }
+
   constructor(
     @InjectRepository(Project)
-    private projectRepository: Repository<Project>,
+    private readonly projectRepository: Repository<Project>,
     @InjectRepository(ProjectParticipation)
-    private participationRepository: Repository<ProjectParticipation>,
-    private galleryService: GalleriesService,
-    private usersService: UsersService,
-    private venturesService: VenturesService,
-    private notificationsService: NotificationsService,
-    private eventEmitter: EventEmitter2
+    private readonly participationRepository: Repository<ProjectParticipation>,
+    private readonly galleryService: GalleriesService,
+    private readonly usersService: UsersService,
+    private readonly venturesService: VenturesService,
+    private readonly notificationsService: NotificationsService,
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
@@ -65,42 +79,43 @@ export class ProjectsService {
     });
   }
 
-  async addParticipantsFromCsv(id: string, file: Express.Multer.File): Promise<void> {
+  async addParticipantsFromCsv(projectId: string, file: Express.Multer.File): Promise<void> {
+    if (!file?.buffer) {
+      throw new BadRequestException('A valid CSV file is required');
+    }
     const project = await this.projectRepository.findOneOrFail({
-      where: { id },
+      where: { id: projectId },
       relations: ['participations', 'participations.user']
     });
     const rows = await this.parseParticipantsCsv(file.buffer);
     const userIds = new Set<string>(project.participations?.map((p) => p.user.id) ?? []);
-    const newParticipantIds: string[] = [];
     for (const row of rows) {
       const user = await this.usersService.findOrCreateParticipant(row);
       if (!userIds.has(user.id)) {
         userIds.add(user.id);
-        newParticipantIds.push(user.id);
       }
     }
     for (const userId of userIds) {
       const existing = await this.participationRepository.findOne({
-        where: { project: { id }, user: { id: userId } }
+        where: { project: { id: projectId }, user: { id: userId } }
       });
       if (!existing) {
         await this.participationRepository.save({
           created_at: project.started_at,
           user: { id: userId },
-          project: { id },
+          project: { id: projectId },
           venture: null
         });
       }
     }
   }
 
-  async addImage(id: string, file: Express.Multer.File): Promise<void> {
+  async addImage(projectId: string, file: Express.Multer.File): Promise<void> {
     try {
-      await this.findOne(id);
+      await this.findOne(projectId);
       const galleryDto = {
         image: file.filename,
-        project: { id }
+        project: { id: projectId }
       };
       await this.galleryService.create(galleryDto);
     } catch {
@@ -123,7 +138,8 @@ export class ProjectsService {
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     const { page = 1, categories, q, filter = 'all' } = queryParams;
-    const skip = (+page - 1) * 20;
+    const categoryIds = Array.isArray(categories) ? categories : categories ? [categories] : [];
+    const skip = (+page - 1) * ProjectsService.DEFAULT_PAGE_SIZE;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
@@ -131,9 +147,10 @@ export class ProjectsService {
       .orderBy('p.updated_at', 'DESC');
     if (filter === 'published') query.andWhere('p.is_published = :isPublished', { isPublished: true });
     if (filter === 'drafts') query.andWhere('p.is_published = :isPublished', { isPublished: false });
+    if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
-    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
-    return await query.skip(skip).take(20).getManyAndCount();
+    if (categoryIds.length) query.andWhere('categories.id IN (:...categoryIds)', { categoryIds });
+    return await query.skip(skip).take(ProjectsService.DEFAULT_PAGE_SIZE).getManyAndCount();
   }
 
   async findUserParticipations(userId: string): Promise<ProjectParticipation[]> {
@@ -145,17 +162,22 @@ export class ProjectsService {
 
   async findPublished(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     const { page = 1, categories, q, status } = queryParams;
-    const skip = (+page - 1) * 40;
+    const categoryIds = Array.isArray(categories) ? categories : categories ? [categories] : [];
+    const skip = (+page - 1) * ProjectsService.PUBLISHED_PAGE_SIZE;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
       .andWhere('p.is_published = :is_published', { is_published: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
-    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
+    if (categoryIds.length) query.andWhere('categories.id IN (:...categoryIds)', { categoryIds });
     if (status === 'past') query.andWhere('p.ended_at < NOW()');
     if (status === 'current') query.andWhere('p.started_at <= NOW() AND p.ended_at >= NOW()');
     if (status === 'future') query.andWhere('p.started_at > NOW()');
-    return await query.skip(skip).take(40).orderBy('p.started_at', 'DESC').getManyAndCount();
+    return await query
+      .skip(skip)
+      .take(ProjectsService.PUBLISHED_PAGE_SIZE)
+      .orderBy('p.started_at', 'DESC')
+      .getManyAndCount();
   }
 
   async findRecent(): Promise<Project[]> {
@@ -170,10 +192,10 @@ export class ProjectsService {
     }
   }
 
-  async addCover(id: string, file: Express.Multer.File): Promise<Project> {
+  async addCover(projectId: string, file: Express.Multer.File): Promise<Project> {
     try {
-      const project = await this.findOne(id);
-      if (project.cover) fs.unlink(`./uploads/projects/${project.cover}`);
+      const project = await this.findOne(projectId);
+      if (project.cover) await fs.unlink(`./uploads/projects/${project.cover}`).catch(() => undefined);
       return await this.projectRepository.save({
         ...project,
         cover: file.filename
@@ -185,20 +207,19 @@ export class ProjectsService {
 
   async findBySlug(slug: string): Promise<Project> {
     try {
-      const project = await this.projectRepository.findOneOrFail({
+      return await this.projectRepository.findOneOrFail({
         where: { slug },
         relations: ['categories', 'project_manager', 'program', 'gallery']
       });
-      return project;
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async findOne(id: string): Promise<Project> {
+  async findOne(projectId: string): Promise<Project> {
     try {
       return await this.projectRepository.findOneOrFail({
-        where: { id },
+        where: { id: projectId },
         relations: ['categories', 'project_manager', 'gallery']
       });
     } catch {
@@ -221,14 +242,7 @@ export class ProjectsService {
       where: { project: { id: projectId } },
       relations: ['user']
     });
-    const seen = new Set<string>();
-    return participations
-      .map((p) => p.user)
-      .filter((u) => {
-        if (seen.has(u.id)) return false;
-        seen.add(u.id);
-        return true;
-      });
+    return this.mapUniqueUsers(participations);
   }
 
   async findParticipantsByPhase(phaseId: string): Promise<User[]> {
@@ -236,14 +250,7 @@ export class ProjectsService {
       where: { phases: { id: phaseId } },
       relations: ['user']
     });
-    const seen = new Set<string>();
-    return participations
-      .map((p) => p.user)
-      .filter((u) => {
-        if (seen.has(u.id)) return false;
-        seen.add(u.id);
-        return true;
-      });
+    return this.mapUniqueUsers(participations);
   }
 
   async createNotification(projectId: string, user: User, dto: CreateNotificationDto): Promise<Notification> {
@@ -256,9 +263,9 @@ export class ProjectsService {
     }
   }
 
-  async sendNotification(id: string): Promise<Notification> {
+  async sendNotification(notificationId: string): Promise<Notification> {
     try {
-      const notification = await this.notificationsService.findOne(id);
+      const notification = await this.notificationsService.findOne(notificationId);
       let recipients: User[] = [];
       if (notification.phase) {
         recipients = await this.findParticipantsByPhase(notification.phase.id);
@@ -266,20 +273,20 @@ export class ProjectsService {
         recipients = await this.findParticipantsByProject(notification.project.id);
       }
       this.eventEmitter.emit('notify.participants', recipients, notification);
-      return await this.notificationsService.sendNotification(id);
+      return await this.notificationsService.sendNotification(notificationId);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async showcase(id: string): Promise<Project> {
-    const project = await this.findOne(id);
+  async toggleHighlight(projectId: string): Promise<Project> {
+    const project = await this.findOne(projectId);
     project.is_highlighted = !project.is_highlighted;
     return await this.projectRepository.save(project);
   }
 
-  async togglePublish(id: string): Promise<Project> {
-    const project = await this.findOne(id);
+  async togglePublish(projectId: string): Promise<Project> {
+    const project = await this.findOne(projectId);
     return await this.projectRepository.save({
       ...project,
       is_published: !project.is_published

@@ -26,7 +26,7 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('ventures')
 export class VenturesController {
-  constructor(private venturesService: VenturesService) {}
+  constructor(private readonly venturesService: VenturesService) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateVentureDto): Promise<Venture> {
@@ -41,8 +41,8 @@ export class VenturesController {
 
   @Get()
   @UseRoles({ resource: 'ventures', action: 'read', possession: 'any' })
-  findAll(@Query() queryParams: FilterVenturesDto): Promise<[Venture[], number]> {
-    return this.venturesService.findAll(queryParams);
+  findAll(@Query() query: FilterVenturesDto): Promise<[Venture[], number]> {
+    return this.venturesService.findAll(query);
   }
 
   @Get('by-slug/:slug')
@@ -51,23 +51,23 @@ export class VenturesController {
     return this.venturesService.findBySlug(slug);
   }
 
-  @Patch('toggle-publish/:slug')
+  @Patch('by-slug/:slug/publish')
   @UseRoles({ resource: 'publishVenture', action: 'update' })
   togglePublish(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.togglePublish(slug);
   }
 
-  @Get('by-user/paginated')
-  findByUser(@Query('page') page: string, @CurrentUser() user: User): Promise<[Venture[], number]> {
+  @Get('me/paginated')
+  findMinePaginated(@Query('page') page: string, @CurrentUser() user: User): Promise<[Venture[], number]> {
     return this.venturesService.findByUser(page, user);
   }
 
-  @Get('by-user/unpaginated')
-  findByUserUnpaginated(@CurrentUser() user: User): Promise<Venture[]> {
+  @Get('me')
+  findMine(@CurrentUser() user: User): Promise<Venture[]> {
     return this.venturesService.findByUserUnpaginated(user);
   }
 
-  @Post('gallery/:id')
+  @Post(':ventureId/gallery')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -79,23 +79,23 @@ export class VenturesController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.venturesService.addGallery(id, file);
+  addGallery(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.venturesService.addGallery(ventureId, file);
   }
 
-  @Delete('gallery/remove/:id')
+  @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
-  removeGallery(@Param('id') id: string): Promise<void> {
-    return this.venturesService.removeGallery(id);
+  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+    return this.venturesService.removeGallery(galleryId);
   }
 
-  @Get('gallery/:slug')
+  @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
     return this.venturesService.findGallery(slug);
   }
 
-  @Post('add-logo/:id')
+  @Post(':ventureId/logo')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('logo', {
@@ -107,11 +107,11 @@ export class VenturesController {
       })
     })
   )
-  addLogo(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-    return this.venturesService.addLogo(id, file);
+  addLogo(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
+    return this.venturesService.addLogo(ventureId, file);
   }
 
-  @Post('add-cover/:id')
+  @Post(':ventureId/cover')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('cover', {
@@ -123,13 +123,13 @@ export class VenturesController {
       })
     })
   )
-  addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-    return this.venturesService.addCover(id, file);
+  addCover(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
+    return this.venturesService.addCover(ventureId, file);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<Venture> {
-    return this.venturesService.findOne(id);
+  @Get(':ventureId')
+  findOne(@Param('ventureId') ventureId: string): Promise<Venture> {
+    return this.venturesService.findOne(ventureId);
   }
 
   @Patch(':slug')

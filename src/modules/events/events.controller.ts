@@ -27,69 +27,69 @@ import { EventParticipation } from './entities/participation.entity';
 
 @Controller('events')
 export class EventsController {
-  constructor(private eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService) {}
 
-  @Post('')
+  @Post()
   @UseRoles({ resource: 'events', action: 'create' })
   create(@Body() dto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(dto);
   }
 
-  @Get('')
+  @Get()
   @UseRoles({ resource: 'events', action: 'read' })
-  findAll(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
-    return this.eventsService.findAll(queryParams);
+  findAll(@Query() query: FilterEventsDto): Promise<[Event[], number]> {
+    return this.eventsService.findAll(query);
   }
 
-  @Get('find-recent')
+  @Get('recent')
   @Public()
   findRecent(): Promise<Event[]> {
     return this.eventsService.findRecent();
   }
 
-  @Get('find-published')
+  @Get('published')
   @Public()
-  findPublished(@Query() queryParams: FilterEventsDto): Promise<[Event[], number]> {
-    return this.eventsService.findPublished(queryParams);
+  findPublished(@Query() query: FilterEventsDto): Promise<[Event[], number]> {
+    return this.eventsService.findPublished(query);
   }
 
-  @Get('slug/:slug')
+  @Get('by-slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Event> {
     return this.eventsService.findBySlug(slug);
   }
 
-  @Get(':id')
+  @Get(':eventId')
   @UseRoles({ resource: 'events', action: 'read' })
-  findOne(@Param('id') id: string): Promise<Event> {
-    return this.eventsService.findOne(id);
+  findOne(@Param('eventId') eventId: string): Promise<Event> {
+    return this.eventsService.findOne(eventId);
   }
 
-  @Post(':id/participate')
+  @Post(':eventId/participate')
   @UseRoles({ resource: 'events', action: 'update' })
-  participate(@Param('id') id: string, @CurrentUser() user: User): Promise<Event> {
-    return this.eventsService.participate(id, user);
+  participate(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<Event> {
+    return this.eventsService.participate(eventId, user);
   }
 
-  @Delete(':id/participate')
+  @Delete(':eventId/participate')
   @UseRoles({ resource: 'events', action: 'update' })
-  leave(@Param('id') id: string, @CurrentUser() user: User): Promise<void> {
-    return this.eventsService.leave(id, user);
+  leave(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<void> {
+    return this.eventsService.leave(eventId, user);
   }
 
-  @Get(':id/participations')
+  @Get(':eventId/participations')
   @UseRoles({ resource: 'events', action: 'read' })
-  findParticipations(@Param('id') id: string): Promise<EventParticipation[]> {
-    return this.eventsService.findParticipations(id);
+  findParticipations(@Param('eventId') eventId: string): Promise<EventParticipation[]> {
+    return this.eventsService.findParticipations(eventId);
   }
 
-  @Post('publish/:id')
+  @Patch(':eventId/publish')
   @UseRoles({ resource: 'events', action: 'update' })
-  togglePublish(@Param('id') id: string): Promise<Event> {
-    return this.eventsService.togglePublish(id);
+  togglePublish(@Param('eventId') eventId: string): Promise<Event> {
+    return this.eventsService.togglePublish(eventId);
   }
 
-  @Post('gallery/:id')
+  @Post(':eventId/gallery')
   @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -101,23 +101,23 @@ export class EventsController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.eventsService.addGallery(id, file);
+  addGallery(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.eventsService.addGallery(eventId, file);
   }
 
-  @Delete('gallery/remove/:id')
+  @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'events', action: 'update' })
-  removeGallery(@Param('id') id: string): Promise<void> {
-    return this.eventsService.removeGallery(id);
+  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+    return this.eventsService.removeGallery(galleryId);
   }
 
-  @Get('gallery/:slug')
+  @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
     return this.eventsService.findGallery(slug);
   }
 
-  @Post('cover/:id')
+  @Post(':eventId/cover')
   @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(
     FileInterceptor('cover', {
@@ -129,25 +129,25 @@ export class EventsController {
       })
     })
   )
-  addCover(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
-    return this.eventsService.addCover(id, file);
+  addCover(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
+    return this.eventsService.addCover(eventId, file);
   }
 
-  @Patch('highlight/:id')
+  @Patch(':eventId/highlight')
   @UseRoles({ resource: 'events', action: 'update' })
-  toggleHighlight(@Param('id') id: string): Promise<Event> {
-    return this.eventsService.highlight(id);
+  toggleHighlight(@Param('eventId') eventId: string): Promise<Event> {
+    return this.eventsService.highlight(eventId);
   }
 
-  @Patch(':id')
+  @Patch(':eventId')
   @UseRoles({ resource: 'events', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdateEventDto): Promise<Event> {
-    return this.eventsService.update(id, dto);
+  update(@Param('eventId') eventId: string, @Body() dto: UpdateEventDto): Promise<Event> {
+    return this.eventsService.update(eventId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':eventId')
   @UseRoles({ resource: 'events', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.eventsService.remove(id);
+  remove(@Param('eventId') eventId: string): Promise<void> {
+    return this.eventsService.remove(eventId);
   }
 }

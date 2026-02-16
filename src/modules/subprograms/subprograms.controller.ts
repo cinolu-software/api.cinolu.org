@@ -23,7 +23,7 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('subprograms')
 export class SubprogramsController {
-  constructor(private subprogramsService: SubprogramsService) {}
+  constructor(private readonly subprogramsService: SubprogramsService) {}
 
   @Post()
   @UseRoles({ resource: 'subprograms', action: 'create' })
@@ -31,19 +31,19 @@ export class SubprogramsController {
     return this.subprogramsService.create(dto);
   }
 
-  @Get('')
+  @Get()
   @Public()
   findAll(): Promise<Subprogram[]> {
     return this.subprogramsService.findAll();
   }
 
-  @Post('publish/:id')
+  @Patch(':subprogramId/publish')
   @UseRoles({ resource: 'subprograms', action: 'update' })
-  togglePublish(@Param('id') id: string): Promise<Subprogram> {
-    return this.subprogramsService.togglePublish(id);
+  togglePublish(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
+    return this.subprogramsService.togglePublish(subprogramId);
   }
 
-  @Post('logo/:id')
+  @Post(':subprogramId/logo')
   @UseRoles({ resource: 'subprograms', action: 'update' })
   @UseInterceptors(
     FileInterceptor('logo', {
@@ -55,52 +55,55 @@ export class SubprogramsController {
       })
     })
   )
-  addLogo(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Subprogram> {
-    return this.subprogramsService.addLogo(id, file);
+  addLogo(
+    @Param('subprogramId') subprogramId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<Subprogram> {
+    return this.subprogramsService.addLogo(subprogramId, file);
   }
 
-  @Get('slug/:slug')
+  @Get('by-slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Subprogram> {
     return this.subprogramsService.findBySlug(slug);
   }
 
-  @Get('unpaginated/:id')
+  @Get('program/:programId')
   @Public()
-  findUnpaginated(@Param('id') id: string): Promise<Subprogram[]> {
-    return this.subprogramsService.findUnpaginated(id);
+  findByProgram(@Param('programId') programId: string): Promise<Subprogram[]> {
+    return this.subprogramsService.findUnpaginated(programId);
   }
 
-  @Get('paginated/:id')
+  @Get('program/:programId/paginated')
   @UseRoles({ resource: 'subprograms', action: 'read' })
-  findAllPaginated(
-    @Param('id') id: string,
-    @Query() queryParams: FilterSubprogramDto
+  findPaginatedByProgram(
+    @Param('programId') programId: string,
+    @Query() query: FilterSubprogramDto
   ): Promise<[Subprogram[], number]> {
-    return this.subprogramsService.findAllPaginated(id, queryParams);
+    return this.subprogramsService.findAllPaginated(programId, query);
   }
 
-  @Get(':id')
+  @Get(':subprogramId')
   @UseRoles({ resource: 'subprograms', action: 'update' })
-  findOne(@Param('id') id: string): Promise<Subprogram> {
-    return this.subprogramsService.findOne(id);
+  findOne(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
+    return this.subprogramsService.findOne(subprogramId);
   }
 
-  @Patch('highlight/:id')
+  @Patch(':subprogramId/highlight')
   @UseRoles({ resource: 'subprograms', action: 'update' })
-  toggleHighlight(@Param('id') id: string): Promise<Subprogram> {
-    return this.subprogramsService.highlight(id);
+  toggleHighlight(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
+    return this.subprogramsService.highlight(subprogramId);
   }
 
-  @Patch(':id')
+  @Patch(':subprogramId')
   @UseRoles({ resource: 'subprograms', action: 'update' })
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateSubprogramDto): Promise<Subprogram> {
-    return this.subprogramsService.update(id, updateProgramDto);
+  update(@Param('subprogramId') subprogramId: string, @Body() dto: UpdateSubprogramDto): Promise<Subprogram> {
+    return this.subprogramsService.update(subprogramId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':subprogramId')
   @UseRoles({ resource: 'subprograms', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.subprogramsService.remove(id);
+  remove(@Param('subprogramId') subprogramId: string): Promise<void> {
+    return this.subprogramsService.remove(subprogramId);
   }
 }

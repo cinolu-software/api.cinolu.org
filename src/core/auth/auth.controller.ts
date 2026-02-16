@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs
 import { AuthService } from './auth.service';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { forgotPasswordDto } from './dto/forgot-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -15,66 +15,66 @@ import { ContactSupportDto } from './dto/contact-support.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('contact-us')
+  @Post('support/contact')
   @Public()
-  async contactUs(@Body() dto: ContactSupportDto): Promise<void> {
+  async contactSupport(@Body() dto: ContactSupportDto): Promise<void> {
     await this.authService.contactUs(dto);
   }
 
-  @Post('sign-up')
+  @Post('signup')
   @Public()
   signUp(@Body() dto: SignUpDto): Promise<User> {
     return this.authService.signUp(dto);
   }
 
-  @Post('sign-in')
+  @Post('signin')
   @Public()
   @UseGuards(LocalAuthGuard)
-  singIn(@Req() req: Request): Promise<User> {
+  signIn(@Req() req: Request): Promise<User> {
     return this.authService.signIn(req);
   }
 
-  @Get('sign-in')
+  @Get('google')
   @Public()
   @UseGuards(GoogleAuthGuard)
-  signInWithGoogle(): void {}
+  googleAuth(): void {}
 
-  @Get('google/redirect')
+  @Get('google/callback')
   @Public()
   @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Res() res: Response): Promise<void> {
+  googleCallback(@Res() res: Response): Promise<void> {
     return this.authService.signInWithGoogle(res);
   }
 
-  @Post('sign-out')
+  @Post('signout')
   signOut(@Req() req: Request) {
     return this.authService.signOut(req);
   }
 
-  @Get('profile')
-  profile(@CurrentUser() user: User): Promise<User> {
+  @Get('me')
+  findMe(@CurrentUser() user: User): Promise<User> {
     return this.authService.profile(user);
   }
 
-  @Patch('profile')
-  updateProfile(@CurrentUser() user: User, @Body() dto: UpdateProfileDto): Promise<User> {
+  @Patch('me')
+  updateMe(@CurrentUser() user: User, @Body() dto: UpdateProfileDto): Promise<User> {
     return this.authService.updateProfile(user, dto);
   }
 
-  @Patch('update-password')
+  @Patch('me/password')
   updatePassword(@CurrentUser() user: User, @Body() dto: UpdatePasswordDto): Promise<User> {
     return this.authService.updatePassword(user, dto);
   }
 
-  @Post('forgot-password')
+  @Post('password/forgot')
   @Public()
-  forgotPassword(@Body() dto: forgotPasswordDto): Promise<void> {
+  forgotPassword(@Body() dto: ForgotPasswordDto): Promise<void> {
     return this.authService.forgotPassword(dto);
   }
 
-  @Post('reset-password')
+  @Post('password/reset')
   @Public()
   resetPassword(@Body() dto: ResetPasswordDto): Promise<User> {
     return this.authService.resetPassword(dto);

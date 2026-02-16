@@ -1,6 +1,6 @@
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { forgotPasswordDto } from './dto/forgot-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { BadRequestException, Injectable, UnauthorizedException, Req, Res } from '@nestjs/common';
 import UpdateProfileDto from './dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
@@ -17,10 +17,10 @@ import { ContactSupportDto } from './dto/contact-support.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private eventEmitter: EventEmitter2,
-    private jwtService: JwtService,
-    private configService: ConfigService
+    private readonly usersService: UsersService,
+    private readonly eventEmitter: EventEmitter2,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -108,7 +108,7 @@ export class AuthService {
     }
   }
 
-  async forgotPassword(dto: forgotPasswordDto): Promise<void> {
+  async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
     try {
       const user = await this.usersService.findByEmail(dto.email);
       const token = await this.generateToken(user, '15m');

@@ -23,7 +23,7 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('programs')
 export class ProgramsController {
-  constructor(private programsService: ProgramsService) {}
+  constructor(private readonly programsService: ProgramsService) {}
 
   @Post()
   @UseRoles({ resource: 'programs', action: 'create' })
@@ -31,19 +31,19 @@ export class ProgramsController {
     return this.programsService.create(dto);
   }
 
-  @Get('find-published')
+  @Get('published')
   @Public()
   findPublished(): Promise<Program[]> {
     return this.programsService.findPublished();
   }
 
-  @Post('publish/:id')
+  @Patch(':programId/publish')
   @UseRoles({ resource: 'programs', action: 'update' })
-  togglePublish(@Param('id') id: string): Promise<Program> {
-    return this.programsService.togglePublish(id);
+  togglePublish(@Param('programId') programId: string): Promise<Program> {
+    return this.programsService.togglePublish(programId);
   }
 
-  @Post('logo/:id')
+  @Post(':programId/logo')
   @UseRoles({ resource: 'programs', action: 'update' })
   @UseInterceptors(
     FileInterceptor('logo', {
@@ -55,17 +55,17 @@ export class ProgramsController {
       })
     })
   )
-  addLogo(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Program> {
-    return this.programsService.addLogo(id, file);
+  addLogo(@Param('programId') programId: string, @UploadedFile() file: Express.Multer.File): Promise<Program> {
+    return this.programsService.addLogo(programId, file);
   }
 
-  @Get('slug/:slug')
+  @Get('by-slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Program> {
     return this.programsService.findBySlug(slug);
   }
 
-  @Get('')
+  @Get()
   @Public()
   findAll(): Promise<Program[]> {
     return this.programsService.findAll();
@@ -73,31 +73,31 @@ export class ProgramsController {
 
   @Get('paginated')
   @UseRoles({ resource: 'programs', action: 'read' })
-  findFiltered(@Query() queryParams: FilterProgramsDto): Promise<[Program[], number]> {
-    return this.programsService.findFiltered(queryParams);
+  findPaginated(@Query() query: FilterProgramsDto): Promise<[Program[], number]> {
+    return this.programsService.findFiltered(query);
   }
 
-  @Get(':id')
+  @Get(':programId')
   @UseRoles({ resource: 'programs', action: 'update' })
-  findOne(@Param('id') id: string): Promise<Program> {
-    return this.programsService.findOne(id);
+  findOne(@Param('programId') programId: string): Promise<Program> {
+    return this.programsService.findOne(programId);
   }
 
-  @Patch('highlight/:id')
+  @Patch(':programId/highlight')
   @UseRoles({ resource: 'programs', action: 'update' })
-  toggleHighlight(@Param('id') id: string): Promise<Program> {
-    return this.programsService.highlight(id);
+  toggleHighlight(@Param('programId') programId: string): Promise<Program> {
+    return this.programsService.highlight(programId);
   }
 
-  @Patch(':id')
+  @Patch(':programId')
   @UseRoles({ resource: 'programs', action: 'update' })
-  update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto): Promise<Program> {
-    return this.programsService.update(id, updateProgramDto);
+  update(@Param('programId') programId: string, @Body() dto: UpdateProgramDto): Promise<Program> {
+    return this.programsService.update(programId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':programId')
   @UseRoles({ resource: 'programs', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.programsService.remove(id);
+  remove(@Param('programId') programId: string): Promise<void> {
+    return this.programsService.remove(programId);
   }
 }

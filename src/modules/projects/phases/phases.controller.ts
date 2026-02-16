@@ -8,47 +8,47 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('phases')
 export class PhasesController {
-  constructor(private phasesService: PhasesService) {}
+  constructor(private readonly phasesService: PhasesService) {}
 
-  @Post(':id')
+  @Post(':projectId')
   @UseRoles({ resource: 'phases', action: 'create' })
-  create(@Param('id') id: string, @Body() dto: CreatePhaseDto): Promise<Phase> {
-    return this.phasesService.create(id, dto);
+  create(@Param('projectId') projectId: string, @Body() dto: CreatePhaseDto): Promise<Phase> {
+    return this.phasesService.create(projectId, dto);
   }
 
-  @Get(':id')
+  @Get(':phaseId')
   @UseRoles({ resource: 'phases', action: 'read' })
-  findOne(@Param('id') id: string): Promise<Phase> {
-    return this.phasesService.findOne(id);
+  findOne(@Param('phaseId') phaseId: string): Promise<Phase> {
+    return this.phasesService.findOne(phaseId);
   }
 
-  @Get('all/:id')
+  @Get('project/:projectId')
   @UseRoles({ resource: 'phases', action: 'read' })
-  findAll(@Param('id') id: string): Promise<Phase[]> {
-    return this.phasesService.findAll(id);
+  findAllByProject(@Param('projectId') projectId: string): Promise<Phase[]> {
+    return this.phasesService.findAll(projectId);
   }
 
-  @Post('move/participants')
+  @Post('participants/move')
   @UseRoles({ resource: 'phases', action: 'update' })
   moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.phasesService.moveParticipants(dto);
   }
 
-  @Post('remove/participants')
+  @Post('participants/remove')
   @UseRoles({ resource: 'phases', action: 'update' })
   removeParticipantsFromPhase(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.phasesService.removeParticipantsFromPhase(dto);
   }
 
-  @Patch(':id')
+  @Patch(':phaseId')
   @UseRoles({ resource: 'phases', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdatePhaseDto): Promise<Phase> {
-    return this.phasesService.update(id, dto);
+  update(@Param('phaseId') phaseId: string, @Body() dto: UpdatePhaseDto): Promise<Phase> {
+    return this.phasesService.update(phaseId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':phaseId')
   @UseRoles({ resource: 'phases', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.phasesService.remove(id);
+  remove(@Param('phaseId') phaseId: string): Promise<void> {
+    return this.phasesService.remove(phaseId);
   }
 }

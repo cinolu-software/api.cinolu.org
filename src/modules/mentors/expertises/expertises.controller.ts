@@ -8,7 +8,7 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('expertises')
 export class ExpertisesController {
-  constructor(private expertisesService: ExpertisesService) {}
+  constructor(private readonly expertisesService: ExpertisesService) {}
 
   @Post()
   @UseRoles({ resource: 'expertises', action: 'create' })
@@ -16,10 +16,10 @@ export class ExpertisesController {
     return this.expertisesService.create(dto);
   }
 
-  @Get('filtered')
+  @Get('paginated')
   @UseRoles({ resource: 'expertises', action: 'read' })
-  findFiltered(@Query() dto: FilterExpertisesDto): Promise<[Expertise[], number]> {
-    return this.expertisesService.findFiltered(dto);
+  findPaginated(@Query() query: FilterExpertisesDto): Promise<[Expertise[], number]> {
+    return this.expertisesService.findFiltered(query);
   }
 
   @Get()

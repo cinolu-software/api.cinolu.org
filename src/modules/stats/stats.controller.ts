@@ -9,20 +9,20 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('stats')
 export class StatsController {
-  constructor(private statsService: StatsService) {}
+  constructor(private readonly statsService: StatsService) {}
 
-  @Get('user')
-  async findUserStats(@CurrentUser() user: User): Promise<IUSerStats> {
+  @Get('me')
+  async findMyStats(@CurrentUser() user: User): Promise<IUSerStats> {
     return await this.statsService.findUserStats(user);
   }
 
-  @Get('admin/general')
+  @Get('admin/overview')
   @UseRoles({ resource: 'stats', action: 'read' })
-  async findAdminStatsGeneral(): Promise<IAdminStatsGeneral> {
+  async findAdminOverview(): Promise<IAdminStatsGeneral> {
     return await this.statsService.findAdminStatsGeneral();
   }
 
-  @Get('admin/by-year/:year')
+  @Get('admin/year/:year')
   @Public()
   async findAdminStatsByYear(@Param('year') year: number): Promise<IAdminStatsByYear> {
     return await this.statsService.findAdminStatsByYear(+year);

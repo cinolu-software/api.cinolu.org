@@ -5,11 +5,11 @@ import { UpdateTagDto } from './dto/update-tag.dto';
 import { FilterTagsDto } from './dto/filter-tags.dto';
 import { Tag } from './entities/tag.entity';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../core/auth/decorators/public.decorator';
+import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('tags')
 export class TagsController {
-  constructor(private tagsService: TagsService) {}
+  constructor(private readonly tagsService: TagsService) {}
 
   @Post()
   @UseRoles({ resource: 'tags', action: 'create' })
@@ -17,10 +17,10 @@ export class TagsController {
     return this.tagsService.create(dto);
   }
 
-  @Get('filtered')
+  @Get('paginated')
   @UseRoles({ resource: 'tags', action: 'read' })
-  findFiltered(@Query() dto: FilterTagsDto): Promise<[Tag[], number]> {
-    return this.tagsService.findFiltered(dto);
+  findPaginated(@Query() query: FilterTagsDto): Promise<[Tag[], number]> {
+    return this.tagsService.findFiltered(query);
   }
 
   @Get()

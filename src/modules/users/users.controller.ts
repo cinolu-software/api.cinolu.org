@@ -26,52 +26,52 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-  @Post('generate/referralCode')
+  @Post('referral-code/generate')
   async generateRefferalLink(@CurrentUser() user: User): Promise<User> {
     return this.usersService.saveRefferalCode(user);
   }
 
-  @Get('find-staff')
+  @Get('staff')
   @UseRoles({ resource: 'users', action: 'read' })
   async findStaff(): Promise<User[]> {
     return this.usersService.findStaff();
   }
 
-  @Get('find-ambassadors')
+  @Get('ambassadors')
   @Public()
-  findAmbassadors(@Query() params: FilterUsersDto): Promise<[User[], number]> {
-    return this.usersService.findAmbassadors(params);
+  findAmbassadors(@Query() query: FilterUsersDto): Promise<[User[], number]> {
+    return this.usersService.findAmbassadors(query);
   }
 
-  @Get('find-ambassadors/:email')
+  @Get('ambassadors/:email')
   @Public()
   findAmbassadorByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findAmbassadorByEmail(email);
   }
 
-  @Get('find-referred-users')
+  @Get('me/referred-users')
   async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<[User[], number]> {
     return this.usersService.refferedUsers(page, user);
   }
 
-  @Post('')
+  @Post()
   @UseRoles({ resource: 'users', action: 'create' })
   create(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }
 
-  @Get('export/csv')
+  @Get('export/users.csv')
   @UseRoles({ resource: 'exportUsersCSV', action: 'read' })
-  async exportCSV(@Query() params: FilterUsersDto, @Res() res: Response): Promise<void> {
-    await this.usersService.exportCSV(params, res);
+  async exportCSV(@Query() query: FilterUsersDto, @Res() res: Response): Promise<void> {
+    await this.usersService.exportCSV(query, res);
   }
 
-  @Get('')
+  @Get()
   @UseRoles({ resource: 'users', action: 'read' })
-  findAll(@Query() params: FilterUsersDto): Promise<[User[], number]> {
-    return this.usersService.findAll(params);
+  findAll(@Query() query: FilterUsersDto): Promise<[User[], number]> {
+    return this.usersService.findAll(query);
   }
 
   @Get('entrepreneurs')
@@ -86,13 +86,13 @@ export class UsersController {
     return this.usersService.findOneByEmail(email);
   }
 
-  @Patch(':id')
+  @Patch(':userId')
   @UseRoles({ resource: 'users', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
-    return this.usersService.update(id, dto);
+  update(@Param('userId') userId: string, @Body() dto: UpdateUserDto): Promise<User> {
+    return this.usersService.update(userId, dto);
   }
 
-  @Post('image-profile')
+  @Post('me/profile-image')
   @UseInterceptors(
     FileInterceptor('profile', {
       storage: diskStorage({
@@ -107,9 +107,9 @@ export class UsersController {
     return this.usersService.uploadImage(user, file);
   }
 
-  @Delete(':id')
+  @Delete(':userId')
   @UseRoles({ resource: 'users', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.usersService.remove(id);
+  remove(@Param('userId') userId: string): Promise<void> {
+    return this.usersService.remove(userId);
   }
 }

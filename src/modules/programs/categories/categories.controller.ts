@@ -5,9 +5,9 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
 import { UseRoles } from 'nest-access-control';
-import { Public } from '../../../core/auth/decorators/public.decorator';
+import { Public } from '@/core/auth/decorators/public.decorator';
 
-@Controller('program-categories')
+@Controller('programs/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
@@ -25,7 +25,7 @@ export class CategoriesController {
 
   @Get('paginated')
   @UseRoles({ resource: 'programCategories', action: 'read' })
-  findAllPaginated(@Query() query: QueryParams): Promise<[ProgramCategory[], number]> {
+  findPaginated(@Query() query: QueryParams): Promise<[ProgramCategory[], number]> {
     return this.categoriesService.findAllPaginated(query);
   }
 

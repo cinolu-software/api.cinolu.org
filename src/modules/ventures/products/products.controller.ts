@@ -26,14 +26,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
   create(@Body() dto: CreateProductDto): Promise<Product> {
     return this.productsService.create(dto);
   }
 
-  @Post('gallery/:id')
+  @Post(':productId/gallery')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -45,35 +45,35 @@ export class ProductsController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.productsService.addGallery(id, file);
+  addGallery(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.productsService.addGallery(productId, file);
   }
 
-  @Delete('gallery/remove/:id')
+  @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
-  removeGallery(@Param('id') id: string): Promise<void> {
-    return this.productsService.removeGallery(id);
+  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+    return this.productsService.removeGallery(galleryId);
   }
 
-  @Get('gallery/:slug')
+  @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
     return this.productsService.findGallery(slug);
   }
 
-  @Get('by-user')
+  @Get('me')
   @UseRoles({ resource: 'products', action: 'read', possession: 'own' })
-  findAll(@CurrentUser() user: User, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
+  findMine(@CurrentUser() user: User, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
     return this.productsService.findAll(user, query);
   }
 
-  @Get(':slug')
+  @Get('by-slug/:slug')
   @Public()
   findOne(@Param('slug') slug: string): Promise<Product> {
     return this.productsService.findBySlug(slug);
   }
 
-  @Patch(':slug')
+  @Patch('by-slug/:slug')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   update(@Param('slug') slug: string, @Body() dto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(slug, dto);

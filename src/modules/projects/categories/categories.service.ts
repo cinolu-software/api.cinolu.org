@@ -10,7 +10,7 @@ import { QueryParams } from './utils/query-params.type';
 export class CategoriesService {
   constructor(
     @InjectRepository(ProjectCategory)
-    private categoryRepository: Repository<ProjectCategory>
+    private readonly categoryRepository: Repository<ProjectCategory>
   ) {}
 
   async create(dto: CreateCategoryDto): Promise<ProjectCategory> {
@@ -25,11 +25,11 @@ export class CategoriesService {
     return await this.categoryRepository.find();
   }
 
-  async findAllPaginated(queryParams: QueryParams): Promise<[ProjectCategory[], number]> {
-    const { page = 1, q } = queryParams;
-    const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
-    if (q) query.where('c.name LIKE :q', { q: `%${q}%` });
-    return await query
+  async findAllPaginated(params: QueryParams): Promise<[ProjectCategory[], number]> {
+    const { page = 1, q } = params;
+    const queryBuilder = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
+    if (q) queryBuilder.where('c.name LIKE :q', { q: `%${q}%` });
+    return await queryBuilder
       .skip((+page - 1) * 10)
       .take(10)
       .getManyAndCount();

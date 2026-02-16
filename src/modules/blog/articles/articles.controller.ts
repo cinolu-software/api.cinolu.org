@@ -26,7 +26,7 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private articlesService: ArticlesService) {}
+  constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
   @UseRoles({ resource: 'blogs', action: 'create' })
@@ -34,7 +34,7 @@ export class ArticlesController {
     return this.articlesService.create(dto, user);
   }
 
-  @Get('find-recent')
+  @Get('recent')
   @Public()
   findRecent(): Promise<Article[]> {
     return this.articlesService.findRecent();
@@ -46,7 +46,7 @@ export class ArticlesController {
     return this.articlesService.findAll(dto);
   }
 
-  @Post('gallery/:id')
+  @Post(':articleId/gallery')
   @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -58,23 +58,23 @@ export class ArticlesController {
       })
     })
   )
-  addGallery(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.articlesService.addGallery(id, file);
+  addGallery(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.articlesService.addGallery(articleId, file);
   }
 
-  @Delete('gallery/remove/:id')
+  @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  removeGallery(@Param('id') id: string): Promise<void> {
-    return this.articlesService.removeGallery(id);
+  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+    return this.articlesService.removeGallery(galleryId);
   }
 
-  @Get('gallery/:slug')
+  @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
     return this.articlesService.findGallery(slug);
   }
 
-  @Post('cover/:id')
+  @Post(':articleId/cover')
   @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(
     FileInterceptor('article', {
@@ -86,49 +86,49 @@ export class ArticlesController {
       })
     })
   )
-  addImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File): Promise<Article> {
-    return this.articlesService.addImage(id, file);
+  addCover(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<Article> {
+    return this.articlesService.addImage(articleId, file);
   }
 
-  @Get('find-published')
+  @Get('published')
   @Public()
   findPublished(@Query() dto: FilterArticlesDto): Promise<[Article[], number]> {
     return this.articlesService.findPublished(dto);
   }
 
-  @Post('toggle-published/:id')
+  @Patch(':articleId/publish')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  togglePublished(@Param('id') id: string): Promise<Article> {
-    return this.articlesService.togglePublished(id);
+  togglePublished(@Param('articleId') articleId: string): Promise<Article> {
+    return this.articlesService.togglePublished(articleId);
   }
 
-  @Get('slug/:slug')
+  @Get('by-slug/:slug')
   @Public()
   findBySlug(@Param('slug') slug: string): Promise<Article> {
     return this.articlesService.findBySlug(slug);
   }
 
-  @Get(':id')
+  @Get(':articleId')
   @UseRoles({ resource: 'blogs', action: 'read' })
-  findOne(@Param('id') id: string): Promise<Article> {
-    return this.articlesService.findOne(id);
+  findOne(@Param('articleId') articleId: string): Promise<Article> {
+    return this.articlesService.findOne(articleId);
   }
 
-  @Patch('highlight/:id')
+  @Patch(':articleId/highlight')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  highlight(@Param('id') id: string): Promise<Article> {
-    return this.articlesService.highlight(id);
+  toggleHighlight(@Param('articleId') articleId: string): Promise<Article> {
+    return this.articlesService.highlight(articleId);
   }
 
-  @Patch(':id')
+  @Patch(':articleId')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdateArticleDto): Promise<Article> {
-    return this.articlesService.update(id, dto);
+  update(@Param('articleId') articleId: string, @Body() dto: UpdateArticleDto): Promise<Article> {
+    return this.articlesService.update(articleId, dto);
   }
 
-  @Delete(':id')
+  @Delete(':articleId')
   @UseRoles({ resource: 'blogs', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.articlesService.remove(id);
+  remove(@Param('articleId') articleId: string): Promise<void> {
+    return this.articlesService.remove(articleId);
   }
 }

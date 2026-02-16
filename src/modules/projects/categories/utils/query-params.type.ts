@@ -1,4 +1,4 @@
 export interface QueryParams {
-  page: string | null;
-  q: string | null;
+  page?: string | null;
+  q?: string | null;
 }

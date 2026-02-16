@@ -24,25 +24,28 @@ import { FilterNotificationsDto } from './dto/filter-notifications.dto';
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @Get('project/:id')
+  @Get('project/:projectId')
   @UseRoles({ resource: 'projects', action: 'read' })
-  findAllByProject(@Param('id') id: string, @Query() query: FilterNotificationsDto): Promise<[Notification[], number]> {
-    return this.notificationsService.findAllByProject(id, query);
+  findAllByProject(
+    @Param('projectId') projectId: string,
+    @Query() query: FilterNotificationsDto
+  ): Promise<[Notification[], number]> {
+    return this.notificationsService.findAllByProject(projectId, query);
   }
 
-  @Patch(':id/read')
+  @Patch(':notificationId/read')
   @UseRoles({ resource: 'notifications', action: 'update' })
-  markRead(@Param('id') id: string): Promise<Notification> {
-    return this.notificationsService.markRead(id);
+  markRead(@Param('notificationId') notificationId: string): Promise<Notification> {
+    return this.notificationsService.markRead(notificationId);
   }
 
-  @Patch(':id')
+  @Patch(':notificationId')
   @UseRoles({ resource: 'notifications', action: 'update' })
-  update(@Param('id') id: string, @Body() dto: UpdateNotificationDto): Promise<Notification> {
-    return this.notificationsService.update(id, dto);
+  update(@Param('notificationId') notificationId: string, @Body() dto: UpdateNotificationDto): Promise<Notification> {
+    return this.notificationsService.update(notificationId, dto);
   }
 
-  @Post(':id/attachments')
+  @Post(':notificationId/attachments')
   @UseRoles({ resource: 'notifications', action: 'update' })
   @UseInterceptors(
     FilesInterceptor('attachments', 10, {
@@ -55,15 +58,15 @@ export class NotificationsController {
     })
   )
   addAttachments(
-    @Param('id') id: string,
+    @Param('notificationId') notificationId: string,
     @UploadedFiles() files: Express.Multer.File[]
   ): Promise<NotificationAttachment[]> {
-    return this.notificationsService.addAttachments(id, files);
+    return this.notificationsService.addAttachments(notificationId, files);
   }
 
-  @Delete(':id')
+  @Delete(':notificationId')
   @UseRoles({ resource: 'notifications', action: 'delete' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.notificationsService.remove(id);
+  remove(@Param('notificationId') notificationId: string): Promise<void> {
+    return this.notificationsService.remove(notificationId);
   }
 }
