@@ -41,6 +41,26 @@ export class GalleriesService {
     }
   }
 
+  async findProjectGallery(slug: string): Promise<Gallery[]> {
+    try {
+      return this.galleryRepository.find({
+        where: { project: { slug } }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
+  async findEventGallery(slug: string): Promise<Gallery[]> {
+    try {
+      return this.galleryRepository.find({
+        where: { project: { slug } }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   private async removeImageFile(filename: string): Promise<void> {
     try {
       await fs.unlink(`./uploads/galleries/${filename}`);
