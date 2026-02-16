@@ -1,41 +1,52 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { existsSync } from 'fs';
 import { join } from 'path';
-import { Injectable } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { Notification } from '../notifications/entities/notification.entity';
 
+type MailAttachment = {
+  filename: string;
+  path: string;
+};
+
 @Injectable()
 export class ProjectsEmailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(private readonly mailerService: MailerService) {}
 
   @OnEvent('notify.participants')
   async notifyParticipants(recipients: User[], notification: Notification): Promise<void> {
     try {
-      const list = (recipients || []).filter((r) => r?.email);
-      if (!list.length) return;
-      const attachmentFiles = (notification.attachments || [])
-        .map((attachment) => {
-          const filePath = join(process.cwd(), 'uploads', 'notifications', attachment.filename);
-          if (!existsSync(filePath)) return null;
-          return { filename: attachment.filename, path: filePath };
-        })
-        .filter((a): a is { filename: string; path: string } => a !== null);
+      const validRecipients = (recipients || []).filter((recipient) => recipient?.email);
+      const attachments = this.resolveExistingAttachments(notification);
       const subject = `${notification.project.name} — ${notification.title}`;
-      const attachments = attachmentFiles.length ? attachmentFiles : undefined;
-      for (const recipient of list) {
-        await this.mailerService.sendMail({
-          to: recipient.email,
-          subject,
-          template: 'project-notification',
-          context: { recipient, notification },
-          ...(attachments && { attachments })
-        });
-      }
+      await Promise.all(
+        validRecipients.map(async (recipient) => {
+          await this.mailerService.sendMail({
+            to: recipient.email,
+            subject,
+            template: 'project-notification',
+            context: { recipient, notification },
+            ...(attachments && { attachments })
+          });
+        })
+      );
     } catch {
       throw new BadRequestException();
     }
+  }
+
+  private resolveExistingAttachments(notification: Notification): MailAttachment[] | undefined {
+    const files = (notification.attachments || [])
+      .map((attachment) => {
+        const filePath = join(process.cwd(), 'uploads', 'notifications', attachment.filename);
+        if (!existsSync(filePath)) {
+          return null;
+        }
+        return { filename: attachment.filename, path: filePath };
+      })
+      .filter((attachment): attachment is MailAttachment => attachment !== null);
+    return files.length ? files : undefined;
   }
 }
