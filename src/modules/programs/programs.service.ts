@@ -83,7 +83,7 @@ export class ProgramsService {
     try {
       return await this.programRepository.findOneOrFail({
         where: { id },
-        relations: ['category', 'indicators']
+        relations: ['category']
       });
     } catch {
       throw new NotFoundException();
