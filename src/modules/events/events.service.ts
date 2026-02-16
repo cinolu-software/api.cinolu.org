@@ -57,8 +57,7 @@ export class EventsService {
   }
 
   async findGallery(slug: string): Promise<Gallery[]> {
-    const event = await this.findBySlug(slug);
-    return event.gallery;
+    return this.galleryService.findEventGallery(slug);
   }
 
   async findAll(queryParams: FilterEventsDto): Promise<[Event[], number]> {

@@ -132,8 +132,7 @@ export class ProjectsService {
   }
 
   async findGallery(slug: string): Promise<Gallery[]> {
-    const project = await this.findBySlug(slug);
-    return project.gallery;
+    return this.galleryService.findProjectGallery(slug);
   }
 
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
@@ -266,12 +265,9 @@ export class ProjectsService {
   async sendNotification(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);
-      let recipients: User[] = [];
-      if (notification.phase) {
-        recipients = await this.findParticipantsByPhase(notification.phase.id);
-      } else {
-        recipients = await this.findParticipantsByProject(notification.project.id);
-      }
+      const phaseParticipants = await this.findParticipantsByPhase(notification.phase.id);
+      const projectParticipants = await this.findParticipantsByProject(notification.project.id);
+      const recipients: User[] = notification.phase ? phaseParticipants : projectParticipants;
       this.eventEmitter.emit('notify.participants', recipients, notification);
       return await this.notificationsService.sendNotification(notificationId);
     } catch {
