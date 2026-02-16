@@ -41,7 +41,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   googleAuth(): void {}
 
-  @Get('google/callback')
+  @Get('google/redirect')
   @Public()
   @UseGuards(GoogleAuthGuard)
   googleCallback(@Res() res: Response): Promise<void> {
