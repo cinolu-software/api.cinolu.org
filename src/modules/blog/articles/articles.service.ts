@@ -54,7 +54,7 @@ export class ArticlesService {
 
   async findGallery(slug: string): Promise<Gallery[]> {
     try {
-      return (await this.findBySlug(slug)).gallery;
+      return await this.galleryService.findBlogGallery(slug);
     } catch {
       throw new BadRequestException();
     }
