@@ -1,20 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
-  UploadedFile,
-  UseInterceptors
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { SubprogramsService } from './subprograms.service';
 import { CreateSubprogramDto } from './dto/create-subprogram.dto';
 import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
 import { Subprogram } from './entities/subprogram.entity';
-import { FilterSubprogramDto } from './dto/filter-subprogram.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -55,10 +43,7 @@ export class SubprogramsController {
       })
     })
   )
-  addLogo(
-    @Param('subprogramId') subprogramId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Promise<Subprogram> {
+  addLogo(@Param('subprogramId') subprogramId: string, @UploadedFile() file: Express.Multer.File): Promise<Subprogram> {
     return this.subprogramsService.addLogo(subprogramId, file);
   }
 
@@ -72,15 +57,6 @@ export class SubprogramsController {
   @Public()
   findByProgram(@Param('programId') programId: string): Promise<Subprogram[]> {
     return this.subprogramsService.findUnpaginated(programId);
-  }
-
-  @Get('program/:programId/paginated')
-  @UseRoles({ resource: 'subprograms', action: 'read' })
-  findPaginatedByProgram(
-    @Param('programId') programId: string,
-    @Query() query: FilterSubprogramDto
-  ): Promise<[Subprogram[], number]> {
-    return this.subprogramsService.findAllPaginated(programId, query);
   }
 
   @Get(':subprogramId')

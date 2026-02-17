@@ -5,7 +5,6 @@ import { promises as fs } from 'fs';
 import { Subprogram } from './entities/subprogram.entity';
 import { CreateSubprogramDto } from './dto/create-subprogram.dto';
 import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
-import { FilterSubprogramDto } from './dto/filter-subprogram.dto';
 
 @Injectable()
 export class SubprogramsService {
@@ -60,18 +59,6 @@ export class SubprogramsService {
     const subprogram = await this.findOne(id);
     subprogram.is_published = !subprogram.is_published;
     return await this.subprogramRepository.save(subprogram);
-  }
-
-  async findAllPaginated(programId: string, queryParams: FilterSubprogramDto): Promise<[Subprogram[], number]> {
-    const { page = 1, q } = queryParams;
-    const query = this.subprogramRepository
-      .createQueryBuilder('p')
-      .leftJoinAndSelect('p.program', 'program')
-      .orderBy('p.updated_at', 'DESC')
-      .where('p.program.id = :programId', { programId });
-    if (q) query.where('p.name LIKE :q OR p.description LIKE :q', { q: `%${q}%` });
-    const skip = (+page - 1) * 10;
-    return await query.skip(skip).take(10).getManyAndCount();
   }
 
   async findOne(id: string): Promise<Subprogram> {
