@@ -38,10 +38,7 @@ export class EventsService {
   async addGallery(id: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.findOne(id);
-      const galleryDto = {
-        image: file.filename,
-        event: { id }
-      };
+      const galleryDto = { image: file.filename, event: { id } };
       await this.galleryService.create(galleryDto);
     } catch {
       throw new BadRequestException();
@@ -66,13 +63,9 @@ export class EventsService {
       .createQueryBuilder('e')
       .leftJoinAndSelect('e.categories', 'categories')
       .orderBy('e.ended_at', 'DESC');
-    if (filter === 'published') {
-      query.andWhere('e.is_published = :isPublished', { isPublished: true });
-    } else if (filter === 'drafts') {
-      query.andWhere('e.is_published = :isPublished', { isPublished: false });
-    } else if (filter === 'highlighted') {
-      query.andWhere('e.is_highlighted = :isHighlighted', { isHighlighted: true });
-    }
+    if (filter === 'published') query.andWhere('e.is_published = :isPublished', { isPublished: true });
+    if (filter === 'drafts') query.andWhere('e.is_published = :isPublished', { isPublished: false });
+    if (filter === 'highlighted') query.andWhere('e.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
     if (categories) query.andWhere('categories.id IN (:categories)', { categories });
     return await query
@@ -199,28 +192,5 @@ export class EventsService {
       where: { id: eventId },
       relations: ['categories', 'event_manager', 'participations', 'participations.user']
     });
-  }
-
-  async leave(eventId: string, user: User): Promise<void> {
-    const participation = await this.participationRepository.findOne({
-      where: { event: { id: eventId }, user: { id: user.id } }
-    });
-    if (!participation) {
-      throw new NotFoundException('You are not participating in this event');
-    }
-    await this.participationRepository.remove(participation);
-  }
-
-  async findParticipations(eventId: string): Promise<EventParticipation[]> {
-    const event = await this.eventRepository
-      .findOneOrFail({
-        where: { id: eventId },
-        relations: ['participations', 'participations.user']
-      })
-      .catch(() => {
-        throw new NotFoundException('Event not found');
-      });
-
-    return event.participations ?? [];
   }
 }
