@@ -63,6 +63,16 @@ export class GalleriesService {
     }
   }
 
+  async findBlogGallery(slug: string): Promise<Gallery[]> {
+    try {
+      return this.galleryRepository.find({
+        where: { article: { slug } }
+      });
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
   private async removeImageFile(filename: string): Promise<void> {
     try {
       await fs.unlink(`./uploads/galleries/${filename}`);
