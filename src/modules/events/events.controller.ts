@@ -23,7 +23,6 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
-import { EventParticipation } from './entities/participation.entity';
 
 @Controller('events')
 export class EventsController {
@@ -69,18 +68,6 @@ export class EventsController {
   @UseRoles({ resource: 'events', action: 'update' })
   participate(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<Event> {
     return this.eventsService.participate(eventId, user);
-  }
-
-  @Delete(':eventId/participate')
-  @UseRoles({ resource: 'events', action: 'update' })
-  leave(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<void> {
-    return this.eventsService.leave(eventId, user);
-  }
-
-  @Get(':eventId/participations')
-  @UseRoles({ resource: 'events', action: 'read' })
-  findParticipations(@Param('eventId') eventId: string): Promise<EventParticipation[]> {
-    return this.eventsService.findParticipations(eventId);
   }
 
   @Patch(':eventId/publish')
