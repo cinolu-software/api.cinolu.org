@@ -14,7 +14,9 @@ export class GalleriesService {
 
   async create(dto: AddGalleryDto): Promise<Gallery> {
     try {
+      console.log(dto);
       const gallery = this.galleryRepository.create(dto);
+
       return await this.galleryRepository.save(gallery);
     } catch {
       throw new BadRequestException();
@@ -54,7 +56,7 @@ export class GalleriesService {
   async findEventGallery(slug: string): Promise<Gallery[]> {
     try {
       return this.galleryRepository.find({
-        where: { project: { slug } }
+        where: { event: { slug } }
       });
     } catch {
       throw new NotFoundException();
