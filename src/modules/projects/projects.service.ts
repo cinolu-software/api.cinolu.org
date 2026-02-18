@@ -22,20 +22,6 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProjectsService {
-  private static readonly DEFAULT_PAGE_SIZE = 20;
-  private static readonly PUBLISHED_PAGE_SIZE = 40;
-
-  private mapUniqueUsers(participations: ProjectParticipation[]): User[] {
-    const seen = new Set<string>();
-    return participations
-      .map((p) => p.user)
-      .filter((user) => {
-        if (seen.has(user.id)) return false;
-        seen.add(user.id);
-        return true;
-      });
-  }
-
   constructor(
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
@@ -60,6 +46,17 @@ export class ProjectsService {
     } catch {
       throw new BadRequestException();
     }
+  }
+
+  private mapUniqueUsers(participations: ProjectParticipation[]): User[] {
+    const seen = new Set<string>();
+    return participations
+      .map((p) => p.user)
+      .filter((user) => {
+        if (seen.has(user.id)) return false;
+        seen.add(user.id);
+        return true;
+      });
   }
 
   private parseParticipantsCsv(buffer: Buffer): Promise<{ name: string; email: string; phone_number?: string }[]> {
@@ -138,7 +135,7 @@ export class ProjectsService {
   async findAll(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     const { page = 1, categories, q, filter = 'all' } = queryParams;
     const categoryIds = Array.isArray(categories) ? categories : categories ? [categories] : [];
-    const skip = (+page - 1) * ProjectsService.DEFAULT_PAGE_SIZE;
+    const skip = (+page - 1) * 20;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
@@ -149,7 +146,7 @@ export class ProjectsService {
     if (filter === 'highlighted') query.andWhere('p.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(p.name LIKE :q OR p.description LIKE :q)', { q: `%${q}%` });
     if (categoryIds.length) query.andWhere('categories.id IN (:...categoryIds)', { categoryIds });
-    return await query.skip(skip).take(ProjectsService.DEFAULT_PAGE_SIZE).getManyAndCount();
+    return await query.skip(skip).take(20).getManyAndCount();
   }
 
   async findUserParticipations(userId: string): Promise<ProjectParticipation[]> {
@@ -162,7 +159,7 @@ export class ProjectsService {
   async findPublished(queryParams: FilterProjectsDto): Promise<[Project[], number]> {
     const { page = 1, categories, q, status } = queryParams;
     const categoryIds = Array.isArray(categories) ? categories : categories ? [categories] : [];
-    const skip = (+page - 1) * ProjectsService.PUBLISHED_PAGE_SIZE;
+    const skip = (+page - 1) * 40;
     const query = this.projectRepository
       .createQueryBuilder('p')
       .leftJoinAndSelect('p.categories', 'categories')
@@ -172,11 +169,7 @@ export class ProjectsService {
     if (status === 'past') query.andWhere('p.ended_at < NOW()');
     if (status === 'current') query.andWhere('p.started_at <= NOW() AND p.ended_at >= NOW()');
     if (status === 'future') query.andWhere('p.started_at > NOW()');
-    return await query
-      .skip(skip)
-      .take(ProjectsService.PUBLISHED_PAGE_SIZE)
-      .orderBy('p.started_at', 'DESC')
-      .getManyAndCount();
+    return await query.skip(skip).take(40).orderBy('p.started_at', 'DESC').getManyAndCount();
   }
 
   async findRecent(): Promise<Project[]> {

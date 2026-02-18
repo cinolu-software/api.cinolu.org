@@ -1,4 +1,4 @@
-import { IsArray, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class MoveParticipantsDto {
   @IsArray()
@@ -7,4 +7,8 @@ export class MoveParticipantsDto {
 
   @IsUUID()
   phaseId: string;
+
+  @IsOptional()
+  @IsUUID()
+  fromPhaseId?: string;
 }
