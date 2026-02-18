@@ -50,9 +50,9 @@ export class UsersReferralService {
       .createQueryBuilder('u')
       .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
     if (q) query.andWhere('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
-    const users = await query.skip(skip).take(take).getMany();
-    const filteredUsers = users.filter((user) => user['referralsCount'] > 0);
-    return [filteredUsers, filteredUsers.length];
+    return await query.skip(skip).take(take).getManyAndCount();
+    // const filteredUsers = users.filter((user) => user['referralsCount'] > 0);
+    // return [filteredUsers, filteredUsers.length];
   }
 
   async findAmbassadorByEmail(email: string): Promise<User> {

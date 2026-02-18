@@ -11,7 +11,7 @@ export class UserMediaService {
     try {
       const oldUser = await this.usersService.findOne(currentUser.id);
       if (oldUser.profile) {
-        await fs.unlink(`./uploads/profiles/${oldUser.profile}`).catch(() => undefined);
+        await fs.unlink(`./uploads/profiles/${oldUser.profile}`);
       }
       return await this.usersService.setProfileImage(oldUser.id, file.filename);
     } catch {
