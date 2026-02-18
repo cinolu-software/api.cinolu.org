@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { randomBytes } from 'crypto';
 import { User } from '../entities/user.entity';
-import { FilterUsersDto } from '../dto/filter-users.dto';
 import { UsersService } from './users.service';
 
 @Injectable()
@@ -42,17 +41,13 @@ export class UsersReferralService {
     }
   }
 
-  async findAmbassadors(queryParams: FilterUsersDto): Promise<[User[], number]> {
-    const { page = 1, q } = queryParams;
-    const take = 50;
-    const skip = (+page - 1) * take;
+  async findAmbassadors(): Promise<[User[], number]> {
     const query = this.userRepository
       .createQueryBuilder('u')
       .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
-    if (q) query.andWhere('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
-    return await query.skip(skip).take(take).getManyAndCount();
-    // const filteredUsers = users.filter((user) => user['referralsCount'] > 0);
-    // return [filteredUsers, filteredUsers.length];
+    const users = await query.getMany();
+    const filteredUsers = users.filter((user) => Number(user['referralsCount']) > 0);
+    return [filteredUsers, filteredUsers.length];
   }
 
   async findAmbassadorByEmail(email: string): Promise<User> {

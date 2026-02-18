@@ -49,8 +49,8 @@ export class UsersController {
 
   @Get('ambassadors')
   @Public()
-  findAmbassadors(@Query() query: FilterUsersDto): Promise<[User[], number]> {
-    return this.usersReferralService.findAmbassadors(query);
+  findAmbassadors(): Promise<[User[], number]> {
+    return this.usersReferralService.findAmbassadors();
   }
 
   @Get('ambassadors/:email')
