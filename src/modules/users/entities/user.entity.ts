@@ -5,9 +5,9 @@ import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
-import { ProjectParticipation } from '@/modules/projects/entities/participation.entity';
+import { ProjectParticipation } from '@/modules/projects/entities/project-participation.entity';
 import { Event } from '@/modules/events/entities/event.entity';
-import { EventParticipation } from '@/modules/events/entities/participation.entity';
+import { EventParticipation } from '@/modules/events/entities/event-participation.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
 import { Notification } from '@/modules/notifications/entities/notification.entity';
 

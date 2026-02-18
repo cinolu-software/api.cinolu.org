@@ -17,7 +17,10 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ParticipateProjectDto } from './dto/participate.dto';
 import { Project } from './entities/project.entity';
-import { ProjectsService } from './projects.service';
+import { ProjectsService } from './services/projects.service';
+import { ProjectParticipationService } from './services/project-participation.service';
+import { ProjectNotificationService } from './services/project-notification.service';
+import { ProjectMediaService } from './services/project-media.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
@@ -26,11 +29,16 @@ import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Notification } from '@/modules/notifications/entities/notification.entity';
 import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
-import { ProjectParticipation } from './entities/participation.entity';
+import { ProjectParticipation } from './entities/project-participation.entity';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly projectsService: ProjectsService,
+    private readonly participationService: ProjectParticipationService,
+    private readonly notificationService: ProjectNotificationService,
+    private readonly mediaService: ProjectMediaService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'projects', action: 'create' })
@@ -68,18 +76,18 @@ export class ProjectsController {
     @CurrentUser() user: User,
     @Body() dto: ParticipateProjectDto
   ): Promise<void> {
-    return this.projectsService.participate(projectId, user, dto);
+    return this.participationService.participate(projectId, user, dto);
   }
 
   @Get('me/participations')
   findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
-    return this.projectsService.findUserParticipations(user.id);
+    return this.participationService.findUserParticipations(user.id);
   }
 
   @Get(':projectId/participations')
   @UseRoles({ resource: 'projects', action: 'read' })
   findParticipations(@Param('projectId') projectId: string): Promise<ProjectParticipation[]> {
-    return this.projectsService.findParticipations(projectId);
+    return this.participationService.findParticipations(projectId);
   }
 
   @Get(':projectId')
@@ -102,7 +110,7 @@ export class ProjectsController {
     })
   )
   addParticipantsFromCsv(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.projectsService.addParticipantsFromCsv(projectId, file);
+    return this.participationService.addParticipantsFromCsv(projectId, file);
   }
 
   @Post(':projectId/notifications')
@@ -112,13 +120,13 @@ export class ProjectsController {
     @CurrentUser() user: User,
     @Body() dto: CreateNotificationDto
   ): Promise<Notification> {
-    return this.projectsService.createNotification(projectId, user, dto);
+    return this.notificationService.createNotification(projectId, user, dto);
   }
 
   @Post('notifications/:notificationId/send')
   @UseRoles({ resource: 'projects', action: 'update' })
   sendNotification(@Param('notificationId') notificationId: string): Promise<Notification> {
-    return this.projectsService.sendNotification(notificationId);
+    return this.notificationService.sendNotification(notificationId);
   }
 
   @Post(':projectId/gallery')
@@ -134,19 +142,19 @@ export class ProjectsController {
     })
   )
   addGallery(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.projectsService.addImage(projectId, file);
+    return this.mediaService.addImage(projectId, file);
   }
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'projects', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
-    return this.projectsService.removeImage(galleryId);
+    return this.mediaService.removeImage(galleryId);
   }
 
   @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
-    return this.projectsService.findGallery(slug);
+    return this.mediaService.findGallery(slug);
   }
 
   @Patch(':projectId/publish')
@@ -168,7 +176,7 @@ export class ProjectsController {
     })
   )
   addCover(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
-    return this.projectsService.addCover(projectId, file);
+    return this.mediaService.addCover(projectId, file);
   }
 
   @Patch(':projectId/highlight')

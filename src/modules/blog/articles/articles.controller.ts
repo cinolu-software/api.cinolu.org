@@ -10,7 +10,8 @@ import {
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common';
-import { ArticlesService } from './articles.service';
+import { ArticlesService } from './services/articles.service';
+import { ArticleMediaService } from './services/article-media.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
@@ -26,7 +27,10 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(
+    private readonly articlesService: ArticlesService,
+    private readonly articleMediaService: ArticleMediaService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'blogs', action: 'create' })
@@ -59,19 +63,19 @@ export class ArticlesController {
     })
   )
   addGallery(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.articlesService.addGallery(articleId, file);
+    return this.articleMediaService.addGallery(articleId, file);
   }
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'blogs', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
-    return this.articlesService.removeGallery(galleryId);
+    return this.articleMediaService.removeGallery(galleryId);
   }
 
   @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
-    return this.articlesService.findGallery(slug);
+    return this.articleMediaService.findGallery(slug);
   }
 
   @Post(':articleId/cover')
@@ -87,7 +91,7 @@ export class ArticlesController {
     })
   )
   addCover(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<Article> {
-    return this.articlesService.addImage(articleId, file);
+    return this.articleMediaService.addImage(articleId, file);
   }
 
   @Get('published')

@@ -4,7 +4,7 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
-import { EventParticipation } from './participation.entity';
+import { EventParticipation } from './event-participation.entity';
 
 @Entity()
 export class Event extends AbstractEntity {

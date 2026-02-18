@@ -10,7 +10,8 @@ import {
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common';
-import { ProgramsService } from './programs.service';
+import { ProgramsService } from './services/programs.service';
+import { ProgramMediaService } from './services/program-media.service';
 import { CreateProgramDto } from './dto/create-program.dto';
 import { UpdateProgramDto } from './dto/update-program.dto';
 import { Program } from './entities/program.entity';
@@ -23,7 +24,10 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('programs')
 export class ProgramsController {
-  constructor(private readonly programsService: ProgramsService) {}
+  constructor(
+    private readonly programsService: ProgramsService,
+    private readonly programMediaService: ProgramMediaService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'programs', action: 'create' })
@@ -56,7 +60,7 @@ export class ProgramsController {
     })
   )
   addLogo(@Param('programId') programId: string, @UploadedFile() file: Express.Multer.File): Promise<Program> {
-    return this.programsService.addLogo(programId, file);
+    return this.programMediaService.addLogo(programId, file);
   }
 
   @Get('by-slug/:slug')

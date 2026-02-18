@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { SubprogramsService } from './subprograms.service';
+import { SubprogramsService } from './services/subprograms.service';
+import { SubprogramMediaService } from './services/subprogram-media.service';
 import { CreateSubprogramDto } from './dto/create-subprogram.dto';
 import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
 import { Subprogram } from './entities/subprogram.entity';
@@ -11,7 +12,10 @@ import { UseRoles } from 'nest-access-control';
 
 @Controller('subprograms')
 export class SubprogramsController {
-  constructor(private readonly subprogramsService: SubprogramsService) {}
+  constructor(
+    private readonly subprogramsService: SubprogramsService,
+    private readonly subprogramMediaService: SubprogramMediaService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'subprograms', action: 'create' })
@@ -44,7 +48,7 @@ export class SubprogramsController {
     })
   )
   addLogo(@Param('subprogramId') subprogramId: string, @UploadedFile() file: Express.Multer.File): Promise<Subprogram> {
-    return this.subprogramsService.addLogo(subprogramId, file);
+    return this.subprogramMediaService.addLogo(subprogramId, file);
   }
 
   @Get('by-slug/:slug')

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { promises as fs } from 'fs';
 import { Gallery } from './entities/gallery.entity';
-import { AddGalleryDto } from './dto/add-gallery.dto';
+import { AddImageDto } from './dto/add-image.dto';
 
 @Injectable()
 export class GalleriesService {
@@ -12,12 +12,9 @@ export class GalleriesService {
     private readonly galleryRepository: Repository<Gallery>
   ) {}
 
-  async create(dto: AddGalleryDto): Promise<Gallery> {
+  async create(dto: AddImageDto): Promise<Gallery> {
     try {
-      console.log(dto);
-      const gallery = this.galleryRepository.create(dto);
-
-      return await this.galleryRepository.save(gallery);
+      return await this.galleryRepository.save(dto);
     } catch {
       throw new BadRequestException();
     }
@@ -43,34 +40,16 @@ export class GalleriesService {
     }
   }
 
-  async findProjectGallery(slug: string): Promise<Gallery[]> {
-    try {
-      return this.galleryRepository.find({
-        where: { project: { slug } }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
+  async findGallery(repo: string, key: string): Promise<Gallery[]> {
+    return this.galleryRepository.find({
+      where: { [repo]: { [key]: key } }
+    });
   }
 
-  async findEventGallery(slug: string): Promise<Gallery[]> {
-    try {
-      return this.galleryRepository.find({
-        where: { event: { slug } }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
-  }
-
-  async findBlogGallery(slug: string): Promise<Gallery[]> {
-    try {
-      return this.galleryRepository.find({
-        where: { article: { slug } }
-      });
-    } catch {
-      throw new NotFoundException();
-    }
+  async findVentureGallery(slug: string): Promise<Gallery[]> {
+    return this.galleryRepository.find({
+      where: { product: { slug } }
+    });
   }
 
   private async removeImageFile(filename: string): Promise<void> {

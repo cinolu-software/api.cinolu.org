@@ -10,7 +10,8 @@ import {
   UseInterceptors,
   Query
 } from '@nestjs/common';
-import { MentorsService } from './mentors.service';
+import { MentorsService } from './services/mentors.service';
+import { MentorMediaService } from './services/mentor-media.service';
 import { CreateMentorDto } from './dto/create-mentor.dto';
 import { UpdateMentorDto } from './dto/update-mentor.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
@@ -24,7 +25,10 @@ import { User } from '@/modules/users/entities/user.entity';
 
 @Controller('mentors')
 export class MentorsController {
-  constructor(private readonly mentorsService: MentorsService) {}
+  constructor(
+    private readonly mentorsService: MentorsService,
+    private readonly mentorMediaService: MentorMediaService
+  ) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateMentorDto): Promise<MentorProfile> {
@@ -44,7 +48,7 @@ export class MentorsController {
     })
   )
   addCv(@Param('mentorId') mentorId: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
-    return this.mentorsService.addCv(mentorId, file);
+    return this.mentorMediaService.addCv(mentorId, file);
   }
 
   @Get('paginated')

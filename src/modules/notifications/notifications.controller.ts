@@ -10,7 +10,8 @@ import {
   UploadedFiles,
   UseInterceptors
 } from '@nestjs/common';
-import { NotificationsService } from './notifications.service';
+import { NotificationsService } from './services/notifications.service';
+import { NotificationAttachmentsService } from './services/notification-attachments.service';
 import { Notification } from './entities/notification.entity';
 import { UseRoles } from 'nest-access-control';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -22,7 +23,10 @@ import { FilterNotificationsDto } from './dto/filter-notifications.dto';
 
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(
+    private readonly notificationsService: NotificationsService,
+    private readonly notificationAttachmentsService: NotificationAttachmentsService
+  ) {}
 
   @Get('project/:projectId')
   @UseRoles({ resource: 'projects', action: 'read' })
@@ -61,7 +65,7 @@ export class NotificationsController {
     @Param('notificationId') notificationId: string,
     @UploadedFiles() files: Express.Multer.File[]
   ): Promise<NotificationAttachment[]> {
-    return this.notificationsService.addAttachments(notificationId, files);
+    return this.notificationAttachmentsService.addAttachments(notificationId, files);
   }
 
   @Delete(':notificationId')

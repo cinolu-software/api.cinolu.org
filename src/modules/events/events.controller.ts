@@ -10,7 +10,9 @@ import {
   UploadedFile,
   Query
 } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { EventsService } from './services/events.service';
+import { EventMediaService } from './services/event-media.service';
+import { EventParticipationService } from './services/event-participation.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
@@ -26,7 +28,11 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly eventMediaService: EventMediaService,
+    private readonly eventParticipationService: EventParticipationService
+  ) {}
 
   @Post()
   @UseRoles({ resource: 'events', action: 'create' })
@@ -67,7 +73,7 @@ export class EventsController {
   @Post(':eventId/participate')
   @UseRoles({ resource: 'events', action: 'update' })
   participate(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<Event> {
-    return this.eventsService.participate(eventId, user);
+    return this.eventParticipationService.participate(eventId, user);
   }
 
   @Patch(':eventId/publish')
@@ -89,19 +95,19 @@ export class EventsController {
     })
   )
   addGallery(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.eventsService.addGallery(eventId, file);
+    return this.eventMediaService.addGallery(eventId, file);
   }
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'events', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
-    return this.eventsService.removeGallery(galleryId);
+    return this.eventMediaService.removeGallery(galleryId);
   }
 
   @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
-    return this.eventsService.findGallery(slug);
+    return this.eventMediaService.findGallery(slug);
   }
 
   @Post(':eventId/cover')
@@ -117,7 +123,7 @@ export class EventsController {
     })
   )
   addCover(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
-    return this.eventsService.addCover(eventId, file);
+    return this.eventMediaService.addCover(eventId, file);
   }
 
   @Patch(':eventId/highlight')

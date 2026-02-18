@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { StatsService } from './stats.service';
+import { StatsService } from './services/stats.service';
 import { IUSerStats } from './types/user-stats.type';
 import { IAdminStatsGeneral, IAdminStatsByYear } from './types/admin-stats.type';
 import { CurrentUser } from '../../core/auth/decorators/current-user.decorator';

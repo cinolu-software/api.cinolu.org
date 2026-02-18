@@ -10,7 +10,8 @@ import {
   UploadedFile,
   UseInterceptors
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductsService } from './services/products.service';
+import { ProductMediaService } from './services/product-media.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -26,7 +27,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly productMediaService: ProductMediaService
+  ) {}
 
   @Post()
   create(@Body() dto: CreateProductDto): Promise<Product> {
@@ -46,19 +50,19 @@ export class ProductsController {
     })
   )
   addGallery(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.productsService.addGallery(productId, file);
+    return this.productMediaService.addGallery(productId, file);
   }
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
-    return this.productsService.removeGallery(galleryId);
+    return this.productMediaService.removeGallery(galleryId);
   }
 
   @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
-    return this.productsService.findGallery(slug);
+    return this.productMediaService.findGallery(slug);
   }
 
   @Get('me')

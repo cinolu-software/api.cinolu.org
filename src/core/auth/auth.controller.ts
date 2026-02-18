@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
+import { AuthPasswordService } from './services/auth-password.service';
 import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -15,7 +16,10 @@ import { ContactSupportDto } from './dto/contact-support.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly authPasswordService: AuthPasswordService
+  ) {}
 
   @Post('support/contact')
   @Public()
@@ -65,18 +69,18 @@ export class AuthController {
 
   @Patch('me/password')
   updatePassword(@CurrentUser() user: User, @Body() dto: UpdatePasswordDto): Promise<User> {
-    return this.authService.updatePassword(user, dto);
+    return this.authPasswordService.updatePassword(user, dto);
   }
 
   @Post('password/forgot')
   @Public()
   forgotPassword(@Body() dto: ForgotPasswordDto): Promise<void> {
-    return this.authService.forgotPassword(dto);
+    return this.authPasswordService.forgotPassword(dto);
   }
 
   @Post('password/reset')
   @Public()
   resetPassword(@Body() dto: ResetPasswordDto): Promise<User> {
-    return this.authService.resetPassword(dto);
+    return this.authPasswordService.resetPassword(dto);
   }
 }

@@ -10,7 +10,8 @@ import {
   UseInterceptors,
   Query
 } from '@nestjs/common';
-import { VenturesService } from './ventures.service';
+import { VenturesService } from './services/ventures.service';
+import { VentureMediaService } from './services/venture-media.service';
 import { CreateVentureDto } from './dto/create-venture.dto';
 import { UpdateVentureDto } from './dto/update-venture.dto';
 import { Venture } from './entities/venture.entity';
@@ -26,7 +27,10 @@ import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('ventures')
 export class VenturesController {
-  constructor(private readonly venturesService: VenturesService) {}
+  constructor(
+    private readonly venturesService: VenturesService,
+    private readonly ventureMediaService: VentureMediaService
+  ) {}
 
   @Post()
   create(@CurrentUser() user: User, @Body() dto: CreateVentureDto): Promise<Venture> {
@@ -80,19 +84,19 @@ export class VenturesController {
     })
   )
   addGallery(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.venturesService.addGallery(ventureId, file);
+    return this.ventureMediaService.addImage(ventureId, file);
   }
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
-    return this.venturesService.removeGallery(galleryId);
+    return this.ventureMediaService.removeImage(galleryId);
   }
 
   @Get('by-slug/:slug/gallery')
   @Public()
   findGallery(@Param('slug') slug: string): Promise<Gallery[]> {
-    return this.venturesService.findGallery(slug);
+    return this.ventureMediaService.findGallery(slug);
   }
 
   @Post(':ventureId/logo')
@@ -108,7 +112,7 @@ export class VenturesController {
     })
   )
   addLogo(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
-    return this.venturesService.addLogo(ventureId, file);
+    return this.ventureMediaService.addLogo(ventureId, file);
   }
 
   @Post(':ventureId/cover')
@@ -124,7 +128,7 @@ export class VenturesController {
     })
   )
   addCover(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
-    return this.venturesService.addCover(ventureId, file);
+    return this.ventureMediaService.addCover(ventureId, file);
   }
 
   @Get(':ventureId')

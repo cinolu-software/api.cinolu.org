@@ -5,7 +5,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
-import { ProjectParticipation } from './participation.entity';
+import { ProjectParticipation } from './project-participation.entity';
 
 @Entity()
 export class Project extends AbstractEntity {
