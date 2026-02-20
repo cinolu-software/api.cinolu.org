@@ -15,21 +15,15 @@
 
 Use `pnpm` as the package manager.
 
-- `pnpm dev` starts the API in watch mode.
-- `pnpm start` runs the standard NestJS start command.
 - `pnpm build` compiles to `dist/`.
 - `pnpm start:prod` runs the compiled build.
 - `pnpm lint` runs ESLint with autofix.
-- `pnpm format` runs Prettier on `src/**/*.ts`.
-- `pnpm db:migrate --name=<migration-name>` generates a migration after building.
-- `pnpm db:up` applies migrations.
-- `pnpm db:down` reverts the last migration.
 
 ## Coding Style & Naming Conventions
 
 - Always follow single responsability principle
 - Keep methods short and clean doing only one thing
-- Use existing patterns
+- Use existing patterns and code organization
 - TypeScript with NestJS patterns (modules, controllers, services, DTOs, entities).
 - Indentation: 2 spaces (match existing files).
 - Filenames use kebab-case; classes use PascalCase.
