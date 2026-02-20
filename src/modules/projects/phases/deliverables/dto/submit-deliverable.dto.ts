@@ -1,8 +1,9 @@
-import { IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class SubmitDeliverableDto {
+  @IsOptional()
   @IsString()
-  content: string;
+  content?: string;
 
   @IsUUID()
   participationId: string;

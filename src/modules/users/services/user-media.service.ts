@@ -9,11 +9,9 @@ export class UserMediaService {
 
   async uploadImage(currentUser: User, file: Express.Multer.File): Promise<User> {
     try {
-      const oldUser = await this.usersService.findOne(currentUser.id);
-      if (oldUser.profile) {
-        await fs.unlink(`./uploads/profiles/${oldUser.profile}`);
-      }
-      return await this.usersService.setProfileImage(oldUser.id, file.filename);
+      if (currentUser.profile) await fs.unlink(`./uploads/profiles/${currentUser.profile}`);
+      await this.usersService.update(currentUser.id, { profile: file.filename });
+      return this.usersService.findByEmail(currentUser.email);
     } catch {
       throw new BadRequestException();
     }

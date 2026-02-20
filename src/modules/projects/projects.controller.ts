@@ -11,7 +11,7 @@ import {
   Query
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createDiskUploadOptions, createMemoryUploadOptions } from '@/core/helpers/upload.helper';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ParticipateProjectDto } from './dto/participate.dto';
@@ -30,6 +30,7 @@ import { Notification } from '@/modules/notifications/entities/notification.enti
 import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
 import { ProjectParticipation } from './entities/project-participation.entity';
 import { MoveParticipantsDto } from './dto/move-participants.dto';
+import { memoryStorage } from 'multer';
 
 @Controller('projects')
 export class ProjectsController {
@@ -111,17 +112,15 @@ export class ProjectsController {
   @Post(':projectId/participants/import-csv')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
-    FileInterceptor(
-      'file',
-      createMemoryUploadOptions({
-        fileFilter: (_req, file, cb) => {
-          const allowed = ['text/csv', 'application/csv', 'text/plain'];
-          const isCsv = allowed.includes(file.mimetype) || file.originalname?.toLowerCase().endsWith('.csv');
-          cb(null, !!isCsv);
-        },
-        limits: { fileSize: 2 * 1024 * 1024 }
-      })
-    )
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['text/csv', 'application/csv', 'text/plain'];
+        const isCsv = allowed.includes(file.mimetype) || file.originalname?.toLowerCase().endsWith('.csv');
+        cb(null, !!isCsv);
+      },
+      limits: { fileSize: 2 * 1024 * 1024 }
+    })
   )
   addParticipantsFromCsv(
     @Param('projectId') projectId: string,

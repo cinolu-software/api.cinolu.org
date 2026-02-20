@@ -241,17 +241,8 @@ export class UsersService {
 
   async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
     try {
-      const oldUser = await this.userRepository.findOneOrFail({
-        where: { id: currentUser.id },
-        relations: ['roles']
-      });
-      delete oldUser.password;
-      await this.userRepository.save({
-        ...oldUser,
-        ...dto,
-        roles: dto.roles?.map((id) => ({ id })) || oldUser.roles
-      });
-      return await this.findOne(oldUser.id);
+      await this.userRepository.update(currentUser.id, dto);
+      return await this.findOne(currentUser.id);
     } catch {
       throw new BadRequestException();
     }
@@ -271,20 +262,6 @@ export class UsersService {
     try {
       await this.findOne(id);
       await this.userRepository.softDelete(id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async setProfileImage(id: string, profile: string): Promise<User> {
-    try {
-      const oldUser = await this.userRepository.findOneOrFail({
-        where: { id },
-        relations: ['roles']
-      });
-      delete oldUser.password;
-      await this.userRepository.save({ ...oldUser, profile });
-      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }

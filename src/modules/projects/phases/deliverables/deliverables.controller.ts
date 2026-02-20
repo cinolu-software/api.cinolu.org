@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UseRoles } from 'nest-access-control';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { DeliverablesService } from './services/deliverables.service';
 import { DeliverableSubmissionsService } from './services/deliverable-submissions.service';
 import { CreateDeliverableDto } from './dto/create-deliverable.dto';
@@ -29,16 +31,23 @@ export class DeliverablesController {
   }
 
   @Post(':deliverableId/submit')
-  submit(@Param() params: DelivrableParams, @Body() dto: SubmitDeliverableDto): Promise<DeliverableSubmission> {
-    return this.submissionsService.submit(params, dto);
+  @UseInterceptors(FileInterceptor('file', createDiskUploadOptions('./uploads/deliverables/submissions')))
+  submit(
+    @Param() params: DelivrableParams,
+    @Body() dto: SubmitDeliverableDto,
+    @UploadedFile() file?: Express.Multer.File
+  ): Promise<DeliverableSubmission> {
+    return this.submissionsService.submit(params, dto, file);
   }
 
   @Patch(':deliverableId/submissions/:submissionId')
+  @UseInterceptors(FileInterceptor('file', createDiskUploadOptions('./uploads/deliverables/submissions')))
   updateSubmission(
     @Param('submissionId') submissionId: string,
-    @Body() dto: SubmitDeliverableDto
+    @Body() dto: SubmitDeliverableDto,
+    @UploadedFile() file?: Express.Multer.File
   ): Promise<DeliverableSubmission> {
-    return this.submissionsService.update(submissionId, dto);
+    return this.submissionsService.update(submissionId, dto, file);
   }
 
   @Delete(':deliverableId/submissions/:submissionId')
