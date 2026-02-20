@@ -3,3 +3,8 @@ export enum DeliverableType {
   LINK = 'link',
   DOCUMENT = 'document'
 }
+
+export interface DelivrableParams {
+  phaseId: string;
+  delivrableId: string;
+}

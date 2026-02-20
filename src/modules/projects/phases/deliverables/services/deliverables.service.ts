@@ -4,19 +4,17 @@ import { Repository } from 'typeorm';
 import { PhaseDeliverable } from '../entities/deliverable.entity';
 import { CreateDeliverableDto } from '../dto/create-deliverable.dto';
 import { UpdateDeliverableDto } from '../dto/update-deliverable.dto';
-import { PhasesService } from '@/modules/projects/phases/services/phases.service';
+import { DelivrableParams } from '../types/deliverables.types';
 
 @Injectable()
 export class PhaseDeliverablesService {
   constructor(
     @InjectRepository(PhaseDeliverable)
-    private readonly deliverableRepository: Repository<PhaseDeliverable>,
-    private readonly phasesService: PhasesService
+    private readonly deliverableRepository: Repository<PhaseDeliverable>
   ) {}
 
   async create(phaseId: string, dto: CreateDeliverableDto): Promise<PhaseDeliverable> {
     try {
-      await this.phasesService.findOne(phaseId);
       return await this.deliverableRepository.save({
         ...dto,
         phase: { id: phaseId }
@@ -26,29 +24,30 @@ export class PhaseDeliverablesService {
     }
   }
 
-  async findOne(phaseId: string, id: string): Promise<PhaseDeliverable> {
+  async findOne(params: DelivrableParams): Promise<PhaseDeliverable> {
     try {
+      const { phaseId, delivrableId } = params;
       return await this.deliverableRepository.findOneOrFail({
-        where: { id, phase: { id: phaseId } }
+        where: { id: delivrableId, phase: { id: phaseId } }
       });
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async update(phaseId: string, id: string, dto: UpdateDeliverableDto): Promise<PhaseDeliverable> {
+  async update(params: DelivrableParams, dto: UpdateDeliverableDto): Promise<PhaseDeliverable> {
     try {
-      const deliverable = await this.findOne(phaseId, id);
+      const deliverable = await this.findOne(params);
       return await this.deliverableRepository.save({ ...deliverable, ...dto });
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async remove(phaseId: string, id: string): Promise<void> {
+  async remove(params: DelivrableParams): Promise<void> {
     try {
-      await this.findOne(phaseId, id);
-      await this.deliverableRepository.softDelete(id);
+      await this.findOne(params);
+      await this.deliverableRepository.softDelete(params.phaseId);
     } catch {
       throw new BadRequestException();
     }
