@@ -9,15 +9,11 @@ export class DeliverableSubmission extends AbstractEntity {
   @Column({ type: 'text' })
   content: string;
 
-  @ManyToOne(() => Deliverable, (deliverable) => deliverable.submissions, {
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => Deliverable, (deliverable) => deliverable.submissions)
   @JoinColumn()
   deliverable: Deliverable;
 
-  @ManyToOne(() => ProjectParticipation, (participation) => participation.deliverable_submissions, {
-    onDelete: 'CASCADE'
-  })
+  @ManyToOne(() => ProjectParticipation, (participation) => participation.deliverable_submissions)
   @JoinColumn()
   participation: ProjectParticipation;
 }
