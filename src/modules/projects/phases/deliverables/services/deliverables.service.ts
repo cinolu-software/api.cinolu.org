@@ -24,12 +24,10 @@ export class DeliverablesService {
     }
   }
 
-  async findOne(params: DelivrableParams): Promise<Deliverable> {
+  async findOne(id: string): Promise<Deliverable> {
     try {
-      const { phaseId, deliverableId } = params;
       return await this.deliverableRepository.findOneOrFail({
-        where: { id: deliverableId, phase: { id: phaseId } },
-        relations: ['phase', 'phase.project']
+        where: { id }
       });
     } catch {
       throw new NotFoundException();
@@ -38,7 +36,7 @@ export class DeliverablesService {
 
   async update(params: DelivrableParams, dto: UpdateDeliverableDto): Promise<Deliverable> {
     try {
-      const deliverable = await this.findOne(params);
+      const deliverable = await this.findOne(params.deliverableId);
       return await this.deliverableRepository.save({ ...deliverable, ...dto });
     } catch {
       throw new BadRequestException();
@@ -47,7 +45,7 @@ export class DeliverablesService {
 
   async remove(params: DelivrableParams): Promise<void> {
     try {
-      const deliverable = await this.findOne(params);
+      const deliverable = await this.findOne(params.deliverableId);
       await this.deliverableRepository.softDelete(deliverable.id);
     } catch {
       throw new BadRequestException();
