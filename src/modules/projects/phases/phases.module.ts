@@ -6,9 +6,10 @@ import { Phase } from './entities/phase.entity';
 import { PhaseSubscriber } from './subscribers/phase.subscriber';
 import { ProjectParticipation } from '@/modules/projects/entities/project-participation.entity';
 import { PhaseParticipantsService } from './services/participations.service';
+import { ProjectDeliverablesModule } from './deliverables/deliverables.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Phase, ProjectParticipation])],
+  imports: [ProjectDeliverablesModule, TypeOrmModule.forFeature([Phase, ProjectParticipation])],
   providers: [PhasesService, PhaseParticipantsService, PhaseSubscriber],
   controllers: [PhasesController]
 })
