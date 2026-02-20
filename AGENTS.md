@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 
 - `src/` contains the NestJS application source code.
-  - `src/core/` holds cross-cutting concerns (auth, email, helpers, interceptors).
+  - `src/core/` holds cross-cutting concerns (auth, helpers, interceptors).
   - `src/modules/` contains feature modules (users, projects, programs, notifications, etc.).
   - `src/main.ts` bootstraps the API.
 - `migrations/` holds TypeORM migration files (generated and applied via scripts).
@@ -16,16 +16,17 @@
 Use `pnpm` as the package manager.
 
 - `pnpm build` compiles to `dist/`.
-- `pnpm start:prod` runs the compiled build.
 - `pnpm lint` runs ESLint with autofix.
+- `pnpm format` runs prettier format
 
 ## Coding Style & Naming Conventions
 
-- Always follow single responsability principle
-- Keep methods short and clean doing only one thing
-- Use existing patterns and code organization
+- Always adhere to the principle of single responsibility
+- Keep methods short and clear by doing only one thing
+- Use existing code patterns and organization
+- Lint for validation after adding a feature
 - TypeScript with NestJS patterns (modules, controllers, services, DTOs, entities).
 - Indentation: 2 spaces (match existing files).
-- Filenames use kebab-case; classes use PascalCase.
-- Prettier and ESLint are the enforced format/lint tools (`pnpm format`, `pnpm lint`).
-- Entities extend `AbstractEntity` and use snake_case columns where present in existing models.
+- File names use kebab-case; classes use PascalCase.
+- Entities extend `AbstractEntity` and use snake_case columns when present in existing models.
+- Do not generate migrations; I will do this manually.
