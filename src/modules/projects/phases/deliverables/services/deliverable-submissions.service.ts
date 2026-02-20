@@ -16,7 +16,7 @@ export class DeliverableSubmissionsService {
 
   async submit(params: DelivrableParams, dto: SubmitDeliverableDto): Promise<DeliverableSubmission> {
     try {
-      const deliverable = await this.deliverablesService.findOne(params);
+      const deliverable = await this.deliverablesService.findOne(params.deliverableId);
       return await this.submissionRepository.save({
         content: dto.content,
         deliverable: { id: deliverable.id },

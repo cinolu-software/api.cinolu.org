@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { UseRoles } from 'nest-access-control';
 import { DeliverablesService } from './services/deliverables.service';
 import { DeliverableSubmissionsService } from './services/deliverable-submissions.service';
@@ -20,12 +20,6 @@ export class DeliverablesController {
   @UseRoles({ resource: 'phases', action: 'create' })
   create(@Param('phaseId') phaseId: string, @Body() dto: CreateDeliverableDto): Promise<Deliverable> {
     return this.deliverablesService.create(phaseId, dto);
-  }
-
-  @Get(':deliverableId')
-  @UseRoles({ resource: 'phases', action: 'read' })
-  findOne(@Param() params: DelivrableParams): Promise<Deliverable> {
-    return this.deliverablesService.findOne(params);
   }
 
   @Patch(':deliverableId')
