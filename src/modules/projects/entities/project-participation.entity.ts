@@ -1,9 +1,10 @@
-import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, Unique } from 'typeorm';
+import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Venture } from '@/modules/ventures/entities/venture.entity';
 import { Phase } from '@/modules/projects/phases/entities/phase.entity';
+import { DeliverableSubmission } from '@/modules/projects/phases/deliverables/entities/deliverable-submission.entity';
 
 @Entity()
 @Unique(['user.id', 'project.id'])
@@ -23,4 +24,7 @@ export class ProjectParticipation extends AbstractEntity {
   @ManyToMany(() => Phase, (phase) => phase.participations)
   @JoinTable()
   phases: Phase[];
+
+  @OneToMany(() => DeliverableSubmission, (submission) => submission.participation)
+  deliverable_submissions: DeliverableSubmission[];
 }

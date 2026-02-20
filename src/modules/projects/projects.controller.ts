@@ -18,8 +18,8 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { ParticipateProjectDto } from './dto/participate.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './services/projects.service';
-import { ProjectParticipationService } from './services/project-participation.service';
-import { ProjectNotificationService } from './services/project-notification.service';
+import { ProjectParticipationService } from './services/project-participations.service';
+import { ProjectNotificationService } from './services/project-notifications.service';
 import { ProjectMediaService } from './services/project-media.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
 import { UseRoles } from 'nest-access-control';
@@ -30,6 +30,7 @@ import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Notification } from '@/modules/notifications/entities/notification.entity';
 import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
 import { ProjectParticipation } from './entities/project-participation.entity';
+import { MoveParticipantsDto } from './dto/move-participants.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -56,6 +57,18 @@ export class ProjectsController {
   @Public()
   findRecent(): Promise<Project[]> {
     return this.projectsService.findRecent();
+  }
+
+  @Post('participants/move')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {
+    return this.participationService.moveParticipants(dto);
+  }
+
+  @Post('participants/remove')
+  @UseRoles({ resource: 'projects', action: 'update' })
+  removeParticipantsFromPhase(@Body() dto: MoveParticipantsDto): Promise<void> {
+    return this.participationService.removeParticipantsFromPhase(dto);
   }
 
   @Get('published')
@@ -109,7 +122,10 @@ export class ProjectsController {
       limits: { fileSize: 2 * 1024 * 1024 }
     })
   )
-  addParticipantsFromCsv(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+  addParticipantsFromCsv(
+    @Param('projectId') projectId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<void> {
     return this.participationService.addParticipantsFromCsv(projectId, file);
   }
 

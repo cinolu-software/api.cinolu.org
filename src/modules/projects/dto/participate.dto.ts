@@ -1,7 +1,6 @@
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 export class ParticipateProjectDto {
-  @IsOptional()
   @IsUUID()
   ventureId?: string;
 }
