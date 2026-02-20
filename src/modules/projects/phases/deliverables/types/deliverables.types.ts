@@ -6,5 +6,5 @@ export enum DeliverableType {
 
 export interface DelivrableParams {
   phaseId: string;
-  delivrableId: string;
+  deliverableId: string;
 }

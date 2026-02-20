@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PhaseDeliverable } from './entities/deliverable.entity';
-import { PhaseDeliverablesService } from './services/deliverables.service';
-import { PhaseDeliverablesController } from './deliverables.controller';
-import { PhasesService } from '../services/phases.service';
+import { Deliverable } from './entities/deliverable.entity';
+import { DeliverableSubmission } from './entities/deliverable-submission.entity';
+import { DeliverablesService } from './services/deliverables.service';
+import { DeliverableSubmissionsService } from './services/deliverable-submissions.service';
+import { DeliverablesController } from './deliverables.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PhaseDeliverable])],
-  providers: [PhaseDeliverablesService, PhasesService],
-  controllers: [PhaseDeliverablesController]
+  imports: [TypeOrmModule.forFeature([Deliverable, DeliverableSubmission])],
+  providers: [DeliverablesService, DeliverableSubmissionsService],
+  exports: [DeliverablesService, DeliverableSubmissionsService],
+  controllers: [DeliverablesController]
 })
 export class ProjectDeliverablesModule {}

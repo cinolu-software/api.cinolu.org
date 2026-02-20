@@ -1,19 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PhaseDeliverable } from '../entities/deliverable.entity';
+import { Deliverable } from '../entities/deliverable.entity';
 import { CreateDeliverableDto } from '../dto/create-deliverable.dto';
 import { UpdateDeliverableDto } from '../dto/update-deliverable.dto';
 import { DelivrableParams } from '../types/deliverables.types';
 
 @Injectable()
-export class PhaseDeliverablesService {
+export class DeliverablesService {
   constructor(
-    @InjectRepository(PhaseDeliverable)
-    private readonly deliverableRepository: Repository<PhaseDeliverable>
+    @InjectRepository(Deliverable)
+    private readonly deliverableRepository: Repository<Deliverable>
   ) {}
 
-  async create(phaseId: string, dto: CreateDeliverableDto): Promise<PhaseDeliverable> {
+  async create(phaseId: string, dto: CreateDeliverableDto): Promise<Deliverable> {
     try {
       return await this.deliverableRepository.save({
         ...dto,
@@ -24,18 +24,19 @@ export class PhaseDeliverablesService {
     }
   }
 
-  async findOne(params: DelivrableParams): Promise<PhaseDeliverable> {
+  async findOne(params: DelivrableParams): Promise<Deliverable> {
     try {
-      const { phaseId, delivrableId } = params;
+      const { phaseId, deliverableId } = params;
       return await this.deliverableRepository.findOneOrFail({
-        where: { id: delivrableId, phase: { id: phaseId } }
+        where: { id: deliverableId, phase: { id: phaseId } },
+        relations: ['phase', 'phase.project']
       });
     } catch {
       throw new NotFoundException();
     }
   }
 
-  async update(params: DelivrableParams, dto: UpdateDeliverableDto): Promise<PhaseDeliverable> {
+  async update(params: DelivrableParams, dto: UpdateDeliverableDto): Promise<Deliverable> {
     try {
       const deliverable = await this.findOne(params);
       return await this.deliverableRepository.save({ ...deliverable, ...dto });
@@ -46,8 +47,8 @@ export class PhaseDeliverablesService {
 
   async remove(params: DelivrableParams): Promise<void> {
     try {
-      await this.findOne(params);
-      await this.deliverableRepository.softDelete(params.phaseId);
+      const deliverable = await this.findOne(params);
+      await this.deliverableRepository.softDelete(deliverable.id);
     } catch {
       throw new BadRequestException();
     }
