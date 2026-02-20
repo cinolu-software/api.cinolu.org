@@ -20,10 +20,9 @@ import { FilterProductsDto } from './dto/filter-products.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Public } from '@/core/auth/decorators/public.decorator';
-import { v4 as uuidv4 } from 'uuid';
 
 @Controller('products')
 export class ProductsController {
@@ -39,16 +38,7 @@ export class ProductsController {
 
   @Post(':productId/gallery')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addGallery(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.productMediaService.addGallery(productId, file);
   }

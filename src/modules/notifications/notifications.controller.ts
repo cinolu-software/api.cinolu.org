@@ -15,8 +15,7 @@ import { NotificationAttachmentsService } from './services/notification-attachme
 import { Notification } from './entities/notification.entity';
 import { UseRoles } from 'nest-access-control';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { NotificationAttachment } from './entities/attachment.entity';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { FilterNotificationsDto } from './dto/filter-notifications.dto';
@@ -51,16 +50,7 @@ export class NotificationsController {
 
   @Post(':notificationId/attachments')
   @UseRoles({ resource: 'notifications', action: 'update' })
-  @UseInterceptors(
-    FilesInterceptor('attachments', 10, {
-      storage: diskStorage({
-        destination: './uploads/notifications',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FilesInterceptor('attachments', 10, createDiskUploadOptions('./uploads/notifications')))
   addAttachments(
     @Param('notificationId') notificationId: string,
     @UploadedFiles() files: Express.Multer.File[]

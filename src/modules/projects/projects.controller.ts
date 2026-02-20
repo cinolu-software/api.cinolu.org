@@ -11,8 +11,7 @@ import {
   Query
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage, memoryStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions, createMemoryUploadOptions } from '@/core/helpers/upload.helper';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ParticipateProjectDto } from './dto/participate.dto';
@@ -112,15 +111,17 @@ export class ProjectsController {
   @Post(':projectId/participants/import-csv')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(
-    FileInterceptor('file', {
-      storage: memoryStorage(),
-      fileFilter: (_req, file, cb) => {
-        const allowed = ['text/csv', 'application/csv', 'text/plain'];
-        const isCsv = allowed.includes(file.mimetype) || file.originalname?.toLowerCase().endsWith('.csv');
-        cb(null, !!isCsv);
-      },
-      limits: { fileSize: 2 * 1024 * 1024 }
-    })
+    FileInterceptor(
+      'file',
+      createMemoryUploadOptions({
+        fileFilter: (_req, file, cb) => {
+          const allowed = ['text/csv', 'application/csv', 'text/plain'];
+          const isCsv = allowed.includes(file.mimetype) || file.originalname?.toLowerCase().endsWith('.csv');
+          cb(null, !!isCsv);
+        },
+        limits: { fileSize: 2 * 1024 * 1024 }
+      })
+    )
   )
   addParticipantsFromCsv(
     @Param('projectId') projectId: string,
@@ -147,16 +148,7 @@ export class ProjectsController {
 
   @Post(':projectId/gallery')
   @UseRoles({ resource: 'projects', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addGallery(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.mediaService.addImage(projectId, file);
   }
@@ -181,16 +173,7 @@ export class ProjectsController {
 
   @Post(':projectId/cover')
   @UseRoles({ resource: 'projects', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('cover', {
-      storage: diskStorage({
-        destination: './uploads/projects',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/projects')))
   addCover(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
     return this.mediaService.addCover(projectId, file);
   }

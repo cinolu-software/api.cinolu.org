@@ -5,8 +5,7 @@ import { CreateSubprogramDto } from './dto/create-subprogram.dto';
 import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
 import { Subprogram } from './entities/subprogram.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 
@@ -37,16 +36,7 @@ export class SubprogramsController {
 
   @Post(':subprogramId/logo')
   @UseRoles({ resource: 'subprograms', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('logo', {
-      storage: diskStorage({
-        destination: './uploads/subprograms',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/subprograms')))
   addLogo(@Param('subprogramId') subprogramId: string, @UploadedFile() file: Express.Multer.File): Promise<Subprogram> {
     return this.subprogramMediaService.addLogo(subprogramId, file);
   }

@@ -19,8 +19,7 @@ import { FilterArticlesDto } from './dto/filter-articles.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { Gallery } from '@/modules/galleries/entities/gallery.entity';
@@ -52,16 +51,7 @@ export class ArticlesController {
 
   @Post(':articleId/gallery')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addGallery(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.articleMediaService.addGallery(articleId, file);
   }
@@ -80,16 +70,7 @@ export class ArticlesController {
 
   @Post(':articleId/cover')
   @UseRoles({ resource: 'blogs', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('article', {
-      storage: diskStorage({
-        destination: './uploads/articles',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('article', createDiskUploadOptions('./uploads/articles')))
   addCover(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<Article> {
     return this.articleMediaService.addImage(articleId, file);
   }

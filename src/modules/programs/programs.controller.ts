@@ -17,8 +17,7 @@ import { UpdateProgramDto } from './dto/update-program.dto';
 import { Program } from './entities/program.entity';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { UseRoles } from 'nest-access-control';
 
@@ -49,16 +48,7 @@ export class ProgramsController {
 
   @Post(':programId/logo')
   @UseRoles({ resource: 'programs', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('logo', {
-      storage: diskStorage({
-        destination: './uploads/programs',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/programs')))
   addLogo(@Param('programId') programId: string, @UploadedFile() file: Express.Multer.File): Promise<Program> {
     return this.programMediaService.addLogo(programId, file);
   }

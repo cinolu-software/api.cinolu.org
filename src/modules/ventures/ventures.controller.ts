@@ -16,8 +16,7 @@ import { CreateVentureDto } from './dto/create-venture.dto';
 import { UpdateVentureDto } from './dto/update-venture.dto';
 import { Venture } from './entities/venture.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
@@ -73,16 +72,7 @@ export class VenturesController {
 
   @Post(':ventureId/gallery')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addGallery(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.ventureMediaService.addImage(ventureId, file);
   }
@@ -101,32 +91,14 @@ export class VenturesController {
 
   @Post(':ventureId/logo')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
-  @UseInterceptors(
-    FileInterceptor('logo', {
-      storage: diskStorage({
-        destination: './uploads/ventures/logos',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/ventures/logos')))
   addLogo(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addLogo(ventureId, file);
   }
 
   @Post(':ventureId/cover')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
-  @UseInterceptors(
-    FileInterceptor('cover', {
-      storage: diskStorage({
-        destination: './uploads/ventures/covers',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/ventures/covers')))
   addCover(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addCover(ventureId, file);
   }

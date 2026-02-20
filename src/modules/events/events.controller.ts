@@ -17,8 +17,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterEventsDto } from './dto/filter-events.dto';
 import { UseRoles } from 'nest-access-control';
 import { Public } from '@/core/auth/decorators/public.decorator';
@@ -84,16 +83,7 @@ export class EventsController {
 
   @Post(':eventId/gallery')
   @UseRoles({ resource: 'events', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/galleries',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addGallery(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.eventMediaService.addGallery(eventId, file);
   }
@@ -112,16 +102,7 @@ export class EventsController {
 
   @Post(':eventId/cover')
   @UseRoles({ resource: 'events', action: 'update' })
-  @UseInterceptors(
-    FileInterceptor('cover', {
-      storage: diskStorage({
-        destination: './uploads/events',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/events')))
   addCover(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
     return this.eventMediaService.addCover(eventId, file);
   }

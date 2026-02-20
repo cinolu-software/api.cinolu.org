@@ -12,8 +12,7 @@ import {
   UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './services/users.service';
@@ -102,14 +101,7 @@ export class UsersController {
 
   @Post('me/profile-image')
   @UseInterceptors(
-    FileInterceptor('profile', {
-      storage: diskStorage({
-        destination: './uploads/profiles',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
+    FileInterceptor('profile', createDiskUploadOptions('./uploads/profiles'))
   )
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<User> {
     return this.userMediaService.uploadImage(user, file);

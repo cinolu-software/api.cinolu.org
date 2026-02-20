@@ -17,8 +17,7 @@ import { UpdateMentorDto } from './dto/update-mentor.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { MentorProfile } from './entities/mentor.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterMentorsDto } from './dto/filter-mentors.dto';
 import { UseRoles } from 'nest-access-control';
 import { User } from '@/modules/users/entities/user.entity';
@@ -37,16 +36,7 @@ export class MentorsController {
 
   @Post(':mentorId/cv')
   @UseRoles({ resource: 'addCV', action: 'update', possession: 'own' })
-  @UseInterceptors(
-    FileInterceptor('cv', {
-      storage: diskStorage({
-        destination: './uploads/mentors/cvs',
-        filename: function (_req, file, cb) {
-          cb(null, `${uuidv4()}.${file.mimetype.split('/')[1]}`);
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('cv', createDiskUploadOptions('./uploads/mentors/cvs')))
   addCv(@Param('mentorId') mentorId: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
     return this.mentorMediaService.addCv(mentorId, file);
   }
