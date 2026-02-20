@@ -24,6 +24,7 @@ Use `pnpm` as the package manager.
 - Always adhere to the principle of single responsibility
 - Keep methods short and clear by doing only one thing
 - Use existing code patterns and organization
+- Refer to existing code before writting so you can code like me
 - Lint for validation after adding a feature
 - TypeScript with NestJS patterns (modules, controllers, services, DTOs, entities).
 - Indentation: 2 spaces (match existing files).
