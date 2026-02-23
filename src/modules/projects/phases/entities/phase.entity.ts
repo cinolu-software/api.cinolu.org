@@ -9,7 +9,7 @@ export class Phase extends AbstractEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'text' })
   description: string;
 
   @Column()
