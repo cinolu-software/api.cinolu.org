@@ -12,7 +12,7 @@ export class ArticleMediaService {
     private readonly articlesService: ArticlesService
   ) {}
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
+  async addImage(id: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.articlesService.findOne(id);
       const dto = { image: file.filename, article: { id } };
@@ -38,7 +38,7 @@ export class ArticleMediaService {
     }
   }
 
-  async addImage(id: string, file: Express.Multer.File): Promise<Article> {
+  async addCover(id: string, file: Express.Multer.File): Promise<Article> {
     try {
       const article = await this.articlesService.findOne(id);
       if (article.image) await fs.unlink(`./uploads/articles/${article.image}`);

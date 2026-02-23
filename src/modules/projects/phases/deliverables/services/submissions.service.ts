@@ -3,26 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { promises as fs } from 'fs';
 import { Repository } from 'typeorm';
 import { DeliverableSubmission } from '../entities/submission.entity';
-import { DeliverablesService } from './deliverables.service';
 import { DelivrableParams } from '../types/deliverables.types';
 
 @Injectable()
 export class SubmissionsService {
   constructor(
     @InjectRepository(DeliverableSubmission)
-    private readonly submissionRepository: Repository<DeliverableSubmission>,
-    private readonly delivrablesService: DeliverablesService
+    private readonly submissionRepository: Repository<DeliverableSubmission>
   ) {}
 
   async submitDeliverable(params: DelivrableParams, file: Express.Multer.File): Promise<DeliverableSubmission> {
     try {
       const { deliverableId, participationId } = params;
-      const deliverable = await this.delivrablesService.findOne(deliverableId);
-      const existing = await this.findSubmission(deliverable.id, participationId);
+      const existing = await this.findSubmission(deliverableId, participationId);
       if (!existing) {
         return await this.submissionRepository.save({
           file: file.filename,
-          deliverable: { id: deliverable.id },
+          deliverable: { id: deliverableId },
           participation: { id: participationId }
         });
       }

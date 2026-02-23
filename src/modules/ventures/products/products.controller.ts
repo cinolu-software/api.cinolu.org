@@ -39,8 +39,8 @@ export class ProductsController {
   @Post(':productId/gallery')
   @UseRoles({ resource: 'products', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
-  addGallery(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.productMediaService.addGallery(productId, file);
+  addImage(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.productMediaService.addImage(productId, file);
   }
 
   @Delete('gallery/:galleryId')

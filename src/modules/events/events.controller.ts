@@ -84,8 +84,8 @@ export class EventsController {
   @Post(':eventId/gallery')
   @UseRoles({ resource: 'events', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
-  addGallery(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.eventMediaService.addGallery(eventId, file);
+  addImage(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.eventMediaService.addImage(eventId, file);
   }
 
   @Delete('gallery/:galleryId')

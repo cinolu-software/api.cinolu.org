@@ -73,7 +73,7 @@ export class VenturesController {
   @Post(':ventureId/gallery')
   @UseRoles({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
-  addGallery(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+  addImage(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.ventureMediaService.addImage(ventureId, file);
   }
 

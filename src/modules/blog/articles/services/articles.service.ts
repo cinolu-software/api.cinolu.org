@@ -119,7 +119,7 @@ export class ArticlesService {
       const article = await this.findOne(id);
       this.articlesRepository.merge(article, {
         ...dto,
-        tags: dto.tags.map((id) => ({ id }))
+        tags: dto.tags.map((id) => ({ id })) || article.tags
       });
       return await this.articlesRepository.save(article);
     } catch {

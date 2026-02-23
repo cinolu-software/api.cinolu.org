@@ -10,7 +10,7 @@ export class ProductMediaService {
     private readonly productsService: ProductsService
   ) {}
 
-  async addGallery(id: string, file: Express.Multer.File): Promise<void> {
+  async addImage(id: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.productsService.findOne(id);
       const dto = {

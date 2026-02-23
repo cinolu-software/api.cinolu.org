@@ -12,7 +12,7 @@ export class EventMediaService {
     private readonly eventsService: EventsService
   ) {}
 
-  async addGallery(eventId: string, file: Express.Multer.File): Promise<void> {
+  async addImage(eventId: string, file: Express.Multer.File): Promise<void> {
     try {
       await this.eventsService.findOne(eventId);
       const galleryDto = { image: file.filename, event: { id: eventId } };

@@ -52,8 +52,8 @@ export class ArticlesController {
   @Post(':articleId/gallery')
   @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
-  addGallery(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
-    return this.articleMediaService.addGallery(articleId, file);
+  addImage(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.articleMediaService.addImage(articleId, file);
   }
 
   @Delete('gallery/:galleryId')
@@ -72,7 +72,7 @@ export class ArticlesController {
   @UseRoles({ resource: 'blogs', action: 'update' })
   @UseInterceptors(FileInterceptor('article', createDiskUploadOptions('./uploads/articles')))
   addCover(@Param('articleId') articleId: string, @UploadedFile() file: Express.Multer.File): Promise<Article> {
-    return this.articleMediaService.addImage(articleId, file);
+    return this.articleMediaService.addCover(articleId, file);
   }
 
   @Get('published')
