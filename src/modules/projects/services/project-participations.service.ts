@@ -16,6 +16,9 @@ type ParticipantCsvRow = {
   name: string;
   email: string;
   phone_number?: string;
+  gender?: string;
+  city?: string;
+  country?: string;
 };
 
 @Injectable()
@@ -86,14 +89,7 @@ export class ProjectParticipationService {
       await this.projectsService.findOne(projectId);
       return await this.participationRepository.find({
         where: { project: { id: projectId } },
-        relations: [
-          'user',
-          'venture',
-          'phases',
-          'phases.deliverables',
-          'deliverable_submissions',
-          'deliverable_submissions.deliverable'
-        ],
+        relations: ['user', 'venture', 'phases'],
         order: { created_at: 'ASC' }
       });
     } catch {
@@ -185,12 +181,14 @@ export class ProjectParticipationService {
       stream
         .pipe(parse({ headers: true }))
         .on('data', (row: Record<string, string>) => {
-          const name = (row.Name ?? row.name ?? '').trim();
-          const email = (row.Email ?? row.email ?? '').trim();
-          const phone_number = (row['Phone Number'] ?? row.phone_number ?? '').trim() || undefined;
-          if (name && email) {
-            rows.push({ name, email, phone_number });
-          }
+          rows.push({
+            name: row['Nom complet'].trim(),
+            email: row['Adresse e-mail'].trim(),
+            phone_number: row['Numéro de téléphone'].trim(),
+            gender: row.Ville.trim(),
+            city: row.Ville.trim(),
+            country: row.Pays.trim()
+          });
         })
         .on('end', () => resolve(rows))
         .on('error', reject);

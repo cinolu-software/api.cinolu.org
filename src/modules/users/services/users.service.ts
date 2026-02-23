@@ -185,8 +185,12 @@ export class UsersService {
       if (existing) return existing;
       const role = await this.rolesService.findByName('user');
       return await this.userRepository.save({
-        ...dto,
+        name: dto.name,
         email: normalizedEmail,
+        phone_number: dto.phone_number,
+        gender: dto.gender,
+        city: dto.city,
+        country: dto.country,
         password: 'user1234',
         referral_code: this.generateRefferalCode(),
         roles: [role]
