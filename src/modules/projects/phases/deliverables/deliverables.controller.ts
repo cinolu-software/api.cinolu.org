@@ -9,7 +9,7 @@ import { DelivrableParams } from './types/deliverables.types';
 export class DeliverablesController {
   constructor(private readonly submissionsService: SubmissionsService) {}
 
-  @Post(':deliverableId/submissions')
+  @Post(':deliverableId/:participationId/submissions')
   @UseInterceptors(FileInterceptor('file', createDiskUploadOptions('./uploads/deliverables')))
   submitDeliverable(
     @Param() params: DelivrableParams,
