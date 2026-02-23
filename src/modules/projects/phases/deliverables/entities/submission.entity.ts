@@ -6,8 +6,8 @@ import { Deliverable } from './deliverable.entity';
 @Entity()
 @Unique(['deliverable', 'participation'])
 export class DeliverableSubmission extends AbstractEntity {
-  @Column({ type: 'text' })
-  content: string;
+  @Column()
+  file: string;
 
   @ManyToOne(() => Deliverable, (deliverable) => deliverable.submissions)
   @JoinColumn()

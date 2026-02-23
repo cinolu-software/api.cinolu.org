@@ -42,7 +42,7 @@ export class GalleriesService {
 
   async findGallery(repo: string, key: string): Promise<Gallery[]> {
     return this.galleryRepository.find({
-      where: { [repo]: { [key]: key } }
+      where: { [repo]: { slug: key } }
     });
   }
 

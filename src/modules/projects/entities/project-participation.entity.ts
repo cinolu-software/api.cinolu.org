@@ -4,7 +4,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { Venture } from '@/modules/ventures/entities/venture.entity';
 import { Phase } from '@/modules/projects/phases/entities/phase.entity';
-import { DeliverableSubmission } from '@/modules/projects/phases/deliverables/entities/deliverable-submission.entity';
+import { DeliverableSubmission } from '@/modules/projects/phases/deliverables/entities/submission.entity';
 
 @Entity()
 @Unique(['user.id', 'project.id'])

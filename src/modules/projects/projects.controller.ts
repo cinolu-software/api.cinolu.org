@@ -148,7 +148,7 @@ export class ProjectsController {
   @Post(':projectId/gallery')
   @UseRoles({ resource: 'projects', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
-  addGallery(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
+  addImage(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.mediaService.addImage(projectId, file);
   }
 

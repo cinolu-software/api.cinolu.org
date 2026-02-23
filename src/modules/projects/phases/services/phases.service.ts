@@ -4,20 +4,25 @@ import { UpdatePhaseDto } from '../dto/update-phase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Phase } from '../entities/phase.entity';
+import { DeliverablesService } from '../deliverables/services/deliverables.service';
 
 @Injectable()
 export class PhasesService {
   constructor(
     @InjectRepository(Phase)
-    private readonly phaseRepository: Repository<Phase>
+    private readonly phaseRepository: Repository<Phase>,
+    private readonly deliverablesService: DeliverablesService
   ) {}
 
   async create(projectId: string, dto: CreatePhaseDto): Promise<Phase> {
     try {
-      return await this.phaseRepository.save({
-        ...dto,
+      const { deliverables, ...phaseData } = dto;
+      const phase = await this.phaseRepository.save({
+        ...phaseData,
         project: { id: projectId }
       });
+      if (deliverables) await this.deliverablesService.createMany(phase.id, deliverables);
+      return await this.findOne(phase.id);
     } catch {
       throw new BadRequestException();
     }
@@ -36,7 +41,11 @@ export class PhasesService {
 
   async update(phaseId: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
     try {
-      await this.phaseRepository.update(phaseId, updatePhaseDto);
+      const { deliverables, ...phaseData } = updatePhaseDto;
+      if (Object.keys(phaseData).length) {
+        await this.phaseRepository.update(phaseId, phaseData);
+      }
+      if (deliverables) await this.deliverablesService.syncPhaseDeliverables(phaseId, deliverables);
       return await this.findOne(phaseId);
     } catch {
       throw new BadRequestException();

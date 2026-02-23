@@ -33,7 +33,15 @@ export class ProjectParticipationService {
     try {
       return await this.participationRepository.find({
         where: { user: { id: userId } },
-        relations: ['project', 'project.phases', 'phases', 'venture']
+        relations: [
+          'project',
+          'project.phases',
+          'phases',
+          'phases.deliverables',
+          'deliverable_submissions',
+          'deliverable_submissions.deliverable',
+          'venture'
+        ]
       });
     } catch {
       throw new BadRequestException();
@@ -78,7 +86,14 @@ export class ProjectParticipationService {
       await this.projectsService.findOne(projectId);
       return await this.participationRepository.find({
         where: { project: { id: projectId } },
-        relations: ['user', 'venture', 'phases', 'phases.deliverables'],
+        relations: [
+          'user',
+          'venture',
+          'phases',
+          'phases.deliverables',
+          'deliverable_submissions',
+          'deliverable_submissions.deliverable'
+        ],
         order: { created_at: 'ASC' }
       });
     } catch {
