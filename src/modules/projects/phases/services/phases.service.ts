@@ -5,21 +5,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Phase } from '../entities/phase.entity';
 import { DeliverablesService } from '../deliverables/services/deliverables.service';
+import { MentorsService } from '@/modules/mentors/services/mentors.service';
 
 @Injectable()
 export class PhasesService {
   constructor(
     @InjectRepository(Phase)
     private readonly phaseRepository: Repository<Phase>,
-    private readonly deliverablesService: DeliverablesService
+    private readonly deliverablesService: DeliverablesService,
+    private readonly mentorsService: MentorsService
   ) {}
 
   async create(projectId: string, dto: CreatePhaseDto): Promise<Phase> {
     try {
-      const { deliverables, ...phaseData } = dto;
+      const { deliverables, mentors, ...phaseData } = dto;
+      const approvedMentors = mentors?.length ? await this.mentorsService.findApprovedByIds(mentors) : [];
       const phase = await this.phaseRepository.save({
         ...phaseData,
-        project: { id: projectId }
+        project: { id: projectId },
+        mentors: approvedMentors.map((mentor) => ({ id: mentor.id }))
       });
       if (deliverables) await this.deliverablesService.createMany(phase.id, deliverables);
       return await this.findOne(phase.id);
@@ -32,7 +36,7 @@ export class PhasesService {
     try {
       return await this.phaseRepository.findOneOrFail({
         where: { id: phaseId },
-        relations: ['participations', 'participations.user', 'deliverables']
+        relations: ['participations', 'participations.user', 'deliverables', 'mentors', 'mentors.owner']
       });
     } catch {
       throw new NotFoundException();
@@ -41,8 +45,15 @@ export class PhasesService {
 
   async update(phaseId: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
     try {
-      const { deliverables, ...phaseData } = updatePhaseDto;
-      await this.phaseRepository.update(phaseId, phaseData);
+      const { deliverables, mentors, ...phaseData } = updatePhaseDto;
+      const phase = await this.findOne(phaseId);
+      const approvedMentors =
+        mentors === undefined ? phase.mentors : await this.mentorsService.findApprovedByIds(mentors);
+      await this.phaseRepository.save({
+        ...phase,
+        ...phaseData,
+        mentors: approvedMentors.map((mentor) => ({ id: mentor.id }))
+      });
       if (deliverables) await this.deliverablesService.syncPhaseDeliverables(phaseId, deliverables);
       return await this.findOne(phaseId);
     } catch {
@@ -54,7 +65,7 @@ export class PhasesService {
     try {
       return await this.phaseRepository.find({
         where: { project: { id: projectId } },
-        relations: ['deliverables']
+        relations: ['deliverables', 'mentors', 'mentors.owner']
       });
     } catch {
       throw new BadRequestException();

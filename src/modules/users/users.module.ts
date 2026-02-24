@@ -13,7 +13,14 @@ import { UserMediaService } from './services/user-media.service';
 @Module({
   imports: [TypeOrmModule.forFeature([User]), RolesModule],
   controllers: [UsersController],
-  providers: [UsersService, UsersReferralService, UsersExportService, UserMediaService, UsersEmailService, UserSubscriber],
+  providers: [
+    UsersService,
+    UsersReferralService,
+    UsersExportService,
+    UserMediaService,
+    UsersEmailService,
+    UserSubscriber
+  ],
   exports: [UsersService]
 })
 export class UsersModule {}

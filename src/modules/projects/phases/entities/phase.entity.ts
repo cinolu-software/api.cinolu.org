@@ -1,8 +1,9 @@
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { ProjectParticipation } from '@/modules/projects/entities/project-participation.entity';
 import { Deliverable } from '@/modules/projects/phases/deliverables/entities/deliverable.entity';
+import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
 
 @Entity()
 export class Phase extends AbstractEntity {
@@ -24,6 +25,10 @@ export class Phase extends AbstractEntity {
 
   @ManyToMany(() => ProjectParticipation, (participation) => participation.phases)
   participations: ProjectParticipation[];
+
+  @ManyToMany(() => MentorProfile, (mentor) => mentor.phases)
+  @JoinTable()
+  mentors: MentorProfile[];
 
   @OneToMany(() => Deliverable, (deliverable) => deliverable.phase)
   deliverables: Deliverable[];

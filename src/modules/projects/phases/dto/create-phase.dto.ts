@@ -1,5 +1,5 @@
 import { Type, Transform } from 'class-transformer';
-import { IsArray, IsDate, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsDate, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
 import { DeliverableDto } from '../deliverables/dto/deliverable.dto';
 
 export class CreatePhaseDto {
@@ -22,4 +22,9 @@ export class CreatePhaseDto {
   @ValidateNested({ each: true })
   @Type(() => DeliverableDto)
   deliverables?: DeliverableDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  mentors?: string[];
 }
