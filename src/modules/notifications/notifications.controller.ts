@@ -36,12 +36,6 @@ export class NotificationsController {
     return this.notificationsService.findAllByProject(projectId, query);
   }
 
-  @Patch(':notificationId/read')
-  @UseRoles({ resource: 'notifications', action: 'update' })
-  markRead(@Param('notificationId') notificationId: string): Promise<Notification> {
-    return this.notificationsService.markRead(notificationId);
-  }
-
   @Patch(':notificationId')
   @UseRoles({ resource: 'notifications', action: 'update' })
   update(@Param('notificationId') notificationId: string, @Body() dto: UpdateNotificationDto): Promise<Notification> {
