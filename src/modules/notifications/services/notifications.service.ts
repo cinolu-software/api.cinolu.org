@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Notification } from '../entities/notification.entity';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
 import { UpdateNotificationDto } from '../dto/update-notification.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationStatus } from '../types/notification-status.enum';
 import { FilterNotificationsDto } from '../dto/filter-notifications.dto';
 
@@ -12,8 +11,7 @@ import { FilterNotificationsDto } from '../dto/filter-notifications.dto';
 export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
-    private notificationsRepository: Repository<Notification>,
-    private eventEmitter: EventEmitter2
+    private notificationsRepository: Repository<Notification>
   ) {}
 
   async create(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
@@ -32,7 +30,6 @@ export class NotificationsService {
   async sendNotification(id: string): Promise<Notification> {
     try {
       await this.notificationsRepository.update(id, { status: NotificationStatus.SENT });
-
       return await this.findOne(id);
     } catch {
       throw new BadRequestException();
