@@ -34,6 +34,23 @@ export class MentorsService {
     }
   }
 
+  async updateRequest(mentorId: string, dto: UpdateMentorRequestDto): Promise<MentorProfile> {
+    try {
+      const mentorProfile = await this.findOne(mentorId);
+      if (dto.experiences) {
+        await this.experiencesService.saveExperiences(mentorId, dto.experiences);
+      }
+      await this.mentorRepository.save({
+        ...mentorProfile,
+        ...dto,
+        expertises: dto?.expertises?.map((id) => ({ id })) || mentorProfile.expertises
+      });
+      return await this.findOne(mentorId);
+    } catch {
+      throw new BadRequestException('Erreur lors de la mise a jour');
+    }
+  }
+
   async findByPhase(phaseId: string): Promise<MentorProfile[]> {
     return this.mentorRepository.find({
       where: { phases: { id: phaseId } }

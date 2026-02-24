@@ -42,6 +42,11 @@ export class MentorsController {
     return this.mentorsService.submitRequest(user, dto);
   }
 
+  @Patch('request/:mentorId')
+  updateRequest(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorRequestDto): Promise<MentorProfile> {
+    return this.mentorsService.updateRequest(mentorId, dto);
+  }
+
   @Patch(':mentorId')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   updateMentor(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
