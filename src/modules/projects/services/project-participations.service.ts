@@ -28,15 +28,7 @@ export class ProjectParticipationService {
     try {
       return await this.participationRepository.find({
         where: { user: { id: userId } },
-        relations: [
-          'project',
-          'project.phases',
-          'phases',
-          'phases.deliverables',
-          'deliverable_submissions',
-          'deliverable_submissions.deliverable',
-          'venture'
-        ]
+        relations: ['project', 'project.phases', 'phases', 'venture']
       });
     } catch {
       throw new BadRequestException();
