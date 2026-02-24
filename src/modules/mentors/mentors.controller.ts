@@ -32,17 +32,17 @@ export class MentorsController {
   ) {}
 
   @Post()
-  submitRequest(@CurrentUser() user: User, @Body() dto: MentorRequestDto): Promise<MentorProfile> {
-    return this.mentorsService.submitRequest(user, dto);
-  }
-
-  @Post('users')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   create(@Body() dto: CreateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.create(dto);
   }
 
-  @Patch('users/:mentorId')
+  @Post('request')
+  submitRequest(@CurrentUser() user: User, @Body() dto: MentorRequestDto): Promise<MentorProfile> {
+    return this.mentorsService.submitRequest(user, dto);
+  }
+
+  @Patch(':mentorId')
   @UseRoles({ resource: 'mentorApplications', action: 'update' })
   updateMentor(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.updateMentor(mentorId, dto);
@@ -74,14 +74,14 @@ export class MentorsController {
   }
 
   @Get('me')
-  findUserProfile(@CurrentUser() user: User): Promise<MentorProfile[]> {
-    return this.mentorsService.findUserProfile(user);
+  findByUser(@CurrentUser() user: User): Promise<MentorProfile[]> {
+    return this.mentorsService.findByUser(user);
   }
 
   @Get()
   @UseRoles({ resource: 'mentors', action: 'read' })
-  findAll(): Promise<MentorProfile[]> {
-    return this.mentorsService.findAll();
+  findApproved(): Promise<MentorProfile[]> {
+    return this.mentorsService.findApproved();
   }
 
   @Get(':mentorId')

@@ -84,9 +84,10 @@ export class MentorsService {
     }
   }
 
-  async findAll(): Promise<MentorProfile[]> {
+  async findApproved(): Promise<MentorProfile[]> {
     try {
       return await this.mentorRepository.find({
+        where: { status: MentorStatus.APPROVED },
         relations: ['owner', 'experiences', 'expertises']
       });
     } catch {
@@ -120,7 +121,7 @@ export class MentorsService {
     }
   }
 
-  async findUserProfile(user: User): Promise<MentorProfile[]> {
+  async findByUser(user: User): Promise<MentorProfile[]> {
     try {
       return await this.mentorRepository.find({
         where: { owner: { id: user.id } },
