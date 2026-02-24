@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable, UnauthorizedException, Req, Res } from '@nestjs/common';
-import UpdateProfileDto from '../dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -10,6 +9,7 @@ import { UsersService } from '@/modules/users/services/users.service';
 import { SignUpDto } from '../dto/sign-up.dto';
 import { ContactSupportDto } from '../dto/contact-support.dto';
 import CreateUserDto from '@/modules/users/dto/create-user.dto';
+import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -80,9 +80,9 @@ export class AuthService {
     return this.usersService.findByEmail(user.email);
   }
 
-  async updateProfile(user: User, dto: UpdateProfileDto): Promise<User> {
+  async updateProfile(user: User, dto: UpdateUserDto): Promise<User> {
     try {
-      return await this.usersService.updateProfile(user, dto);
+      return await this.usersService.update(user.id, dto);
     } catch {
       throw new BadRequestException('Requête invalide');
     }

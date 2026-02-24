@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { AuthPasswordService } from './services/auth-password.service';
-import UpdateProfileDto from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -13,6 +12,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Public } from './decorators/public.decorator';
 import { ContactSupportDto } from './dto/contact-support.dto';
+import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -63,7 +63,7 @@ export class AuthController {
   }
 
   @Patch('me')
-  updateMe(@CurrentUser() user: User, @Body() dto: UpdateProfileDto): Promise<User> {
+  updateMe(@CurrentUser() user: User, @Body() dto: UpdateUserDto): Promise<User> {
     return this.authService.updateProfile(user, dto);
   }
 

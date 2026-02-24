@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import UpdateProfileDto from '@/core/auth/dto/update-profile.dto';
 import CreateUserDto from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
@@ -170,9 +169,16 @@ export class UsersService {
   async findOrCreate(dto: CreateUserDto): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
-        where: { email: dto.email }
+        where: { email: dto.email },
+        relations: ['roles']
       });
-      if (user) return await this.findByEmail(user.email);
+      if (user) {
+        await this.userRepository.update(user.id, {
+          ...dto,
+          roles: user.roles
+        });
+        return await this.findByEmail(user.email);
+      }
       const role = await this.rolesService.findByName('user');
       const newUser = await this.userRepository.save({
         ...dto,
@@ -192,34 +198,25 @@ export class UsersService {
         relations: ['roles']
       });
       delete oldUser.password;
-      return await this.userRepository.save({
+      await this.userRepository.save({
         ...oldUser,
         ...dto,
         roles: dto.roles?.map((id) => ({ id })) || oldUser.roles
       });
+      return this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
-    try {
-      await this.userRepository.update(currentUser.id, dto);
-      return await this.findOne(currentUser.id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async updatePassword(id: string, password: string): Promise<User> {
-    try {
-      const user = await this.findOne(id);
-      await this.userRepository.update(user.id, { password });
-      return await this.findOne(user.id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
+  // async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
+  //   try {
+  //     await this.userRepository.update(currentUser.id, dto);
+  //     return await this.findOne(currentUser.id);
+  //   } catch {
+  //     throw new BadRequestException();
+  //   }
+  // }
 
   async remove(id: string): Promise<void> {
     try {

@@ -19,7 +19,7 @@ export class AuthPasswordService {
 
   async updatePassword(currentUser: User, dto: UpdatePasswordDto): Promise<User> {
     try {
-      await this.usersService.updatePassword(currentUser.id, dto.password);
+      await this.usersService.update(currentUser.id, { password: dto.password });
       return await this.usersService.findByEmail(currentUser.email);
     } catch {
       throw new BadRequestException('Requete invalide');
@@ -43,7 +43,7 @@ export class AuthPasswordService {
     try {
       const secret = this.configService.get<string>('JWT_SECRET');
       const payload = await this.jwtService.verifyAsync(token, { secret });
-      return await this.usersService.updatePassword(payload.sub, password);
+      return await this.usersService.update(payload.sub, { password });
     } catch {
       throw new BadRequestException('Mot de passe invalide');
     }
