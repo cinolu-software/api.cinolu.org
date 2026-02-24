@@ -6,7 +6,7 @@ import { CreateNotificationDto } from '@/modules/notifications/dto/create-notifi
 import { User } from '@/modules/users/entities/user.entity';
 import { ProjectsService } from './projects.service';
 import { ProjectParticipationService } from './project-participations.service';
-import { PhasesService } from '../phases/services/phases.service';
+import { MentorsService } from '@/modules/mentors/services/mentors.service';
 
 @Injectable()
 export class ProjectNotificationService {
@@ -14,7 +14,7 @@ export class ProjectNotificationService {
     private readonly notificationsService: NotificationsService,
     private readonly projectsService: ProjectsService,
     private readonly participationService: ProjectParticipationService,
-    private readonly phasesService: PhasesService,
+    private readonly mentorsService: MentorsService,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -31,9 +31,14 @@ export class ProjectNotificationService {
   async sendNotification(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);
-      const recipients = notification.phase
-        ? await this.participationService.findParticipantsByPhase(notification.phase.id)
-        : await this.participationService.findParticipantsByProject(notification.project.id);
+      let recipients = [];
+      if (notification.notify_mentors) {
+        recipients = await this.mentorsService.findByPhase(notification.phase.id);
+      } else if (notification.phase) {
+        recipients = await this.participationService.findParticipantsByPhase(notification.phase.id);
+      } else {
+        recipients = await this.participationService.findParticipantsByProject(notification.project.id);
+      }
       this.eventEmitter.emit('notify.participants', recipients, notification);
       return await this.notificationsService.sendNotification(notificationId);
     } catch {
