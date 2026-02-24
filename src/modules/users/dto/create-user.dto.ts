@@ -1,30 +1,12 @@
-import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
-
 export default class CreateUserDto {
-  @IsEmail()
   email: string;
-
-  @IsNotEmpty()
   name: string;
-
-  @IsNotEmpty()
-  phone_number: string;
-
-  @IsNotEmpty()
-  gender: string;
-
-  @IsNotEmpty()
-  city: string;
-
-  @IsNotEmpty()
-  birth_date: Date;
-
-  @IsNotEmpty()
-  country: string;
-
-  @IsOptional()
-  biography: string;
-
-  @IsNotEmpty()
-  roles: string[];
+  phone_number?: string;
+  gender?: string;
+  city?: string;
+  birth_date?: Date;
+  country?: string;
+  biography?: string;
+  google_image?: string;
+  roles?: string[];
 }

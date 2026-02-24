@@ -4,15 +4,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import UpdateProfileDto from '@/core/auth/dto/update-profile.dto';
 import CreateUserDto from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { Role } from '../roles/entities/role.entity';
 import { User } from '../entities/user.entity';
 import { RolesService } from '../roles/roles.service';
 import { FilterUsersDto } from '../dto/filter-users.dto';
 import { SignUpDto } from '@/core/auth/dto/sign-up.dto';
-import { CreateWithGoogleDto } from '@/core/auth/dto/sign-up-with-google.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { randomBytes } from 'crypto';
-import { CreateFromCsvDto } from '../dto/create-from-csv.dto';
 
 @Injectable()
 export class UsersService {
@@ -47,12 +44,7 @@ export class UsersService {
 
   async assignRole(userId: string, roleName: string): Promise<User> {
     try {
-      let role: Role;
-      try {
-        role = await this.rolesService.findByName(roleName);
-      } catch {
-        role = await this.rolesService.create({ name: roleName });
-      }
+      const role = await this.rolesService.findByName(roleName);
       const user = await this.findOne(userId);
       user.roles = [role];
       return await this.userRepository.save(user);
@@ -175,50 +167,17 @@ export class UsersService {
     }
   }
 
-  async findOrCreateParticipant(dto: CreateFromCsvDto): Promise<User> {
-    try {
-      const normalizedEmail = dto.email.trim().toLowerCase();
-      const existing = await this.userRepository.findOne({
-        where: { email: normalizedEmail },
-        relations: ['roles']
-      });
-      if (existing) return existing;
-      const role = await this.rolesService.findByName('user');
-      return await this.userRepository.save({
-        name: dto.name,
-        email: normalizedEmail,
-        phone_number: dto.phone_number,
-        gender: dto.gender,
-        city: dto.city,
-        country: dto.country,
-        password: 'user1234',
-        referral_code: this.generateRefferalCode(),
-        roles: [role]
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
+  async findOrCreate(dto: CreateUserDto): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
         where: { email: dto.email }
       });
       if (user) return await this.findByEmail(user.email);
       const role = await this.rolesService.findByName('user');
-      return await this.createNewUser(dto, role);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async createNewUser(dto: CreateWithGoogleDto, userRole: Role): Promise<User> {
-    try {
       const newUser = await this.userRepository.save({
         ...dto,
         referral_code: this.generateRefferalCode(),
-        roles: [userRole]
+        roles: [role]
       });
       return await this.findOne(newUser.id);
     } catch {

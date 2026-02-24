@@ -126,7 +126,7 @@ export class ProjectsController {
     @Param('projectId') projectId: string,
     @UploadedFile() file: Express.Multer.File
   ): Promise<void> {
-    return this.participationService.addParticipantsFromCsv(projectId, file);
+    return this.participationService.importParticipants(projectId, file);
   }
 
   @Post(':projectId/notifications')

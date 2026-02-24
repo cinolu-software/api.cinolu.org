@@ -11,15 +11,7 @@ import { ParticipateProjectDto } from '../dto/participate.dto';
 import { ProjectsService } from './projects.service';
 import { MoveParticipantsDto } from '../dto/move-participants.dto';
 import { PhasesService } from '../phases/services/phases.service';
-
-type ParticipantCsvRow = {
-  name: string;
-  email: string;
-  phone_number?: string;
-  gender?: string;
-  city?: string;
-  country?: string;
-};
+import CreateUserDto from '@/modules/users/dto/create-user.dto';
 
 @Injectable()
 export class ProjectParticipationService {
@@ -122,13 +114,13 @@ export class ProjectParticipationService {
     }
   }
 
-  async addParticipantsFromCsv(projectId: string, file: Express.Multer.File): Promise<void> {
+  async importParticipants(projectId: string, file: Express.Multer.File): Promise<void> {
     try {
       const project = await this.projectsService.findOneWithParticipations(projectId);
-      const rows = await this.parseParticipantsCsv(file.buffer);
+      const rows = await this.parseCsv(file.buffer);
       const userIds = new Set<string>(project.participations?.map((participation) => participation.user.id) ?? []);
       for (const row of rows) {
-        const user = await this.usersService.findOrCreateParticipant(row);
+        const user = await this.usersService.findOrCreate(row);
         userIds.add(user.id);
       }
       for (const userId of userIds) {
@@ -174,21 +166,25 @@ export class ProjectParticipationService {
       });
   }
 
-  private parseParticipantsCsv(buffer: Buffer): Promise<ParticipantCsvRow[]> {
+  private parseCsv(buffer: Buffer): Promise<CreateUserDto[]> {
     return new Promise((resolve, reject) => {
-      const rows: ParticipantCsvRow[] = [];
+      const rows = [];
       const stream = Readable.from(buffer.toString());
       stream
         .pipe(parse({ headers: true }))
         .on('data', (row: Record<string, string>) => {
-          rows.push({
-            name: row['Nom complet'].trim(),
-            email: row['Adresse e-mail'].trim(),
-            phone_number: row['Numéro de téléphone'].trim(),
-            gender: row.Ville.trim(),
-            city: row.Ville.trim(),
-            country: row.Pays.trim()
-          });
+          const name = row['Name'].trim();
+          const email = row['Email'].trim().toLocaleLowerCase();
+          if (name && email) {
+            rows.push({
+              name,
+              email,
+              phone_number: row['Phone'].trim(),
+              gender: row['Gender'].trim(),
+              city: row['Town'].trim(),
+              country: row['Country'].trim()
+            });
+          }
         })
         .on('end', () => resolve(rows))
         .on('error', reject);

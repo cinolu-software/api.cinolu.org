@@ -7,9 +7,9 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ConfigService } from '@nestjs/config';
 import { User } from '@/modules/users/entities/user.entity';
 import { UsersService } from '@/modules/users/services/users.service';
-import { CreateWithGoogleDto } from '../dto/sign-up-with-google.dto';
 import { SignUpDto } from '../dto/sign-up.dto';
 import { ContactSupportDto } from '../dto/contact-support.dto';
+import CreateUserDto from '@/modules/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +28,7 @@ export class AuthService {
     return user;
   }
 
-  async findOrCreate(dto: CreateWithGoogleDto): Promise<User> {
+  async findOrCreate(dto: CreateUserDto): Promise<User> {
     try {
       return await this.usersService.findOrCreate(dto);
     } catch {
@@ -95,5 +95,4 @@ export class AuthService {
       throw new BadRequestException();
     }
   }
-
 }
