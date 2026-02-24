@@ -4,10 +4,9 @@ import { PhasesController } from './phases.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Phase } from './entities/phase.entity';
 import { ProjectDeliverablesModule } from './deliverables/deliverables.module';
-import { MentorsModule } from '@/modules/mentors/mentors.module';
 
 @Module({
-  imports: [ProjectDeliverablesModule, MentorsModule, TypeOrmModule.forFeature([Phase])],
+  imports: [ProjectDeliverablesModule, TypeOrmModule.forFeature([Phase])],
   providers: [PhasesService],
   controllers: [PhasesController],
   exports: [PhasesService]

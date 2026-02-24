@@ -5,27 +5,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Phase } from '../entities/phase.entity';
 import { DeliverablesService } from '../deliverables/services/deliverables.service';
-import { MentorsService } from '@/modules/mentors/services/mentors.service';
 
 @Injectable()
 export class PhasesService {
   constructor(
     @InjectRepository(Phase)
     private readonly phaseRepository: Repository<Phase>,
-    private readonly deliverablesService: DeliverablesService,
-    private readonly mentorsService: MentorsService
+    private readonly deliverablesService: DeliverablesService
   ) {}
 
   async create(projectId: string, dto: CreatePhaseDto): Promise<Phase> {
     try {
       const { deliverables, mentors, ...phaseData } = dto;
-      const approvedMentors = mentors?.length ? await this.mentorsService.findApprovedByIds(mentors) : [];
       const phase = await this.phaseRepository.save({
         ...phaseData,
         project: { id: projectId },
-        mentors: approvedMentors.map((mentor) => ({ id: mentor.id }))
+        mentors: mentors?.map((id) => ({ id }))
       });
-      if (deliverables) await this.deliverablesService.createMany(phase.id, deliverables);
+      if (deliverables?.length) await this.deliverablesService.createMany(phase.id, deliverables);
       return await this.findOne(phase.id);
     } catch {
       throw new BadRequestException();
@@ -47,12 +44,10 @@ export class PhasesService {
     try {
       const { deliverables, mentors, ...phaseData } = updatePhaseDto;
       const phase = await this.findOne(phaseId);
-      const approvedMentors =
-        mentors === undefined ? phase.mentors : await this.mentorsService.findApprovedByIds(mentors);
       await this.phaseRepository.save({
         ...phase,
         ...phaseData,
-        mentors: approvedMentors.map((mentor) => ({ id: mentor.id }))
+        mentors: mentors.map((id) => ({ id }))
       });
       if (deliverables) await this.deliverablesService.syncPhaseDeliverables(phaseId, deliverables);
       return await this.findOne(phaseId);

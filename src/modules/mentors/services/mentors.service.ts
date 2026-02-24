@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { MentorRequestDto } from '../dto/mentor-request.dto';
 import { UpdateMentorRequestDto } from '../dto/update-mentor-request.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { MentorProfile } from '../entities/mentor.entity';
 import { User } from '../../users/entities/user.entity';
 import { FilterMentorsDto } from '../dto/filter-mentors.dto';
@@ -64,7 +64,8 @@ export class MentorsService {
       await this.usersService.assignRole(user.id, Role.MENTOR);
       this.eventEmitter.emit('mentor.approved', mentorProfile);
       return mentorProfile;
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException('Erreur lors de la création du profil mentor approuvé');
     }
   }
@@ -160,19 +161,6 @@ export class MentorsService {
     }
   }
 
-  async findApprovedByIds(ids: string[]): Promise<MentorProfile[]> {
-    try {
-      const uniqueIds = [...new Set(ids)];
-      if (!uniqueIds.length) return [];
-      return await this.mentorRepository.find({
-        where: { id: In(uniqueIds), status: MentorStatus.APPROVED },
-        relations: ['owner']
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async update(id: string, dto: UpdateMentorRequestDto): Promise<MentorProfile> {
     try {
       const mentorProfile = await this.findOne(id);
@@ -221,7 +209,7 @@ export class MentorsService {
       }
       return await this.findOne(mentorProfile.id);
     } catch {
-      throw new BadRequestException('Cet utilisateur a déjà un profil mentor');
+      throw new BadRequestException();
     }
   }
 }

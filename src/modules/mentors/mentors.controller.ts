@@ -32,7 +32,7 @@ export class MentorsController {
   ) {}
 
   @Post()
-  @UseRoles({ resource: 'mentorApplications', action: 'update' })
+  @UseRoles({ resource: 'mentorApplications', action: 'create' })
   create(@Body() dto: CreateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.create(dto);
   }

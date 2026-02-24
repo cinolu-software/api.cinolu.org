@@ -59,6 +59,8 @@ export class MentorExperiencesService {
   private async createExperience(dto: CreateExperienceDto, mentorProfileId: string): Promise<Experience> {
     return await this.experienceRepository.save({
       ...dto,
+      start_date: new Date(dto.start_date),
+      end_date: new Date(dto.end_date),
       mentor_profile: { id: mentorProfileId }
     });
   }
