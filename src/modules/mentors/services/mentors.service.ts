@@ -34,6 +34,12 @@ export class MentorsService {
     }
   }
 
+  async findByPhase(phaseId: string): Promise<MentorProfile[]> {
+    return this.mentorRepository.find({
+      where: { phases: { id: phaseId } }
+    });
+  }
+
   async create(dto: CreateMentorDto): Promise<MentorProfile> {
     try {
       const user = await this.usersService.findOrCreate(dto.user);
