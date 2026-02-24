@@ -15,12 +15,14 @@ import { ProjectNotificationService } from './services/project-notifications.ser
 import { ProjectsEmailService } from './services/projects-email.service';
 import { ProjectsService } from './services/projects.service';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
+import { MentorsModule } from '../mentors/mentors.module';
 
 @Module({
   imports: [
     GalleriesModule,
     NotificationsModule,
     PhasesModule,
+    MentorsModule,
     ProjectCategoriesModule,
     UsersModule,
     VenturesModule,
