@@ -172,13 +172,7 @@ export class UsersService {
         where: { email: dto.email },
         relations: ['roles']
       });
-      if (user) {
-        await this.userRepository.update(user.id, {
-          ...dto,
-          roles: user.roles
-        });
-        return await this.findByEmail(user.email);
-      }
+      if (user) return await this.findByEmail(user.email);
       const role = await this.rolesService.findByName('user');
       const newUser = await this.userRepository.save({
         ...dto,
