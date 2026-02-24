@@ -3,7 +3,8 @@ import { Experience } from './experience.entity';
 import { Expertise } from '../expertises/entities/expertise.entity';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
 import { User } from '@/modules/users/entities/user.entity';
-import { MentorStatus } from '../enums/mentor.enum';
+import { MentorStatus, MentorType } from '../enums/mentor.enum';
+import { Phase } from '@/modules/projects/phases/entities/phase.entity';
 
 @Entity()
 export class MentorProfile extends AbstractEntity {
@@ -16,6 +17,9 @@ export class MentorProfile extends AbstractEntity {
   @Column({ type: 'enum', enum: MentorStatus, default: MentorStatus.PENDING })
   status: MentorStatus;
 
+  @Column({ type: 'enum', enum: MentorType, default: MentorType.COACH })
+  type: MentorType;
+
   @OneToOne(() => User, (user) => user.mentor_profile)
   @JoinColumn()
   owner: User;
@@ -26,4 +30,7 @@ export class MentorProfile extends AbstractEntity {
   @ManyToMany(() => Expertise, (expertise) => expertise.mentors_profiles)
   @JoinTable()
   expertises: Expertise[];
+
+  @ManyToMany(() => Phase, (phase) => phase.mentors)
+  phases: Phase[];
 }

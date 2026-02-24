@@ -13,7 +13,7 @@ export class MentorMediaService {
       if (mentor.cv) {
         await fs.unlink(`./uploads/mentors/cvs/${mentor.cv}`).catch(() => undefined);
       }
-      return await this.mentorsService.setCv(id, file.filename);
+      return await this.mentorsService.addCv(id, file.filename);
     } catch {
       throw new BadRequestException();
     }

@@ -1,13 +1,7 @@
-import { Type } from 'class-transformer';
-import { CreateExperienceDto } from './create-experience.dto';
-import { IsArray, ValidateNested } from 'class-validator';
+import CreateUserDto from '@/modules/users/dto/create-user.dto';
+import { MentorRequestDto } from './mentor-request.dto';
 
 export class CreateMentorDto {
-  years_experience: number;
-  expertises: string[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateExperienceDto)
-  experiences: CreateExperienceDto[];
+  user: CreateUserDto;
+  mentor: MentorRequestDto;
 }

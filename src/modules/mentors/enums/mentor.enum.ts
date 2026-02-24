@@ -3,3 +3,8 @@ export enum MentorStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected'
 }
+
+export enum MentorType {
+  COACH = 'coach',
+  FACILITATOR = 'facilitator'
+}

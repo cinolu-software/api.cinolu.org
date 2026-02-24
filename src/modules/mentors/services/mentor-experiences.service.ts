@@ -1,29 +1,29 @@
-import { Experience } from './entities/experience.entity';
+import { Experience } from '../entities/experience.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateExperienceDto } from './dto/create-experience.dto';
+import { CreateExperienceDto } from '../dto/create-experience.dto';
 
 @Injectable()
-export class ExperiencesService {
+export class MentorExperiencesService {
   constructor(
     @InjectRepository(Experience)
     private experienceRepository: Repository<Experience>
   ) {}
 
-  async saveExperiences(mentorProfileId: string, DTOs: CreateExperienceDto[]): Promise<Experience[]> {
+  async saveExperiences(mentorProfileId: string, dto: CreateExperienceDto[]): Promise<Experience[]> {
     try {
       const existingExperiences = await this.getExistingExperiences(mentorProfileId);
       const existingExperiencesMap = this.createExperienceMap(existingExperiences);
       const processedIds = new Set<string>();
       const result: Experience[] = [];
-      for (const dto of DTOs) {
-        if (this.isExistingExperience(dto, existingExperiencesMap)) {
-          const updated = await this.updateExperience(dto, existingExperiencesMap);
+      for (const d of dto) {
+        if (this.isExistingExperience(d, existingExperiencesMap)) {
+          const updated = await this.updateExperience(d, existingExperiencesMap);
           result.push(updated);
-          processedIds.add(dto.id!);
+          processedIds.add(d.id!);
         } else {
-          const newExperience = await this.createExperience(dto, mentorProfileId);
+          const newExperience = await this.createExperience(d, mentorProfileId);
           result.push(newExperience);
         }
       }

@@ -6,13 +6,14 @@ import { MentorProfile } from './entities/mentor.entity';
 import { Experience } from './entities/experience.entity';
 import { ExpertisesModule } from './expertises/expertises.module';
 import { UsersModule } from '../users/users.module';
-import { ExperiencesService } from './experiences.service';
+import { MentorExperiencesService } from './services/mentor-experiences.service';
 import { MentorsEmailService } from './services/mentors-email.service';
 import { MentorMediaService } from './services/mentor-media.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MentorProfile, Experience]), ExpertisesModule, UsersModule],
   controllers: [MentorsController],
-  providers: [MentorsService, MentorMediaService, ExperiencesService, MentorsEmailService]
+  providers: [MentorsService, MentorMediaService, MentorExperiencesService, MentorsEmailService],
+  exports: [MentorsService]
 })
 export class MentorsModule {}

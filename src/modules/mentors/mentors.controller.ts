@@ -12,8 +12,8 @@ import {
 } from '@nestjs/common';
 import { MentorsService } from './services/mentors.service';
 import { MentorMediaService } from './services/mentor-media.service';
-import { CreateMentorDto } from './dto/create-mentor.dto';
-import { UpdateMentorDto } from './dto/update-mentor.dto';
+import { MentorRequestDto } from './dto/mentor-request.dto';
+import { UpdateMentorRequestDto } from './dto/update-mentor-request.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { MentorProfile } from './entities/mentor.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -21,6 +21,8 @@ import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterMentorsDto } from './dto/filter-mentors.dto';
 import { UseRoles } from 'nest-access-control';
 import { User } from '@/modules/users/entities/user.entity';
+import { CreateMentorDto } from './dto/create-mentor.dto';
+import { UpdateMentorDto } from './dto/update-mentor.dto';
 
 @Controller('mentors')
 export class MentorsController {
@@ -30,12 +32,24 @@ export class MentorsController {
   ) {}
 
   @Post()
-  create(@CurrentUser() user: User, @Body() dto: CreateMentorDto): Promise<MentorProfile> {
-    return this.mentorsService.create(user, dto);
+  submitRequest(@CurrentUser() user: User, @Body() dto: MentorRequestDto): Promise<MentorProfile> {
+    return this.mentorsService.submitRequest(user, dto);
+  }
+
+  @Post('users')
+  @UseRoles({ resource: 'mentorApplications', action: 'update' })
+  create(@Body() dto: CreateMentorDto): Promise<MentorProfile> {
+    return this.mentorsService.create(dto);
+  }
+
+  @Patch('users/:mentorId')
+  @UseRoles({ resource: 'mentorApplications', action: 'update' })
+  updateMentor(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
+    return this.mentorsService.updateMentor(mentorId, dto);
   }
 
   @Post(':mentorId/cv')
-  @UseRoles({ resource: 'addCV', action: 'update', possession: 'own' })
+  @UseRoles({ resource: 'mentorApplications', action: 'update' })
   @UseInterceptors(FileInterceptor('cv', createDiskUploadOptions('./uploads/mentors/cvs')))
   addCv(@Param('mentorId') mentorId: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
     return this.mentorMediaService.addCv(mentorId, file);
@@ -60,8 +74,8 @@ export class MentorsController {
   }
 
   @Get('me')
-  findMine(@CurrentUser() user: User): Promise<MentorProfile[]> {
-    return this.mentorsService.findForUser(user);
+  findUserProfile(@CurrentUser() user: User): Promise<MentorProfile[]> {
+    return this.mentorsService.findUserProfile(user);
   }
 
   @Get()
@@ -78,7 +92,7 @@ export class MentorsController {
 
   @Patch(':mentorId')
   @UseRoles({ resource: 'mentors', action: 'update', possession: 'own' })
-  update(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
+  update(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorRequestDto): Promise<MentorProfile> {
     return this.mentorsService.update(mentorId, dto);
   }
 
