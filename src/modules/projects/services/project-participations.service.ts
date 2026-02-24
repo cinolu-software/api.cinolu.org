@@ -126,8 +126,7 @@ export class ProjectParticipationService {
           project: { id: projectId }
         });
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException();
     }
   }
