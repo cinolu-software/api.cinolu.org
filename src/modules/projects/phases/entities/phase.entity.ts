@@ -13,9 +13,6 @@ export class Phase extends AbstractEntity {
   description: string;
 
   @Column()
-  slug: string;
-
-  @Column()
   started_at: Date;
 
   @Column()
