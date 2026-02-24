@@ -32,6 +32,7 @@ export class NotificationsService {
   async sendNotification(id: string): Promise<Notification> {
     try {
       await this.notificationsRepository.update(id, { status: NotificationStatus.SENT });
+
       return await this.findOne(id);
     } catch {
       throw new BadRequestException();
@@ -76,25 +77,7 @@ export class NotificationsService {
       const notification = await this.findOne(id);
       this.notificationsRepository.merge(notification, dto);
       const savedNotification = await this.notificationsRepository.save(notification);
-      const withRelations = await this.findOne(savedNotification.id);
-      this.eventEmitter.emit('notification.updated', withRelations);
-      return withRelations;
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async markRead(id: string): Promise<Notification> {
-    try {
-      const notification = await this.notificationsRepository.findOneOrFail({
-        where: { id },
-        relations: ['attachments']
-      });
-      return await this.notificationsRepository.save({
-        ...notification,
-        is_read: true,
-        read_at: new Date()
-      });
+      return await this.findOne(savedNotification.id);
     } catch {
       throw new BadRequestException();
     }

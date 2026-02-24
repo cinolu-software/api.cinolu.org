@@ -31,23 +31,9 @@ export class ProjectNotificationService {
   async sendNotification(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);
-      const participants = notification.phase
+      const recipients = notification.phase
         ? await this.participationService.findParticipantsByPhase(notification.phase.id)
         : await this.participationService.findParticipantsByProject(notification.project.id);
-
-      const mentorOwners = notification.phase
-        ? (await this.phasesService.findOne(notification.phase.id)).mentors
-            ?.map((mentor) => mentor.owner)
-            .filter((owner): owner is User => !!owner)
-        : [];
-
-      const recipients = [...participants, ...mentorOwners].reduce<User[]>((acc, user) => {
-        if (!acc.some((entry) => entry.id === user.id)) {
-          acc.push(user);
-        }
-        return acc;
-      }, []);
-
       this.eventEmitter.emit('notify.participants', recipients, notification);
       return await this.notificationsService.sendNotification(notificationId);
     } catch {

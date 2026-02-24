@@ -47,7 +47,7 @@ export class ProjectMediaService {
       if (project.cover) {
         await fs.unlink(`./uploads/projects/${project.cover}`).catch(() => undefined);
       }
-      return await this.projectsService.setCover(projectId, file.filename);
+      return await this.projectsService.addCover(projectId, file.filename);
     } catch {
       throw new BadRequestException();
     }

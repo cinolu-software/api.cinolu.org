@@ -135,7 +135,7 @@ export class ProjectsService {
     }
   }
 
-  async setCover(projectId: string, cover: string): Promise<Project> {
+  async addCover(projectId: string, cover: string): Promise<Project> {
     try {
       const project = await this.findOne(projectId);
       return await this.projectRepository.save({
@@ -170,5 +170,4 @@ export class ProjectsService {
       throw new BadRequestException();
     }
   }
-
 }

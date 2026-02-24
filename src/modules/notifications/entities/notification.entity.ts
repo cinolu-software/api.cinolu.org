@@ -20,6 +20,9 @@ export class Notification extends AbstractEntity {
   @Column({ type: 'datetime', nullable: true })
   read_at: Date;
 
+  @Column({ type: 'boolean', nullable: true, default: null })
+  notify_mentors: boolean | null;
+
   @ManyToOne(() => User, (user) => user.sent_notifications)
   @JoinColumn()
   sender: User;

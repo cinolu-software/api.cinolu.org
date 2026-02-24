@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateNotificationDto {
   @IsNotEmpty()
@@ -9,4 +9,8 @@ export class CreateNotificationDto {
 
   @IsOptional()
   phase_id?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  notify_mentors?: boolean | null;
 }
