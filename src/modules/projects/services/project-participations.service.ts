@@ -172,10 +172,10 @@ export class ProjectParticipationService {
             rows.push({
               name,
               email,
-              phone_number: row['Phone'].trim(),
-              gender: row['Gender'].trim(),
-              city: row['Town'].trim(),
-              country: row['Country'].trim()
+              phone_number: row['Phone']?.trim() || null,
+              gender: row['Gender']?.trim() || null,
+              city: row['Town']?.trim() || null,
+              country: row['Country']?.trim() || null
             });
           }
         })
