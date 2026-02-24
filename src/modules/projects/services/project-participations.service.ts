@@ -119,16 +119,15 @@ export class ProjectParticipationService {
         const existing = await this.participationRepository.findOne({
           where: { project: { id: projectId }, user: { id: userId } }
         });
-        if (existing) {
-          await this.participationRepository.update(existing.id, { created_at: project.started_at });
-        }
+        if (existing) continue;
         await this.participationRepository.save({
           created_at: project.started_at,
           user: { id: userId },
           project: { id: projectId }
         });
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException();
     }
   }
