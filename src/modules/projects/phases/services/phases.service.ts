@@ -42,9 +42,7 @@ export class PhasesService {
   async update(phaseId: string, updatePhaseDto: UpdatePhaseDto): Promise<Phase> {
     try {
       const { deliverables, ...phaseData } = updatePhaseDto;
-      if (Object.keys(phaseData).length) {
-        await this.phaseRepository.update(phaseId, phaseData);
-      }
+      await this.phaseRepository.update(phaseId, phaseData);
       if (deliverables) await this.deliverablesService.syncPhaseDeliverables(phaseId, deliverables);
       return await this.findOne(phaseId);
     } catch {
@@ -63,10 +61,10 @@ export class PhasesService {
     }
   }
 
-  async remove(phaseId: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     try {
-      const phase = await this.phaseRepository.findOneOrFail({ where: { id: phaseId } });
-      await this.phaseRepository.softDelete(phase.id);
+      await this.findOne(id);
+      await this.phaseRepository.softDelete(id);
     } catch {
       throw new BadRequestException();
     }
