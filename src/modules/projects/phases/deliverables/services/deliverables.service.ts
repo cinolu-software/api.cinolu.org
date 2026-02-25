@@ -11,35 +11,35 @@ export class DeliverablesService {
     private readonly deliverableRepository: Repository<Deliverable>
   ) {}
 
-  async createMany(phaseId: string, dto: DeliverableDto[]): Promise<Deliverable[]> {
+  async create(phaseId: string, dto: DeliverableDto[]): Promise<Deliverable[]> {
+    if (!dto?.length) return;
     try {
-      return await this.deliverableRepository.save(
-        dto.map((dto) => ({
-          title: dto.title,
-          description: dto.description,
-          phase: { id: phaseId }
-        }))
-      );
+      const payload = dto.map((dto) => ({
+        title: dto.title,
+        description: dto.description,
+        phase: { id: phaseId }
+      }));
+      return await this.deliverableRepository.save(payload);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async syncPhaseDeliverables(phaseId: string, dto: DeliverableDto[]): Promise<void> {
+  async sync(phaseId: string, dto: DeliverableDto[]): Promise<void> {
     try {
-      const current = await this.findByPhaseId(phaseId);
+      const current = await this.findByPhase(phaseId);
       const currentById = this.mapById(current);
-      const incomingWithId = this.getIncomingWithId(dto);
-      this.ensureIncomingIdsExist(incomingWithId, currentById);
-      await this.updateChangedDeliverables(incomingWithId, currentById);
-      await this.removeMissingDeliverables(current, incomingWithId);
-      await this.createNewDeliverables(phaseId, dto);
+      const incomingWithId = this.getWithId(dto);
+      this.ensureIdsExist(incomingWithId, currentById);
+      await this.update(incomingWithId, currentById);
+      await this.remove(current, incomingWithId);
+      await this.addNew(phaseId, dto);
     } catch {
       throw new BadRequestException();
     }
   }
 
-  private async findByPhaseId(phaseId: string): Promise<Deliverable[]> {
+  private async findByPhase(phaseId: string): Promise<Deliverable[]> {
     return await this.deliverableRepository.find({
       where: { phase: { id: phaseId } }
     });
@@ -49,21 +49,21 @@ export class DeliverablesService {
     return new Map(deliverables.map((deliverable) => [deliverable.id, deliverable]));
   }
 
-  private getIncomingWithId(incoming: DeliverableDto[]): DeliverableDto[] {
+  private getWithId(incoming: DeliverableDto[]): DeliverableDto[] {
     return incoming.filter((dto) => dto.id);
   }
 
-  private ensureIncomingIdsExist(dto: DeliverableDto[], currentById: Map<string, Deliverable>): void {
+  private ensureIdsExist(dto: DeliverableDto[], currentById: Map<string, Deliverable>): void {
     const hasInvalidId = dto.some((dto) => !currentById.has(dto.id as string));
     if (hasInvalidId) throw new BadRequestException();
   }
 
-  private async updateChangedDeliverables(dto: DeliverableDto[], currentById: Map<string, Deliverable>): Promise<void> {
+  private async update(dto: DeliverableDto[], currentById: Map<string, Deliverable>): Promise<void> {
     for (const d of dto) {
       const existing = currentById.get(d.id as string);
       if (!existing) continue;
       if (!this.hasChanges(existing, d)) continue;
-      await this.deliverableRepository.save(this.buildUpdatedDeliverable(existing, d));
+      await this.deliverableRepository.save(this.buildUpdated(existing, d));
     }
   }
 
@@ -71,7 +71,7 @@ export class DeliverablesService {
     return existing.title !== dto.title || (existing.description ?? null) !== (dto.description ?? null);
   }
 
-  private buildUpdatedDeliverable(existing: Deliverable, dto: DeliverableDto): Deliverable {
+  private buildUpdated(existing: Deliverable, dto: DeliverableDto): Deliverable {
     return {
       ...existing,
       title: dto.title,
@@ -79,16 +79,16 @@ export class DeliverablesService {
     };
   }
 
-  private async removeMissingDeliverables(current: Deliverable[], dto: DeliverableDto[]): Promise<void> {
+  private async remove(current: Deliverable[], dto: DeliverableDto[]): Promise<void> {
     const ids = new Set(dto.map((dto) => dto.id as string));
     const toDeleteIds = current.filter((deliverable) => !ids.has(deliverable.id)).map((deliverable) => deliverable.id);
     if (!toDeleteIds.length) return;
     await this.deliverableRepository.softDelete(toDeleteIds);
   }
 
-  private async createNewDeliverables(phaseId: string, dto: DeliverableDto[]): Promise<void> {
+  private async addNew(phaseId: string, dto: DeliverableDto[]): Promise<void> {
     const toCreate = dto.filter((d) => !d.id);
     if (!toCreate.length) return;
-    await this.createMany(phaseId, toCreate);
+    await this.create(phaseId, toCreate);
   }
 }
