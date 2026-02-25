@@ -73,15 +73,10 @@ export class ProjectParticipationService {
 
   async findParticipations(projectId: string): Promise<ProjectParticipation[]> {
     try {
-      await this.projectsService.findOne(projectId);
-      return this.participationRepository
-        .createQueryBuilder('p')
-        .leftJoinAndSelect('p.user', 'user')
-        .leftJoinAndSelect('p.venture', 'venture')
-        .leftJoinAndSelect('p.phases', 'phases')
-        .loadRelationCountAndMap('p.upvotesCount', 'p.upvotes')
-        .orderBy('p.created_at', 'ASC')
-        .getMany();
+      return this.participationRepository.find({
+        where: { project: { id: projectId } },
+        relations: ['user', 'venture', 'project', 'phases', 'upvotes']
+      });
     } catch {
       throw new BadRequestException();
     }
