@@ -35,7 +35,7 @@ export class ProjectNotificationService {
       if (notification.notify_mentors) {
         recipients = await this.mentorsService.findByPhase(notification.phase.id);
       } else if (notification.phase) {
-        recipients = await this.participationService.findParticipantsByPhase(notification.phase.id);
+        recipients = await this.participationService.findByPhase(notification.phase.id);
       } else {
         recipients = await this.participationService.findParticipantsByProject(notification.project.id);
       }
