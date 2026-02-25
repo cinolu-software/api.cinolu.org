@@ -118,9 +118,8 @@ export class MentorsService {
       const mentorProfile = await this.findOne(id);
       await this.mentorRepository.update(id, { status: MentorStatus.APPROVED });
       await this.usersService.assignRole(mentorProfile.owner.id, Role.MENTOR);
-      const updatedProfile = await this.findOne(id);
-      this.eventEmitter.emit('mentor.approved', updatedProfile);
-      return updatedProfile;
+      this.eventEmitter.emit('mentor.approved', mentorProfile);
+      return await this.findOne(id);
     } catch {
       throw new BadRequestException();
     }
