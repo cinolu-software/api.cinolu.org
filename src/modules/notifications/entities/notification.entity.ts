@@ -17,9 +17,6 @@ export class Notification extends AbstractEntity {
   @Column({ type: 'enum', enum: NotificationStatus, default: NotificationStatus.DRAFT })
   status: NotificationStatus;
 
-  @Column({ type: 'datetime', nullable: true })
-  read_at: Date;
-
   @Column({ type: 'boolean', nullable: true, default: null })
   notify_mentors: boolean | null;
 

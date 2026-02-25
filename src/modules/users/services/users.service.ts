@@ -143,7 +143,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { id },
-        relations: ['roles']
+        relations: ['roles', 'mentor_profile']
       });
       const roles = user.roles.map((role) => role.name);
       return { ...user, roles } as unknown as User;
@@ -156,7 +156,7 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOneOrFail({
         where: { email },
-        relations: ['roles']
+        relations: ['roles', 'mentor_profile']
       });
       user['referralsCount'] = await this.userRepository.count({
         where: { referred_by: { id: user.id } }
