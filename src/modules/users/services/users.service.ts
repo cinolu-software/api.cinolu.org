@@ -96,6 +96,19 @@ export class UsersService {
     }
   }
 
+  async search(term: string): Promise<User[]> {
+    try {
+      const searchTerm = `%${term.trim()}%`;
+      return await this.userRepository
+        .createQueryBuilder('u')
+        .where('u.name LIKE :term OR u.email LIKE :term', { term: searchTerm })
+        .take(20)
+        .getMany();
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async refferedBy(referral_code: string): Promise<User> {
     try {
       return await this.userRepository.findOne({
@@ -172,7 +185,7 @@ export class UsersService {
         where: { email: dto.email },
         relations: ['roles']
       });
-      if (user) return await this.findByEmail(user.email);
+      if (user) return await this.update(user.id, dto);
       const role = await this.rolesService.findByName('user');
       const newUser = await this.userRepository.save({
         ...dto,
@@ -202,15 +215,6 @@ export class UsersService {
       throw new BadRequestException();
     }
   }
-
-  // async updateProfile(currentUser: User, dto: UpdateProfileDto): Promise<User> {
-  //   try {
-  //     await this.userRepository.update(currentUser.id, dto);
-  //     return await this.findOne(currentUser.id);
-  //   } catch {
-  //     throw new BadRequestException();
-  //   }
-  // }
 
   async remove(id: string): Promise<void> {
     try {

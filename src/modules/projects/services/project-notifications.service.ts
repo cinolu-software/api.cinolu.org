@@ -18,7 +18,7 @@ export class ProjectNotificationService {
     private readonly eventEmitter: EventEmitter2
   ) {}
 
-  async createNotification(projectId: string, user: User, dto: CreateNotificationDto): Promise<Notification> {
+  async create(projectId: string, user: User, dto: CreateNotificationDto): Promise<Notification> {
     try {
       await this.projectsService.findOne(projectId);
       const notification = await this.notificationsService.create(projectId, user.id, dto);
@@ -28,7 +28,7 @@ export class ProjectNotificationService {
     }
   }
 
-  async sendNotification(notificationId: string): Promise<Notification> {
+  async send(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);
       let recipients = [];
@@ -37,10 +37,10 @@ export class ProjectNotificationService {
       } else if (notification.phase) {
         recipients = await this.participationService.findByPhase(notification.phase.id);
       } else {
-        recipients = await this.participationService.findParticipantsByProject(notification.project.id);
+        recipients = await this.participationService.findByProject(notification.project.id);
       }
       this.eventEmitter.emit('notify.participants', recipients, notification);
-      return await this.notificationsService.sendNotification(notificationId);
+      return await this.notificationsService.send(notificationId);
     } catch {
       throw new BadRequestException();
     }

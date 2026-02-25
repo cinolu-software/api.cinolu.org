@@ -92,6 +92,16 @@ export class ProjectsController {
     return this.participationService.participate(projectId, user, dto);
   }
 
+  @Post('participations/:participationId/upvote')
+  async upvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
+    return await this.participationService.upvote(participationId, user.id);
+  }
+
+  @Delete('participations/:participationId/upvote')
+  async unvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
+    return await this.participationService.unvote(participationId, user.id);
+  }
+
   @Get('me/participations')
   findUserParticipations(@CurrentUser() user: User): Promise<ProjectParticipation[]> {
     return this.participationService.findUserParticipations(user.id);
@@ -136,13 +146,13 @@ export class ProjectsController {
     @CurrentUser() user: User,
     @Body() dto: CreateNotificationDto
   ): Promise<Notification> {
-    return this.notificationService.createNotification(projectId, user, dto);
+    return this.notificationService.create(projectId, user, dto);
   }
 
   @Post('notifications/:notificationId/send')
   @UseRoles({ resource: 'projects', action: 'update' })
-  sendNotification(@Param('notificationId') notificationId: string): Promise<Notification> {
-    return this.notificationService.sendNotification(notificationId);
+  send(@Param('notificationId') notificationId: string): Promise<Notification> {
+    return this.notificationService.send(notificationId);
   }
 
   @Post(':projectId/gallery')
@@ -154,7 +164,7 @@ export class ProjectsController {
 
   @Delete('gallery/:galleryId')
   @UseRoles({ resource: 'projects', action: 'update' })
-  removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
+  removeImage(@Param('galleryId') galleryId: string): Promise<void> {
     return this.mediaService.removeImage(galleryId);
   }
 

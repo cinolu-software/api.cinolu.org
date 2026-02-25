@@ -4,6 +4,7 @@ import { In, Repository } from 'typeorm';
 import { Readable } from 'stream';
 import { parse } from 'fast-csv';
 import { ProjectParticipation } from '../entities/project-participation.entity';
+import { ProjectParticipationUpvote } from '../entities/participation-upvote.entity';
 import { UsersService } from '@/modules/users/services/users.service';
 import { VenturesService } from '@/modules/ventures/services/ventures.service';
 import { User } from '@/modules/users/entities/user.entity';
@@ -18,6 +19,8 @@ export class ProjectParticipationService {
   constructor(
     @InjectRepository(ProjectParticipation)
     private readonly participationRepository: Repository<ProjectParticipation>,
+    @InjectRepository(ProjectParticipationUpvote)
+    private readonly upvoteRepository: Repository<ProjectParticipationUpvote>,
     private readonly usersService: UsersService,
     private readonly phasesService: PhasesService,
     private readonly venturesService: VenturesService,
@@ -71,17 +74,20 @@ export class ProjectParticipationService {
   async findParticipations(projectId: string): Promise<ProjectParticipation[]> {
     try {
       await this.projectsService.findOne(projectId);
-      return await this.participationRepository.find({
-        where: { project: { id: projectId } },
-        relations: ['user', 'venture', 'phases'],
-        order: { created_at: 'ASC' }
-      });
+      return this.participationRepository
+        .createQueryBuilder('p')
+        .leftJoinAndSelect('p.user', 'user')
+        .leftJoinAndSelect('p.venture', 'venture')
+        .leftJoinAndSelect('p.phases', 'phases')
+        .loadRelationCountAndMap('p.upvotesCount', 'p.upvotes')
+        .orderBy('p.created_at', 'ASC')
+        .getMany();
     } catch {
       throw new BadRequestException();
     }
   }
 
-  async findParticipantsByProject(projectId: string): Promise<User[]> {
+  async findByProject(projectId: string): Promise<User[]> {
     try {
       await this.projectsService.findOne(projectId);
       const participations = await this.participationRepository.find({
@@ -136,9 +142,7 @@ export class ProjectParticipationService {
     return participations
       .map((participation) => participation.user)
       .filter((participant) => {
-        if (seen.has(participant.id)) {
-          return false;
-        }
+        if (seen.has(participant.id)) return false;
         seen.add(participant.id);
         return true;
       });
@@ -178,6 +182,28 @@ export class ProjectParticipationService {
         project: { id: projectId },
         venture: venture ? { id: venture.id } : null
       });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async upvote(id: string, userId: string): Promise<void> {
+    try {
+      await this.upvoteRepository.save({
+        participation: { id },
+        user: { id: userId }
+      });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async unvote(id: string, userId: string): Promise<void> {
+    try {
+      const upvote = await this.upvoteRepository.findOne({
+        where: { participation: { id }, user: { id: userId } }
+      });
+      await this.upvoteRepository.remove(upvote);
     } catch {
       throw new BadRequestException();
     }

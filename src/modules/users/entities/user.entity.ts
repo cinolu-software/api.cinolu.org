@@ -6,6 +6,7 @@ import { Article } from '@/modules/blog/articles/entities/article.entity';
 import { Comment } from '@/modules/blog/comments/entities/comment.entity';
 import { Project } from '@/modules/projects/entities/project.entity';
 import { ProjectParticipation } from '@/modules/projects/entities/project-participation.entity';
+import { ProjectParticipationUpvote } from '@/modules/projects/entities/participation-upvote.entity';
 import { Event } from '@/modules/events/entities/event.entity';
 import { EventParticipation } from '@/modules/events/entities/event-participation.entity';
 import { MentorProfile } from '@/modules/mentors/entities/mentor.entity';
@@ -64,6 +65,9 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => ProjectParticipation, (participation) => participation.user)
   project_participations: ProjectParticipation[];
+
+  @OneToMany(() => ProjectParticipationUpvote, (upvote) => upvote.user)
+  project_participation_upvotes: ProjectParticipationUpvote[];
 
   @OneToMany(() => EventParticipation, (participation) => participation.user)
   event_participations: EventParticipation[];

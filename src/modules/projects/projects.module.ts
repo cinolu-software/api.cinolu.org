@@ -6,6 +6,7 @@ import { UsersModule } from '@/modules/users/users.module';
 import { VenturesModule } from '@/modules/ventures/ventures.module';
 import { Project } from './entities/project.entity';
 import { ProjectParticipation } from './entities/project-participation.entity';
+import { ProjectParticipationUpvote } from './entities/participation-upvote.entity';
 import { ProjectsController } from './projects.controller';
 import { ProjectCategoriesModule } from './categories/categories.module';
 import { PhasesModule } from './phases/phases.module';
@@ -26,7 +27,7 @@ import { MentorsModule } from '../mentors/mentors.module';
     ProjectCategoriesModule,
     UsersModule,
     VenturesModule,
-    TypeOrmModule.forFeature([Project, ProjectParticipation])
+    TypeOrmModule.forFeature([Project, ProjectParticipation, ProjectParticipationUpvote])
   ],
   providers: [
     ProjectsService,
