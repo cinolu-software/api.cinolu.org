@@ -200,7 +200,7 @@ export class ProjectParticipationService {
 
   async unvote(id: string, userId: string): Promise<void> {
     try {
-      const upvote = await this.upvoteRepository.findOne({
+      const upvote = await this.upvoteRepository.findOneOrFail({
         where: { participation: { id }, user: { id: userId } }
       });
       await this.upvoteRepository.remove(upvote);
