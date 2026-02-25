@@ -1,31 +1,69 @@
-# Repository Guidelines
+You are an expert in TypeScript + NestJS backend development (monolith). You write **concise**, secure, maintainable code. Every file/function/class must **do one thing**.
 
-## Project Structure & Module Organization
+## Core Principles
 
-- `src/` contains the NestJS application source code.
-  - `src/core/` holds cross-cutting concerns (auth, helpers, interceptors).
-  - `src/modules/` contains feature modules (users, projects, programs, notifications, etc.).
-  - `src/main.ts` bootstraps the API.
-- `migrations/` holds TypeORM migration files (generated and applied via scripts).
-- `templates/` contains Handlebars email templates.
-- `uploads/` stores user-uploaded assets (served via `ServeStaticModule`).
-- `dist/` is the build output and should be treated as generated artifacts.
+- **Single Responsibility**: one class = one responsibility, one method = one use-case
+- **Concise code**: short functions, early returns, no duplication
+- **Thin controllers**: controllers only map HTTP → service calls
+- **Explicit boundaries**: transport (controller) vs business (service) vs persistence (TypeORM)
 
-## Build, Test, and Development Commands
+## TypeScript Rules
 
-Use `pnpm` as the package manager.
+- `strict` typing always
+- No `any` (use `unknown` + validation/narrowing)
+- Public methods/exported functions must have explicit return types
+- Never ignore promises (`await` or intentionally run concurrently)
 
-- `pnpm build` compiles to `dist/`.
-- `pnpm lint` runs ESLint with autofix.
-- `pnpm format` runs prettier format
+## Project Structure
 
-## Coding Style & Naming Conventions
+- `src/modules/<domain>/`
+  - `dto/` input/output DTOs
+  - `entities/` TypeORM entities only
+  - `services/` business logic (use-cases)
+  - `types/` domain types/constants
+  - `<domain>.controller.ts`, `<domain>.module.ts`
 
-- Always adhere to the principle of single responsibility
-- Keep methods short and clear by doing only one thing
-- Use existing code patterns and organization
-- TypeScript with NestJS patterns (modules, controllers, services, DTOs, entities).
-- Indentation: 2 spaces (match existing files).
-- File names use kebab-case; classes use PascalCase.
-- Entities extend `AbstractEntity` and use snake_case columns when present in existing models.
-- Do not generate migrations; I will do this manually.
+- `src/core/` shared infra (db, config, auth/session, guards, interceptors, filters, utils)
+
+## Controllers
+
+- No business logic
+- No TypeORM calls
+- Use DTOs for validation and typing
+- Return response DTOs (never raw entities)
+
+## Services
+
+- Each method represents **one use-case**
+- Orchestrate repositories and other services
+- Keep functions small; extract helpers when logic grows
+- Use transactions for multi-step writes
+
+## TypeORM Rules
+
+- Entities stay in `entities/`
+- Never expose internal fields (passwords, session data, internal flags)
+- Use QueryBuilder for complex queries/pagination
+- Avoid N+1: load relations intentionally
+
+## Access Control (nest-access-control)
+
+- All authorization uses **nest-access-control** `RolesBuilder`
+- Enforce permissions in the **controller layer** using guards/decorators:
+  - `@UseRoles(...)` + `ACGuard` (or your existing pattern)
+
+- Services assume they are called by an authorized path unless explicitly marked “internal”
+- Keep resource/action names consistent across modules (`create/read/update/delete`)
+
+## Validation & Error Handling
+
+- Validate all input using DTOs (`class-validator`)
+- Fail fast with Nest exceptions (`BadRequest`, `NotFound`, `Conflict`, `Forbidden`)
+- Keep error messages safe and consistent
+
+## Clean Code Constraints
+
+- No “god services”
+- No long methods (> ~30–40 lines): extract helpers
+- Avoid clever code; prefer readable code
+- Prefer pure helper functions for transformations/mapping
