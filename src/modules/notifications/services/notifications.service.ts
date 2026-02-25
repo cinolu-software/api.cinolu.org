@@ -27,7 +27,7 @@ export class NotificationsService {
     }
   }
 
-  async sendNotification(id: string): Promise<Notification> {
+  async send(id: string): Promise<Notification> {
     try {
       await this.notificationsRepository.update(id, { status: NotificationStatus.SENT });
       return await this.findOne(id);
@@ -36,7 +36,7 @@ export class NotificationsService {
     }
   }
 
-  async findAllByProject(projectId: string, filters: FilterNotificationsDto): Promise<[Notification[], number]> {
+  async findByProject(projectId: string, filters: FilterNotificationsDto): Promise<[Notification[], number]> {
     try {
       const { phaseId, page = 1, status } = filters;
       const query = this.notificationsRepository
