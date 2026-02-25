@@ -108,7 +108,7 @@ export class ProjectsController {
   }
 
   @Get(':projectId/participations')
-  @UseRoles({ resource: 'projects', action: 'read' })
+  @Public()
   findParticipations(@Param('projectId') projectId: string): Promise<ProjectParticipation[]> {
     return this.participationService.findParticipations(projectId);
   }

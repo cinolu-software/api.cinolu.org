@@ -26,6 +26,7 @@ export class DeliverablesService {
   }
 
   async sync(phaseId: string, dto: DeliverableDto[]): Promise<void> {
+    if (!dto?.length) return;
     try {
       const current = await this.findByPhase(phaseId);
       const currentById = this.mapById(current);
