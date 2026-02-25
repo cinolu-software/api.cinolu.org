@@ -94,7 +94,7 @@ export class ProjectParticipationService {
     }
   }
 
-  async findParticipantsByPhase(phaseId: string): Promise<User[]> {
+  async findByPhase(phaseId: string): Promise<User[]> {
     try {
       const participations = await this.participationRepository.find({
         where: { phases: { id: phaseId } },
@@ -131,20 +131,6 @@ export class ProjectParticipationService {
     }
   }
 
-  async participate(projectId: string, user: User, dto: ParticipateProjectDto): Promise<void> {
-    try {
-      await this.projectsService.findOne(projectId);
-      const venture = await this.venturesService.findOne(dto.ventureId);
-      await this.participationRepository.save({
-        user: { id: user.id },
-        project: { id: projectId },
-        venture: venture ? { id: venture.id } : null
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   private mapUniqueUsers(participations: ProjectParticipation[]): User[] {
     const seen = new Set<string>();
     return participations
@@ -165,8 +151,8 @@ export class ProjectParticipationService {
       stream
         .pipe(parse({ headers: true }))
         .on('data', (row: Record<string, string>) => {
-          const name = row['Name'].trim();
-          const email = row['Email'].trim().toLocaleLowerCase();
+          const name = row['Name']?.trim();
+          const email = row['Email']?.trim()?.toLocaleLowerCase();
           if (name && email) {
             rows.push({
               name,
@@ -181,5 +167,19 @@ export class ProjectParticipationService {
         .on('end', () => resolve(rows))
         .on('error', reject);
     });
+  }
+
+  async participate(projectId: string, user: User, dto: ParticipateProjectDto): Promise<void> {
+    try {
+      await this.projectsService.findOne(projectId);
+      const venture = await this.venturesService.findOne(dto.ventureId);
+      await this.participationRepository.save({
+        user: { id: user.id },
+        project: { id: projectId },
+        venture: venture ? { id: venture.id } : null
+      });
+    } catch {
+      throw new BadRequestException();
+    }
   }
 }
