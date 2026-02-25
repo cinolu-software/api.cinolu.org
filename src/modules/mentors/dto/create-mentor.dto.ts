@@ -1,11 +1,9 @@
-import CreateUserDto from '@/modules/users/dto/create-user.dto';
 import { MentorRequestDto } from './mentor-request.dto';
-import { Type } from 'class-transformer';
+import { IsEmail } from 'class-validator';
 
 export class CreateMentorDto {
-  @Type(() => CreateUserDto)
-  user: CreateUserDto;
+  @IsEmail()
+  email: string;
 
-  @Type(() => CreateUserDto)
   mentor: MentorRequestDto;
 }
