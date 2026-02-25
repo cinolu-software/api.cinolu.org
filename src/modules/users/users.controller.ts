@@ -75,6 +75,12 @@ export class UsersController {
     await this.usersExportService.exportCSV(query, res);
   }
 
+  @Get('search')
+  @UseRoles({ resource: 'users', action: 'read' })
+  search(@Query('term') term: string): Promise<User[]> {
+    return this.usersService.search(term);
+  }
+
   @Get()
   @UseRoles({ resource: 'users', action: 'read' })
   findAll(@Query() query: FilterUsersDto): Promise<[User[], number]> {
@@ -100,9 +106,7 @@ export class UsersController {
   }
 
   @Post('me/profile-image')
-  @UseInterceptors(
-    FileInterceptor('profile', createDiskUploadOptions('./uploads/profiles'))
-  )
+  @UseInterceptors(FileInterceptor('profile', createDiskUploadOptions('./uploads/profiles')))
   uploadImage(@CurrentUser() user: User, @UploadedFile() file: Express.Multer.File): Promise<User> {
     return this.userMediaService.uploadImage(user, file);
   }
