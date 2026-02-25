@@ -59,13 +59,12 @@ export class MentorsService {
 
   async create(dto: CreateMentorDto): Promise<MentorProfile> {
     try {
-      const user = await this.usersService.findOrCreate(dto.user);
+      const user = await this.usersService.findByEmail(dto.email);
       const mentorProfile = await this.createProfile(user.id, dto.mentor, MentorStatus.APPROVED);
       await this.usersService.assignRole(user.id, Role.MENTOR);
       this.eventEmitter.emit('mentor.approved', mentorProfile);
       return mentorProfile;
-    } catch (e) {
-      console.log(e);
+    } catch {
       throw new BadRequestException('Erreur lors de la création du profil mentor approuvé');
     }
   }
