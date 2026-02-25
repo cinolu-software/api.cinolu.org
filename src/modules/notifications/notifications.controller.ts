@@ -33,7 +33,7 @@ export class NotificationsController {
     @Param('projectId') projectId: string,
     @Query() query: FilterNotificationsDto
   ): Promise<[Notification[], number]> {
-    return this.notificationsService.findAllByProject(projectId, query);
+    return this.notificationsService.findByProject(projectId, query);
   }
 
   @Patch(':notificationId')
