@@ -22,7 +22,7 @@ export class PhasesService {
         project: { id: projectId },
         mentors: mentors?.map((id) => ({ id }))
       });
-      if (deliverables?.length) await this.deliverablesService.createMany(phase.id, deliverables);
+      await this.deliverablesService.create(phase.id, deliverables);
       return await this.findOne(phase.id);
     } catch {
       throw new BadRequestException();
@@ -47,9 +47,9 @@ export class PhasesService {
       await this.phaseRepository.save({
         ...phase,
         ...phaseData,
-        mentors: mentors.map((id) => ({ id }))
+        mentors: mentors?.map((id) => ({ id }))
       });
-      if (deliverables) await this.deliverablesService.syncPhaseDeliverables(phaseId, deliverables);
+      await this.deliverablesService.sync(phaseId, deliverables);
       return await this.findOne(phaseId);
     } catch {
       throw new BadRequestException();
