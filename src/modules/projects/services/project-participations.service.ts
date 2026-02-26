@@ -109,22 +109,24 @@ export class ProjectParticipationService {
     try {
       const project = await this.projectsService.findOneWithParticipations(projectId);
       const rows = await parseUsersCsv(file.buffer);
-      const userIds = new Set<string>(project.participations?.map((participation) => participation.user.id) ?? []);
+      const existingUserIds = new Set<string>(
+        project.participations?.map((participation) => participation.user.id) ?? []
+      );
+      const newUserIds = new Set<string>();
       for (const row of rows) {
         const user = await this.usersService.findOrCreate(row);
-        userIds.add(user.id);
+        if (!existingUserIds.has(user.id)) {
+          newUserIds.add(user.id);
+        }
       }
-      for (const userId of userIds) {
-        const existing = await this.participationRepository.findOne({
-          where: { project: { id: projectId }, user: { id: userId } }
-        });
-        if (existing) continue;
-        await this.participationRepository.save({
+      if (newUserIds.size === 0) return;
+      await this.participationRepository.save(
+        [...newUserIds].map((userId) => ({
           created_at: project.started_at,
           user: { id: userId },
           project: { id: projectId }
-        });
-      }
+        }))
+      );
     } catch {
       throw new BadRequestException();
     }
