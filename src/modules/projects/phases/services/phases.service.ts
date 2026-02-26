@@ -47,7 +47,7 @@ export class PhasesService {
       await this.phaseRepository.save({
         ...phase,
         ...phaseData,
-        mentors: mentors?.map((id) => ({ id }))
+        mentors: mentors?.map((id) => ({ id })) || []
       });
       await this.deliverablesService.sync(phaseId, deliverables);
       return await this.findOne(phaseId);
