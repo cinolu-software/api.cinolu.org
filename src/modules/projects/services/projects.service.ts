@@ -84,7 +84,7 @@ export class ProjectsService {
     try {
       return await this.projectRepository.findOneOrFail({
         where: { slug },
-        relations: ['categories', 'project_manager', 'program', 'gallery', 'phases']
+        relations: ['categories', 'project_manager', 'program', 'gallery', 'phases', 'phases.delivrables']
       });
     } catch {
       throw new NotFoundException();
