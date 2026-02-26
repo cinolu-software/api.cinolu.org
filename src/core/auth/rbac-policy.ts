@@ -36,6 +36,7 @@ RBAC_POLICY.grant(Role.USER)
   .createAny([
     'indicators',
     'users',
+    'mentors',
     'phases',
     'expertises',
     'programs',
@@ -56,6 +57,7 @@ RBAC_POLICY.grant(Role.USER)
   .updateAny([
     'indicators',
     'users',
+    'mentors',
     'phases',
     'programs',
     'subprograms',
@@ -70,7 +72,6 @@ RBAC_POLICY.grant(Role.USER)
     'tags',
     'ventures',
     'publishVenture',
-    'mentorApplications',
     'expertises',
     'notifications',
     'opportunities'
