@@ -24,7 +24,7 @@ export class SubprogramsService {
     }
   }
 
-  async findAll(programId: string): Promise<Subprogram[]> {
+  async findByProgram(programId: string): Promise<Subprogram[]> {
     try {
       return await this.subprogramRepository.find({
         relations: ['program'],
@@ -34,6 +34,13 @@ export class SubprogramsService {
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  async findAll(): Promise<Subprogram[]> {
+    return await this.subprogramRepository.find({
+      relations: ['program'],
+      order: { updated_at: 'DESC' }
+    });
   }
 
   async findBySlug(slug: string): Promise<Subprogram> {

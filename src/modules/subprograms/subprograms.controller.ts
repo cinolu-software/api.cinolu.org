@@ -22,6 +22,12 @@ export class SubprogramsController {
     return this.subprogramsService.create(dto);
   }
 
+  @Get()
+  @Public()
+  findAll(): Promise<Subprogram[]> {
+    return this.subprogramsService.findAll();
+  }
+
   @Patch(':subprogramId/publish')
   @UseRoles({ resource: 'subprograms', action: 'update' })
   togglePublish(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
@@ -44,7 +50,7 @@ export class SubprogramsController {
   @Get('program/:programId')
   @Public()
   findByProgram(@Param('programId') programId: string): Promise<Subprogram[]> {
-    return this.subprogramsService.findAll(programId);
+    return this.subprogramsService.findByProgram(programId);
   }
 
   @Get(':subprogramId')
