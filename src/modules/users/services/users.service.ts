@@ -9,6 +9,7 @@ import { FilterUsersDto } from '../dto/filter-users.dto';
 import { SignUpDto } from '@/core/auth/dto/sign-up.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { randomBytes } from 'crypto';
+import { parseUsersCsv } from '@/core/helpers/user-csv.helper';
 
 @Injectable()
 export class UsersService {
@@ -193,6 +194,17 @@ export class UsersService {
         roles: [role]
       });
       return await this.findOne(newUser.id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async importCsv(file: Express.Multer.File): Promise<void> {
+    try {
+      const rows = await parseUsersCsv(file.buffer);
+      for (const row of rows) {
+        await this.findOrCreate(row);
+      }
     } catch {
       throw new BadRequestException();
     }

@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
+import { createCsvUploadOptions } from '@/core/helpers/csv-upload.helper';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './services/users.service';
@@ -79,6 +80,13 @@ export class UsersController {
   @UseRoles({ resource: 'users', action: 'read' })
   search(@Query('term') term: string): Promise<User[]> {
     return this.usersService.search(term);
+  }
+
+  @Post('import-csv')
+  @UseRoles({ resource: 'users', action: 'create' })
+  @UseInterceptors(FileInterceptor('file', createCsvUploadOptions()))
+  importCsv(@UploadedFile() file: Express.Multer.File): Promise<void> {
+    return this.usersService.importCsv(file);
   }
 
   @Get()

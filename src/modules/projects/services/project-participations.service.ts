@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Readable } from 'stream';
-import { parse } from 'fast-csv';
 import { ProjectParticipation } from '../entities/project-participation.entity';
 import { ProjectParticipationUpvote } from '../entities/participation-upvote.entity';
 import { UsersService } from '@/modules/users/services/users.service';
@@ -12,7 +10,7 @@ import { ParticipateProjectDto } from '../dto/participate.dto';
 import { ProjectsService } from './projects.service';
 import { MoveParticipantsDto } from '../dto/move-participants.dto';
 import { PhasesService } from '../phases/services/phases.service';
-import CreateUserDto from '@/modules/users/dto/create-user.dto';
+import { parseUsersCsv } from '@/core/helpers/user-csv.helper';
 
 @Injectable()
 export class ProjectParticipationService {
@@ -110,7 +108,7 @@ export class ProjectParticipationService {
   async importParticipants(projectId: string, file: Express.Multer.File): Promise<void> {
     try {
       const project = await this.projectsService.findOneWithParticipations(projectId);
-      const rows = await this.parseCsv(file.buffer);
+      const rows = await parseUsersCsv(file.buffer);
       const userIds = new Set<string>(project.participations?.map((participation) => participation.user.id) ?? []);
       for (const row of rows) {
         const user = await this.usersService.findOrCreate(row);
@@ -141,31 +139,6 @@ export class ProjectParticipationService {
         seen.add(participant.id);
         return true;
       });
-  }
-
-  private parseCsv(buffer: Buffer): Promise<CreateUserDto[]> {
-    return new Promise((resolve, reject) => {
-      const rows = [];
-      const stream = Readable.from(buffer.toString());
-      stream
-        .pipe(parse({ headers: true }))
-        .on('data', (row: Record<string, string>) => {
-          const name = row['Name']?.trim();
-          const email = row['Email']?.trim()?.toLocaleLowerCase();
-          if (name && email) {
-            rows.push({
-              name,
-              email,
-              phone_number: row['Phone']?.trim() || null,
-              gender: row['Gender']?.trim() || null,
-              city: row['Town']?.trim() || null,
-              country: row['Country']?.trim() || null
-            });
-          }
-        })
-        .on('end', () => resolve(rows))
-        .on('error', reject);
-    });
   }
 
   async participate(projectId: string, user: User, dto: ParticipateProjectDto): Promise<void> {
