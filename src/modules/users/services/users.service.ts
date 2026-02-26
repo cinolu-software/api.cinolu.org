@@ -91,7 +91,7 @@ export class UsersService {
         .createQueryBuilder('u')
         .loadRelationCountAndMap('u.referralsCount', 'u.referrals');
       if (q) query.where('u.name LIKE :q OR u.email LIKE :q', { q: `%${q}%` });
-      return await query.skip(skip).take(take).getManyAndCount();
+      return await query.skip(skip).orderBy('u.created_at', 'DESC').take(take).getManyAndCount();
     } catch {
       throw new BadRequestException();
     }
