@@ -22,12 +22,6 @@ export class SubprogramsController {
     return this.subprogramsService.create(dto);
   }
 
-  @Get()
-  @Public()
-  findAll(): Promise<Subprogram[]> {
-    return this.subprogramsService.findAll();
-  }
-
   @Patch(':subprogramId/publish')
   @UseRoles({ resource: 'subprograms', action: 'update' })
   togglePublish(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
