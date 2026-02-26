@@ -50,7 +50,7 @@ export class SubprogramsController {
   @Get('program/:programId')
   @Public()
   findByProgram(@Param('programId') programId: string): Promise<Subprogram[]> {
-    return this.subprogramsService.findUnpaginated(programId);
+    return this.subprogramsService.findAll(programId);
   }
 
   @Get(':subprogramId')
