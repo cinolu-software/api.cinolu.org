@@ -33,7 +33,7 @@ export class ProjectNotificationService {
       const notification = await this.notificationsService.findOne(notificationId);
       let recipients = [];
       if (notification.notify_mentors) {
-        recipients = await this.mentorsService.findByPhase(notification.phase.id);
+        recipients = await this.mentorsService.findUsersByPhase(notification.phase.id);
       } else if (notification.phase) {
         recipients = await this.participationService.findByPhase(notification.phase.id);
       } else {

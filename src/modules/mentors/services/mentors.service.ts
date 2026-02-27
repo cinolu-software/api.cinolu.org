@@ -51,10 +51,26 @@ export class MentorsService {
     }
   }
 
-  async findByPhase(phaseId: string): Promise<MentorProfile[]> {
-    return this.mentorRepository.find({
-      where: { phases: { id: phaseId } }
+  async findMentorsByPhase(phaseId: string): Promise<MentorProfile[]> {
+    return await this.mentorRepository.find({
+      where: { phases: { id: phaseId } },
+      relations: ['owner']
     });
+  }
+
+  async findUsersByPhase(phaseId: string): Promise<User[]> {
+    const mentors = await this.findMentorsByPhase(phaseId);
+    return this.extractUniqueUsers(mentors);
+  }
+
+  private extractUniqueUsers(mentors: MentorProfile[]): User[] {
+    const uniqueUsers = new Map<string, User>();
+    mentors.forEach((mentor) => {
+      if (mentor.owner && !uniqueUsers.has(mentor.owner.id)) {
+        uniqueUsers.set(mentor.owner.id, mentor.owner);
+      }
+    });
+    return Array.from(uniqueUsers.values());
   }
 
   async create(dto: CreateMentorDto): Promise<MentorProfile> {
