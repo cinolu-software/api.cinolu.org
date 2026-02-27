@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { EventCategory } from '../categories/entities/category.entity';
 import { EventParticipation } from './event-participation.entity';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Entity()
 export class Event extends AbstractEntity {

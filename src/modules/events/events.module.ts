@@ -5,15 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity';
 import { EventParticipation } from './entities/event-participation.entity';
 import { EventSubscriber } from './subscribers/event.subscriber';
-import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { EventCategoriesModule } from './categories/categories.module';
 import { EventMediaService } from './services/event-media.service';
 import { EventParticipationService } from './services/event-participation.service';
+import { EVENTS_RBAC } from './events-rbac';
+import { GalleriesModule } from '@/shared/galleries/galleries.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, EventParticipation]), EventCategoriesModule, GalleriesModule],
   controllers: [EventsController],
-  providers: [EventsService, EventMediaService, EventParticipationService, EventSubscriber],
+  providers: [EventsService, EventMediaService, EventParticipationService, EventSubscriber, EVENTS_RBAC],
   exports: [EventsService]
 })
 export class EventsModule {}

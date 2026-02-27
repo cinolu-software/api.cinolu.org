@@ -7,10 +7,11 @@ import { SubprogramSubscriber } from './subscribers/subprogram.subscriber';
 import { EventsModule } from '../events/events.module';
 import { ProjectsModule } from '../projects/projects.module';
 import { SubprogramMediaService } from './services/subprogram-media.service';
+import { SUBPROGRAMS_RBAC } from './subprograms-rbac';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Subprogram]), ProjectsModule, EventsModule],
   controllers: [SubprogramsController],
-  providers: [SubprogramsService, SubprogramMediaService, SubprogramSubscriber]
+  providers: [SubprogramsService, SubprogramMediaService, SubprogramSubscriber, SUBPROGRAMS_RBAC]
 })
 export class SubprogramsModule {}

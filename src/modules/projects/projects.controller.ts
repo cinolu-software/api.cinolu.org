@@ -22,15 +22,15 @@ import { ProjectParticipationService } from './services/project-participations.s
 import { ProjectNotificationService } from './services/project-notifications.service';
 import { ProjectMediaService } from './services/project-media.service';
 import { FilterProjectsDto } from './dto/filter-projects.dto';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Notification } from '@/modules/notifications/entities/notification.entity';
 import { CreateNotificationDto } from '@/modules/notifications/dto/create-notification.dto';
 import { ProjectParticipation } from './entities/project-participation.entity';
 import { MoveParticipantsDto } from './dto/move-participants.dto';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('projects')
 export class ProjectsController {
@@ -42,13 +42,13 @@ export class ProjectsController {
   ) {}
 
   @Post()
-  @Roles({ resource: 'projects', action: 'create' })
+  @Rbac({ resource: 'projects', action: 'create' })
   create(@Body() dto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(dto);
   }
 
   @Get()
-  @Roles({ resource: 'projects', action: 'read' })
+  @Rbac({ resource: 'projects', action: 'read' })
   findAll(@Query() query: FilterProjectsDto): Promise<[Project[], number]> {
     return this.projectsService.findAll(query);
   }
@@ -60,13 +60,13 @@ export class ProjectsController {
   }
 
   @Post('participants/move')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   moveParticipants(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.participationService.moveParticipants(dto);
   }
 
   @Post('participants/remove')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   removeParticipantsFromPhase(@Body() dto: MoveParticipantsDto): Promise<void> {
     return this.participationService.removeParticipantsFromPhase(dto);
   }
@@ -114,13 +114,13 @@ export class ProjectsController {
   }
 
   @Get(':projectId')
-  @Roles({ resource: 'projects', action: 'read' })
+  @Rbac({ resource: 'projects', action: 'read' })
   findOne(@Param('projectId') projectId: string): Promise<Project> {
     return this.projectsService.findOne(projectId);
   }
 
   @Post(':projectId/participants/import-csv')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   @UseInterceptors(FileInterceptor('file', createCsvUploadOptions()))
   addParticipantsFromCsv(
     @Param('projectId') projectId: string,
@@ -130,7 +130,7 @@ export class ProjectsController {
   }
 
   @Post(':projectId/notifications')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   createNotification(
     @Param('projectId') projectId: string,
     @CurrentUser() user: User,
@@ -140,20 +140,20 @@ export class ProjectsController {
   }
 
   @Post('notifications/:notificationId/send')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   send(@Param('notificationId') notificationId: string): Promise<Notification> {
     return this.notificationService.send(notificationId);
   }
 
   @Post(':projectId/gallery')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.mediaService.addImage(projectId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   removeImage(@Param('galleryId') galleryId: string): Promise<void> {
     return this.mediaService.removeImage(galleryId);
   }
@@ -165,32 +165,32 @@ export class ProjectsController {
   }
 
   @Patch(':projectId/publish')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   togglePublish(@Param('projectId') projectId: string): Promise<Project> {
     return this.projectsService.togglePublish(projectId);
   }
 
   @Post(':projectId/cover')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/projects')))
   addCover(@Param('projectId') projectId: string, @UploadedFile() file: Express.Multer.File): Promise<Project> {
     return this.mediaService.addCover(projectId, file);
   }
 
   @Patch(':projectId/highlight')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   toggleHighlight(@Param('projectId') projectId: string): Promise<Project> {
     return this.projectsService.toggleHighlight(projectId);
   }
 
   @Patch(':projectId')
-  @Roles({ resource: 'projects', action: 'update' })
+  @Rbac({ resource: 'projects', action: 'update' })
   update(@Param('projectId') projectId: string, @Body() dto: UpdateProjectDto): Promise<Project> {
     return this.projectsService.update(projectId, dto);
   }
 
   @Delete(':projectId')
-  @Roles({ resource: 'projects', action: 'delete' })
+  @Rbac({ resource: 'projects', action: 'delete' })
   remove(@Param('projectId') projectId: string): Promise<void> {
     return this.projectsService.remove(projectId);
   }

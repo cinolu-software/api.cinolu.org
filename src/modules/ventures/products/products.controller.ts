@@ -15,14 +15,14 @@ import { ProductMediaService } from './services/product-media.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { FilterProductsDto } from './dto/filter-products.dto';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Public } from '@/core/auth/decorators/public.decorator';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -37,14 +37,14 @@ export class ProductsController {
   }
 
   @Post(':productId/gallery')
-  @Roles({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.productMediaService.addImage(productId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @Roles({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
     return this.productMediaService.removeGallery(galleryId);
   }
@@ -56,7 +56,7 @@ export class ProductsController {
   }
 
   @Get('me')
-  @Roles({ resource: 'products', action: 'read', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'read', possession: 'own' })
   findMine(@CurrentUser() user: User, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
     return this.productsService.findAll(user, query);
   }
@@ -68,13 +68,13 @@ export class ProductsController {
   }
 
   @Patch('by-slug/:slug')
-  @Roles({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
   update(@Param('slug') slug: string, @Body() dto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(slug, dto);
   }
 
   @Delete(':id')
-  @Roles({ resource: 'products', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
     return this.productsService.remove(id);
   }

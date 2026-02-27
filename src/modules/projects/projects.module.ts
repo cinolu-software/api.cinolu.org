@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { NotificationsModule } from '@/modules/notifications/notifications.module';
 import { UsersModule } from '@/modules/users/users.module';
 import { VenturesModule } from '@/modules/ventures/ventures.module';
@@ -17,6 +16,8 @@ import { ProjectsEmailService } from './services/projects-email.service';
 import { ProjectsService } from './services/projects.service';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { MentorsModule } from '../mentors/mentors.module';
+import { PROJECTS_RBAC } from './projects-rbac';
+import { GalleriesModule } from '@/shared/galleries/galleries.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { MentorsModule } from '../mentors/mentors.module';
     ProjectNotificationService,
     ProjectMediaService,
     ProjectsEmailService,
-    ProjectSubscriber
+    ProjectSubscriber,
+    PROJECTS_RBAC
   ],
   controllers: [ProjectsController],
   exports: [ProjectsService]

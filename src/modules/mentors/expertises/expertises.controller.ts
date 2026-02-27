@@ -4,20 +4,20 @@ import { CreateExpertiseDto } from './dto/create-expertise.dto';
 import { UpdateExpertiseDto } from './dto/update-expertise.dto';
 import { Expertise } from './entities/expertise.entity';
 import { FilterExpertisesDto } from './dto/filter-expertises.dto';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 
 @Controller('expertises')
 export class ExpertisesController {
   constructor(private readonly expertisesService: ExpertisesService) {}
 
   @Post()
-  @Roles({ resource: 'expertises', action: 'create' })
+  @Rbac({ resource: 'expertises', action: 'create' })
   create(@Body() dto: CreateExpertiseDto): Promise<Expertise> {
     return this.expertisesService.create(dto);
   }
 
   @Get('paginated')
-  @Roles({ resource: 'expertises', action: 'read' })
+  @Rbac({ resource: 'expertises', action: 'read' })
   findPaginated(@Query() query: FilterExpertisesDto): Promise<[Expertise[], number]> {
     return this.expertisesService.findFiltered(query);
   }
@@ -28,19 +28,19 @@ export class ExpertisesController {
   }
 
   @Get(':id')
-  @Roles({ resource: 'expertises', action: 'read' })
+  @Rbac({ resource: 'expertises', action: 'read' })
   findOne(@Param('id') id: string): Promise<Expertise> {
     return this.expertisesService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles({ resource: 'expertises', action: 'update' })
+  @Rbac({ resource: 'expertises', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateExpertiseDto): Promise<Expertise> {
     return this.expertisesService.update(id, dto);
   }
 
   @Delete(':id')
-  @Roles({ resource: 'expertises', action: 'delete' })
+  @Rbac({ resource: 'expertises', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.expertisesService.remove(id);
   }

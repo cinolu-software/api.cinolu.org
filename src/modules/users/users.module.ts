@@ -9,6 +9,7 @@ import { UsersEmailService } from './services/users-email.service';
 import { UsersReferralService } from './services/users-referral.service';
 import { UsersExportService } from './services/users-export.service';
 import { UserMediaService } from './services/user-media.service';
+import { USERS_RBAC } from './users-rbac';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), RolesModule],
@@ -19,7 +20,8 @@ import { UserMediaService } from './services/user-media.service';
     UsersExportService,
     UserMediaService,
     UsersEmailService,
-    UserSubscriber
+    UserSubscriber,
+    USERS_RBAC
   ],
   exports: [UsersService]
 })

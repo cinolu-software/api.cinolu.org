@@ -19,7 +19,7 @@ import { MentorProfile } from './entities/mentor.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterMentorsDto } from './dto/filter-mentors.dto';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { CreateMentorDto } from './dto/create-mentor.dto';
 import { UpdateMentorDto } from './dto/update-mentor.dto';
@@ -32,7 +32,7 @@ export class MentorsController {
   ) {}
 
   @Post()
-  @Roles({ resource: 'mentors', action: 'create' })
+  @Rbac({ resource: 'mentors', action: 'create' })
   create(@Body() dto: CreateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.create(dto);
   }
@@ -48,32 +48,32 @@ export class MentorsController {
   }
 
   @Patch(':mentorId')
-  @Roles({ resource: 'mentorApplications', action: 'update' })
+  @Rbac({ resource: 'mentorApplications', action: 'update' })
   updateMentor(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorDto): Promise<MentorProfile> {
     return this.mentorsService.updateMentor(mentorId, dto);
   }
 
   @Post(':mentorId/cv')
-  @Roles({ resource: 'mentorApplications', action: 'update' })
+  @Rbac({ resource: 'mentorApplications', action: 'update' })
   @UseInterceptors(FileInterceptor('cv', createDiskUploadOptions('./uploads/mentors/cvs')))
   addCv(@Param('mentorId') mentorId: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
     return this.mentorMediaService.addCv(mentorId, file);
   }
 
   @Get('paginated')
-  @Roles({ resource: 'mentors', action: 'read' })
+  @Rbac({ resource: 'mentors', action: 'read' })
   findPaginated(@Query() query: FilterMentorsDto): Promise<[MentorProfile[], number]> {
     return this.mentorsService.findFiltered(query);
   }
 
   @Patch(':mentorId/approve')
-  @Roles({ resource: 'mentorApplications', action: 'update' })
+  @Rbac({ resource: 'mentorApplications', action: 'update' })
   approve(@Param('mentorId') mentorId: string): Promise<MentorProfile> {
     return this.mentorsService.approve(mentorId);
   }
 
   @Patch(':mentorId/reject')
-  @Roles({ resource: 'mentorApplications', action: 'update' })
+  @Rbac({ resource: 'mentorApplications', action: 'update' })
   reject(@Param('mentorId') mentorId: string): Promise<MentorProfile> {
     return this.mentorsService.reject(mentorId);
   }
@@ -84,25 +84,25 @@ export class MentorsController {
   }
 
   @Get()
-  @Roles({ resource: 'mentors', action: 'read' })
+  @Rbac({ resource: 'mentors', action: 'read' })
   findApproved(): Promise<MentorProfile[]> {
     return this.mentorsService.findApproved();
   }
 
   @Get(':mentorId')
-  @Roles({ resource: 'mentors', action: 'read' })
+  @Rbac({ resource: 'mentors', action: 'read' })
   findOne(@Param('mentorId') mentorId: string): Promise<MentorProfile> {
     return this.mentorsService.findOne(mentorId);
   }
 
   @Patch(':mentorId')
-  @Roles({ resource: 'mentors', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'mentors', action: 'update', possession: 'own' })
   update(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorRequestDto): Promise<MentorProfile> {
     return this.mentorsService.update(mentorId, dto);
   }
 
   @Delete(':mentorId')
-  @Roles({ resource: 'mentors', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'mentors', action: 'delete', possession: 'own' })
   remove(@Param('mentorId') mentorId: string): Promise<void> {
     return this.mentorsService.remove(mentorId);
   }

@@ -4,7 +4,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProjectCategory as Category } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('project-categories')
@@ -12,7 +12,7 @@ export class ProjectCategoriesController {
   constructor(private readonly projectCategoriesService: ProjectCategoriesService) {}
 
   @Post()
-  @Roles({ resource: 'projectCategories', action: 'create' })
+  @Rbac({ resource: 'projectCategories', action: 'create' })
   create(@Body() dto: CreateCategoryDto): Promise<Category> {
     return this.projectCategoriesService.create(dto);
   }
@@ -24,25 +24,25 @@ export class ProjectCategoriesController {
   }
 
   @Get('paginated')
-  @Roles({ resource: 'projectCategories', action: 'read' })
+  @Rbac({ resource: 'projectCategories', action: 'read' })
   findPaginated(@Query() query: QueryParams): Promise<[Category[], number]> {
     return this.projectCategoriesService.findAllPaginated(query);
   }
 
   @Get(':id')
-  @Roles({ resource: 'projectCategories', action: 'read' })
+  @Rbac({ resource: 'projectCategories', action: 'read' })
   findOne(@Param('id') id: string): Promise<Category> {
     return this.projectCategoriesService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles({ resource: 'projectCategories', action: 'update' })
+  @Rbac({ resource: 'projectCategories', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateCategoryDto): Promise<Category> {
     return this.projectCategoriesService.update(id, dto);
   }
 
   @Delete(':id')
-  @Roles({ resource: 'projectCategories', action: 'delete' })
+  @Rbac({ resource: 'projectCategories', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.projectCategoriesService.remove(id);
   }

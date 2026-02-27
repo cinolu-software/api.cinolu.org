@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { promises as fs } from 'fs';
-import { GalleriesService } from '@/modules/galleries/galleries.service';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { Project } from '../entities/project.entity';
 import { ProjectsService } from './projects.service';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
+import { GalleriesService } from '@/shared/galleries/galleries.service';
 
 @Injectable()
 export class ProjectMediaService {

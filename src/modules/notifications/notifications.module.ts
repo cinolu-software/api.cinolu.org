@@ -6,11 +6,12 @@ import { Notification } from './entities/notification.entity';
 import { NotificationAttachment } from './entities/attachment.entity';
 import { UsersModule } from '../users/users.module';
 import { NotificationAttachmentsService } from './services/notification-attachments.service';
+import { NOTIFICATIONS_RBAC } from './notifications-rbac';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Notification, NotificationAttachment]), UsersModule],
   controllers: [NotificationsController],
-  providers: [NotificationsService, NotificationAttachmentsService],
+  providers: [NotificationsService, NotificationAttachmentsService, NOTIFICATIONS_RBAC],
   exports: [NotificationsService]
 })
 export class NotificationsModule {}

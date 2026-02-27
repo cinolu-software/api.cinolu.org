@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { GalleriesService } from '@/modules/galleries/galleries.service';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { ProductsService } from './products.service';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
+import { GalleriesService } from '@/shared/galleries/galleries.service';
 
 @Injectable()
 export class ProductMediaService {

@@ -8,7 +8,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthModule } from './core/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { EventsModule } from './modules/events/events.module';
-import { GalleriesModule } from './modules/galleries/galleries.module';
 import { HighlightsModule } from './modules/highlights/highlights.module';
 import { ProgramsModule } from './modules/programs/programs.module';
 import { ProjectsModule } from './modules/projects/projects.module';
@@ -23,7 +22,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { RoleGuard } from './core/auth/guards/role.guard';
+import { RbacGuard } from './core/auth/guards/rbac.guard';
+import { GalleriesModule } from './shared/galleries/galleries.module';
 
 @Module({
   imports: [
@@ -100,7 +100,7 @@ import { RoleGuard } from './core/auth/guards/role.guard';
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: RoleGuard },
+    { provide: APP_GUARD, useClass: RbacGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]
 })

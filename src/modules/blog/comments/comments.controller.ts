@@ -6,7 +6,7 @@ import { Comment } from './entities/comment.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
-import { Roles } from '@/core/auth/decorators/role.decorator';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('comments')
@@ -19,7 +19,7 @@ export class CommentsController {
   }
 
   @Get()
-  @Roles({ resource: 'comments', action: 'read' })
+  @Rbac({ resource: 'comments', action: 'read' })
   findAll(): Promise<Comment[]> {
     return this.commentsService.findAll();
   }
@@ -31,19 +31,19 @@ export class CommentsController {
   }
 
   @Get(':id')
-  @Roles({ resource: 'comments', action: 'read' })
+  @Rbac({ resource: 'comments', action: 'read' })
   findOne(@Param('id') id: string): Promise<Comment> {
     return this.commentsService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles({ resource: 'comments', action: 'update' })
+  @Rbac({ resource: 'comments', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateCommentDto): Promise<Comment> {
     return this.commentsService.update(id, dto);
   }
 
   @Delete(':id')
-  @Roles({ resource: 'comments', action: 'delete' })
+  @Rbac({ resource: 'comments', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.commentsService.remove(id);
   }

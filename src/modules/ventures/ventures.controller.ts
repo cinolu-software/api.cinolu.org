@@ -20,9 +20,9 @@ import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
-import { Roles } from '@/core/auth/decorators/role.decorator';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
+import { Rbac } from '@/core/auth/decorators/rbac.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('ventures')
 export class VenturesController {
@@ -43,7 +43,7 @@ export class VenturesController {
   }
 
   @Get()
-  @Roles({ resource: 'ventures', action: 'read', possession: 'any' })
+  @Rbac({ resource: 'ventures', action: 'read' })
   findAll(@Query() query: FilterVenturesDto): Promise<[Venture[], number]> {
     return this.venturesService.findAll(query);
   }
@@ -55,7 +55,7 @@ export class VenturesController {
   }
 
   @Patch('by-slug/:slug/publish')
-  @Roles({ resource: 'publishVenture', action: 'update' })
+  @Rbac({ resource: 'publishVenture', action: 'update' })
   togglePublish(@Param('slug') slug: string): Promise<Venture> {
     return this.venturesService.togglePublish(slug);
   }
@@ -71,14 +71,14 @@ export class VenturesController {
   }
 
   @Post(':ventureId/gallery')
-  @Roles({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.ventureMediaService.addImage(ventureId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @Roles({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
     return this.ventureMediaService.removeImage(galleryId);
   }
@@ -90,14 +90,14 @@ export class VenturesController {
   }
 
   @Post(':ventureId/logo')
-  @Roles({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/ventures/logos')))
   addLogo(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addLogo(ventureId, file);
   }
 
   @Post(':ventureId/cover')
-  @Roles({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
   @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/ventures/covers')))
   addCover(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addCover(ventureId, file);
@@ -109,13 +109,13 @@ export class VenturesController {
   }
 
   @Patch(':slug')
-  @Roles({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
   update(@Param('slug') slug: string, @Body() dto: UpdateVentureDto): Promise<Venture> {
     return this.venturesService.update(slug, dto);
   }
 
   @Delete(':id')
-  @Roles({ resource: 'ventures', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'delete', possession: 'own' })
   remove(@Param('id') id: string): Promise<void> {
     return this.venturesService.remove(id);
   }

@@ -58,12 +58,12 @@ export class AuthController {
   }
 
   @Get('me')
-  findMe(@CurrentUser() user: User): Promise<User> {
+  profile(@CurrentUser() user: User): Promise<User> {
     return this.authService.profile(user);
   }
 
   @Patch('me')
-  updateMe(@CurrentUser() user: User, @Body() dto: UpdateUserDto): Promise<User> {
+  updateProfile(@CurrentUser() user: User, @Body() dto: UpdateUserDto): Promise<User> {
     return this.authService.updateProfile(user, dto);
   }
 

@@ -4,12 +4,12 @@ import { ArticlesController } from './articles.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Article } from './entities/article.entity';
 import { ArticlesSubscriber } from './subscribers/articles.subscriber';
-import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { ArticleMediaService } from './services/article-media.service';
+import { GalleriesModule } from '@/shared/galleries/galleries.module';
 
 @Module({
-  controllers: [ArticlesController],
+  imports: [TypeOrmModule.forFeature([Article]), GalleriesModule],
   providers: [ArticlesService, ArticleMediaService, ArticlesSubscriber],
-  imports: [TypeOrmModule.forFeature([Article]), GalleriesModule]
+  controllers: [ArticlesController]
 })
 export class ArticlesModule {}

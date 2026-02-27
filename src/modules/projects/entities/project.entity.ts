@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { User } from '@/modules/users/entities/user.entity';
 import { Subprogram } from '@/modules/subprograms/entities/subprogram.entity';
 import { ProjectCategory } from '../categories/entities/category.entity';
 import { Phase } from '../phases/entities/phase.entity';
 import { ProjectParticipation } from './project-participation.entity';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Entity()
 export class Project extends AbstractEntity {

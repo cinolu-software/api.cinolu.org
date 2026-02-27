@@ -4,8 +4,8 @@ import { ProductsController } from './products.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { ProductSubscriber } from './subscribers/product.subscriber';
-import { GalleriesModule } from '@/modules/galleries/galleries.module';
 import { ProductMediaService } from './services/product-media.service';
+import { GalleriesModule } from '@/shared/galleries/galleries.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product]), GalleriesModule],

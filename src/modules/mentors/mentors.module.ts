@@ -9,11 +9,12 @@ import { UsersModule } from '../users/users.module';
 import { MentorExperiencesService } from './services/mentor-experiences.service';
 import { MentorsEmailService } from './services/mentors-email.service';
 import { MentorMediaService } from './services/mentor-media.service';
+import { MENTORS_RBAC } from './mentors-rbac';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MentorProfile, Experience]), ExpertisesModule, UsersModule],
   controllers: [MentorsController],
-  providers: [MentorsService, MentorMediaService, MentorExperiencesService, MentorsEmailService],
+  providers: [MentorsService, MentorMediaService, MentorExperiencesService, MentorsEmailService, MENTORS_RBAC],
   exports: [MentorsService]
 })
 export class MentorsModule {}

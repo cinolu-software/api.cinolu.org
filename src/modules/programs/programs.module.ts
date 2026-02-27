@@ -6,11 +6,12 @@ import { Program } from './entities/program.entity';
 import { ProgramSubscriber } from './subscribers/program.subscriber';
 import { ProgramCategoriesModule } from './categories/categories.module';
 import { ProgramMediaService } from './services/program-media.service';
+import { PROGRAMS_RBAC } from './programs-rbac';
 
 @Module({
   imports: [ProgramCategoriesModule, TypeOrmModule.forFeature([Program])],
   controllers: [ProgramsController],
-  providers: [ProgramsService, ProgramMediaService, ProgramSubscriber],
+  providers: [ProgramsService, ProgramMediaService, ProgramSubscriber, PROGRAMS_RBAC],
   exports: [ProgramsService]
 })
 export class ProgramsModule {}

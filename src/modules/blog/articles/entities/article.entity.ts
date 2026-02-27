@@ -2,8 +2,8 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany
 import { Tag } from '../../tags/entities/tag.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { User } from '@/modules/users/entities/user.entity';
-import { Gallery } from '@/modules/galleries/entities/gallery.entity';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
+import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Entity()
 export class Article extends AbstractEntity {
