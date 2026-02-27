@@ -19,7 +19,7 @@ import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { Public } from '@/core/auth/decorators/public.decorator';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 
 @Controller('programs')
 export class ProgramsController {
@@ -29,7 +29,7 @@ export class ProgramsController {
   ) {}
 
   @Post()
-  @UseRoles({ resource: 'programs', action: 'create' })
+  @Roles({ resource: 'programs', action: 'create' })
   create(@Body() dto: CreateProgramDto): Promise<Program> {
     return this.programsService.create(dto);
   }
@@ -41,13 +41,13 @@ export class ProgramsController {
   }
 
   @Patch(':programId/publish')
-  @UseRoles({ resource: 'programs', action: 'update' })
+  @Roles({ resource: 'programs', action: 'update' })
   togglePublish(@Param('programId') programId: string): Promise<Program> {
     return this.programsService.togglePublish(programId);
   }
 
   @Post(':programId/logo')
-  @UseRoles({ resource: 'programs', action: 'update' })
+  @Roles({ resource: 'programs', action: 'update' })
   @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/programs')))
   addLogo(@Param('programId') programId: string, @UploadedFile() file: Express.Multer.File): Promise<Program> {
     return this.programMediaService.addLogo(programId, file);
@@ -66,31 +66,31 @@ export class ProgramsController {
   }
 
   @Get('paginated')
-  @UseRoles({ resource: 'programs', action: 'read' })
+  @Roles({ resource: 'programs', action: 'read' })
   findPaginated(@Query() query: FilterProgramsDto): Promise<[Program[], number]> {
     return this.programsService.findFiltered(query);
   }
 
   @Get(':programId')
-  @UseRoles({ resource: 'programs', action: 'update' })
+  @Roles({ resource: 'programs', action: 'update' })
   findOne(@Param('programId') programId: string): Promise<Program> {
     return this.programsService.findOne(programId);
   }
 
   @Patch(':programId/highlight')
-  @UseRoles({ resource: 'programs', action: 'update' })
+  @Roles({ resource: 'programs', action: 'update' })
   toggleHighlight(@Param('programId') programId: string): Promise<Program> {
     return this.programsService.highlight(programId);
   }
 
   @Patch(':programId')
-  @UseRoles({ resource: 'programs', action: 'update' })
+  @Roles({ resource: 'programs', action: 'update' })
   update(@Param('programId') programId: string, @Body() dto: UpdateProgramDto): Promise<Program> {
     return this.programsService.update(programId, dto);
   }
 
   @Delete(':programId')
-  @UseRoles({ resource: 'programs', action: 'delete' })
+  @Roles({ resource: 'programs', action: 'delete' })
   remove(@Param('programId') programId: string): Promise<void> {
     return this.programsService.remove(programId);
   }

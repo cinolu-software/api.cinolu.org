@@ -4,20 +4,20 @@ import { CreateExpertiseDto } from './dto/create-expertise.dto';
 import { UpdateExpertiseDto } from './dto/update-expertise.dto';
 import { Expertise } from './entities/expertise.entity';
 import { FilterExpertisesDto } from './dto/filter-expertises.dto';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 
 @Controller('expertises')
 export class ExpertisesController {
   constructor(private readonly expertisesService: ExpertisesService) {}
 
   @Post()
-  @UseRoles({ resource: 'expertises', action: 'create' })
+  @Roles({ resource: 'expertises', action: 'create' })
   create(@Body() dto: CreateExpertiseDto): Promise<Expertise> {
     return this.expertisesService.create(dto);
   }
 
   @Get('paginated')
-  @UseRoles({ resource: 'expertises', action: 'read' })
+  @Roles({ resource: 'expertises', action: 'read' })
   findPaginated(@Query() query: FilterExpertisesDto): Promise<[Expertise[], number]> {
     return this.expertisesService.findFiltered(query);
   }
@@ -28,19 +28,19 @@ export class ExpertisesController {
   }
 
   @Get(':id')
-  @UseRoles({ resource: 'expertises', action: 'read' })
+  @Roles({ resource: 'expertises', action: 'read' })
   findOne(@Param('id') id: string): Promise<Expertise> {
     return this.expertisesService.findOne(id);
   }
 
   @Patch(':id')
-  @UseRoles({ resource: 'expertises', action: 'update' })
+  @Roles({ resource: 'expertises', action: 'update' })
   update(@Param('id') id: string, @Body() dto: UpdateExpertiseDto): Promise<Expertise> {
     return this.expertisesService.update(id, dto);
   }
 
   @Delete(':id')
-  @UseRoles({ resource: 'expertises', action: 'delete' })
+  @Roles({ resource: 'expertises', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.expertisesService.remove(id);
   }

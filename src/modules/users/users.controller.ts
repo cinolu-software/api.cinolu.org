@@ -25,7 +25,7 @@ import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -42,7 +42,7 @@ export class UsersController {
   }
 
   @Get('staff')
-  @UseRoles({ resource: 'users', action: 'read' })
+  @Roles({ resource: 'users', action: 'read' })
   async findStaff(): Promise<User[]> {
     return this.usersService.findStaff();
   }
@@ -65,32 +65,32 @@ export class UsersController {
   }
 
   @Post()
-  @UseRoles({ resource: 'users', action: 'create' })
+  @Roles({ resource: 'users', action: 'create' })
   create(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }
 
   @Get('export/users.csv')
-  @UseRoles({ resource: 'exportUsersCSV', action: 'read' })
+  @Roles({ resource: 'exportUsersCSV', action: 'read' })
   async exportCSV(@Query() query: FilterUsersDto, @Res() res: Response): Promise<void> {
     await this.usersExportService.exportCSV(query, res);
   }
 
   @Get('search')
-  @UseRoles({ resource: 'users', action: 'read' })
+  @Roles({ resource: 'users', action: 'read' })
   search(@Query('term') term: string): Promise<User[]> {
     return this.usersService.search(term);
   }
 
   @Post('import-csv')
-  @UseRoles({ resource: 'users', action: 'create' })
+  @Roles({ resource: 'users', action: 'create' })
   @UseInterceptors(FileInterceptor('file', createCsvUploadOptions()))
   importCsv(@UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.usersService.importCsv(file);
   }
 
   @Get()
-  @UseRoles({ resource: 'users', action: 'read' })
+  @Roles({ resource: 'users', action: 'read' })
   findAll(@Query() query: FilterUsersDto): Promise<[User[], number]> {
     return this.usersService.findAll(query);
   }
@@ -108,7 +108,7 @@ export class UsersController {
   }
 
   @Patch(':userId')
-  @UseRoles({ resource: 'users', action: 'update' })
+  @Roles({ resource: 'users', action: 'update' })
   update(@Param('userId') userId: string, @Body() dto: UpdateUserDto): Promise<User> {
     return this.usersService.update(userId, dto);
   }
@@ -120,7 +120,7 @@ export class UsersController {
   }
 
   @Delete(':userId')
-  @UseRoles({ resource: 'users', action: 'delete' })
+  @Roles({ resource: 'users', action: 'delete' })
   remove(@Param('userId') userId: string): Promise<void> {
     return this.usersService.remove(userId);
   }

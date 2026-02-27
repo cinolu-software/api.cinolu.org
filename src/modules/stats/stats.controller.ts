@@ -4,7 +4,7 @@ import { IUSerStats } from './types/user-stats.type';
 import { IAdminStatsGeneral, IAdminStatsByYear } from './types/admin-stats.type';
 import { CurrentUser } from '../../core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
 
 @Controller('stats')
@@ -17,7 +17,7 @@ export class StatsController {
   }
 
   @Get('admin/overview')
-  @UseRoles({ resource: 'stats', action: 'read' })
+  @Roles({ resource: 'stats', action: 'read' })
   async findAdminOverview(): Promise<IAdminStatsGeneral> {
     return await this.statsService.findAdminStatsGeneral();
   }

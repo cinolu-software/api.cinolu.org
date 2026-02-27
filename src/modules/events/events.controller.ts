@@ -19,7 +19,7 @@ import { Event } from './entities/event.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterEventsDto } from './dto/filter-events.dto';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 import { Public } from '@/core/auth/decorators/public.decorator';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
 import { User } from '@/modules/users/entities/user.entity';
@@ -34,13 +34,13 @@ export class EventsController {
   ) {}
 
   @Post()
-  @UseRoles({ resource: 'events', action: 'create' })
+  @Roles({ resource: 'events', action: 'create' })
   create(@Body() dto: CreateEventDto): Promise<Event> {
     return this.eventsService.create(dto);
   }
 
   @Get()
-  @UseRoles({ resource: 'events', action: 'read' })
+  @Roles({ resource: 'events', action: 'read' })
   findAll(@Query() query: FilterEventsDto): Promise<[Event[], number]> {
     return this.eventsService.findAll(query);
   }
@@ -64,32 +64,32 @@ export class EventsController {
   }
 
   @Get(':eventId')
-  @UseRoles({ resource: 'events', action: 'read' })
+  @Roles({ resource: 'events', action: 'read' })
   findOne(@Param('eventId') eventId: string): Promise<Event> {
     return this.eventsService.findOne(eventId);
   }
 
   @Post(':eventId/participate')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   participate(@Param('eventId') eventId: string, @CurrentUser() user: User): Promise<Event> {
     return this.eventParticipationService.participate(eventId, user);
   }
 
   @Patch(':eventId/publish')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   togglePublish(@Param('eventId') eventId: string): Promise<Event> {
     return this.eventsService.togglePublish(eventId);
   }
 
   @Post(':eventId/gallery')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.eventMediaService.addImage(eventId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
     return this.eventMediaService.removeGallery(galleryId);
   }
@@ -101,26 +101,26 @@ export class EventsController {
   }
 
   @Post(':eventId/cover')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/events')))
   addCover(@Param('eventId') eventId: string, @UploadedFile() file: Express.Multer.File): Promise<Event> {
     return this.eventMediaService.addCover(eventId, file);
   }
 
   @Patch(':eventId/highlight')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   toggleHighlight(@Param('eventId') eventId: string): Promise<Event> {
     return this.eventsService.highlight(eventId);
   }
 
   @Patch(':eventId')
-  @UseRoles({ resource: 'events', action: 'update' })
+  @Roles({ resource: 'events', action: 'update' })
   update(@Param('eventId') eventId: string, @Body() dto: UpdateEventDto): Promise<Event> {
     return this.eventsService.update(eventId, dto);
   }
 
   @Delete(':eventId')
-  @UseRoles({ resource: 'events', action: 'delete' })
+  @Roles({ resource: 'events', action: 'delete' })
   remove(@Param('eventId') eventId: string): Promise<void> {
     return this.eventsService.remove(eventId);
   }

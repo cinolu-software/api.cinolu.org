@@ -5,9 +5,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { JwtModule } from '@nestjs/jwt';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AccessControlModule, ACGuard } from 'nest-access-control';
 import { AuthModule } from './core/auth/auth.module';
-import { RBAC_POLICY } from './core/auth/rbac-policy';
 import { BlogModule } from './modules/blog/blog.module';
 import { EventsModule } from './modules/events/events.module';
 import { GalleriesModule } from './modules/galleries/galleries.module';
@@ -25,11 +23,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { RoleGuard } from './core/auth/guards/role.guard';
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
-    AccessControlModule.forRoles(RBAC_POLICY),
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, '../../'),
       renderPath: '/uploads'
@@ -102,7 +100,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: ACGuard },
+    { provide: APP_GUARD, useClass: RoleGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]
 })

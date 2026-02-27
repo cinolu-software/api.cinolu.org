@@ -13,7 +13,7 @@ import {
 import { NotificationsService } from './services/notifications.service';
 import { NotificationAttachmentsService } from './services/notification-attachments.service';
 import { Notification } from './entities/notification.entity';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { NotificationAttachment } from './entities/attachment.entity';
@@ -28,7 +28,7 @@ export class NotificationsController {
   ) {}
 
   @Get('project/:projectId')
-  @UseRoles({ resource: 'projects', action: 'read' })
+  @Roles({ resource: 'projects', action: 'read' })
   findAllByProject(
     @Param('projectId') projectId: string,
     @Query() query: FilterNotificationsDto
@@ -37,13 +37,13 @@ export class NotificationsController {
   }
 
   @Patch(':notificationId')
-  @UseRoles({ resource: 'notifications', action: 'update' })
+  @Roles({ resource: 'notifications', action: 'update' })
   update(@Param('notificationId') notificationId: string, @Body() dto: UpdateNotificationDto): Promise<Notification> {
     return this.notificationsService.update(notificationId, dto);
   }
 
   @Post(':notificationId/attachments')
-  @UseRoles({ resource: 'notifications', action: 'update' })
+  @Roles({ resource: 'notifications', action: 'update' })
   @UseInterceptors(FilesInterceptor('attachments', 10, createDiskUploadOptions('./uploads/notifications')))
   addAttachments(
     @Param('notificationId') notificationId: string,
@@ -53,7 +53,7 @@ export class NotificationsController {
   }
 
   @Delete(':notificationId')
-  @UseRoles({ resource: 'notifications', action: 'delete' })
+  @Roles({ resource: 'notifications', action: 'delete' })
   remove(@Param('notificationId') notificationId: string): Promise<void> {
     return this.notificationsService.remove(notificationId);
   }

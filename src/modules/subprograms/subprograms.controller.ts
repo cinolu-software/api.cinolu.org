@@ -7,7 +7,7 @@ import { Subprogram } from './entities/subprogram.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { Public } from '@/core/auth/decorators/public.decorator';
-import { UseRoles } from 'nest-access-control';
+import { Roles } from '@/core/auth/decorators/role.decorator';
 
 @Controller('subprograms')
 export class SubprogramsController {
@@ -17,7 +17,7 @@ export class SubprogramsController {
   ) {}
 
   @Post()
-  @UseRoles({ resource: 'subprograms', action: 'create' })
+  @Roles({ resource: 'subprograms', action: 'create' })
   create(@Body() dto: CreateSubprogramDto): Promise<Subprogram> {
     return this.subprogramsService.create(dto);
   }
@@ -29,13 +29,13 @@ export class SubprogramsController {
   }
 
   @Patch(':subprogramId/publish')
-  @UseRoles({ resource: 'subprograms', action: 'update' })
+  @Roles({ resource: 'subprograms', action: 'update' })
   togglePublish(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
     return this.subprogramsService.togglePublish(subprogramId);
   }
 
   @Post(':subprogramId/logo')
-  @UseRoles({ resource: 'subprograms', action: 'update' })
+  @Roles({ resource: 'subprograms', action: 'update' })
   @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/subprograms')))
   addLogo(@Param('subprogramId') subprogramId: string, @UploadedFile() file: Express.Multer.File): Promise<Subprogram> {
     return this.subprogramMediaService.addLogo(subprogramId, file);
@@ -54,25 +54,25 @@ export class SubprogramsController {
   }
 
   @Get(':subprogramId')
-  @UseRoles({ resource: 'subprograms', action: 'update' })
+  @Roles({ resource: 'subprograms', action: 'update' })
   findOne(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
     return this.subprogramsService.findOne(subprogramId);
   }
 
   @Patch(':subprogramId/highlight')
-  @UseRoles({ resource: 'subprograms', action: 'update' })
+  @Roles({ resource: 'subprograms', action: 'update' })
   toggleHighlight(@Param('subprogramId') subprogramId: string): Promise<Subprogram> {
     return this.subprogramsService.highlight(subprogramId);
   }
 
   @Patch(':subprogramId')
-  @UseRoles({ resource: 'subprograms', action: 'update' })
+  @Roles({ resource: 'subprograms', action: 'update' })
   update(@Param('subprogramId') subprogramId: string, @Body() dto: UpdateSubprogramDto): Promise<Subprogram> {
     return this.subprogramsService.update(subprogramId, dto);
   }
 
   @Delete(':subprogramId')
-  @UseRoles({ resource: 'subprograms', action: 'delete' })
+  @Roles({ resource: 'subprograms', action: 'delete' })
   remove(@Param('subprogramId') subprogramId: string): Promise<void> {
     return this.subprogramsService.remove(subprogramId);
   }
