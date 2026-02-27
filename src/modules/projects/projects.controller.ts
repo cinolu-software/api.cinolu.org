@@ -71,6 +71,16 @@ export class ProjectsController {
     return this.participationService.removeParticipantsFromPhase(dto);
   }
 
+  @Post('participations/:participationId/upvote')
+  async upvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
+    return await this.participationService.upvote(participationId, user.id);
+  }
+
+  @Delete('participations/:participationId/upvote')
+  async unvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
+    return await this.participationService.unvote(participationId, user.id);
+  }
+
   @Get('published')
   @Public()
   findPublished(@Query() query: FilterProjectsDto): Promise<[Project[], number]> {
@@ -90,16 +100,6 @@ export class ProjectsController {
     @Body() dto: ParticipateProjectDto
   ): Promise<void> {
     return this.participationService.participate(projectId, user, dto);
-  }
-
-  @Post('participations/:participationId/upvote')
-  async upvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
-    return await this.participationService.upvote(participationId, user.id);
-  }
-
-  @Delete('participations/:participationId/upvote')
-  async unvote(@Param('participationId') participationId: string, @CurrentUser() user: User) {
-    return await this.participationService.unvote(participationId, user.id);
   }
 
   @Get('me/participations')
