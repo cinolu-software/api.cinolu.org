@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import CreateUserDto from '../dto/create-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 import { RolesService } from '../roles/roles.service';
@@ -58,7 +58,7 @@ export class UsersService {
       return await this.userRepository.save({
         ...dto,
         password: 'user1234',
-        referral_code: this.generateRefferalCode(),
+        referral_code: this.generateReferralCode(),
         roles: dto.roles?.map((id) => ({ id }))
       });
     } catch {
@@ -78,7 +78,7 @@ export class UsersService {
     }
   }
 
-  private generateRefferalCode(): string {
+  private generateReferralCode(): string {
     return randomBytes(9).toString('base64url');
   }
 
@@ -110,7 +110,7 @@ export class UsersService {
     }
   }
 
-  async refferedBy(referral_code: string): Promise<User> {
+  async referredBy(referral_code: string): Promise<User> {
     try {
       return await this.userRepository.findOne({
         where: { referral_code }
@@ -124,11 +124,11 @@ export class UsersService {
     try {
       const role = await this.rolesService.findByName('user');
       let referredBy: User | null = null;
-      if (dto.referral_code) referredBy = await this.refferedBy(dto.referral_code);
+      if (dto.referral_code) referredBy = await this.referredBy(dto.referral_code);
       const newUser = await this.userRepository.save({
         ...dto,
         referred_by: referredBy ? { id: referredBy.id } : null,
-        referral_code: this.generateRefferalCode(),
+        referral_code: this.generateReferralCode(),
         roles: [{ id: role.id }]
       });
       if (referredBy) {
@@ -190,7 +190,7 @@ export class UsersService {
       const role = await this.rolesService.findByName('user');
       const newUser = await this.userRepository.save({
         ...dto,
-        referral_code: this.generateRefferalCode(),
+        referral_code: this.generateReferralCode(),
         roles: [role]
       });
       return await this.findOne(newUser.id);

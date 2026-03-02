@@ -1,7 +1,19 @@
-export interface FilterProjectsDto {
-  page?: string | null;
-  q?: string | null;
-  categories?: string[] | string;
-  status?: 'past' | 'current' | 'future' | null;
+import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+import { Transform } from 'class-transformer';
+import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
+
+export class FilterProjectsDto extends PaginatedQueryDto {
+  @IsOptional()
+  @Transform(({ value }) => (Array.isArray(value) ? value : value ? [value] : undefined))
+  @IsArray()
+  @IsString({ each: true })
+  categories?: string[];
+
+  @IsOptional()
+  @IsIn(['past', 'current', 'future'])
+  status?: 'past' | 'current' | 'future';
+
+  @IsOptional()
+  @IsIn(['all', 'published', 'drafts', 'highlighted'])
   filter?: 'all' | 'published' | 'drafts' | 'highlighted';
 }

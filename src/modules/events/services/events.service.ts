@@ -37,7 +37,7 @@ export class EventsService {
     if (filter === 'drafts') query.andWhere('e.is_published = :isPublished', { isPublished: false });
     if (filter === 'highlighted') query.andWhere('e.is_highlighted = :isHighlighted', { isHighlighted: true });
     if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
-    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
+    if (categories?.length) query.andWhere('categories.id IN (:...categories)', { categories });
     return await query
       .skip((+page - 1) * 20)
       .take(20)
@@ -52,7 +52,7 @@ export class EventsService {
       .leftJoinAndSelect('e.categories', 'categories')
       .andWhere('e.is_published = :is_published', { is_published: true });
     if (q) query.andWhere('(e.name LIKE :q OR e.description LIKE :q)', { q: `%${q}%` });
-    if (categories) query.andWhere('categories.id IN (:categories)', { categories });
+    if (categories?.length) query.andWhere('categories.id IN (:...categories)', { categories });
     return await query.skip(skip).take(40).orderBy('e.started_at', 'DESC').getManyAndCount();
   }
 
@@ -137,8 +137,8 @@ export class EventsService {
         ...event,
         ...dto,
         event_manager: dto.event_manager ? { id: dto.event_manager } : event.event_manager,
-        program: { id: dto.program },
-        categories: dto?.categories.map((type) => ({ id: type })) || event.categories
+        program: dto.program ? { id: dto.program } : event.program,
+        categories: dto.categories?.map((type) => ({ id: type })) || event.categories
       });
     } catch {
       throw new BadRequestException();

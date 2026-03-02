@@ -8,5 +8,5 @@ export class EventCategory extends AbstractEntity {
   name: string;
 
   @ManyToMany(() => Event, (event) => event.categories)
-  event: Event[];
+  events: Event[];
 }

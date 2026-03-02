@@ -20,7 +20,7 @@ import { UsersService } from './services/users.service';
 import { UsersReferralService } from './services/users-referral.service';
 import { UsersExportService } from './services/users-export.service';
 import { UserMediaService } from './services/user-media.service';
-import CreateUserDto from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
 import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
@@ -37,8 +37,8 @@ export class UsersController {
   ) {}
 
   @Post('referral-code/generate')
-  async generateRefferalLink(@CurrentUser() user: User): Promise<User> {
-    return this.usersReferralService.saveRefferalCode(user);
+  async generateReferralLink(@CurrentUser() user: User): Promise<User> {
+    return this.usersReferralService.saveReferralCode(user);
   }
 
   @Get('staff')
@@ -61,7 +61,7 @@ export class UsersController {
 
   @Get('me/referred-users')
   async findReferredUsers(@Query('page') page: number, @CurrentUser() user: User): Promise<[User[], number]> {
-    return this.usersReferralService.refferedUsers(page, user);
+    return this.usersReferralService.referredUsers(page, user);
   }
 
   @Post()

@@ -155,7 +155,7 @@ export class ProjectsService {
         ...dto,
         project_manager: { id: dto?.project_manager ?? project.project_manager.id },
         program: { id: dto?.program ?? project.program.id },
-        categories: dto?.categories.map((type) => ({ id: type })) || project.categories
+        categories: dto.categories?.map((type) => ({ id: type })) || project.categories
       });
     } catch {
       throw new BadRequestException();

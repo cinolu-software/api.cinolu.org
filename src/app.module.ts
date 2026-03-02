@@ -43,8 +43,7 @@ import { EmailModule } from './core/email/email.module';
     EventsModule,
     ProjectsModule,
     MentorsModule,
-    NotificationsModule,
-    EmailModule
+    NotificationsModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

@@ -10,9 +10,4 @@ export class RBACModule {
       providers: createRbacProviders(policies)
     };
   }
-
-  // Backward-compatible alias for common typo.
-  static foreFeature(policies: ModuleRbacPolicy[]): DynamicModule {
-    return RBACModule.forFeature(policies);
-  }
 }

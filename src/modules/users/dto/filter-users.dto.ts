@@ -1,4 +1,3 @@
-export interface FilterUsersDto {
-  page: string | null;
-  q: string | null;
-}
+import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+
+export class FilterUsersDto extends PaginatedQueryDto {}

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException, Req, Res } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
@@ -8,7 +8,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { UsersService } from '@/modules/users/services/users.service';
 import { SignUpDto } from '../dto/sign-up.dto';
 import { ContactSupportDto } from '../dto/contact-support.dto';
-import CreateUserDto from '@/modules/users/dto/create-user.dto';
+import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
 
 @Injectable()
@@ -36,12 +36,12 @@ export class AuthService {
     }
   }
 
-  async signInWithGoogle(@Res() res: Response): Promise<void> {
+  async signInWithGoogle(res: Response): Promise<void> {
     const frontendUri = this.configService.get<string>('FRONTEND_URI');
     return res.redirect(frontendUri);
   }
 
-  async signIn(@Req() req: Request): Promise<User> {
+  async signIn(req: Request): Promise<User> {
     if (!req.user) {
       throw new UnauthorizedException('Non autorisé');
     }
@@ -58,7 +58,7 @@ export class AuthService {
     }
   }
 
-  signOut(@Req() request: Request): void {
+  signOut(request: Request): void {
     request.session.destroy(() => {});
   }
 

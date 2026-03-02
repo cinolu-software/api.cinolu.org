@@ -55,7 +55,7 @@ export class Event extends AbstractEntity {
   @JoinColumn()
   program: Subprogram;
 
-  @ManyToMany(() => EventCategory, (category) => category.event)
+  @ManyToMany(() => EventCategory, (category) => category.events)
   @JoinTable()
   categories: EventCategory[];
 

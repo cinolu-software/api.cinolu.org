@@ -13,10 +13,10 @@ export class UsersReferralService {
     private readonly usersService: UsersService
   ) {}
 
-  async saveRefferalCode(user: User): Promise<User> {
+  async saveReferralCode(user: User): Promise<User> {
     try {
       await this.userRepository.update(user.id, {
-        referral_code: this.generateRefferalCode()
+        referral_code: this.generateReferralCode()
       });
       return await this.usersService.findByEmail(user.email);
     } catch {
@@ -24,7 +24,7 @@ export class UsersReferralService {
     }
   }
 
-  async refferedUsers(page: number, user: User): Promise<[User[], number]> {
+  async referredUsers(page: number, user: User): Promise<[User[], number]> {
     try {
       const take = 20;
       const skip = (+page - 1) * take;
@@ -66,7 +66,7 @@ export class UsersReferralService {
     }
   }
 
-  private generateRefferalCode(): string {
+  private generateReferralCode(): string {
     return randomBytes(9).toString('base64url');
   }
 }

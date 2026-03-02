@@ -1,0 +1,61 @@
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { AbstractEntity } from '@/core/helpers/abstract.entity';
+import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+
+type NameDto = { name: string };
+
+export abstract class BaseCategoryService<T extends AbstractEntity & { name: string }> {
+  protected constructor(protected readonly categoryRepository: Repository<T>) {}
+
+  async create(dto: NameDto): Promise<T> {
+    try {
+      return await this.categoryRepository.save(dto as T);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async findAll(): Promise<T[]> {
+    return this.categoryRepository.find();
+  }
+
+  async findPaginated(queryParams: PaginatedQueryDto): Promise<[T[], number]> {
+    const { page = 1, q } = queryParams;
+    const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
+    if (q) query.where('c.name LIKE :q', { q: `%${q}%` });
+    return query
+      .skip((+page - 1) * 10)
+      .take(10)
+      .getManyAndCount();
+  }
+
+  async findOne(id: string): Promise<T> {
+    try {
+      return await this.categoryRepository
+        .createQueryBuilder('c')
+        .where('c.id = :id', { id })
+        .getOneOrFail();
+    } catch {
+      throw new NotFoundException();
+    }
+  }
+
+  async update(id: string, dto: Partial<NameDto>): Promise<T> {
+    try {
+      const category = await this.findOne(id);
+      return await this.categoryRepository.save({ ...category, ...dto });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    try {
+      await this.findOne(id);
+      await this.categoryRepository.softDelete(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+}
