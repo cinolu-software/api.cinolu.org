@@ -26,8 +26,16 @@ export class ProjectsEmailService {
           await this.mailerService.sendMail({
             to: recipient.email,
             subject,
-            template: 'project-notification',
-            context: { recipient, notification },
+            text: [
+              `Bonjour ${recipient.name},`,
+              '',
+              `Projet: ${notification.project.name}`,
+              `Titre: ${notification.title}`,
+              '',
+              notification.body,
+              '',
+              `Expediteur: ${notification.sender?.name ?? 'CINOLU'}`
+            ].join('\n'),
             ...(attachments && { attachments })
           });
         })

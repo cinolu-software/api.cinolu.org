@@ -14,8 +14,13 @@ export class UsersEmailService {
       await this.mailerService.sendMail({
         to: referredBy.email,
         subject: 'Un nouvel utilisateur a rejoint CINOLU grâce à votre lien de parrainage',
-        template: 'referral-signup',
-        context: { referredBy, newUser }
+        text: [
+          `Bonjour ${referredBy.name},`,
+          '',
+          `${newUser.name} (${newUser.email}) a rejoint CINOLU grace a votre lien de parrainage.`,
+          '',
+          "L'equipe CINOLU"
+        ].join('\n')
       });
     } catch {
       throw new BadRequestException();

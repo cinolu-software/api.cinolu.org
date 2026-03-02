@@ -8,7 +8,7 @@ Backend API for CINOLU, built with NestJS and TypeORM (MariaDB).
 - TypeORM 0.3
 - MariaDB
 - JWT + Passport (including Google OAuth)
-- Handlebars email templates
+- Raw text transactional emails
 
 ## Prerequisites
 
@@ -90,7 +90,6 @@ src/
   modules/    # Domain modules (users, projects, programs, etc.)
   main.ts     # App bootstrap
 migrations/   # TypeORM migrations
-templates/    # Email templates
 uploads/      # Uploaded files served statically
 ```
 

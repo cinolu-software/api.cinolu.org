@@ -39,7 +39,6 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "fast-csv": "^5.0.5",
-    "handlebars": "^4.7.8",
     "mariadb": "^3.4.5",
     "multer": "2.0.2",
     "nodemailer": "7.0.9",
@@ -64,7 +63,6 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
-    "@types/jest": "^30.0.0",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.9.1",
     "@types/nodemailer": "^7.0.2",
@@ -80,21 +78,11 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
-    "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript-eslint": "^8.46.2"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@compodoc/compodoc",
-      "@nestjs/core",
-      "@scarf/scarf",
-      "bcrypt",
-      "unrs-resolver"
-    ]
   }
 }

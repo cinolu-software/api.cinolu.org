@@ -20,7 +20,6 @@ import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
@@ -73,13 +72,6 @@ import { GalleriesModule } from './shared/galleries/galleries.module';
         },
         defaults: {
           from: `Support CINOLU <${configService.get('MAIL_USERNAME')}>`
-        },
-        template: {
-          dir: process.cwd() + '/templates/',
-          adapter: new HandlebarsAdapter(),
-          options: {
-            strict: true
-          }
         },
         isGlobal: true
       })

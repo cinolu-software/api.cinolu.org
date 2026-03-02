@@ -14,8 +14,7 @@ export class AuthEmailService {
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Bienvenue sur CINOLU',
-        template: 'welcome',
-        context: { user }
+        text: [`Bonjour ${user.name},`, '', 'Bienvenue sur CINOLU.', '', "L'equipe CINOLU"].join('\n')
       });
     } catch {
       throw new BadRequestException();
@@ -29,8 +28,16 @@ export class AuthEmailService {
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Réinitialisation du mot de passe',
-        template: 'reset-password',
-        context: { user, link }
+        text: [
+          `Bonjour ${user.name},`,
+          '',
+          'Vous avez demande la reinitialisation de votre mot de passe.',
+          `Lien: ${link}`,
+          '',
+          "Si vous n'etes pas a l'origine de cette demande, ignorez cet email.",
+          '',
+          "L'equipe CINOLU"
+        ].join('\n')
       });
     } catch {
       throw new BadRequestException();
@@ -43,8 +50,17 @@ export class AuthEmailService {
       await this.mailerService.sendMail({
         to: process.env.SUPPORT_EMAIL,
         subject: `One Stop Contact from ${dto.name}`,
-        template: 'contact-us',
-        context: { dto }
+        text: [
+          'New support contact request',
+          '',
+          `Name: ${dto.name}`,
+          `Email: ${dto.email}`,
+          `Country: ${dto.country}`,
+          `Phone: ${dto.phone_number}`,
+          '',
+          'Message:',
+          dto.message
+        ].join('\n')
       });
     } catch {
       throw new BadRequestException();
