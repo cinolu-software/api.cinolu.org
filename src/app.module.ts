@@ -1,10 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { resolve } from 'path';
-import { JwtModule } from '@nestjs/jwt';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthModule } from './core/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { EventsModule } from './modules/events/events.module';
@@ -18,64 +13,24 @@ import { TransformInterceptor } from './core/interceptors/transform.interceptor'
 import { AuthGuard } from './core/auth/guards/auth.guard';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
+import { CoreConfigModule } from './core/config/config.module';
+import { JwtModule } from './core/jwt/jwt.module';
+import { DatabaseModule } from './core/database/database.module';
+import { StaticModule } from './core/static/static.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EmailModule } from './core/email/email.module';
 
 @Module({
   imports: [
+    CoreConfigModule,
+    JwtModule,
+    DatabaseModule,
+    StaticModule,
     EventEmitterModule.forRoot(),
-    ServeStaticModule.forRoot({
-      rootPath: resolve(__dirname, '../../'),
-      renderPath: '/uploads'
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      cache: true
-    }),
-    JwtModule.registerAsync({
-      global: true,
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' }
-      })
-    }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configServie: ConfigService) => ({
-        type: 'mariadb',
-        port: +configServie.get('DB_PORT'),
-        host: configServie.get('DB_HOST'),
-        password: configServie.get('DB_PASSWORD'),
-        database: configServie.get('DB_NAME'),
-        username: configServie.get('DB_USERNAME'),
-        subscribers: ['dist/**/*.subscriber.js'],
-        entities: ['dist/**/*.entity.js'],
-        autoLoadEntities: false,
-        synchronize: false
-      })
-    }),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        transport: {
-          host: configService.get('MAIL_HOST'),
-          port: +configService.get('MAIL_PORT'),
-          auth: {
-            user: configService.get('MAIL_USERNAME'),
-            pass: configService.get('MAIL_PASSWORD')
-          }
-        },
-        defaults: {
-          from: `Support CINOLU <${configService.get('MAIL_USERNAME')}>`
-        },
-        isGlobal: true
-      })
-    }),
+    EmailModule,
     AuthModule,
     UsersModule,
     VenturesModule,
@@ -88,7 +43,8 @@ import { GalleriesModule } from './shared/galleries/galleries.module';
     EventsModule,
     ProjectsModule,
     MentorsModule,
-    NotificationsModule
+    NotificationsModule,
+    EmailModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
