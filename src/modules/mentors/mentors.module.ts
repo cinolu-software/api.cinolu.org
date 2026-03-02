@@ -9,12 +9,18 @@ import { UsersModule } from '../users/users.module';
 import { MentorExperiencesService } from './services/mentor-experiences.service';
 import { MentorsEmailService } from './services/mentors-email.service';
 import { MentorMediaService } from './services/mentor-media.service';
-import { MENTORS_RBAC } from './mentors-rbac';
+import { MENTORS_RBAC_POLICY } from './mentors-rbac';
+import { RBACModule } from '@/core/auth/rbac/rbac.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MentorProfile, Experience]), ExpertisesModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([MentorProfile, Experience]),
+    ExpertisesModule,
+    UsersModule,
+    RBACModule.forFeature([MENTORS_RBAC_POLICY])
+  ],
   controllers: [MentorsController],
-  providers: [MentorsService, MentorMediaService, MentorExperiencesService, MentorsEmailService, MENTORS_RBAC],
+  providers: [MentorsService, MentorMediaService, MentorExperiencesService, MentorsEmailService],
   exports: [MentorsService]
 })
 export class MentorsModule {}

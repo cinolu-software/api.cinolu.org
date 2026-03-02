@@ -9,10 +9,11 @@ import { UsersEmailService } from './services/users-email.service';
 import { UsersReferralService } from './services/users-referral.service';
 import { UsersExportService } from './services/users-export.service';
 import { UserMediaService } from './services/user-media.service';
-import { USERS_RBAC } from './users-rbac';
+import { USERS_RBAC_POLICY } from './users-rbac';
+import { RBACModule } from '@/core/auth/rbac/rbac.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), RolesModule],
+  imports: [TypeOrmModule.forFeature([User]), RolesModule, RBACModule.forFeature([USERS_RBAC_POLICY])],
   controllers: [UsersController],
   providers: [
     UsersService,
@@ -20,8 +21,7 @@ import { USERS_RBAC } from './users-rbac';
     UsersExportService,
     UserMediaService,
     UsersEmailService,
-    UserSubscriber,
-    USERS_RBAC
+    UserSubscriber
   ],
   exports: [UsersService]
 })

@@ -10,3 +10,5 @@ export const createRbac = (policy: ModuleRbacPolicy): Provider => ({
     return true;
   }
 });
+
+export const createRbacProviders = (policies: ModuleRbacPolicy[]): Provider[] => policies.map(createRbac);

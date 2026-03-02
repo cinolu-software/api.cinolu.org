@@ -9,11 +9,12 @@ import { UsersModule } from '@/modules/users/users.module';
 import { AuthEmailService } from './services/auth-email.service';
 import { AuthPasswordService } from './services/auth-password.service';
 import { RbacService } from './rbac/rbac.service';
-import { SYSTEM_RBAC_REGISTRATION } from './rbac/system-rbac';
+import { SYSTEM_RBAC_POLICY } from './rbac/system-rbac';
+import { RBACModule } from './rbac/rbac.module';
 
 @Global()
 @Module({
-  imports: [PassportModule, UsersModule],
+  imports: [PassportModule, UsersModule, RBACModule.forFeature([SYSTEM_RBAC_POLICY])],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -22,8 +23,7 @@ import { SYSTEM_RBAC_REGISTRATION } from './rbac/system-rbac';
     SessionSerializer,
     GoogleStrategy,
     AuthEmailService,
-    RbacService,
-    SYSTEM_RBAC_REGISTRATION
+    RbacService
   ],
   exports: [AuthService, RbacService]
 })

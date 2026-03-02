@@ -1,7 +1,7 @@
 import { Role } from '@/core/auth/enums/roles.enum';
-import { createRbac } from '@/core/auth/rbac/rbac.provider';
+import { ModuleRbacPolicy } from '@/core/auth/rbac/rbac-policy';
 
-export const PROGRAMS_RBAC = createRbac({
+export const PROGRAMS_RBAC_POLICY: ModuleRbacPolicy = {
   module: 'programs',
   grants: [
     {
@@ -10,4 +10,4 @@ export const PROGRAMS_RBAC = createRbac({
       resources: ['programs', 'programCategories']
     }
   ]
-});
+};

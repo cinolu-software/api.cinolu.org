@@ -1,13 +1,13 @@
 import { Role } from '@/core/auth/enums/roles.enum';
-import { createRbac } from '@/core/auth/rbac/rbac.provider';
+import { ModuleRbacPolicy } from '@/core/auth/rbac/rbac-policy';
 
-export const VENTURES_RBAC = createRbac({
+export const VENTURES_RBAC_POLICY: ModuleRbacPolicy = {
   module: 'ventures',
   grants: [
     {
       roles: [Role.STAFF],
       actions: ['create', 'read', 'update', 'delete'],
-      resources: ['ventures', 'products']
+      resources: ['ventures', 'products', 'publishVenture']
     },
     {
       roles: [Role.USER],
@@ -16,4 +16,4 @@ export const VENTURES_RBAC = createRbac({
       possession: 'own'
     }
   ]
-});
+};

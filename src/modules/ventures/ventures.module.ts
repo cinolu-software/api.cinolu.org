@@ -8,13 +8,19 @@ import { ProductsModule } from './products/products.module';
 import { VentureDocument } from './entities/document.entity';
 import { VenturesEmailService } from './services/ventures-email.service';
 import { VentureMediaService } from './services/venture-media.service';
-import { VENTURES_RBAC } from './ventures-rbac';
+import { VENTURES_RBAC_POLICY } from './ventures-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
+import { RBACModule } from '@/core/auth/rbac/rbac.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Venture, VentureDocument]), ProductsModule, GalleriesModule],
+  imports: [
+    TypeOrmModule.forFeature([Venture, VentureDocument]),
+    ProductsModule,
+    GalleriesModule,
+    RBACModule.forFeature([VENTURES_RBAC_POLICY])
+  ],
   controllers: [VenturesController],
-  providers: [VenturesService, VentureMediaService, VenturesEmailService, VentureSubscriber, VENTURES_RBAC],
+  providers: [VenturesService, VentureMediaService, VenturesEmailService, VentureSubscriber],
   exports: [VenturesService]
 })
 export class VenturesModule {}

@@ -1,13 +1,13 @@
 import { Role } from '@/core/auth/enums/roles.enum';
-import { createRbac } from '@/core/auth/rbac/rbac.provider';
+import { ModuleRbacPolicy } from '@/core/auth/rbac/rbac-policy';
 
-export const SUBPROGRAMS_RBAC = createRbac({
+export const SUBPROGRAMS_RBAC_POLICY: ModuleRbacPolicy = {
   module: 'subprograms',
   grants: [
     {
       roles: [Role.STAFF],
-      actions: ['read', 'create', 'update'],
+      actions: ['read', 'create', 'update', 'delete'],
       resources: ['subprograms']
     }
   ]
-});
+};

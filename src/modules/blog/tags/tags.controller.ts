@@ -42,7 +42,7 @@ export class TagsController {
   }
 
   @Delete(':id')
-  @Rbac({ resource: 'tags', action: 'update' })
+  @Rbac({ resource: 'tags', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.tagsService.remove(id);
   }

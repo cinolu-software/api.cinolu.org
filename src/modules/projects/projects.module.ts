@@ -16,8 +16,9 @@ import { ProjectsEmailService } from './services/projects-email.service';
 import { ProjectsService } from './services/projects.service';
 import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { MentorsModule } from '../mentors/mentors.module';
-import { PROJECTS_RBAC } from './projects-rbac';
+import { PROJECTS_RBAC_POLICY } from './projects-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
+import { RBACModule } from '@/core/auth/rbac/rbac.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { GalleriesModule } from '@/shared/galleries/galleries.module';
     ProjectCategoriesModule,
     UsersModule,
     VenturesModule,
-    TypeOrmModule.forFeature([Project, ProjectParticipation, ProjectParticipationUpvote])
+    TypeOrmModule.forFeature([Project, ProjectParticipation, ProjectParticipationUpvote]),
+    RBACModule.forFeature([PROJECTS_RBAC_POLICY])
   ],
   providers: [
     ProjectsService,
@@ -36,8 +38,7 @@ import { GalleriesModule } from '@/shared/galleries/galleries.module';
     ProjectNotificationService,
     ProjectMediaService,
     ProjectsEmailService,
-    ProjectSubscriber,
-    PROJECTS_RBAC
+    ProjectSubscriber
   ],
   controllers: [ProjectsController],
   exports: [ProjectsService]
