@@ -182,6 +182,7 @@ export class UsersService {
 
   async findOrCreate(dto: CreateUserDto): Promise<User> {
     try {
+      if (!dto.email || !dto.email.includes('@')) throw new BadRequestException();
       const user = await this.userRepository.findOne({
         where: { email: dto.email },
         relations: ['roles']

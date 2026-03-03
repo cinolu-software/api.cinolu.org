@@ -1,3 +1,3 @@
-import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+import { PaginationQuery } from '@/core/types/pagination.query';
 
-export class FilterUsersDto extends PaginatedQueryDto {}
+export class FilterUsersDto extends PaginationQuery {}

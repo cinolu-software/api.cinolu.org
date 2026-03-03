@@ -78,10 +78,10 @@ describe('ProjectParticipationService', () => {
     participationRepository.find.mockResolvedValue([{ id: 'pp1', phases: [{ id: 'phase-1' }, { id: 'phase-2' }] }]);
     participationRepository.save.mockResolvedValue(undefined);
 
-    await expect(service.removeParticipantsFromPhase({ ids: ['pp1'], phaseId: 'phase-1' } as any)).resolves.toBeUndefined();
-    expect(participationRepository.save).toHaveBeenCalledWith(
-      expect.objectContaining({ phases: [{ id: 'phase-2' }] })
-    );
+    await expect(
+      service.removeParticipantsFromPhase({ ids: ['pp1'], phaseId: 'phase-1' } as any)
+    ).resolves.toBeUndefined();
+    expect(participationRepository.save).toHaveBeenCalledWith(expect.objectContaining({ phases: [{ id: 'phase-2' }] }));
   });
 
   it('finds participations by project', async () => {
@@ -120,12 +120,12 @@ describe('ProjectParticipationService', () => {
       participations: [{ user: { id: 'u-existing' } }]
     });
     (parseUsersCsv as jest.Mock).mockResolvedValue([{ email: 'a@x.com' }, { email: 'b@x.com' }]);
-    usersService.findOrCreate
-      .mockResolvedValueOnce({ id: 'u-existing' })
-      .mockResolvedValueOnce({ id: 'u-new' });
+    usersService.findOrCreate.mockResolvedValueOnce({ id: 'u-existing' }).mockResolvedValueOnce({ id: 'u-new' });
     participationRepository.save.mockResolvedValue(undefined);
 
-    await expect(service.importParticipants('project-1', { buffer: Buffer.from('csv') } as any)).resolves.toBeUndefined();
+    await expect(
+      service.importParticipants('project-1', { buffer: Buffer.from('csv') } as any)
+    ).resolves.toBeUndefined();
     expect(participationRepository.save).toHaveBeenCalledWith([
       expect.objectContaining({
         user: { id: 'u-new' },
@@ -144,7 +144,9 @@ describe('ProjectParticipationService', () => {
     (parseUsersCsv as jest.Mock).mockResolvedValue([{ email: 'a@x.com' }]);
     usersService.findOrCreate.mockResolvedValue({ id: 'u1' });
 
-    await expect(service.importParticipants('project-1', { buffer: Buffer.from('csv') } as any)).resolves.toBeUndefined();
+    await expect(
+      service.importParticipants('project-1', { buffer: Buffer.from('csv') } as any)
+    ).resolves.toBeUndefined();
     expect(participationRepository.save).not.toHaveBeenCalled();
   });
 
@@ -154,7 +156,9 @@ describe('ProjectParticipationService', () => {
     venturesService.findOne.mockResolvedValue({ id: 'venture-1' });
     participationRepository.save.mockResolvedValue(undefined);
 
-    await expect(service.participate('project-1', { id: 'u1' } as any, { ventureId: 'venture-1' } as any)).resolves.toBeUndefined();
+    await expect(
+      service.participate('project-1', { id: 'u1' } as any, { ventureId: 'venture-1' } as any)
+    ).resolves.toBeUndefined();
     expect(participationRepository.save).toHaveBeenCalledWith(
       expect.objectContaining({
         user: { id: 'u1' },

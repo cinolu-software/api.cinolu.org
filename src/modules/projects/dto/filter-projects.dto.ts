@@ -1,8 +1,8 @@
-import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+import { PaginationQuery } from '@/core/types/pagination.query';
 import { Transform } from 'class-transformer';
 import { IsArray, IsIn, IsOptional, IsString } from 'class-validator';
 
-export class FilterProjectsDto extends PaginatedQueryDto {
+export class FilterProjectsDto extends PaginationQuery {
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : value ? [value] : undefined))
   @IsArray()

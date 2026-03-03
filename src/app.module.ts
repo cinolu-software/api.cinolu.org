@@ -17,11 +17,11 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
 import { CoreConfigModule } from './core/config/config.module';
-import { JwtModule } from './core/jwt/jwt.module';
-import { DatabaseModule } from './core/database/database.module';
-import { StaticModule } from './core/static/static.module';
+import { JwtModule } from './shared/jwt/jwt.module';
+import { DatabaseModule } from './shared/database/database.module';
+import { StaticModule } from './shared/static/static.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { EmailModule } from './core/email/email.module';
+import { EmailModule } from './shared/email/email.module';
 
 @Module({
   imports: [

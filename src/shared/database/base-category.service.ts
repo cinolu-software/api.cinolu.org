@@ -1,7 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { AbstractEntity } from '@/core/helpers/abstract.entity';
-import { PaginatedQueryDto } from '@/core/dto/paginated-query.dto';
+import { PaginationQuery } from '@/core/types/pagination.query';
 
 type NameDto = { name: string };
 
@@ -20,7 +20,7 @@ export abstract class BaseCategoryService<T extends AbstractEntity & { name: str
     return this.categoryRepository.find();
   }
 
-  async findPaginated(queryParams: PaginatedQueryDto): Promise<[T[], number]> {
+  async findPaginated(queryParams: PaginationQuery): Promise<[T[], number]> {
     const { page = 1, q } = queryParams;
     const query = this.categoryRepository.createQueryBuilder('c').orderBy('c.updated_at', 'DESC');
     if (q) query.where('c.name LIKE :q', { q: `%${q}%` });
@@ -32,10 +32,7 @@ export abstract class BaseCategoryService<T extends AbstractEntity & { name: str
 
   async findOne(id: string): Promise<T> {
     try {
-      return await this.categoryRepository
-        .createQueryBuilder('c')
-        .where('c.id = :id', { id })
-        .getOneOrFail();
+      return await this.categoryRepository.createQueryBuilder('c').where('c.id = :id', { id }).getOneOrFail();
     } catch {
       throw new NotFoundException();
     }
