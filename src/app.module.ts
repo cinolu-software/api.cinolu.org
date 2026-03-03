@@ -25,11 +25,11 @@ import { EmailModule } from './shared/email/email.module';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     CoreConfigModule,
     JwtModule,
     DatabaseModule,
     StaticModule,
-    EventEmitterModule.forRoot(),
     EmailModule,
     AuthModule,
     UsersModule,

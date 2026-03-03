@@ -3,58 +3,53 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { htmlToText } from 'html-to-text';
 import { User } from '@/modules/users/entities/user.entity';
 import { Notification } from '@/modules/notifications/entities/notification.entity';
 
-type MailAttachment = {
-  filename: string;
-  path: string;
-};
-
 @Injectable()
 export class ProjectsEmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(private mailerService: MailerService) {}
 
   @OnEvent('notify.participants')
-  async notifyParticipants(recipients: User[], notification: Notification): Promise<void> {
+  async notifyParticipants(recipients: User[] = [], notification: Notification): Promise<void> {
+    const emails = Array.from(new Set(recipients.map((r) => r?.email?.trim()).filter((e): e is string => !!e)));
+    if (emails.length === 0) return;
+    const attachments = this.resolveExistingAttachments(notification);
+    const subject = `${notification.project.name} — ${notification.title}`;
+    const html = `
+      <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;">
+        <p><strong>Projet:</strong> ${notification.project?.name}</p>
+        <p><strong>Titre:</strong> ${notification.title}</p>
+        <hr />
+        ${notification.body ?? ''}
+      </div>
+    `;
+    const text = htmlToText(html, {
+      wordwrap: 120,
+      selectors: [{ selector: 'img', format: 'skip' }]
+    });
     try {
-      const validRecipients = (recipients || []).filter((recipient) => recipient?.email);
-      const attachments = this.resolveExistingAttachments(notification);
-      const subject = `${notification.project.name} — ${notification.title}`;
-      await Promise.all(
-        validRecipients.map(async (recipient) => {
-          await this.mailerService.sendMail({
-            to: recipient.email,
-            subject,
-            text: [
-              `Bonjour ${recipient.name},`,
-              '',
-              `Projet: ${notification.project.name}`,
-              `Titre: ${notification.title}`,
-              '',
-              notification.body,
-              '',
-              `Expediteur: ${notification.sender?.name ?? 'CINOLU'}`
-            ].join('\n'),
-            ...(attachments && { attachments })
-          });
-        })
-      );
+      await this.mailerService.sendMail({
+        to: emails,
+        subject,
+        html,
+        text,
+        ...(attachments?.length ? { attachments } : {})
+      });
     } catch {
       throw new BadRequestException();
     }
   }
 
-  private resolveExistingAttachments(notification: Notification): MailAttachment[] | undefined {
+  private resolveExistingAttachments(notification: Notification) {
     const files = (notification.attachments || [])
       .map((attachment) => {
         const filePath = join(process.cwd(), 'uploads', 'notifications', attachment.filename);
-        if (!existsSync(filePath)) {
-          return null;
-        }
+        if (!existsSync(filePath)) return null;
         return { filename: attachment.filename, path: filePath };
       })
-      .filter((attachment): attachment is MailAttachment => attachment !== null);
+      .filter((a) => a !== null);
     return files.length ? files : undefined;
   }
 }

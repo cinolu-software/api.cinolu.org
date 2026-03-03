@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
-import  passport from 'passport';
+import passport from 'passport';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap(): Promise<void> {
@@ -11,9 +11,7 @@ async function bootstrap(): Promise<void> {
   const port = configService.get<number>('PORT', 3000);
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true
+      transform: true
     })
   );
   app.enableCors({
