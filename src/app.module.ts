@@ -18,7 +18,7 @@ import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
 import { CoreConfigModule } from './core/config/config.module';
 import { JwtModule } from './shared/jwt/jwt.module';
-import { DatabaseModule } from './shared/database/database.module';
+import { DatabaseModule } from './core/database/database.module';
 import { StaticModule } from './shared/static/static.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { EmailModule } from './shared/email/email.module';
