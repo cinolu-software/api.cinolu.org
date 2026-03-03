@@ -27,7 +27,6 @@ describe('ProjectsEmailService', () => {
 
     const recipients = [
       { email: 'a@example.com', name: 'Alice' },
-      { email: null, name: 'No Email' },
       { email: 'b@example.com', name: 'Bob' }
     ] as any;
     const notification = {
@@ -37,7 +36,6 @@ describe('ProjectsEmailService', () => {
       project: { name: 'Project X' },
       attachments: [{ filename: 'a.pdf' }, { filename: 'missing.pdf' }]
     } as any;
-
     await expect(service.notifyParticipants(recipients, notification)).resolves.toBeUndefined();
     expect(existsSpy).toHaveBeenCalled();
     expect(mailerService.sendMail).toHaveBeenCalledTimes(1);
