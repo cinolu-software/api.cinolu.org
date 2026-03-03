@@ -31,6 +31,7 @@ import { CreateNotificationDto } from '@/modules/notifications/dto/create-notifi
 import { ProjectParticipation } from './entities/project-participation.entity';
 import { MoveParticipantsDto } from './dto/move-participants.dto';
 import { Gallery } from '@/shared/galleries/entities/gallery.entity';
+import { FilterParticipationsDto } from './dto/filter-participations.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -109,8 +110,11 @@ export class ProjectsController {
 
   @Get(':projectId/participations')
   @Public()
-  findParticipations(@Param('projectId') projectId: string): Promise<ProjectParticipation[]> {
-    return this.participationService.findParticipations(projectId);
+  findParticipations(
+    @Param('projectId') projectId: string,
+    @Query() query: FilterParticipationsDto
+  ): Promise<[ProjectParticipation[], number]> {
+    return this.participationService.findParticipations(projectId, query);
   }
 
   @Get(':projectId')

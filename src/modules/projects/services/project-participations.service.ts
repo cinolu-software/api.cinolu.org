@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Brackets, In, Repository } from 'typeorm';
 import { ProjectParticipation } from '../entities/project-participation.entity';
 import { ProjectParticipationUpvote } from '../entities/participation-upvote.entity';
 import { UsersService } from '@/modules/users/services/users.service';
@@ -11,6 +11,7 @@ import { ProjectsService } from './projects.service';
 import { MoveParticipantsDto } from '../dto/move-participants.dto';
 import { PhasesService } from '../phases/services/phases.service';
 import { parseUsersCsv } from '@/core/helpers/user-csv.helper';
+import { FilterParticipationsDto } from '../dto/filter-participations.dto';
 
 @Injectable()
 export class ProjectParticipationService {
@@ -69,12 +70,34 @@ export class ProjectParticipationService {
     }
   }
 
-  async findParticipations(projectId: string): Promise<ProjectParticipation[]> {
+  async findParticipations(
+    projectId: string,
+    queryParams: FilterParticipationsDto
+  ): Promise<[ProjectParticipation[], number]> {
     try {
-      return this.participationRepository.find({
-        where: { project: { id: projectId } },
-        relations: ['user', 'venture', 'project', 'phases', 'upvotes']
-      });
+      const { page = 1, q } = queryParams;
+      const skip = (+page - 1) * 20;
+      const query = this.participationRepository
+        .createQueryBuilder('pp')
+        .leftJoinAndSelect('pp.user', 'user')
+        .leftJoinAndSelect('pp.venture', 'venture')
+        .leftJoinAndSelect('pp.project', 'project')
+        .leftJoinAndSelect('pp.phases', 'phases')
+        .loadRelationCountAndMap('pp.upvotesCount', 'pp.upvotes')
+        .where('project.id = :projectId', { projectId })
+        .orderBy('pp.created_at', 'DESC')
+        .distinct(true);
+      if (q?.trim()) {
+        query.andWhere(
+          new Brackets((subQuery) => {
+            subQuery
+              .where('user.name LIKE :q', { q: `%${q.trim()}%` })
+              .orWhere('user.email LIKE :q', { q: `%${q.trim()}%` })
+              .orWhere('venture.name LIKE :q', { q: `%${q.trim()}%` });
+          })
+        );
+      }
+      return await query.skip(skip).take(20).getManyAndCount();
     } catch {
       throw new BadRequestException();
     }

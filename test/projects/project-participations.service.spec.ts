@@ -6,12 +6,26 @@ jest.mock('@/core/helpers/user-csv.helper', () => ({
   parseUsersCsv: jest.fn()
 }));
 
+const makeQueryBuilder = (result: [any[], number] = [[], 0]) => ({
+  leftJoinAndSelect: jest.fn().mockReturnThis(),
+  loadRelationCountAndMap: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  andWhere: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  distinct: jest.fn().mockReturnThis(),
+  skip: jest.fn().mockReturnThis(),
+  take: jest.fn().mockReturnThis(),
+  getManyAndCount: jest.fn().mockResolvedValue(result)
+});
+
 describe('ProjectParticipationService', () => {
   const setup = () => {
+    const queryBuilder = makeQueryBuilder([[{ id: 'pp1' }], 1]);
     const participationRepository = {
       find: jest.fn(),
       save: jest.fn(),
-      findOne: jest.fn()
+      findOne: jest.fn(),
+      createQueryBuilder: jest.fn().mockReturnValue(queryBuilder)
     } as any;
     const upvoteRepository = {
       save: jest.fn(),
@@ -36,6 +50,7 @@ describe('ProjectParticipationService', () => {
     );
     return {
       service,
+      queryBuilder,
       participationRepository,
       upvoteRepository,
       usersService,
@@ -85,9 +100,28 @@ describe('ProjectParticipationService', () => {
   });
 
   it('finds participations by project', async () => {
-    const { service, participationRepository } = setup();
-    participationRepository.find.mockResolvedValue([{ id: 'pp1' }]);
-    await expect(service.findParticipations('project-1')).resolves.toEqual([{ id: 'pp1' }]);
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', {} as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
+    expect(queryBuilder.where).toHaveBeenCalledWith('project.id = :projectId', { projectId: 'project-1' });
+    expect(queryBuilder.loadRelationCountAndMap).toHaveBeenCalledWith('pp.upvotesCount', 'pp.upvotes');
+    expect(queryBuilder.skip).toHaveBeenCalledWith(0);
+    expect(queryBuilder.take).toHaveBeenCalledWith(20);
+  });
+
+  it('applies search and pagination when finding participations', async () => {
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', { page: 3, q: '  alice  ' } as any)).resolves.toEqual([
+      [{ id: 'pp1' }],
+      1
+    ]);
+    expect(queryBuilder.andWhere).toHaveBeenCalledTimes(1);
+    expect(queryBuilder.skip).toHaveBeenCalledWith(40);
+  });
+
+  it('does not apply search when q is blank', async () => {
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', { q: '   ' } as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
+    expect(queryBuilder.andWhere).not.toHaveBeenCalled();
   });
 
   it('finds unique users by project', async () => {
@@ -184,9 +218,9 @@ describe('ProjectParticipationService', () => {
   });
 
   it('throws on internal failures', async () => {
-    const { service, participationRepository, upvoteRepository } = setup();
-    participationRepository.find.mockRejectedValue(new Error('bad'));
-    await expect(service.findParticipations('project-1')).rejects.toThrow('bad');
+    const { service, queryBuilder, upvoteRepository } = setup();
+    queryBuilder.getManyAndCount.mockRejectedValue(new Error('bad'));
+    await expect(service.findParticipations('project-1', {} as any)).rejects.toBeInstanceOf(BadRequestException);
 
     upvoteRepository.findOneOrFail.mockRejectedValue(new Error('bad'));
     await expect(service.unvote('pp1', 'u1')).rejects.toBeInstanceOf(BadRequestException);
