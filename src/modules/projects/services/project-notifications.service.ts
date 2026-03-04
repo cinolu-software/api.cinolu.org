@@ -30,15 +30,6 @@ export class ProjectNotificationService {
     }
   }
 
-  async sendReportToStaff(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
-    try {
-      await this.projectsService.findOne(projectId);
-      return await this.notificationsService.sendProjectReportToStaff(projectId, senderId, dto);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async send(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);

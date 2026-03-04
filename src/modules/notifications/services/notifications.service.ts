@@ -40,18 +40,6 @@ export class NotificationsService {
     }
   }
 
-  async sendProjectReportToStaff(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
-    try {
-      const notification = await this.create(projectId, senderId, dto);
-      const notificationToSend = await this.findOne(notification.id);
-      const staffRecipients = await this.usersService.findStaff();
-      this.eventEmitter.emit('notify.participants', staffRecipients, notificationToSend);
-      return await this.send(notification.id);
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
   async findByProject(projectId: string, filters: FilterNotificationsDto): Promise<[Notification[], number]> {
     try {
       const { phaseId, page = 1, status } = filters;
@@ -69,7 +57,8 @@ export class NotificationsService {
         .skip((+page - 1) * 10)
         .take(10)
         .getManyAndCount();
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException();
     }
   }

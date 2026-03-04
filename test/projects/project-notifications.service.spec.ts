@@ -50,29 +50,6 @@ describe('ProjectNotificationService', () => {
     await expect(service.create('p1', { id: 'u1' } as any, {} as any)).rejects.toBeInstanceOf(BadRequestException);
   });
 
-  it('sends report to staff', async () => {
-    const { service, projectsService, notificationsService } = setup();
-    projectsService.findOne.mockResolvedValue({ id: 'p1' });
-    notificationsService.sendProjectReportToStaff.mockResolvedValue({ id: 'n1', status: 'sent' });
-
-    await expect(service.sendReportToStaff('p1', 'u1', { title: 'Weekly', body: 'content' } as any)).resolves.toEqual({
-      id: 'n1',
-      status: 'sent'
-    });
-    expect(notificationsService.sendProjectReportToStaff).toHaveBeenCalledWith('p1', 'u1', {
-      title: 'Weekly',
-      body: 'content'
-    });
-  });
-
-  it('throws on sendReportToStaff failure', async () => {
-    const { service, projectsService } = setup();
-    projectsService.findOne.mockRejectedValue(new Error('bad'));
-    await expect(service.sendReportToStaff('p1', 'u1', { title: 'Weekly' } as any)).rejects.toBeInstanceOf(
-      BadRequestException
-    );
-  });
-
   it('sends notification to staff when notify_staff is true', async () => {
     const { service, notificationsService, usersService, eventEmitter } = setup();
     notificationsService.findOne.mockResolvedValue({

@@ -73,41 +73,11 @@ describe('NotificationsService', () => {
     await expect(service.send('n1')).rejects.toBeInstanceOf(BadRequestException);
   });
 
-  it('sends project report to staff', async () => {
-    const { service, usersService, eventEmitter } = setup();
-    jest.spyOn(service, 'create').mockResolvedValue({ id: 'n1' } as any);
-    jest.spyOn(service, 'findOne').mockResolvedValue({ id: 'n1', project: { name: 'P1' } } as any);
-    jest.spyOn(service, 'send').mockResolvedValue({ id: 'n1', status: NotificationStatus.SENT } as any);
-    usersService.findStaff.mockResolvedValue([{ id: 'staff-1' }, { id: 'staff-2' }]);
-
-    await expect(service.sendProjectReportToStaff('p1', 'u1', { title: 'Weekly report', body: 'done' } as any)).resolves.toEqual(
-      {
-        id: 'n1',
-        status: NotificationStatus.SENT
-      }
-    );
-
-    expect(eventEmitter.emit).toHaveBeenCalledWith(
-      'notify.participants',
-      [{ id: 'staff-1' }, { id: 'staff-2' }],
-      expect.objectContaining({ id: 'n1' })
-    );
-  });
-
-  it('throws when sending project report to staff fails', async () => {
-    const { service } = setup();
-    jest.spyOn(service, 'create').mockRejectedValue(new Error('bad'));
-    await expect(service.sendProjectReportToStaff('p1', 'u1', { title: 'Weekly report' } as any)).rejects.toBeInstanceOf(
-      BadRequestException
-    );
-  });
-
   it('finds project notifications with filters', async () => {
     const { service, queryBuilder } = setup();
-    await expect(service.findByProject('p1', { page: 2, phaseId: 'ph1', status: NotificationStatus.DRAFT } as any)).resolves.toEqual([
-      [{ id: 'n1' }],
-      1
-    ]);
+    await expect(
+      service.findByProject('p1', { page: 2, phaseId: 'ph1', status: NotificationStatus.DRAFT } as any)
+    ).resolves.toEqual([[{ id: 'n1' }], 1]);
     expect(queryBuilder.where).toHaveBeenCalledWith('n.projectId = :projectId', { projectId: 'p1' });
     expect(queryBuilder.andWhere).toHaveBeenCalledWith('n.phaseId = :phaseId', { phaseId: 'ph1' });
     expect(queryBuilder.andWhere).toHaveBeenCalledWith('n.status = :status', { status: NotificationStatus.DRAFT });
