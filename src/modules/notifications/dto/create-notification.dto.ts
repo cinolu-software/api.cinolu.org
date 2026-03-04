@@ -13,4 +13,8 @@ export class CreateNotificationDto {
   @IsOptional()
   @IsBoolean()
   notify_mentors?: boolean | null;
+
+  @IsOptional()
+  @IsBoolean()
+  notify_staff?: boolean | null;
 }

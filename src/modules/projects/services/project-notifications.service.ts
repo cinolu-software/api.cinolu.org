@@ -7,6 +7,7 @@ import { User } from '@/modules/users/entities/user.entity';
 import { ProjectsService } from './projects.service';
 import { ProjectParticipationService } from './project-participations.service';
 import { MentorsService } from '@/modules/mentors/services/mentors.service';
+import { UsersService } from '@/modules/users/services/users.service';
 
 @Injectable()
 export class ProjectNotificationService {
@@ -15,6 +16,7 @@ export class ProjectNotificationService {
     private readonly projectsService: ProjectsService,
     private readonly participationService: ProjectParticipationService,
     private readonly mentorsService: MentorsService,
+    private readonly usersService: UsersService,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -28,11 +30,22 @@ export class ProjectNotificationService {
     }
   }
 
+  async sendReportToStaff(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
+    try {
+      await this.projectsService.findOne(projectId);
+      return await this.notificationsService.sendProjectReportToStaff(projectId, senderId, dto);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
   async send(notificationId: string): Promise<Notification> {
     try {
       const notification = await this.notificationsService.findOne(notificationId);
       let recipients = [];
-      if (notification.notify_mentors) {
+      if (notification.notify_staff) {
+        recipients = await this.usersService.findStaff();
+      } else if (notification.notify_mentors) {
         recipients = await this.mentorsService.findUsersByPhase(notification.phase.id);
       } else if (notification.phase) {
         recipients = await this.participationService.findByPhase(notification.phase.id);

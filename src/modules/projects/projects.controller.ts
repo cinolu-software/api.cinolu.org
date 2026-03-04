@@ -149,6 +149,16 @@ export class ProjectsController {
     return this.notificationService.send(notificationId);
   }
 
+  @Post(':projectId/notifications/report-to-staff')
+  @Rbac({ resource: 'projects', action: 'update' })
+  sendReportToStaff(
+    @Param('projectId') projectId: string,
+    @CurrentUser() user: User,
+    @Body() dto: CreateNotificationDto
+  ): Promise<Notification> {
+    return this.notificationService.sendReportToStaff(projectId, user.id, { ...dto, notify_staff: true });
+  }
+
   @Post(':projectId/gallery')
   @Rbac({ resource: 'projects', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))

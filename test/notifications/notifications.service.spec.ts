@@ -23,8 +23,14 @@ describe('NotificationsService', () => {
       merge: jest.fn(),
       softDelete: jest.fn()
     } as any;
-    const service = new NotificationsService(notificationsRepository);
-    return { service, notificationsRepository, queryBuilder };
+    const usersService = {
+      findStaff: jest.fn()
+    } as any;
+    const eventEmitter = {
+      emit: jest.fn()
+    } as any;
+    const service = new NotificationsService(notificationsRepository, usersService, eventEmitter);
+    return { service, notificationsRepository, queryBuilder, usersService, eventEmitter };
   };
 
   it('creates notification with optional phase', async () => {
@@ -65,6 +71,35 @@ describe('NotificationsService', () => {
     const { service, notificationsRepository } = setup();
     notificationsRepository.update.mockRejectedValue(new Error('bad'));
     await expect(service.send('n1')).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('sends project report to staff', async () => {
+    const { service, usersService, eventEmitter } = setup();
+    jest.spyOn(service, 'create').mockResolvedValue({ id: 'n1' } as any);
+    jest.spyOn(service, 'findOne').mockResolvedValue({ id: 'n1', project: { name: 'P1' } } as any);
+    jest.spyOn(service, 'send').mockResolvedValue({ id: 'n1', status: NotificationStatus.SENT } as any);
+    usersService.findStaff.mockResolvedValue([{ id: 'staff-1' }, { id: 'staff-2' }]);
+
+    await expect(service.sendProjectReportToStaff('p1', 'u1', { title: 'Weekly report', body: 'done' } as any)).resolves.toEqual(
+      {
+        id: 'n1',
+        status: NotificationStatus.SENT
+      }
+    );
+
+    expect(eventEmitter.emit).toHaveBeenCalledWith(
+      'notify.participants',
+      [{ id: 'staff-1' }, { id: 'staff-2' }],
+      expect.objectContaining({ id: 'n1' })
+    );
+  });
+
+  it('throws when sending project report to staff fails', async () => {
+    const { service } = setup();
+    jest.spyOn(service, 'create').mockRejectedValue(new Error('bad'));
+    await expect(service.sendProjectReportToStaff('p1', 'u1', { title: 'Weekly report' } as any)).rejects.toBeInstanceOf(
+      BadRequestException
+    );
   });
 
   it('finds project notifications with filters', async () => {

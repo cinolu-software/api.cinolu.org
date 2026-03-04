@@ -14,15 +14,25 @@ describe('ProjectNotificationService', () => {
       findByProject: jest.fn()
     } as any;
     const mentorsService = { findUsersByPhase: jest.fn() } as any;
+    const usersService = { findStaff: jest.fn() } as any;
     const eventEmitter = { emit: jest.fn() } as any;
     const service = new ProjectNotificationService(
       notificationsService,
       projectsService,
       participationService,
       mentorsService,
+      usersService,
       eventEmitter
     );
-    return { service, notificationsService, projectsService, participationService, mentorsService, eventEmitter };
+    return {
+      service,
+      notificationsService,
+      projectsService,
+      participationService,
+      mentorsService,
+      usersService,
+      eventEmitter
+    };
   };
 
   it('creates a project notification', async () => {
@@ -37,6 +47,25 @@ describe('ProjectNotificationService', () => {
     const { service, projectsService } = setup();
     projectsService.findOne.mockRejectedValue(new Error('bad'));
     await expect(service.create('p1', { id: 'u1' } as any, {} as any)).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('sends notification to staff when notify_staff is true', async () => {
+    const { service, notificationsService, usersService, eventEmitter } = setup();
+    notificationsService.findOne.mockResolvedValue({
+      id: 'n1',
+      notify_staff: true,
+      notify_mentors: true,
+      phase: { id: 'phase-1' },
+      project: { id: 'p1' }
+    });
+    usersService.findStaff.mockResolvedValue([{ id: 'u-staff' }]);
+    notificationsService.send.mockResolvedValue({ id: 'n1', status: 'sent' });
+    await expect(service.send('n1')).resolves.toEqual({ id: 'n1', status: 'sent' });
+    expect(eventEmitter.emit).toHaveBeenCalledWith(
+      'notify.participants',
+      [{ id: 'u-staff' }],
+      expect.objectContaining({ id: 'n1' })
+    );
   });
 
   it('sends notification to mentors when notify_mentors is true', async () => {

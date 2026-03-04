@@ -1,17 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Notification } from '../entities/notification.entity';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
 import { UpdateNotificationDto } from '../dto/update-notification.dto';
 import { NotificationStatus } from '../types/notification-status.enum';
 import { FilterNotificationsDto } from '../dto/filter-notifications.dto';
+import { UsersService } from '@/modules/users/services/users.service';
 
 @Injectable()
 export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
-    private notificationsRepository: Repository<Notification>
+    private notificationsRepository: Repository<Notification>,
+    private readonly usersService: UsersService,
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   async create(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
@@ -31,6 +35,18 @@ export class NotificationsService {
     try {
       await this.notificationsRepository.update(id, { status: NotificationStatus.SENT });
       return await this.findOne(id);
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  async sendProjectReportToStaff(projectId: string, senderId: string, dto: CreateNotificationDto): Promise<Notification> {
+    try {
+      const notification = await this.create(projectId, senderId, dto);
+      const notificationToSend = await this.findOne(notification.id);
+      const staffRecipients = await this.usersService.findStaff();
+      this.eventEmitter.emit('notify.participants', staffRecipients, notificationToSend);
+      return await this.send(notification.id);
     } catch {
       throw new BadRequestException();
     }
