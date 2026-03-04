@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventCategory } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseCategoryService } from '@/core/database/base-category.service';
+import { BaseCategoryService } from '@/core/helpers/abstract-category.service';
 
 @Injectable()
 export class EventCategoriesService extends BaseCategoryService<EventCategory> {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ProjectCategory } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BaseCategoryService } from '@/core/database/base-category.service';
+import { BaseCategoryService } from '@/core/helpers/abstract-category.service';
 
 @Injectable()
 export class ProjectCategoriesService extends BaseCategoryService<ProjectCategory> {
