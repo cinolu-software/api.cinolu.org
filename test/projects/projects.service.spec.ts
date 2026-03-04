@@ -4,11 +4,13 @@ import { ProjectsService } from '@/modules/projects/services/projects.service';
 const makeQueryBuilder = (result: [any[], number] = [[], 0]) => ({
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   loadRelationCountAndMap: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   skip: jest.fn().mockReturnThis(),
   take: jest.fn().mockReturnThis(),
-  getManyAndCount: jest.fn().mockResolvedValue(result)
+  getManyAndCount: jest.fn().mockResolvedValue(result),
+  getOneOrFail: jest.fn()
 });
 
 describe('ProjectsService', () => {
@@ -100,14 +102,14 @@ describe('ProjectsService', () => {
   });
 
   it('finds by slug', async () => {
-    const { service, projectRepository } = setup();
-    projectRepository.findOneOrFail.mockResolvedValue({ id: 'p1' });
+    const { service, queryBuilder } = setup();
+    queryBuilder.getOneOrFail.mockResolvedValue({ id: 'p1' });
     await expect(service.findBySlug('slug')).resolves.toEqual({ id: 'p1' });
   });
 
   it('throws on missing slug', async () => {
-    const { service, projectRepository } = setup();
-    projectRepository.findOneOrFail.mockRejectedValue(new Error('bad'));
+    const { service, queryBuilder } = setup();
+    queryBuilder.getOneOrFail.mockRejectedValue(new Error('bad'));
     await expect(service.findBySlug('slug')).rejects.toBeInstanceOf(NotFoundException);
   });
 
