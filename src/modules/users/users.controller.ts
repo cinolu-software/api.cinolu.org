@@ -119,6 +119,12 @@ export class UsersController {
     return this.userMediaService.uploadImage(user, file);
   }
 
+  @Delete('clear')
+  @Rbac({ resource: 'users', action: 'delete' })
+  clear(): Promise<number> {
+    return this.usersService.clear();
+  }
+
   @Delete(':userId')
   @Rbac({ resource: 'users', action: 'delete' })
   remove(@Param('userId') userId: string): Promise<void> {

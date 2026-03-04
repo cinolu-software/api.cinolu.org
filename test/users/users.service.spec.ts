@@ -27,7 +27,8 @@ describe('UsersService', () => {
       findOne: jest.fn(),
       findOneOrFail: jest.fn(),
       count: jest.fn(),
-      softDelete: jest.fn()
+      softDelete: jest.fn(),
+      delete: jest.fn()
     } as any;
     const rolesService = { findByName: jest.fn() } as any;
     const eventEmitter = { emit: jest.fn() } as any;
@@ -230,5 +231,32 @@ describe('UsersService', () => {
     const { service } = setup();
     jest.spyOn(service, 'findOne').mockRejectedValue(new Error('bad'));
     await expect(service.remove('u1')).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('hard deletes users with invalid email or name on clear', async () => {
+    const { service, userRepository } = setup();
+    userRepository.find.mockResolvedValue([
+      { id: 'u1', email: 'john@example.com', name: 'John' },
+      { id: 'u2', email: 'bad-email', name: 'Jane' },
+      { id: 'u3', email: 'mark@example.com', name: '@@@' }
+    ]);
+    userRepository.delete.mockResolvedValue({});
+
+    await expect(service.clear()).resolves.toBe(2);
+    expect(userRepository.delete).toHaveBeenCalledWith(['u2', 'u3']);
+  });
+
+  it('returns 0 on clear when all users are valid', async () => {
+    const { service, userRepository } = setup();
+    userRepository.find.mockResolvedValue([{ id: 'u1', email: 'john@example.com', name: 'John' }]);
+
+    await expect(service.clear()).resolves.toBe(0);
+    expect(userRepository.delete).not.toHaveBeenCalled();
+  });
+
+  it('throws on clear failure', async () => {
+    const { service, userRepository } = setup();
+    userRepository.find.mockRejectedValue(new Error('bad'));
+    await expect(service.clear()).rejects.toBeInstanceOf(BadRequestException);
   });
 });

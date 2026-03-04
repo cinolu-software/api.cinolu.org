@@ -236,4 +236,35 @@ export class UsersService {
       throw new BadRequestException();
     }
   }
+
+  async clear(): Promise<number> {
+    try {
+      const users = await this.userRepository.find({
+        select: ['id', 'email', 'name']
+      });
+
+      const idsToDelete = users
+        .filter((user) => !this.isValidEmail(user.email) || !this.isValidName(user.name))
+        .map((user) => user.id);
+
+      if (!idsToDelete.length) return 0;
+
+      await this.userRepository.delete(idsToDelete);
+      return idsToDelete.length;
+    } catch {
+      throw new BadRequestException();
+    }
+  }
+
+  private isValidEmail(email: string): boolean {
+    if (!email) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  }
+
+  private isValidName(name: string): boolean {
+    if (!name) return false;
+    const normalizedName = name.trim();
+    if (normalizedName.length < 2 || normalizedName.includes('@')) return false;
+    return /[A-Za-z]/.test(normalizedName);
+  }
 }
