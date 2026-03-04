@@ -82,10 +82,18 @@ export class ProjectsService {
 
   async findBySlug(slug: string): Promise<Project> {
     try {
-      return await this.projectRepository.findOneOrFail({
-        where: { slug },
-        relations: ['categories', 'project_manager', 'program', 'gallery', 'phases', 'phases.deliverables']
-      });
+      return await this.projectRepository
+        .createQueryBuilder('p')
+        .leftJoinAndSelect('p.categories', 'categories')
+        .leftJoinAndSelect('p.project_manager', 'project_manager')
+        .leftJoinAndSelect('p.program', 'program')
+        .leftJoinAndSelect('p.gallery', 'gallery')
+        .leftJoinAndSelect('p.phases', 'phases')
+        .leftJoinAndSelect('phases.deliverables', 'deliverables')
+        .loadRelationCountAndMap('phases.participationsCount', 'phases.participations')
+        .where('p.slug = :slug', { slug })
+        .orderBy('phases.started_at', 'ASC')
+        .getOneOrFail();
     } catch {
       throw new NotFoundException();
     }

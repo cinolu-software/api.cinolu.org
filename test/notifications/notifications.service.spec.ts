@@ -87,8 +87,11 @@ describe('NotificationsService', () => {
 
   it('throws on findByProject failure', async () => {
     const { service, queryBuilder } = setup();
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
     queryBuilder.getManyAndCount.mockRejectedValue(new Error('bad'));
     await expect(service.findByProject('p1', {} as any)).rejects.toBeInstanceOf(BadRequestException);
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 
   it('finds one notification', async () => {
