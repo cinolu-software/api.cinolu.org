@@ -3,18 +3,25 @@ import { PhasesService } from '@/modules/projects/phases/services/phases.service
 
 describe('PhasesService', () => {
   const setup = () => {
+    const queryBuilder = {
+      where: jest.fn().mockReturnThis(),
+      leftJoinAndSelect: jest.fn().mockReturnThis(),
+      loadRelationCountAndMap: jest.fn().mockReturnThis(),
+      getMany: jest.fn().mockResolvedValue([{ id: 'ph1' }])
+    };
     const phaseRepository = {
       save: jest.fn(),
       findOneOrFail: jest.fn(),
       find: jest.fn(),
-      softDelete: jest.fn()
+      softDelete: jest.fn(),
+      createQueryBuilder: jest.fn().mockReturnValue(queryBuilder)
     } as any;
     const deliverablesService = {
       create: jest.fn(),
       sync: jest.fn()
     } as any;
     const service = new PhasesService(phaseRepository, deliverablesService);
-    return { service, phaseRepository, deliverablesService };
+    return { service, phaseRepository, deliverablesService, queryBuilder };
   };
 
   it('creates phase and deliverables', async () => {
@@ -66,14 +73,18 @@ describe('PhasesService', () => {
   });
 
   it('finds all phases by project', async () => {
-    const { service, phaseRepository } = setup();
-    phaseRepository.find.mockResolvedValue([{ id: 'ph1' }]);
+    const { service, queryBuilder } = setup();
     await expect(service.findAll('project-1')).resolves.toEqual([{ id: 'ph1' }]);
+    expect(queryBuilder.where).toHaveBeenCalledWith('phase.projectId = :projectId', { projectId: 'project-1' });
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith('phase.deliverables', 'deliverables');
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith('phase.mentors', 'mentors');
+    expect(queryBuilder.leftJoinAndSelect).toHaveBeenCalledWith('mentors.owner', 'owner');
+    expect(queryBuilder.loadRelationCountAndMap).toHaveBeenCalledWith('phase.participationsCount', 'phase.participations');
   });
 
   it('throws on findAll failure', async () => {
-    const { service, phaseRepository } = setup();
-    phaseRepository.find.mockRejectedValue(new Error('bad'));
+    const { service, queryBuilder } = setup();
+    queryBuilder.getMany.mockRejectedValue(new Error('bad'));
     await expect(service.findAll('project-1')).rejects.toBeInstanceOf(BadRequestException);
   });
 

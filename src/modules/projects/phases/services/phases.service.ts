@@ -58,10 +58,14 @@ export class PhasesService {
 
   async findAll(projectId: string): Promise<Phase[]> {
     try {
-      return await this.phaseRepository.find({
-        where: { project: { id: projectId } },
-        relations: ['deliverables', 'mentors', 'mentors.owner']
-      });
+      return await this.phaseRepository
+        .createQueryBuilder('phase')
+        .where('phase.projectId = :projectId', { projectId })
+        .leftJoinAndSelect('phase.deliverables', 'deliverables')
+        .leftJoinAndSelect('phase.mentors', 'mentors')
+        .leftJoinAndSelect('mentors.owner', 'owner')
+        .loadRelationCountAndMap('phase.participationsCount', 'phase.participations')
+        .getMany();
     } catch {
       throw new BadRequestException();
     }
