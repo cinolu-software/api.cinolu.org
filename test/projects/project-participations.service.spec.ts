@@ -102,7 +102,7 @@ describe('ProjectParticipationService', () => {
   it('finds participations by project', async () => {
     const { service, queryBuilder } = setup();
     await expect(service.findParticipations('project-1', {} as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
-    expect(queryBuilder.where).toHaveBeenCalledWith('project.id = :projectId', { projectId: 'project-1' });
+    expect(queryBuilder.where).toHaveBeenCalledWith('pp.projectId = :projectId', { projectId: 'project-1' });
     expect(queryBuilder.loadRelationCountAndMap).toHaveBeenCalledWith('pp.upvotesCount', 'pp.upvotes');
     expect(queryBuilder.skip).toHaveBeenCalledWith(0);
     expect(queryBuilder.take).toHaveBeenCalledWith(20);
@@ -132,6 +132,21 @@ describe('ProjectParticipationService', () => {
     const { service, queryBuilder } = setup();
     await expect(service.findParticipations('project-1', { q: '' } as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
     expect(queryBuilder.andWhere).not.toHaveBeenCalled();
+  });
+
+  it('applies phase filter when phaseId is provided', async () => {
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', { phaseId: 'phase-1' } as any)).resolves.toEqual([
+      [{ id: 'pp1' }],
+      1
+    ]);
+    expect(queryBuilder.andWhere).toHaveBeenCalledWith('phases.id = :phaseId', { phaseId: 'phase-1' });
+  });
+
+  it('does not apply phase filter when phaseId is an empty string', async () => {
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', { phaseId: '' } as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
+    expect(queryBuilder.andWhere).not.toHaveBeenCalledWith('phases.id = :phaseId', expect.anything());
   });
 
   it('finds unique users by project', async () => {

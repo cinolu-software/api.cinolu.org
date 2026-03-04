@@ -75,7 +75,7 @@ export class ProjectParticipationService {
     queryParams: FilterParticipationsDto
   ): Promise<[ProjectParticipation[], number]> {
     try {
-      const { page = 1, q } = queryParams;
+      const { page = 1, q, phaseId } = queryParams;
       const skip = (+page - 1) * 20;
       const query = this.participationRepository
         .createQueryBuilder('pp')
@@ -84,12 +84,14 @@ export class ProjectParticipationService {
         .leftJoinAndSelect('pp.project', 'project')
         .leftJoinAndSelect('pp.phases', 'phases')
         .loadRelationCountAndMap('pp.upvotesCount', 'pp.upvotes')
-        .where('project.id = :projectId', { projectId })
-        .orderBy('pp.created_at', 'DESC')
-        .distinct(true);
+        .where('pp.projectId = :projectId', { projectId })
+        .orderBy('pp.created_at', 'DESC');
       if (q) {
         query.andWhere('user.name LIKE :q', { q: `%${q}%` });
         query.andWhere('user.email LIKE :q', { q: `%${q}%` });
+      }
+      if (phaseId) {
+        query.andWhere('phases.id = :phaseId', { phaseId });
       }
       return await query.skip(skip).take(20).getManyAndCount();
     } catch {
