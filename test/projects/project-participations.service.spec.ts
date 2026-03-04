@@ -114,13 +114,23 @@ describe('ProjectParticipationService', () => {
       [{ id: 'pp1' }],
       1
     ]);
-    expect(queryBuilder.andWhere).toHaveBeenCalledTimes(1);
+    expect(queryBuilder.andWhere).toHaveBeenCalledTimes(2);
+    expect(queryBuilder.andWhere).toHaveBeenNthCalledWith(1, 'user.name LIKE :q', { q: '%  alice  %' });
+    expect(queryBuilder.andWhere).toHaveBeenNthCalledWith(2, 'user.email LIKE :q', { q: '%  alice  %' });
     expect(queryBuilder.skip).toHaveBeenCalledWith(40);
   });
 
-  it('does not apply search when q is blank', async () => {
+  it('applies search when q is whitespace-only', async () => {
     const { service, queryBuilder } = setup();
     await expect(service.findParticipations('project-1', { q: '   ' } as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
+    expect(queryBuilder.andWhere).toHaveBeenCalledTimes(2);
+    expect(queryBuilder.andWhere).toHaveBeenNthCalledWith(1, 'user.name LIKE :q', { q: '%   %' });
+    expect(queryBuilder.andWhere).toHaveBeenNthCalledWith(2, 'user.email LIKE :q', { q: '%   %' });
+  });
+
+  it('does not apply search when q is an empty string', async () => {
+    const { service, queryBuilder } = setup();
+    await expect(service.findParticipations('project-1', { q: '' } as any)).resolves.toEqual([[{ id: 'pp1' }], 1]);
     expect(queryBuilder.andWhere).not.toHaveBeenCalled();
   });
 

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProjectParticipation } from '../entities/project-participation.entity';
 import { ProjectParticipationUpvote } from '../entities/participation-upvote.entity';
 import { UsersService } from '@/modules/users/services/users.service';
@@ -87,15 +87,9 @@ export class ProjectParticipationService {
         .where('project.id = :projectId', { projectId })
         .orderBy('pp.created_at', 'DESC')
         .distinct(true);
-      if (q?.trim()) {
-        query.andWhere(
-          new Brackets((subQuery) => {
-            subQuery
-              .where('user.name LIKE :q', { q: `%${q.trim()}%` })
-              .orWhere('user.email LIKE :q', { q: `%${q.trim()}%` })
-              .orWhere('venture.name LIKE :q', { q: `%${q.trim()}%` });
-          })
-        );
+      if (q) {
+        query.andWhere('user.name LIKE :q', { q: `%${q}%` });
+        query.andWhere('user.email LIKE :q', { q: `%${q}%` });
       }
       return await query.skip(skip).take(20).getManyAndCount();
     } catch {
