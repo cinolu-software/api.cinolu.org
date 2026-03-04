@@ -92,7 +92,7 @@ describe('UsersService', () => {
   it('searches users', async () => {
     const { service, queryBuilder } = setup();
     await expect(service.search(' john ')).resolves.toEqual([{ id: 'u1' }]);
-    expect(queryBuilder.where).toHaveBeenCalledWith('u.name LIKE :term OR u.email LIKE :term', { term: '%john%' });
+    expect(queryBuilder.where).toHaveBeenCalledWith('u.name LIKE :q OR u.email LIKE :q', { q: '%john%' });
   });
 
   it('finds referring user', async () => {

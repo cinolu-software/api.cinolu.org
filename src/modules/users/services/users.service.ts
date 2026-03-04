@@ -97,12 +97,12 @@ export class UsersService {
     }
   }
 
-  async search(term: string): Promise<User[]> {
+  async search(q: string): Promise<User[]> {
     try {
-      const searchTerm = `%${term.trim()}%`;
+      const searchTerm = `%${q.trim()}%`;
       return await this.userRepository
         .createQueryBuilder('u')
-        .where('u.name LIKE :term OR u.email LIKE :term', { term: searchTerm })
+        .where('u.name LIKE :q OR u.email LIKE :q', { q: searchTerm })
         .take(20)
         .getMany();
     } catch {
