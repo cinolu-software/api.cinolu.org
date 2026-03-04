@@ -242,13 +242,10 @@ export class UsersService {
       const users = await this.userRepository.find({
         select: ['id', 'email', 'name']
       });
-
       const idsToDelete = users
         .filter((user) => !this.isValidEmail(user.email) || !this.isValidName(user.name))
         .map((user) => user.id);
-
       if (!idsToDelete.length) return 0;
-
       await this.userRepository.delete(idsToDelete);
       return idsToDelete.length;
     } catch {
