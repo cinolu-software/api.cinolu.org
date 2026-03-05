@@ -89,6 +89,8 @@ export class ProjectsService {
         .leftJoinAndSelect('p.program', 'program')
         .leftJoinAndSelect('p.gallery', 'gallery')
         .leftJoinAndSelect('p.phases', 'phases')
+        .leftJoinAndSelect('phases.mentors', 'mentors')
+        .leftJoinAndSelect('mentors.owner', 'owner')
         .leftJoinAndSelect('phases.deliverables', 'deliverables')
         .loadRelationCountAndMap('phases.participationsCount', 'phases.participations')
         .where('p.slug = :slug', { slug })
