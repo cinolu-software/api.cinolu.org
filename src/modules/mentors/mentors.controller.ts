@@ -54,7 +54,6 @@ export class MentorsController {
   }
 
   @Post(':mentorId/cv')
-  @Rbac({ resource: 'mentorApplications', action: 'update' })
   @UseInterceptors(FileInterceptor('cv', createDiskUploadOptions('./uploads/mentors/cvs')))
   addCv(@Param('mentorId') mentorId: string, @UploadedFile() file: Express.Multer.File): Promise<MentorProfile> {
     return this.mentorMediaService.addCv(mentorId, file);

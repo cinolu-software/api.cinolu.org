@@ -56,7 +56,6 @@ export class ProductsController {
   }
 
   @Get('me')
-  @Rbac({ resource: 'products', action: 'read', possession: 'own' })
   findMine(@CurrentUser() user: User, @Query() query: FilterProductsDto): Promise<[Product[], number]> {
     return this.productsService.findAll(user, query);
   }
