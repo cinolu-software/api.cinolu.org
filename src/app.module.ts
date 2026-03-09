@@ -16,21 +16,53 @@ import { VenturesModule } from './modules/ventures/ventures.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
-import { CoreConfigModule } from './core/config/config.module';
-import { JwtModule } from './shared/jwt/jwt.module';
-import { DatabaseModule } from './core/database/database.module';
-import { StaticModule } from './shared/static/static.module';
+import { DatabaseModule } from './shared/database/database.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { EmailModule } from './shared/email/email.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('MAIL_HOST'),
+          port: +configService.get('MAIL_PORT'),
+          auth: {
+            user: configService.get('MAIL_USERNAME'),
+            pass: configService.get('MAIL_PASSWORD')
+          }
+        },
+        defaults: {
+          from: `Support CINOLU <${configService.get('MAIL_USERNAME')}>`
+        },
+        isGlobal: true
+      })
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1d' }
+      })
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads'
+    }),
     EventEmitterModule.forRoot(),
-    CoreConfigModule,
-    JwtModule,
     DatabaseModule,
-    StaticModule,
-    EmailModule,
     AuthModule,
     UsersModule,
     VenturesModule,

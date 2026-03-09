@@ -13,6 +13,6 @@ export default new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   synchronize: false,
-  migrations: ['dist/core/database/migrations/*.js'],
+  migrations: ['dist/shared/database/migrations/*.js'],
   entities: ['dist/**/*.entity.js']
 });
