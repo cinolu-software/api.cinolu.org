@@ -13,10 +13,16 @@ export class ProjectsEmailService {
 
   @OnEvent('notify.participants')
   async notifyParticipants(recipients: User[] = [], notification: Notification): Promise<void> {
-    const emails = Array.from(new Set(recipients.map((r) => r?.email?.trim()).filter((e): e is string => !!e)));
+    const emails = Array.from(
+      new Set(
+        recipients
+          .map((recipient) => recipient?.email?.trim())
+          .filter((email): email is string => Boolean(email))
+      )
+    );
     if (emails.length === 0) return;
     const attachments = this.resolveExistingAttachments(notification);
-    const subject = `${notification.project.name} — ${notification.title}`;
+    const subject = `${notification.project?.name ?? 'Project'} - ${notification.title}`;
     const html = `
       <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;">
         <p><strong>Projet:</strong> ${notification.project?.name}</p>
@@ -29,6 +35,7 @@ export class ProjectsEmailService {
       wordwrap: 120,
       selectors: [{ selector: 'img', format: 'skip' }]
     });
+
     try {
       await this.mailerService.sendMail({
         to: emails,
