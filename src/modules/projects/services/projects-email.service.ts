@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -13,14 +13,9 @@ export class ProjectsEmailService {
 
   @OnEvent('notify.participants')
   async notifyParticipants(recipients: User[] = [], notification: Notification): Promise<void> {
-    const emails = Array.from(
-      new Set(
-        recipients
-          .map((recipient) => recipient?.email?.trim())
-          .filter((email): email is string => Boolean(email))
-      )
-    );
+    const emails = Array.from(new Set(recipients.map((r) => r?.email?.trim())));
     if (emails.length === 0) return;
+
     const attachments = this.resolveExistingAttachments(notification);
     const subject = `${notification.project?.name ?? 'Project'} - ${notification.title}`;
     const html = `
@@ -36,16 +31,18 @@ export class ProjectsEmailService {
       selectors: [{ selector: 'img', format: 'skip' }]
     });
 
-    try {
-      await this.mailerService.sendMail({
-        to: emails,
-        subject,
-        html,
-        text,
-        ...(attachments?.length ? { attachments } : {})
-      });
-    } catch {
-      throw new BadRequestException();
+    for (const email of emails) {
+      try {
+        await this.mailerService.sendMail({
+          to: email,
+          subject,
+          html,
+          text,
+          ...(attachments?.length ? { attachments } : {})
+        });
+      } catch {
+        continue;
+      }
     }
   }
 

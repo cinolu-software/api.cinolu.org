@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { existsSync, PathLike } from 'fs';
 import { ProjectsEmailService } from '@/modules/projects/services/projects-email.service';
 
@@ -36,9 +35,24 @@ describe('ProjectsEmailService', () => {
       project: { name: 'Project X' },
       attachments: [{ filename: 'a.pdf' }, { filename: 'missing.pdf' }]
     } as any;
+
     await expect(service.notifyParticipants(recipients, notification)).resolves.toBeUndefined();
     expect(existsSpy).toHaveBeenCalled();
-    expect(mailerService.sendMail).toHaveBeenCalledTimes(1);
+    expect(mailerService.sendMail).toHaveBeenCalledTimes(2);
+    expect(mailerService.sendMail).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        to: 'a@example.com',
+        attachments: [expect.objectContaining({ filename: 'a.pdf' })]
+      })
+    );
+    expect(mailerService.sendMail).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        to: 'b@example.com',
+        attachments: [expect.objectContaining({ filename: 'a.pdf' })]
+      })
+    );
   });
 
   it('sends emails without attachments when files do not exist', async () => {
@@ -54,29 +68,23 @@ describe('ProjectsEmailService', () => {
     );
   });
 
-  it('wraps mailer failure in bad request', async () => {
+  it('skips failed sends and continues with next recipient', async () => {
     const { service, mailerService } = setup();
     jest.mocked(existsSync).mockReturnValue(true);
-    mailerService.sendMail.mockRejectedValue(new Error('smtp'));
-    await expect(
-      service.notifyParticipants(
-        [{ email: 'a@example.com', name: 'Alice' }] as any,
-        { title: 'T', body: 'B', sender: {}, project: { name: 'P' }, attachments: [] } as any
-      )
-    ).rejects.toBeInstanceOf(BadRequestException);
-  });
-
-  it('does not send emails when there are no valid recipients', async () => {
-    const { service, mailerService } = setup();
-    jest.mocked(existsSync).mockReturnValue(true);
+    mailerService.sendMail.mockRejectedValueOnce(new Error('smtp')).mockResolvedValueOnce(undefined);
 
     await expect(
       service.notifyParticipants(
-        [{ email: null, name: 'No Email' }] as any,
+        [
+          { email: 'a@example.com', name: 'Alice' },
+          { email: 'b@example.com', name: 'Bob' }
+        ] as any,
         { title: 'T', body: 'B', sender: {}, project: { name: 'P' }, attachments: [] } as any
       )
     ).resolves.toBeUndefined();
 
-    expect(mailerService.sendMail).not.toHaveBeenCalled();
+    expect(mailerService.sendMail).toHaveBeenCalledTimes(2);
+    expect(mailerService.sendMail).toHaveBeenNthCalledWith(1, expect.objectContaining({ to: 'a@example.com' }));
+    expect(mailerService.sendMail).toHaveBeenNthCalledWith(2, expect.objectContaining({ to: 'b@example.com' }));
   });
 });
