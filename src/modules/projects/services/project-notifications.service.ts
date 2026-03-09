@@ -43,9 +43,11 @@ export class ProjectNotificationService {
       } else {
         recipients = await this.participationService.findByProject(notification.project.id);
       }
-      this.eventEmitter.emit('notify.participants', recipients, notification);
+      console.log(recipients?.length)
+      // this.eventEmitter.emit('notify.participants', recipients, notification);
       return await this.notificationsService.send(notificationId);
-    } catch {
+    } catch (e) {
+      console.log(e)
       throw new BadRequestException();
     }
   }

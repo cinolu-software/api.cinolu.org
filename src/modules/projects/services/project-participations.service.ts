@@ -156,8 +156,8 @@ export class ProjectParticipationService {
     return participations
       .map((participation) => participation.user)
       .filter((participant) => {
-        if (seen.has(participant.id)) return false;
-        seen.add(participant.id);
+        if (seen.has(participant?.id)) return false;
+        seen.add(participant?.id);
         return true;
       });
   }
