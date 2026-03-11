@@ -108,6 +108,34 @@ export class ProjectsController {
     return this.participationService.findUserParticipations(user.id);
   }
 
+  @Get('me/mentored-projects')
+  findMentorProjects(@CurrentUser() user: User): Promise<Project[]> {
+    return this.projectsService.findMentorProjects(user.id);
+  }
+
+  @Get('me/mentored-projects/:projectId/participations/:participationId')
+  findMentorParticipationDetail(
+    @CurrentUser() user: User,
+    @Param('projectId') projectId: string,
+    @Param('participationId') participationId: string
+  ): Promise<ProjectParticipation> {
+    return this.participationService.findMentorParticipationDetail(user.id, projectId, participationId);
+  }
+
+  @Get('me/mentored-projects/:projectId/participations')
+  findMentorParticipations(
+    @CurrentUser() user: User,
+    @Param('projectId') projectId: string,
+    @Query() query: FilterParticipationsDto
+  ): Promise<[ProjectParticipation[], number]> {
+    return this.participationService.findMentorProjectParticipations(user.id, projectId, query);
+  }
+
+  @Get('me/mentored-projects/:projectId')
+  findMentorProject(@CurrentUser() user: User, @Param('projectId') projectId: string): Promise<Project> {
+    return this.projectsService.findMentorProject(projectId, user.id);
+  }
+
   @Get(':projectId/participations')
   @Public()
   findParticipations(

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { ProjectParticipation } from '../entities/project-participation.entity';
@@ -96,6 +96,74 @@ export class ProjectParticipationService {
       return await query.skip(skip).take(20).getManyAndCount();
     } catch {
       throw new BadRequestException();
+    }
+  }
+
+  async findMentorProjectParticipations(
+    userId: string,
+    projectId: string,
+    queryParams: FilterParticipationsDto
+  ): Promise<[ProjectParticipation[], number]> {
+    try {
+      await this.projectsService.findMentorProject(projectId, userId);
+      const { page = 1, q, phaseId } = queryParams;
+      const skip = (+page - 1) * 20;
+      const query = this.participationRepository
+        .createQueryBuilder('pp')
+        .leftJoinAndSelect('pp.user', 'user')
+        .leftJoinAndSelect('pp.venture', 'venture')
+        .leftJoinAndSelect('pp.project', 'project')
+        .leftJoinAndSelect('project.program', 'subprogram')
+        .leftJoinAndSelect('subprogram.program', 'program')
+        .leftJoinAndSelect('pp.phases', 'phases')
+        .loadRelationCountAndMap('pp.upvotesCount', 'pp.upvotes')
+        .where('pp.projectId = :projectId', { projectId })
+        .orderBy('pp.created_at', 'DESC');
+
+      if (q) {
+        query.andWhere('(user.name LIKE :q OR user.email LIKE :q)', { q: `%${q}%` });
+      }
+
+      if (phaseId) {
+        query.andWhere('phases.id = :phaseId', { phaseId });
+      }
+
+      return await query.skip(skip).take(20).getManyAndCount();
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new BadRequestException();
+    }
+  }
+
+  async findMentorParticipationDetail(
+    userId: string,
+    projectId: string,
+    participationId: string
+  ): Promise<ProjectParticipation> {
+    try {
+      await this.projectsService.findMentorProject(projectId, userId);
+      const participation = await this.participationRepository
+        .createQueryBuilder('pp')
+        .leftJoinAndSelect('pp.user', 'user')
+        .leftJoinAndSelect('pp.venture', 'venture')
+        .leftJoinAndSelect('pp.project', 'project')
+        .leftJoinAndSelect('project.categories', 'categories')
+        .leftJoinAndSelect('project.program', 'subprogram')
+        .leftJoinAndSelect('subprogram.program', 'program')
+        .leftJoinAndSelect('project.phases', 'project_phases')
+        .leftJoinAndSelect('project_phases.mentors', 'mentors')
+        .leftJoinAndSelect('mentors.owner', 'owner')
+        .leftJoinAndSelect('pp.phases', 'phases')
+        .leftJoinAndSelect('pp.deliverable_submissions', 'deliverable_submissions')
+        .leftJoinAndSelect('deliverable_submissions.deliverable', 'deliverable')
+        .loadRelationCountAndMap('pp.upvotesCount', 'pp.upvotes')
+        .where('pp.id = :participationId', { participationId })
+        .andWhere('pp.projectId = :projectId', { projectId })
+        .getOneOrFail();
+
+      return participation;
+    } catch {
+      throw new NotFoundException();
     }
   }
 
