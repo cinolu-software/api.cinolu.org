@@ -37,14 +37,14 @@ export class ProductsController {
   }
 
   @Post(':productId/gallery')
-  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('productId') productId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.productMediaService.addImage(productId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
     return this.productMediaService.removeGallery(galleryId);
   }
@@ -67,13 +67,13 @@ export class ProductsController {
   }
 
   @Patch('by-slug/:slug')
-  @Rbac({ resource: 'products', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'update' })
   update(@Param('slug') slug: string, @Body() dto: UpdateProductDto): Promise<Product> {
     return this.productsService.update(slug, dto);
   }
 
   @Delete(':id')
-  @Rbac({ resource: 'products', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'products', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.productsService.remove(id);
   }

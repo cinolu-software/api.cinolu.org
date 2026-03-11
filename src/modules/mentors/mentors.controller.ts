@@ -95,13 +95,13 @@ export class MentorsController {
   }
 
   @Patch(':mentorId')
-  @Rbac({ resource: 'mentors', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'mentors', action: 'update' })
   update(@Param('mentorId') mentorId: string, @Body() dto: UpdateMentorRequestDto): Promise<MentorProfile> {
     return this.mentorsService.update(mentorId, dto);
   }
 
   @Delete(':mentorId')
-  @Rbac({ resource: 'mentors', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'mentors', action: 'delete' })
   remove(@Param('mentorId') mentorId: string): Promise<void> {
     return this.mentorsService.remove(mentorId);
   }

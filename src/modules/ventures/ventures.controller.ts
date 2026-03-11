@@ -71,14 +71,14 @@ export class VenturesController {
   }
 
   @Post(':ventureId/gallery')
-  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update' })
   @UseInterceptors(FileInterceptor('image', createDiskUploadOptions('./uploads/galleries')))
   addImage(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<void> {
     return this.ventureMediaService.addImage(ventureId, file);
   }
 
   @Delete('gallery/:galleryId')
-  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update' })
   removeGallery(@Param('galleryId') galleryId: string): Promise<void> {
     return this.ventureMediaService.removeImage(galleryId);
   }
@@ -90,14 +90,14 @@ export class VenturesController {
   }
 
   @Post(':ventureId/logo')
-  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update' })
   @UseInterceptors(FileInterceptor('logo', createDiskUploadOptions('./uploads/ventures/logos')))
   addLogo(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addLogo(ventureId, file);
   }
 
   @Post(':ventureId/cover')
-  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update' })
   @UseInterceptors(FileInterceptor('cover', createDiskUploadOptions('./uploads/ventures/covers')))
   addCover(@Param('ventureId') ventureId: string, @UploadedFile() file: Express.Multer.File): Promise<Venture> {
     return this.ventureMediaService.addCover(ventureId, file);
@@ -109,13 +109,13 @@ export class VenturesController {
   }
 
   @Patch(':slug')
-  @Rbac({ resource: 'ventures', action: 'update', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'update' })
   update(@Param('slug') slug: string, @Body() dto: UpdateVentureDto): Promise<Venture> {
     return this.venturesService.update(slug, dto);
   }
 
   @Delete(':id')
-  @Rbac({ resource: 'ventures', action: 'delete', possession: 'own' })
+  @Rbac({ resource: 'ventures', action: 'delete' })
   remove(@Param('id') id: string): Promise<void> {
     return this.venturesService.remove(id);
   }

@@ -4,7 +4,7 @@ import { AuthPasswordService } from './services/auth-password.service';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { Request, Response } from 'express';
+import { Response, Request } from 'express';
 import { LocalAuthGuard, GoogleAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser, Public } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
