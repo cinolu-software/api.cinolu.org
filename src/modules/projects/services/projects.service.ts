@@ -72,7 +72,6 @@ export class ProjectsService {
     try {
       return await this.projectRepository
         .createQueryBuilder('project')
-        .distinct(true)
         .leftJoinAndSelect('project.categories', 'categories')
         .leftJoinAndSelect('project.project_manager', 'project_manager')
         .leftJoinAndSelect('project.program', 'subprogram')
