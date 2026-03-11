@@ -1,14 +1,16 @@
 import { Provider } from '@nestjs/common';
-import { ModuleRbacPolicy } from './rbac-policy';
-import { RbacService } from './rbac.service';
+import { ModuleRbacPolicy, RbacRegistryService } from 'nestjs-session-auth';
 
+/** @deprecated Use SessionAuthModule.forFeature() directly */
 export const createRbac = (policy: ModuleRbacPolicy): Provider => ({
   provide: `RBAC_POLICY_REGISTRATION:${policy.module}`,
-  inject: [RbacService],
-  useFactory: (registry: RbacService): boolean => {
+  inject: [RbacRegistryService],
+  useFactory: (registry: RbacRegistryService): boolean => {
     registry.register(policy);
     return true;
-  }
+  },
 });
 
-export const createRbacProviders = (policies: ModuleRbacPolicy[]): Provider[] => policies.map(createRbac);
+/** @deprecated Use SessionAuthModule.forFeature() directly */
+export const createRbacProviders = (policies: ModuleRbacPolicy[]): Provider[] =>
+  policies.map(createRbac);

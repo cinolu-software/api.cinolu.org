@@ -10,11 +10,10 @@ import { StatsModule } from './modules/stats/stats.module';
 import { SubprogramsModule } from './modules/subprograms/subprograms.module';
 import { UsersModule } from './modules/users/users.module';
 import { TransformInterceptor } from './core/interceptors/transform.interceptor';
-import { AuthGuard } from './core/auth/guards/auth.guard';
+import { SessionAuthGuard, RbacGuard } from 'nestjs-session-auth';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { RbacGuard } from './core/auth/guards/rbac.guard';
 import { GalleriesModule } from './shared/galleries/galleries.module';
 import { DatabaseModule } from './shared/database/database.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -78,7 +77,7 @@ import { join } from 'path';
     NotificationsModule
   ],
   providers: [
-    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: SessionAuthGuard },
     { provide: APP_GUARD, useClass: RbacGuard },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ]

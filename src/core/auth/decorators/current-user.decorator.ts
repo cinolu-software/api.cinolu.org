@@ -1,7 +1,5 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-
-export const CurrentUser = createParamDecorator((key: string, ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest();
-  const user = request.user;
-  return key ? user?.[key] : user;
-});
+/**
+ * Re-exports from nestjs-session-auth for backward compatibility.
+ * @deprecated Import directly from 'nestjs-session-auth'
+ */
+export { CurrentUser } from 'nestjs-session-auth';

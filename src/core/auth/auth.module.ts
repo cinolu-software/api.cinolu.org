@@ -1,20 +1,22 @@
 import { Global, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
-import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './serializers/session.serializer';
 import { UsersModule } from '@/modules/users/users.module';
 import { AuthEmailService } from './services/auth-email.service';
 import { AuthPasswordService } from './services/auth-password.service';
-import { RbacService } from './rbac/rbac.service';
+import { SessionAuthModule, RbacRegistryService } from 'nestjs-session-auth';
 import { SYSTEM_RBAC_POLICY } from './rbac/system-rbac';
-import { RBACModule } from './rbac/rbac.module';
 
 @Global()
 @Module({
-  imports: [PassportModule, UsersModule, RBACModule.forFeature([SYSTEM_RBAC_POLICY])],
+  imports: [
+    UsersModule,
+    // Register the session-auth library with system-wide admin policy
+    SessionAuthModule.forRoot({ policies: [SYSTEM_RBAC_POLICY] }),
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -23,8 +25,7 @@ import { RBACModule } from './rbac/rbac.module';
     SessionSerializer,
     GoogleStrategy,
     AuthEmailService,
-    RbacService
   ],
-  exports: [AuthService, RbacService]
+  exports: [AuthService, RbacRegistryService],
 })
 export class AuthModule {}

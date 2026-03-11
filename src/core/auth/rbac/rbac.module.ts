@@ -1,13 +1,13 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { ModuleRbacPolicy } from './rbac-policy';
-import { createRbacProviders } from './rbac.provider';
+import { SessionAuthModule, ModuleRbacPolicy } from 'nestjs-session-auth';
 
+/**
+ * Thin wrapper around SessionAuthModule.forFeature for backward compatibility.
+ * @deprecated Use SessionAuthModule.forFeature() directly from 'nestjs-session-auth'
+ */
 @Module({})
 export class RBACModule {
   static forFeature(policies: ModuleRbacPolicy[]): DynamicModule {
-    return {
-      module: RBACModule,
-      providers: createRbacProviders(policies)
-    };
+    return SessionAuthModule.forFeature(policies);
   }
 }

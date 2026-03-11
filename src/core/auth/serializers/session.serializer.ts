@@ -1,14 +1,11 @@
-import { PassportSerializer } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { User } from '@/modules/users/entities/user.entity';
+import { DefaultSessionSerializer } from 'nestjs-session-auth';
 
+/**
+ * Session serializer — delegates to the library's DefaultSessionSerializer
+ * which stores the full user object in the session.
+ *
+ * To override (e.g. serialize only ID), extend PassportSerializer directly.
+ */
 @Injectable()
-export class SessionSerializer extends PassportSerializer {
-  serializeUser(user: User, done: (err: Error, user: User) => void): void {
-    done(null, user);
-  }
-
-  deserializeUser(payload: string, done: (err: Error, payload: string) => void) {
-    done(null, payload);
-  }
-}
+export class SessionSerializer extends DefaultSessionSerializer {}

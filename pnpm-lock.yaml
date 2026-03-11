@@ -74,6 +74,9 @@ importers:
       multer:
         specifier: 2.0.2
         version: 2.0.2
+      nestjs-session-auth:
+        specifier: link:/Users/Musanzi/Documents/projects/nestjs-session-auth
+        version: link:../../nestjs-session-auth
       nodemailer:
         specifier: 7.0.9
         version: 7.0.9
