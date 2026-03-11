@@ -7,7 +7,7 @@ import { UsersModule } from '@/modules/users/users.module';
 import { AuthEmailService } from './services/auth-email.service';
 import { AuthPasswordService } from './services/auth-password.service';
 import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
-import { SYSTEM_RBAC_POLICY } from './rbac/system-rbac';
+import { SYSTEM_RBAC_POLICY } from './system-rbac';
 
 @Global()
 @Module({
