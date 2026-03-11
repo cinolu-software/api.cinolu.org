@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LocalAuthStrategy } from 'nestjs-session-auth';
 import { AuthService } from '../services/auth.service';
 

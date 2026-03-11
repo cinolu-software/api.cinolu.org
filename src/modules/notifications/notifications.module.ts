@@ -7,13 +7,13 @@ import { NotificationAttachment } from './entities/attachment.entity';
 import { UsersModule } from '../users/users.module';
 import { NotificationAttachmentsService } from './services/notification-attachments.service';
 import { NOTIFICATIONS_RBAC_POLICY } from './notifications-rbac';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Notification, NotificationAttachment]),
     UsersModule,
-    RBACModule.forFeature([NOTIFICATIONS_RBAC_POLICY])
+    SessionAuthModule.forFeature([NOTIFICATIONS_RBAC_POLICY])
   ],
   controllers: [NotificationsController],
   providers: [NotificationsService, NotificationAttachmentsService],

@@ -10,14 +10,14 @@ import { VenturesEmailService } from './services/ventures-email.service';
 import { VentureMediaService } from './services/venture-media.service';
 import { VENTURES_RBAC_POLICY } from './ventures-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Venture, VentureDocument]),
     ProductsModule,
     GalleriesModule,
-    RBACModule.forFeature([VENTURES_RBAC_POLICY])
+    SessionAuthModule.forFeature([VENTURES_RBAC_POLICY])
   ],
   controllers: [VenturesController],
   providers: [VenturesService, VentureMediaService, VenturesEmailService, VentureSubscriber],

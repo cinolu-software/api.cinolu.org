@@ -17,11 +17,11 @@ import { UpdateVentureDto } from './dto/update-venture.dto';
 import { Venture } from './entities/venture.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { FilterVenturesDto } from './dto/filter-ventures.dto';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
-import { Public } from '@/core/auth/decorators/public.decorator';
+import { Rbac } from 'nestjs-session-auth';
+import { Public } from 'nestjs-session-auth';
 import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('ventures')

@@ -4,7 +4,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { FilterRolesDto } from './dto/filter-roles.dto';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
+import { Rbac } from 'nestjs-session-auth';
 
 @Controller('roles')
 export class RolesController {

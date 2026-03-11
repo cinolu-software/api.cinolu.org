@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { StatsController } from './stats.controller';
 import { StatsService } from './services/stats.service';
 import { STATS_RBAC_POLICY } from './stats-rbac';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
-  imports: [RBACModule.forFeature([STATS_RBAC_POLICY])],
+  imports: [SessionAuthModule.forFeature([STATS_RBAC_POLICY])],
   controllers: [StatsController],
   providers: [StatsService]
 })

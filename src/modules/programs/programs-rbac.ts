@@ -1,5 +1,5 @@
 import { Role } from '@/core/auth/enums/roles.enum';
-import { ModuleRbacPolicy } from '@/core/auth/rbac/rbac-policy';
+import { ModuleRbacPolicy } from 'nestjs-session-auth';
 
 export const PROGRAMS_RBAC_POLICY: ModuleRbacPolicy = {
   module: 'programs',

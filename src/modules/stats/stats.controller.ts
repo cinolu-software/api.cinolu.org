@@ -2,9 +2,9 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { StatsService } from './services/stats.service';
 import { IUSerStats } from './types/user-stats.type';
 import { IAdminStatsGeneral, IAdminStatsByYear } from './types/admin-stats.type';
-import { CurrentUser } from '../../core/auth/decorators/current-user.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
+import { Rbac } from 'nestjs-session-auth';
 
 @Controller('stats')
 export class StatsController {

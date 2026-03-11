@@ -4,10 +4,10 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
 import { User } from '@/modules/users/entities/user.entity';
-import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
 import { FilterCommentsDto } from './dto/filter-comments.dto';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
-import { Public } from '@/core/auth/decorators/public.decorator';
+import { Rbac } from 'nestjs-session-auth';
+import { Public } from 'nestjs-session-auth';
 
 @Controller('comments')
 export class CommentsController {

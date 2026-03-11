@@ -3,9 +3,9 @@ import { ArticlesModule } from './articles/articles.module';
 import { TagsModule } from './tags/tags.module';
 import { CommentsModule } from './comments/comments.module';
 import { BLOG_RBAC_POLICY } from './blog-rbac';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
-  imports: [ArticlesModule, TagsModule, CommentsModule, RBACModule.forFeature([BLOG_RBAC_POLICY])]
+  imports: [ArticlesModule, TagsModule, CommentsModule, SessionAuthModule.forFeature([BLOG_RBAC_POLICY])]
 })
 export class BlogModule {}

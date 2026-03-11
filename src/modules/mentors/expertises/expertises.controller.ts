@@ -4,7 +4,7 @@ import { CreateExpertiseDto } from './dto/create-expertise.dto';
 import { UpdateExpertiseDto } from './dto/update-expertise.dto';
 import { Expertise } from './entities/expertise.entity';
 import { FilterExpertisesDto } from './dto/filter-expertises.dto';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
+import { Rbac } from 'nestjs-session-auth';
 
 @Controller('expertises')
 export class ExpertisesController {

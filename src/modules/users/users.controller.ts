@@ -23,9 +23,9 @@ import { UserMediaService } from './services/user-media.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUsersDto } from './dto/filter-users.dto';
 import { Response } from 'express';
-import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
-import { Public } from '@/core/auth/decorators/public.decorator';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
+import { Public } from 'nestjs-session-auth';
+import { Rbac } from 'nestjs-session-auth';
 
 @Controller('users')
 export class UsersController {

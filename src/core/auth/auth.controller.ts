@@ -5,12 +5,10 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Request, Response } from 'express';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { GoogleAuthGuard } from './guards/google-auth.guard';
-import { CurrentUser } from './decorators/current-user.decorator';
+import { LocalAuthGuard, GoogleAuthGuard } from './guards/local-auth.guard';
+import { CurrentUser, Public } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { Public } from './decorators/public.decorator';
 import { ContactSupportDto } from './dto/contact-support.dto';
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
 

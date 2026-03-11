@@ -18,7 +18,7 @@ import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { MentorsModule } from '../mentors/mentors.module';
 import { PROJECTS_RBAC_POLICY } from './projects-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { RBACModule } from '@/core/auth/rbac/rbac.module';
     UsersModule,
     VenturesModule,
     TypeOrmModule.forFeature([Project, ProjectParticipation, ProjectParticipationUpvote]),
-    RBACModule.forFeature([PROJECTS_RBAC_POLICY])
+    SessionAuthModule.forFeature([PROJECTS_RBAC_POLICY])
   ],
   providers: [
     ProjectsService,

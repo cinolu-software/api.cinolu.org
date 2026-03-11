@@ -16,12 +16,12 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { FilterArticlesDto } from './dto/filter-articles.dto';
-import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
-import { Public } from '@/core/auth/decorators/public.decorator';
+import { Rbac } from 'nestjs-session-auth';
+import { Public } from 'nestjs-session-auth';
 import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('articles')

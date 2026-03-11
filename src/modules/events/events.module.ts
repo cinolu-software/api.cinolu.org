@@ -10,14 +10,14 @@ import { EventMediaService } from './services/event-media.service';
 import { EventParticipationService } from './services/event-participation.service';
 import { EVENTS_RBAC_POLICY } from './events-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Event, EventParticipation]),
     EventCategoriesModule,
     GalleriesModule,
-    RBACModule.forFeature([EVENTS_RBAC_POLICY])
+    SessionAuthModule.forFeature([EVENTS_RBAC_POLICY])
   ],
   controllers: [EventsController],
   providers: [EventsService, EventMediaService, EventParticipationService, EventSubscriber],

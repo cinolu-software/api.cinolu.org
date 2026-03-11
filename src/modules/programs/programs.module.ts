@@ -7,10 +7,10 @@ import { ProgramSubscriber } from './subscribers/program.subscriber';
 import { ProgramCategoriesModule } from './categories/categories.module';
 import { ProgramMediaService } from './services/program-media.service';
 import { PROGRAMS_RBAC_POLICY } from './programs-rbac';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
-  imports: [ProgramCategoriesModule, TypeOrmModule.forFeature([Program]), RBACModule.forFeature([PROGRAMS_RBAC_POLICY])],
+  imports: [ProgramCategoriesModule, TypeOrmModule.forFeature([Program]), SessionAuthModule.forFeature([PROGRAMS_RBAC_POLICY])],
   controllers: [ProgramsController],
   providers: [ProgramsService, ProgramMediaService, ProgramSubscriber],
   exports: [ProgramsService]

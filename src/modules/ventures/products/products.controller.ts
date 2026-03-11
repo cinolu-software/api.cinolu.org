@@ -15,13 +15,13 @@ import { ProductMediaService } from './services/product-media.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-import { Rbac } from '@/core/auth/decorators/rbac.decorator';
+import { Rbac } from 'nestjs-session-auth';
 import { FilterProductsDto } from './dto/filter-products.dto';
-import { CurrentUser } from '@/core/auth/decorators/current-user.decorator';
+import { CurrentUser } from 'nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { Public } from '@/core/auth/decorators/public.decorator';
+import { Public } from 'nestjs-session-auth';
 import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 
 @Controller('products')

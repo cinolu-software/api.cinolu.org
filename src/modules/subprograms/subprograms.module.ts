@@ -8,14 +8,14 @@ import { EventsModule } from '../events/events.module';
 import { ProjectsModule } from '../projects/projects.module';
 import { SubprogramMediaService } from './services/subprogram-media.service';
 import { SUBPROGRAMS_RBAC_POLICY } from './subprograms-rbac';
-import { RBACModule } from '@/core/auth/rbac/rbac.module';
+import { SessionAuthModule } from 'nestjs-session-auth';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Subprogram]),
     ProjectsModule,
     EventsModule,
-    RBACModule.forFeature([SUBPROGRAMS_RBAC_POLICY])
+    SessionAuthModule.forFeature([SUBPROGRAMS_RBAC_POLICY])
   ],
   controllers: [SubprogramsController],
   providers: [SubprogramsService, SubprogramMediaService, SubprogramSubscriber]
