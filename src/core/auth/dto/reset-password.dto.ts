@@ -1,5 +1,4 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
-import { Match } from '../decorators/match.decorator';
 
 export class ResetPasswordDto {
   @IsNotEmpty()
@@ -7,7 +6,4 @@ export class ResetPasswordDto {
 
   @MinLength(6)
   password: string;
-
-  @Match('password')
-  password_confirm: string;
 }

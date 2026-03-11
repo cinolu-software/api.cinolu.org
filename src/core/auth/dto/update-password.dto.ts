@@ -1,11 +1,6 @@
-import { IsNotEmpty, MinLength } from 'class-validator';
-import { Match } from '../decorators/match.decorator';
+import { MinLength } from 'class-validator';
 
 export class UpdatePasswordDto {
   @MinLength(6)
   password: string;
-
-  @IsNotEmpty()
-  @Match('password')
-  password_confirm: string;
 }

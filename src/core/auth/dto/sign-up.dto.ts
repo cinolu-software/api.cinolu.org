@@ -1,5 +1,4 @@
 import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
-import { Match } from '@/core/auth/decorators/match.decorator';
 
 export class SignUpDto {
   @IsEmail()
@@ -22,9 +21,6 @@ export class SignUpDto {
 
   @MinLength(6)
   password: string;
-
-  @Match('password', { message: 'Passwords do not match' })
-  password_confirm: string;
 
   @IsOptional()
   referral_code: string;
