@@ -17,49 +17,13 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { GalleriesModule } from './shared/galleries/galleries.module';
 import { DatabaseModule } from './shared/database/database.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { EmailModule } from './shared/email/email.module';
+import { JwtModule } from './shared/jwt/jwt.module';
+import { StaticModule } from './shared/static/static.module';
+import { ConfigModule } from './shared/config/config.module';
 
 @Module({
   imports: [
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        transport: {
-          host: configService.get('MAIL_HOST'),
-          port: +configService.get('MAIL_PORT'),
-          auth: {
-            user: configService.get('MAIL_USERNAME'),
-            pass: configService.get('MAIL_PASSWORD')
-          }
-        },
-        defaults: {
-          from: `Support CINOLU <${configService.get('MAIL_USERNAME')}>`
-        },
-        isGlobal: true
-      })
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      cache: true
-    }),
-    JwtModule.registerAsync({
-      global: true,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' }
-      })
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads'
-    }),
     EventEmitterModule.forRoot(),
     DatabaseModule,
     AuthModule,
@@ -74,7 +38,11 @@ import { join } from 'path';
     EventsModule,
     ProjectsModule,
     MentorsModule,
-    NotificationsModule
+    NotificationsModule,
+    EmailModule,
+    JwtModule,
+    StaticModule,
+    ConfigModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: SessionAuthGuard },
