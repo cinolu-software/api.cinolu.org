@@ -10,7 +10,7 @@ import { VenturesEmailService } from './services/ventures-email.service';
 import { VentureMediaService } from './services/venture-media.service';
 import { VENTURES_RBAC_POLICY } from './ventures-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DefaultSessionSerializer } from 'nestjs-session-auth';
+import { DefaultSessionSerializer } from '@musanzi/nestjs-session-auth';
 
 /**
  * Session serializer — delegates to the library's DefaultSessionSerializer

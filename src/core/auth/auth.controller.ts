@@ -6,7 +6,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Response, Request } from 'express';
 import { LocalAuthGuard, GoogleAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser, Public } from 'nestjs-session-auth';
+import { CurrentUser, Public } from '@musanzi/nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { ContactSupportDto } from './dto/contact-support.dto';

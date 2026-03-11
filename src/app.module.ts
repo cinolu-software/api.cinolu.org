@@ -10,7 +10,7 @@ import { StatsModule } from './modules/stats/stats.module';
 import { SubprogramsModule } from './modules/subprograms/subprograms.module';
 import { UsersModule } from './modules/users/users.module';
 import { TransformInterceptor } from './core/interceptors/transform.interceptor';
-import { SessionAuthGuard, RbacGuard } from 'nestjs-session-auth';
+import { SessionAuthGuard, RbacGuard } from '@musanzi/nestjs-session-auth';
 import { MentorsModule } from './modules/mentors/mentors.module';
 import { VenturesModule } from './modules/ventures/ventures.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';

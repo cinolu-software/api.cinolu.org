@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleAuthStrategy, GoogleProfile, GoogleVerifyCallback } from 'nestjs-session-auth';
+import { GoogleAuthStrategy, GoogleProfile, GoogleVerifyCallback } from '@musanzi/nestjs-session-auth';
 import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
 

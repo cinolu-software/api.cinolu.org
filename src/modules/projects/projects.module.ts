@@ -18,7 +18,7 @@ import { ProjectSubscriber } from './subscribers/project.subscriber';
 import { MentorsModule } from '../mentors/mentors.module';
 import { PROJECTS_RBAC_POLICY } from './projects-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

@@ -4,8 +4,8 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ProgramCategory } from './entities/category.entity';
 import { QueryParams } from './utils/query-params.type';
-import { Rbac } from 'nestjs-session-auth';
-import { Public } from 'nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
+import { Public } from '@musanzi/nestjs-session-auth';
 
 @Controller('program-categories')
 export class ProgramCategoriesController {

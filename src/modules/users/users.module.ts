@@ -10,7 +10,7 @@ import { UsersReferralService } from './services/users-referral.service';
 import { UsersExportService } from './services/users-export.service';
 import { UserMediaService } from './services/user-media.service';
 import { USERS_RBAC_POLICY } from './users-rbac';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), RolesModule, SessionAuthModule.forFeature([USERS_RBAC_POLICY])],

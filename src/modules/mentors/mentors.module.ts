@@ -10,7 +10,7 @@ import { MentorExperiencesService } from './services/mentor-experiences.service'
 import { MentorsEmailService } from './services/mentors-email.service';
 import { MentorMediaService } from './services/mentor-media.service';
 import { MENTORS_RBAC_POLICY } from './mentors-rbac';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

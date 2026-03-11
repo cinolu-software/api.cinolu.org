@@ -10,7 +10,7 @@ import { EventMediaService } from './services/event-media.service';
 import { EventParticipationService } from './services/event-participation.service';
 import { EVENTS_RBAC_POLICY } from './events-rbac';
 import { GalleriesModule } from '@/shared/galleries/galleries.module';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

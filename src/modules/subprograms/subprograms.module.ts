@@ -8,7 +8,7 @@ import { EventsModule } from '../events/events.module';
 import { ProjectsModule } from '../projects/projects.module';
 import { SubprogramMediaService } from './services/subprogram-media.service';
 import { SUBPROGRAMS_RBAC_POLICY } from './subprograms-rbac';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

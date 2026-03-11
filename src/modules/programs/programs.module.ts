@@ -7,7 +7,7 @@ import { ProgramSubscriber } from './subscribers/program.subscriber';
 import { ProgramCategoriesModule } from './categories/categories.module';
 import { ProgramMediaService } from './services/program-media.service';
 import { PROGRAMS_RBAC_POLICY } from './programs-rbac';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [ProgramCategoriesModule, TypeOrmModule.forFeature([Program]), SessionAuthModule.forFeature([PROGRAMS_RBAC_POLICY])],

@@ -4,8 +4,8 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { FilterTagsDto } from './dto/filter-tags.dto';
 import { Tag } from './entities/tag.entity';
-import { Rbac } from 'nestjs-session-auth';
-import { Public } from 'nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
+import { Public } from '@musanzi/nestjs-session-auth';
 
 @Controller('tags')
 export class TagsController {

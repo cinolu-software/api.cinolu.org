@@ -1,2 +1,2 @@
-export { LocalAuthGuard } from 'nestjs-session-auth';
-export { GoogleAuthGuard } from 'nestjs-session-auth';
+export { LocalAuthGuard } from '@musanzi/nestjs-session-auth';
+export { GoogleAuthGuard } from '@musanzi/nestjs-session-auth';

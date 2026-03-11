@@ -7,7 +7,7 @@ import { NotificationAttachment } from './entities/attachment.entity';
 import { UsersModule } from '../users/users.module';
 import { NotificationAttachmentsService } from './services/notification-attachments.service';
 import { NOTIFICATIONS_RBAC_POLICY } from './notifications-rbac';
-import { SessionAuthModule } from 'nestjs-session-auth';
+import { SessionAuthModule } from '@musanzi/nestjs-session-auth';
 
 @Module({
   imports: [

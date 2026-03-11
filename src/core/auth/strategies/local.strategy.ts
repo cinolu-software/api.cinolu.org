@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LocalAuthStrategy } from 'nestjs-session-auth';
+import { LocalAuthStrategy } from '@musanzi/nestjs-session-auth';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()

@@ -6,8 +6,8 @@ import { UpdateSubprogramDto } from './dto/update-subprogram.dto';
 import { Subprogram } from './entities/subprogram.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { Public } from 'nestjs-session-auth';
-import { Rbac } from 'nestjs-session-auth';
+import { Public } from '@musanzi/nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
 
 @Controller('subprograms')
 export class SubprogramsController {

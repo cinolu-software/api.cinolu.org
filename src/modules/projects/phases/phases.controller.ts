@@ -3,7 +3,7 @@ import { PhasesService } from './services/phases.service';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
 import { Phase } from './entities/phase.entity';
-import { Rbac } from 'nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
 
 @Controller('phases')
 export class PhasesController {

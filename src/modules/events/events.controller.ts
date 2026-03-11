@@ -19,9 +19,9 @@ import { Event } from './entities/event.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
 import { FilterEventsDto } from './dto/filter-events.dto';
-import { Rbac } from 'nestjs-session-auth';
-import { Public } from 'nestjs-session-auth';
-import { CurrentUser } from 'nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
+import { Public } from '@musanzi/nestjs-session-auth';
+import { CurrentUser } from '@musanzi/nestjs-session-auth';
 import { User } from '@/modules/users/entities/user.entity';
 import { Gallery } from '@/shared/galleries/entities/gallery.entity';
 

@@ -1,5 +1,5 @@
 import { Role } from '@/core/auth/enums/roles.enum';
-import { ModuleRbacPolicy } from 'nestjs-session-auth';
+import { ModuleRbacPolicy } from '@musanzi/nestjs-session-auth';
 
 export const VENTURES_RBAC_POLICY: ModuleRbacPolicy = {
   module: 'ventures',
@@ -13,7 +13,6 @@ export const VENTURES_RBAC_POLICY: ModuleRbacPolicy = {
       roles: [Role.USER],
       actions: ['create', 'update'],
       resources: ['ventures', 'products'],
-      possession: 'own'
     }
   ]
 };

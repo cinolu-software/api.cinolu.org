@@ -18,8 +18,8 @@ import { Program } from './entities/program.entity';
 import { FilterProgramsDto } from './dto/filter-programs.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createDiskUploadOptions } from '@/core/helpers/upload.helper';
-import { Public } from 'nestjs-session-auth';
-import { Rbac } from 'nestjs-session-auth';
+import { Public } from '@musanzi/nestjs-session-auth';
+import { Rbac } from '@musanzi/nestjs-session-auth';
 
 @Controller('programs')
 export class ProgramsController {
