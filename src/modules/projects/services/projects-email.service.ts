@@ -15,7 +15,6 @@ export class ProjectsEmailService {
   async notifyParticipants(recipients: User[] = [], notification: Notification): Promise<void> {
     const emails = Array.from(new Set(recipients.map((r) => r?.email?.trim())));
     if (emails.length === 0) return;
-
     const attachments = this.resolveExistingAttachments(notification);
     const subject = `${notification.project?.name ?? 'Project'} - ${notification.title}`;
     const html = `
@@ -30,7 +29,6 @@ export class ProjectsEmailService {
       wordwrap: 120,
       selectors: [{ selector: 'img', format: 'skip' }]
     });
-
     for (const email of emails) {
       try {
         await this.mailerService.sendMail({
