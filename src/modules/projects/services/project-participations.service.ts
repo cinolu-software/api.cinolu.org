@@ -160,7 +160,6 @@ export class ProjectParticipationService {
         .where('pp.id = :participationId', { participationId })
         .andWhere('pp.projectId = :projectId', { projectId })
         .getOneOrFail();
-
       return participation;
     } catch {
       throw new NotFoundException();
