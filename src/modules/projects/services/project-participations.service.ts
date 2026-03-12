@@ -197,13 +197,13 @@ export class ProjectParticipationService {
       const project = await this.projectsService.findOneWithParticipations(projectId);
       const rows = await parseUsersCsv(file.buffer);
       const existingUserIds = new Set<string>(
-        project.participations?.map((participation) => participation.user.id) ?? []
+        project.participations?.map((participation) => participation?.user?.id) ?? []
       );
       const newUserIds = new Set<string>();
       for (const row of rows) {
         const user = await this.usersService.findOrCreate(row);
-        if (!existingUserIds.has(user.id)) {
-          newUserIds.add(user.id);
+        if (!existingUserIds.has(user?.id)) {
+          newUserIds.add(user?.id);
         }
       }
       if (newUserIds.size === 0) return;
